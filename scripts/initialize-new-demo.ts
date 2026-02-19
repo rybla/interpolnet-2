@@ -1,4 +1,9 @@
-import { app_name, notes_dirpath, root_url } from "@/constants";
+import {
+  app_name,
+  demo_slug_pattern,
+  notes_dirpath,
+  root_url,
+} from "@/constants";
 import { argument, object, string } from "@optique/core";
 import { run } from "@optique/run";
 import fs from "fs";
@@ -14,17 +19,14 @@ const parser = object({
       },
     ],
   }),
-  slug: argument(
-    string({ metavar: "DEMO_SLUG", pattern: /^[a-zA-Z0-9_-]+$/ }),
-    {
-      description: [
-        {
-          type: "text",
-          text: "The short unique slug for the new demo.",
-        },
-      ],
-    },
-  ),
+  slug: argument(string({ metavar: "DEMO_SLUG", pattern: demo_slug_pattern }), {
+    description: [
+      {
+        type: "text",
+        text: "The short unique slug for the new demo.",
+      },
+    ],
+  }),
 });
 
 const config = run(parser);
@@ -53,11 +55,13 @@ fs.mkdirSync(demo_dirpath);
 
 const demo_index_filepath = `${demo_dirpath}/index.html`;
 
-const demo_script_filename = "main.js";
+const demo_script_filename = "script.js";
 const demo_script_filepath = `${demo_dirpath}/${demo_script_filename}`;
 
-const demo_styles_filename = "styles.css";
+const demo_styles_filename = "style.css";
 const demo_styles_filepath = `${demo_dirpath}/${demo_styles_filename}`;
+
+const demo_manifest_filepath = `${demo_dirpath}/manifest.json`;
 
 console.log(
   `Creating template HTML for demo "${config.name}" at \`${demo_index_filepath}\``,
@@ -83,7 +87,7 @@ fs.writeFileSync(
 );
 
 console.log(
-  `Creating template Javascript for demo "${config.name}" at \`${demo_script_filepath}\``,
+  `Creating template Javascript for new demo "${config.name}" at \`${demo_script_filepath}\``,
 );
 fs.writeFileSync(
   demo_script_filepath,
@@ -92,10 +96,22 @@ fs.writeFileSync(
 );
 
 console.log(
-  `Creating template CSS styles for demo "${config.name}" at \`${demo_styles_filepath}\``,
+  `Creating template CSS styles for new demo "${config.name}" at \`${demo_styles_filepath}\``,
 );
 fs.writeFileSync(
   demo_styles_filepath,
   `/* TODO: styles for new demo "${config.name}" */\n`,
+  { encoding: "utf-8" },
+);
+
+console.log(
+  `Creating manifest file for new demo "${config.name}" at \`${demo_manifest_filepath}\``,
+);
+fs.writeFileSync(
+  demo_manifest_filepath,
+  `{
+  "name": "${config.name}",
+  "slug": "${config.slug}"
+}\n`,
   { encoding: "utf-8" },
 );
