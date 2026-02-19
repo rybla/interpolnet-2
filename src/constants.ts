@@ -3,7 +3,9 @@ import z from "zod";
 export const app_name = "Interpolnet 2";
 export const root_url_relative_prefix = "interpolnet-2";
 export const root_url = `https://rybla.github.io/${root_url_relative_prefix}`;
-export const site_dirpath = "site";
+export const public_dirpath = "./public";
+export const dist_dirpath = "./dist";
+
 export const notes_dirpath = "notes";
 
 export const demo_slug_pattern = /^[a-zA-Z0-9_-]+$/;

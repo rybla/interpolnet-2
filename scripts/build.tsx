@@ -2,20 +2,32 @@ import {
   app_name,
   demo_manifest_schema,
   root_url_relative_prefix,
-  site_dirpath,
+  public_dirpath,
   type DemoManifest,
+  dist_dirpath,
 } from "@/constants";
 import { do_ } from "@/utility";
 import fs from "fs";
 import z from "zod";
 import { renderToStaticMarkup } from "react-dom/server";
 
-const demo_dirnames = fs.readdirSync(site_dirpath);
+// -----------------------------------------------------------------------------
 
+console.log("Removing old dist directory");
+fs.rmSync(dist_dirpath, { recursive: true, force: true });
+
+console.log("Copying public directory to dist new directory");
+fs.cpSync(public_dirpath, dist_dirpath, { recursive: true, force: true });
+
+// -----------------------------------------------------------------------------
+
+console.log("Reading demo manifests");
+
+const demo_dirnames = fs.readdirSync(public_dirpath);
 const demo_manifests: DemoManifest[] = [];
 
 for (const demo_slug of demo_dirnames) {
-  const demo_dirpath = `${site_dirpath}/${demo_slug}`;
+  const demo_dirpath = `${public_dirpath}/${demo_slug}`;
 
   if (!fs.statSync(demo_dirpath).isDirectory()) continue;
 
@@ -50,6 +62,10 @@ for (const demo_slug of demo_dirnames) {
   demo_manifests.push(demo_manifest);
 }
 
+// -----------------------------------------------------------------------------
+
+console.log("Building index");
+
 function Index() {
   return (
     <html lang="en">
@@ -76,7 +92,7 @@ function Index() {
   );
 }
 
-const index_filepath = `${site_dirpath}/index.html`;
+const index_filepath = `${dist_dirpath}/index.html`;
 console.log(`Writing index HTML to \`${index_filepath}\``);
 fs.writeFileSync(
   index_filepath,

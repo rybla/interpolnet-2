@@ -2,6 +2,7 @@ import {
   app_name,
   demo_slug_pattern,
   notes_dirpath,
+  public_dirpath,
   root_url,
 } from "@/constants";
 import { argument, object, string } from "@optique/core";
@@ -46,7 +47,7 @@ TODO: comprehensive description of new demo "${config.name}"
 `,
 );
 
-const demo_dirpath = `./site/${config.slug}`;
+const demo_dirpath = `${public_dirpath}/${config.slug}`;
 console.log(`Creating a new directory at \`${demo_dirpath}\``);
 
 fs.mkdirSync(demo_dirpath);
