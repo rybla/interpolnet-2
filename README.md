@@ -1,6 +1,6 @@
 # Interpolnet 2
 
-This is the **Interpolnet Project**, a giant collection of intereseting self-contained single-page application web demos.
+This is the **Interpolnet Project** version 2, a giant collection of intereseting self-contained single-page application web demos.
 
 Each demo must follow these guidelines:
 

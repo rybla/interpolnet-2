@@ -1,6 +1,7 @@
 import {
   app_name,
   demo_slug_pattern,
+  directory_new_demo_placeholder_text,
   notes_dirpath,
   public_dirpath,
   root_url,
@@ -43,7 +44,7 @@ fs.appendFileSync(
   `
 ## ${config.name} [[demo](${root_url}/${config.slug})]
 
-TODO: comprehensive description of new demo "${config.name}"
+${directory_new_demo_placeholder_text(config.name)}
 `,
 );
 
