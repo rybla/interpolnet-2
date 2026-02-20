@@ -13,7 +13,7 @@ permissions:
 jobs:
   auto-approve-and-merge:
     runs-on: ubuntu-latest
-    if: github.actor == 'jules[bot]'
+    if: github.actor == 'rybla'
     steps:
       - uses: actions/checkout@v4
         with:
