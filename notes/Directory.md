@@ -13,7 +13,3 @@ A falling-sand style physics simulation. The user can choose from a variety of d
 - Ooze is like water but spreads out very slowly and sticks together.
 - Steam is like water but with inverse gravity.
 - Lava is like water but spreads out slower. Lava melts sand into stone. Lava boils water into steam. Lava burns plant and ooze into steam.
-
-## Mandelbrot Vsualization [[demo](https://rybla.github.io/interpolnet-2/mandelbrot)]
-
-TODO: comprehensive description of new demo "Mandelbrot Vsualization"
