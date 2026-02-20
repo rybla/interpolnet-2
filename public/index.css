@@ -1,0 +1,19 @@
+body {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.title {
+  font-size: 2em;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.menu-item {
+  display: block;
+}
