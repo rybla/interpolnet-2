@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import { public_dirpath } from "./constants";
 
 export function do_<A>(k: () => A): A {
@@ -14,5 +15,9 @@ export function cqBlock(lang: string, s: string): string {
 }
 
 export function getAllDemoSlugs(): string[] {
-  return fs.readdirSync(public_dirpath);
+  return fs
+    .readdirSync(public_dirpath)
+    .filter((name) =>
+      fs.statSync(path.join(public_dirpath, name)).isDirectory(),
+    );
 }
