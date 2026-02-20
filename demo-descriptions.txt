@@ -1,4 +1,3 @@
-Build a UI design playground that lets users tweak CSS variables for a mock dashboard and immediately see the results on typography and layout (Citation: LearnUI Design Exercises).
 Develop a Markov chain text generator visualization that displays the state transition graph using SVG while generating sample text dynamically (Citation: Standard mathematical modeling concepts).
 Create an interactive L-system fractal generator where users can define custom axioms and production rules to draw plants or geometric shapes on a canvas (Citation: Mathematical graphics tutorials).
 Program an interactive sorting algorithm visualizer that uses CSS animations to swap DOM elements representing an array of numbers (Citation: Reddit r/webdev beginner projects).
