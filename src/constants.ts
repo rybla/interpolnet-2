@@ -3,7 +3,6 @@ import path from "path";
 
 export const app_name = "Interpolnet 2";
 export const root_url_relative_prefix = "interpolnet-2";
-export const root_url = `https://rybla.github.io/${root_url_relative_prefix}`;
 export const public_dirpath = "public";
 export const dist_dirpath = "dist";
 

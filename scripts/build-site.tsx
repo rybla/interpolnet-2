@@ -1,15 +1,14 @@
 import {
   app_name,
   demo_manifest_schema,
-  root_url_relative_prefix,
+  dist_dirpath,
   public_dirpath,
   type DemoManifest,
-  dist_dirpath,
 } from "@/constants";
 import { do_, getAllDemoSlugs } from "@/utility";
 import fs from "fs";
-import z from "zod";
 import { renderToStaticMarkup } from "react-dom/server";
+import z from "zod";
 
 // -----------------------------------------------------------------------------
 
@@ -72,17 +71,13 @@ function Index() {
       <head>
         <meta charSet="utf-8" />
         <title>{`${app_name} | Index`}</title>
-        <link rel="stylesheet" href="/index.css"></link>
+        <link rel="stylesheet" href="./index.css"></link>
       </head>
       <body>
         <div className="title">{app_name}</div>
         <div className="menu">
           {demo_manifests.map((demo_manifest, i) => (
-            <a
-              className="menu-item"
-              href={`/${root_url_relative_prefix}/${demo_manifest.slug}/`}
-              key={i}
-            >
+            <a className="menu-item" href={`./${demo_manifest.slug}/`} key={i}>
               {demo_manifest.name}
             </a>
           ))}
