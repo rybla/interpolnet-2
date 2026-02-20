@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Lambda Calculus Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Lambda Calculus Visualizer</h1>
+        <p>Explore beta reduction and variable binding visually.</p>
+      </header>
+
+      <main>
+        <section class="controls">
+          <div class="input-group">
+            <input type="text" id="expression-input" placeholder="Enter lambda expression (e.g., (\x.x) y)" autocomplete="off">
+            <button id="parse-btn">Parse</button>
+          </div>
+
+          <div class="actions">
+            <button id="step-btn" disabled>Step</button>
+            <button id="reset-btn" disabled>Reset</button>
+            <button id="clear-btn">Clear</button>
+
+            <select id="example-select">
+              <option value="">Load Example...</option>
+              <option value="(\x.x) y">Identity: (\x.x) y</option>
+              <option value="(\x.\y.x) a b">True (K combinator): (\x.\y.x) a b</option>
+              <option value="(\x.\y.y) a b">False: (\x.\y.y) a b</option>
+              <option value="(\x.\y.\z.x z (y z)) a b c">S combinator: (\x.\y.\z.x z (y z)) a b c</option>
+              <option value="(\f.(\x.f (x x)) (\x.f (x x)))">Y Combinator</option>
+              <option value="(\n.\f.\x.f (n f x)) (\f.\x.x)">Successor of 0: (\n.\f.\x.f (n f x)) (\f.\x.x)</option>
+              <option value="(\m.\n.\f.\x.m f (n f x)) (\f.\x.f x) (\f.\x.f (f x))">Addition: 1 + 2</option>
+            </select>
+          </div>
+
+          <div id="status-message" class="status-message">Ready</div>
+        </section>
+
+        <section class="visualization-container">
+          <div id="visualization" class="visualization"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

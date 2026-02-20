@@ -1,4 +1,3 @@
-Build an interactive lambda calculus evaluator that visually steps through beta reductions and highlights bound variables as the execution progresses.
 Develop a simple Hindley-Milner type inference visualizer where users type functional programming expressions and see the unification tree update in real-time.
 Create a web-based truth table generator that parses propositional logic formulas and builds an interactive HTML table.
 Program a basic Conway's Game of Life simulation on an HTML Canvas where users can click to toggle cells and adjust the tick rate.

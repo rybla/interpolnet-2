@@ -1,0 +1,203 @@
+:root {
+  --bg-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --accent-color: #00bcd4;
+  --secondary-color: #ff4081;
+  --box-bg: #2c2c2c;
+  --box-border: #424242;
+  --highlight-bg: #334d4d;
+  --bound-highlight: #ffeb3b;
+  --redex-border: #ff4081;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --mono-font: 'Courier New', Courier, monospace;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  margin: 0;
+  color: var(--accent-color);
+}
+
+.controls {
+  background-color: var(--box-bg);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--mono-font);
+  font-size: 1.1em;
+}
+
+button, select {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 1em;
+  transition: background-color 0.2s;
+}
+
+button {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+button:hover:not(:disabled) {
+  background-color: #00acc1;
+}
+
+button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#clear-btn {
+  background-color: #757575;
+}
+
+select {
+  background-color: var(--box-bg);
+  color: var(--text-color);
+  border: 1px solid var(--box-border);
+}
+
+.status-message {
+  font-family: var(--mono-font);
+  color: #aaa;
+  min-height: 1.2em;
+}
+
+.visualization-container {
+  flex: 1;
+  background-color: var(--box-bg);
+  border-radius: 8px;
+  padding: 20px;
+  overflow: auto;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Visualization Nodes */
+.ast-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+.variable {
+  padding: 5px 10px;
+  font-family: var(--mono-font);
+  font-weight: bold;
+  font-size: 1.2em;
+  color: var(--accent-color);
+  border-radius: 4px;
+  cursor: default;
+}
+
+.variable:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.abstraction {
+  border: 2px solid var(--box-border);
+  border-radius: 6px;
+  padding: 10px;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.abstraction-header {
+  font-family: var(--mono-font);
+  color: var(--secondary-color);
+  margin-bottom: 5px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.application {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px dashed var(--box-border); /* Dashed to show grouping */
+  border-radius: 6px;
+  padding: 10px;
+}
+
+/* Highlighting */
+.highlight-bound {
+  background-color: rgba(255, 235, 59, 0.2);
+  border-color: var(--bound-highlight);
+  color: var(--bound-highlight);
+}
+
+.highlight-binder {
+  border-color: var(--bound-highlight);
+  box-shadow: 0 0 5px var(--bound-highlight);
+}
+
+.redex {
+  border-color: var(--redex-border);
+  box-shadow: 0 0 8px rgba(255, 64, 129, 0.4);
+}
+
+/* Animation classes */
+.fade-out {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
