@@ -68,3 +68,35 @@ An interactive lambda calculus evaluator that visually steps through beta reduct
     2. Animate the argument moving into the positions of the bound variable in the function body.
     3. Replace the redex with the reduced body.
 - **State Management**: Keep track of the current AST and the history of reduction steps to allow "Undo" or "Reset" functionality.
+
+## Hindley-Milner Type Inference Visualizer [[demo](https://rybla.github.io/interpolnet-2/hm-type-inference-visualizer)]
+
+An interactive tool that visualizes the Hindley-Milner type inference algorithm. Users input functional programming expressions (similar to lambda calculus but with `let` bindings), and the system infers the type, showing the unification process and the resulting type tree.
+
+### Features
+- **Expression Input**: Supports lambda calculus syntax plus `let` bindings (e.g., `let id = \x.x in id`).
+- **Real-time Inference**: Updates the type inference as the user types.
+- **Unification Visualization**: Shows the constraints generated and how they are solved (unified).
+- **Type Tree Visualization**: Visually represents the inferred type as a tree structure.
+- **Interactive AST**: Hovering over parts of the expression highlights the corresponding type constraints.
+
+### Design Goals
+- **Educational**: Help users understand how type inference works "under the hood".
+- **Visual**: Use diagrams (trees/graphs) to represent types and constraints.
+- **Clean UI**: Minimalist interface focusing on the code and the visualization.
+
+### Implementation Plan
+- **Parser**: Implement a parser for a mini-functional language.
+    - AST nodes: `Var`, `Abs` (lambda), `App`, `Let`, `Lit` (Int, Bool).
+- **Type System**:
+    - Types: `TVar` (type variable), `TCon` (type constructor like Int, Bool), `TArr` (function arrow).
+    - **Inference Algorithm**: Implement Algorithm W to generate constraints and substitutions.
+    - **Unification**: Solve constraints, maintaining a substitution map.
+- **Visualization**:
+    - **AST View**: Display the parsed expression structure.
+    - **Constraint View**: List generated constraints.
+    - **Substitution View**: Show current variable mappings (e.g., `a -> Int`).
+    - **Type Tree**: Render the final type using a tree layout using HTML/CSS.
+- **UI/UX**:
+    - Split screen: Code input on one side, Visualization on the other.
+    - Color coding for type variables to track them easily.

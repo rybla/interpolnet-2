@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Hindley-Milner Type Inference Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Hindley-Milner Type Inference Visualizer</h1>
+      </header>
+      <main>
+        <section class="input-section">
+          <h2>Input Expression</h2>
+          <p class="description">
+            Enter a functional expression. Supports lambda calculus syntax (<code>\x.x</code>) and <code>let</code> bindings.
+            <br>
+            Examples: <code>\x.x</code>, <code>let id = \x.x in id</code>, <code>\f.\x.f x</code>
+          </p>
+          <div class="editor-container">
+            <textarea id="expression-input" spellcheck="false" placeholder="\x.x"></textarea>
+          </div>
+          <div id="error-message" class="error-message"></div>
+        </section>
+
+        <section class="visualization-section">
+          <div class="panel ast-panel">
+            <h3>AST</h3>
+            <div id="ast-display" class="display-area"></div>
+          </div>
+          <div class="panel type-panel">
+            <h3>Inferred Type</h3>
+            <div id="type-display" class="display-area type-result"></div>
+          </div>
+          <div class="panel constraints-panel">
+            <h3>Constraints</h3>
+            <div id="constraints-display" class="display-area"></div>
+          </div>
+          <div class="panel substitution-panel">
+            <h3>Substitutions</h3>
+            <div id="substitution-display" class="display-area"></div>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <p>Part of Interpolnet 2</p>
+      </footer>
+    </div>
+  </body>
+</html>

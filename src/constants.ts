@@ -2,6 +2,7 @@ import z from "zod";
 import path from "path";
 
 export const app_name = "Interpolnet 2";
+export const root_url = "https://rybla.github.io/interpolnet-2";
 export const root_url_relative_prefix = "interpolnet-2";
 export const public_dirpath = "public";
 export const dist_dirpath = "dist";
