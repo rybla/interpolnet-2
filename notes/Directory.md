@@ -132,3 +132,39 @@ An interactive tool that visualizes the Abstract Syntax Tree (AST) of a custom C
     - Map source ranges to AST nodes.
     - Handle mouse events for hovering and clicking.
     - Implement zoom/pan logic for the SVG container.
+
+## Mark and Sweep [[demo](https://rybla.github.io/interpolnet-2/mark-and-sweep)]
+
+An interactive visualization of the Mark-and-Sweep garbage collection algorithm. This demo helps users understand how automatic memory management works by allowing them to manipulate object references and trigger the garbage collection cycle.
+
+### Features
+- **Memory Heap Visualization**: The memory heap is represented as a graph where nodes are objects and edges are references.
+- **Interactive References**: Users can click on reference edges to "sever" them, effectively simulating a variable going out of scope or being set to null.
+- **Root Set**: Clearly distinct "Root" nodes (representing the stack or global variables) serve as the starting point for reachability.
+- **Allocation Simulation**: A button to "Allocate" new objects, which randomly links them to existing reachable objects, simulating program execution.
+- **Step-by-Step GC**:
+    - **Mark Phase**: When triggered, the algorithm traverses the graph from the roots, visually "marking" reachable objects (e.g., changing color).
+    - **Sweep Phase**: After marking, the system identifies unmarked objects and animates their deallocation (e.g., fading away), reclaiming space.
+
+### Design Goals
+- **Educational Clarity**: Distinguish clearly between "reachable" (live) and "unreachable" (garbage) memory.
+- **Interactive Learning**: Allow users to create "garbage" manually and see it being collected.
+- **Visual Satisfaction**: Use satisfying animations for the marking spread and the sweeping deletion.
+- **Responsive Design**: Ensure the visualization works well on both desktop and mobile screens.
+
+### Implementation Plan
+- **Data Structure**:
+    - `HeapObject`: ID, position (x,y), marked (boolean).
+    - `Reference`: fromID, toID.
+    - `RootSet`: List of IDs that are always reachable.
+- **Rendering**:
+    - Use SVG for drawing graph structures and enabling easy interaction (clicking edges).
+    - Nodes: Circles with unique IDs or labels.
+    - Edges: Directed arrows connecting nodes.
+- **Interaction**:
+    - Click on edge: Remove the reference.
+    - Click on "Allocate": Create a new node and add a reference from a random reachable node to it.
+    - Click on "Run GC": Start the animation loop for Mark and Sweep.
+- **Algorithm & Animation**:
+    - **Mark**: BFS/DFS traversal from Roots. Animate the "discovery" of nodes with a delay. Change node color to "Marked" state.
+    - **Sweep**: Iterate through all nodes. If `!marked`, animate removal. If `marked`, reset `marked` flag for next cycle and revert color.

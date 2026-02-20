@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Mark and Sweep</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Mark and Sweep Garbage Collector</h1>
+        <p>Simulate memory management by creating objects, severing references, and running garbage collection.</p>
+      </header>
+
+      <div class="controls">
+        <button id="allocate-btn">Allocate Object</button>
+        <button id="run-gc-btn">Run GC</button>
+        <button id="reset-btn">Reset</button>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <span class="dot root"></span> Root
+        </div>
+        <div class="legend-item">
+          <span class="dot reachable"></span> Reachable
+        </div>
+        <div class="legend-item">
+          <span class="dot unreachable"></span> Unreachable (Garbage)
+        </div>
+        <div class="legend-item">
+          <span class="dot marked"></span> Marked
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <svg id="heap-canvas" width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+          <!-- Graph elements will be injected here -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="28" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#888" />
+            </marker>
+             <marker id="arrowhead-marked" markerWidth="10" markerHeight="7" refX="28" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#4CAF50" />
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </body>
+</html>

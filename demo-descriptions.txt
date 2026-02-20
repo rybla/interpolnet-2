@@ -1,4 +1,3 @@
-Simulate a Mark-and-Sweep garbage collector where users manually sever object references to trigger memory deallocation animations.
 Build a drag-and-drop instruction reordering tool to demonstrate how weak memory models lead to out-of-order execution anomalies.
 Develop an interactive Piet interpreter that traces a cursor through a pixel art grid to show how color transitions dictate program logic.
 Create a 2D tape visualizer for Brainfuck where a mechanical read/write head moves physically to execute loops and pointer increments.
