@@ -1,0 +1,127 @@
+:root {
+  --bg-color: #0f172a;
+  --text-color: #e2e8f0;
+  --accent-color: #38bdf8;
+  --node-bg: #1e293b;
+  --node-border: #38bdf8;
+  --edge-color: #94a3b8;
+  --highlight-color: #f472b6;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+}
+
+.editor-pane {
+  flex: 1;
+  border-right: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+}
+
+textarea {
+  flex: 1;
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border: none;
+  padding: 1rem;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.visualization-pane {
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  /* Dot grid pattern */
+  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+svg:active {
+  cursor: grabbing;
+}
+
+.node {
+    transition: transform 0.5s ease;
+}
+
+.node circle, .node rect {
+  fill: var(--node-bg);
+  stroke: var(--node-border);
+  stroke-width: 2px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.node:hover circle, .node:hover rect {
+  fill: var(--accent-color);
+  stroke: var(--text-color);
+}
+
+.node text {
+  fill: var(--text-color);
+  font-size: 12px;
+  font-family: sans-serif;
+  text-anchor: middle;
+  pointer-events: none;
+  user-select: none;
+}
+
+.edge {
+  stroke: var(--edge-color);
+  stroke-width: 2px;
+  fill: none;
+  transition: d 0.5s ease;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+button {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #0ea5e9;
+}
+
+/* Highlighting from code to node */
+.node.highlighted circle, .node.highlighted rect {
+  stroke: var(--highlight-color);
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 5px var(--highlight-color));
+}
+
+.collapsed circle {
+    stroke-dasharray: 4;
+}
