@@ -25,6 +25,13 @@ Now, you should replace the placeholder text in ${cq(directory_filepath)}, which
 
 Finally, you must implement the demo according to your flushed-out and comprehensive description of the demo and implementation plan in ${cq(path.join(public_dirpath, "<DEMO_SLUG>"))}. That directory has been initialized with some template files which you should edit to implement the demo.
 
+Recall that each demo must follow these guidelines:
+
+- Use distinct, unique, and consistent color schemes and typography.
+- Use many passive and active animations to indicate what elements are interactable, and when things change in response to either automatic updates or user input.
+- Ensure that the webpage is designed to be mobile-friendly.
+- Use a responsive design.
+
 Once you've finished implementing the demo, run this command for the next instructions on validating your demo implementation:
 
 ${cqBlock("sh", "bun run scripts/get-instructions-for-validation.ts")}
