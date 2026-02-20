@@ -1,0 +1,146 @@
+:root {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --accent-color: #6200ea;
+  --node-radius: 20px;
+  --node-root: #ff4081;
+  --node-reachable: #03dac6;
+  --node-unreachable: #333333;
+  --node-marked: #ffd740;
+  --edge-color: #888888;
+  --edge-highlight: #ffffff;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 1000px;
+  padding: 20px;
+  text-align: center;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.controls {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #3700b3;
+}
+
+button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot.root { background-color: var(--node-root); }
+.dot.reachable { background-color: var(--node-reachable); }
+.dot.unreachable { background-color: var(--node-unreachable); border: 1px solid #555; }
+.dot.marked { background-color: var(--node-marked); }
+
+.canvas-container {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  cursor: crosshair;
+}
+
+/* Node Styles */
+circle.node {
+  stroke: #fff;
+  stroke-width: 2px;
+  transition: fill 0.5s ease, stroke 0.3s ease, transform 0.3s ease;
+  cursor: default;
+}
+
+circle.root { fill: var(--node-root); }
+circle.reachable { fill: var(--node-reachable); }
+circle.unreachable { fill: var(--node-unreachable); }
+circle.marked { fill: var(--node-marked); }
+
+text.label {
+  fill: #fff;
+  font-size: 12px;
+  pointer-events: none;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* Edge Styles */
+line.edge {
+  stroke: var(--edge-color);
+  stroke-width: 2px;
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+  cursor: pointer;
+}
+
+line.edge:hover {
+  stroke: #ff5252; /* Red to indicate deletable */
+  stroke-width: 4px;
+}
+
+line.edge.severed {
+  opacity: 0;
+}
