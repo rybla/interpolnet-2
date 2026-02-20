@@ -1,3 +1,213 @@
+Design an interactive Abstract Syntax Tree where editing source code dynamically grows or prunes branches in real-time.
+Simulate a Mark-and-Sweep garbage collector where users manually sever object references to trigger memory deallocation animations.
+Build a drag-and-drop instruction reordering tool to demonstrate how weak memory models lead to out-of-order execution anomalies.
+Develop an interactive Piet interpreter that traces a cursor through a pixel art grid to show how color transitions dictate program logic.
+Create a 2D tape visualizer for Brainfuck where a mechanical read/write head moves physically to execute loops and pointer increments.
+Visualize the call stack of a recursive Fibonacci function as a fractal tree that blooms downward and highlights overlapping subproblems.
+Illustrate JavaScript closures by showing variables trapped in nested physical bubbles that persist even after the outer function executes.
+Design a visual type-checker that fits interlocking puzzle pieces together to demonstrate structural subtyping and generic constraints.
+Build an interactive regex engine that draws a non-deterministic finite automaton graph and animates string matching state transitions.
+Simulate the Dining Philosophers problem where users adjust mutex timeout variables to visually induce or resolve deadlocks.
+Represent functional monads as protective conveyor belts that carry wrapped values safely through a series of pure function transformation nodes.
+Use an interactive topographical map to show how variable shadowing obscures higher-level scope variables in nested code blocks.
+Animate the process of currying by showing a multi-argument function physically breaking apart into a chain of single-argument function boxes.
+Visualize the JavaScript event loop with physical queues transferring tasks, microtasks, and Web API callbacks onto a central execution stack.
+Illustrate heap fragmentation by having users drag unequally sized blocks into a memory array until allocation fails despite sufficient free space.
+Show the transformation of source code through a pipeline of lexical analysis, syntax parsing, and machine code generation as an assembly line.
+Map asynchronous JavaScript promises as branching paths that glow green upon resolution or red upon rejection to trigger downstream clauses.
+Create a visual substitution engine for Lambda calculus that visually reduces beta-reductions step-by-step using colored geometric shapes.
+Demonstrate pointer aliasing in C by showing multiple floating arrows pointing to a single memory cell where changing one alters the base value.
+Provide a visual canvas where users draw circles and arrows to define a finite state machine that automatically generates the switch-case code.
+Step through compiled Java bytecode instructions while highlighting the specific stack memory pushes and pops at the virtual machine level.
+Animate JavaScript variable hoisting by physically lifting declarations to the top of an execution context container before code execution.
+Visualize Rust ownership rules by representing variables as physical tokens that can only be held by one function scope at a time.
+Build a tool that shows how functional pattern matching acts as a visual sieve filtering data structures through specific shape templates.
+Show interactive binary logic gates where toggling 32-bit integer switches immediately reveals the resulting XOR, AND, and bit-shift transformations.
+Contrast standard recursion against tail-call optimization by showing how the latter reuses a single stack frame instead of stacking them endlessly.
+Deconstruct the IEEE 754 floating-point standard visually by allowing users to toggle sign, exponent, and mantissa bits to see the decimal value.
+Illustrate object-oriented dynamic dispatch by showing a virtual method table routing function calls to the correct subclass implementation.
+Create a Lisp macro visualizer that expands concise syntax into deep parenthetical trees before the actual evaluation phase begins.
+Map software dependencies as an interconnected plumbing network where an injector module explicitly routes required service fluids into components.
+Allow users to draw an arbitrary continuous wave and watch it decompose into a mechanical chain of rotating Fourier series epicycles.
+Create a 3D translucent cone intersected by an adjustable plane that visually slices out circles, ellipses, parabolas, and hyperbolas in real-time.
+Visualize a 2D grid where manipulating the values of a 2x2 matrix dynamically shears, rotates, and scales the entire coordinate space.
+Build an interactive Ulam spiral that zooms out indefinitely allowing users to highlight quadratic equations to search for diagonal prime clustering.
+Show how a sine wave is approximated by drawing the sequential addition of Taylor polynomial terms that slowly wrap around the true curve.
+Create an interactive Mandelbrot set where clicking any coordinate instantly maps and animates the corresponding Julia set iteration on a secondary canvas.
+Simulate hyperbolic geometry using the Poincaré disk model where users can draw straight lines that visually curve towards the boundary.
+Represent integer partitions as interactive Ferrers diagrams where users can rotate the grid to visually prove conjugate partition theorems.
+Illustrate the concept of a derivative by letting users slide a secant line's anchor points closer together until it smoothly becomes the tangent line.
+Design a grid transformation tool that highlights the specific eigenvectors that scale but do not rotate during a linear matrix transformation.
+Provide a sandbox for drawing nodes and edges while an algorithm automatically color-codes the graph to prove the Four Color Theorem.
+Map the paths of the Collatz sequence as a branching organic tree structure that always funnels down to the root node of one.
+Animate the continuous topological deformation of a coffee mug morphing smoothly into a donut to explain homeomorphism.
+Create an interactive complex plane where multiplying two complex numbers visually demonstrates the scaling of magnitude and the addition of angles.
+Visualize the Riemann Zeta function mapped onto a 3D landscape to explore the topography of the critical line where non-trivial zeros reside.
+Build a one-dimensional cellular automaton explorer focusing on Rule 30 to show how simple binary rules generate chaotic fractal triangles.
+Link the uniform circular motion of a point on a wheel directly to the generation of a simple harmonic sine wave on an adjacent scrolling graph.
+Reveal the recursive linear interpolations that construct a cubic Bézier curve by showing the moving scaffolding lines dynamically.
+Implement Conway’s Game of Life on a massive WebGL canvas allowing users to stamp gliders and gosper guns into existence.
+Use an interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
+Visually calculate binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution.
+Represent modular arithmetic as a physical clock face where addition and multiplication warp around the dial continuously.
+Visualize a Markov chain as a network of Lilypads where a frog jumps between them based on weighted probability arrows.
+Allow users to place random seed points on a canvas while a sweep-line algorithm calculates and renders the intersecting Voronoi cell boundaries.
+Render an interactive 3D multivariable calculus surface where a rolling ball naturally settles into the minimax saddle point.
+Show the Fibonacci sequence recursively dividing a golden rectangle into smaller squares that perfectly trace the path of a logarithmic spiral.
+Create an interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
+Build an entropy calculator that visually compresses a string of text using a dynamically generated Huffman coding tree based on character frequency.
+Plot a dynamic slope field where users can drop virtual ink drops to trace the distinct solution curves of a given differential equation.
+Provide an interlocking tile editor where manipulating the edge of one geometric shape symmetrically deforms its adjacent neighbors to create Penrose tilings.
+Step through a single pixel's ray calculation showing the physical line bouncing off a sphere and checking light source occlusion.
+Implement a WebGL Gray-Scott model where users can paint chemical food onto the canvas to watch organic Turing patterns grow and split.
+Provide an interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
+Visualise the generation of 2D Perlin noise by showing the underlying gradient vectors and how bilinear interpolation smooths the resulting map.
+Simulate a Boids algorithm where users can tweak the exact weights of separation, alignment, and cohesion to see how bird flocking changes.
+Show the barycentric coordinate rasterization process by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients.
+Create a 3D scalar field where users adjust an isosurface threshold slider to watch the marching cubes algorithm generate a cohesive polygonal mesh.
+Compare various error-diffusion dithering algorithms by dragging a slider across a high-resolution image to reveal its 1-bit pixelation.
+Build a map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.
+Design a WebGL particle emitter where users can visually construct the math for wind, gravity, and drag vectors applied to independent points.
+Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
+Let users place points randomly on a canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
+Show a 3D cube unrolled into a flat UV map layout allowing users to paint on the 2D surface and see the brush strokes wrap around the 3D object.
+Construct a multi-jointed robotic arm utilizing inverse kinematics where users drag the end effector and the algorithm calculates the joint angles.
+Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
+Demonstrate Screen Space Ambient Occlusion by shooting hemispherical test rays from a pixel's depth buffer to determine corner shading.
+Show how 3D character facial expressions are generated by interpolating vertex positions between a neutral base mesh and a smiling target mesh.
+Break down non-photorealistic rendering by snapping smooth lighting gradients into sharp color bands using an interactive 1D step texture.
+Generate a grid of rotating vector arrows based on underlying noise and release thousands of particles to trace the resulting fluid-like currents.
+Provide a slider that converts a high-poly 3D model into an increasingly blocky Minecraft-style voxel grid by testing bounding box intersections.
+Layer multiple frequencies of noise over a 1D line to simulate the erratic, jagged price movement of a synthetic stock market chart using fractional Brownian motion.
+Simulate a camera lens by calculating a focal plane and intentionally blurring objects based on their z-depth distance from the circle of confusion.
+Shine a virtual light behind a translucent 3D marble hand to visualize how light rays penetrate, scatter, and exit the surface to create a fleshy glow.
+Render 2D metaballs that smoothly merge into one another like liquid drops by calculating the overlapping thresholds of their inverse-square distance functions.
+Contrast standard ray tracing with path tracing by showing how firing hundreds of randomized stochastic rays per pixel accurately resolves global illumination.
+Display a 3D model with its underlying bone armature visible to show how vertex weight painting controls skin deformation during skeletal animation.
+Show how a grayscale height map alters a flat surface's normal vectors to fake the appearance of physical bumps and divots under moving light.
+Allow users to move control points on a graph to compare the mathematical curvature differences between Catmull-Rom, B-Spline, and Bezier curves.
+Build an interactive 3D color gamut visualization to show the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
+Demonstrate GPU tessellation by moving a virtual camera closer to a low-poly sphere and watching the graphics pipeline dynamically subdivide the geometry.
+Drop two virtual balls simultaneously where one falls straight down and one launches horizontally to prove they hit the ground at the exact same time.
+Hook a virtual mass to a spring and graph its kinetic and potential energy exchange in real-time as it oscillates with adjustable damping friction.
+Program a Lennard-Jones gas simulation where users can squeeze the container to increase pressure and watch the particles violently phase-shift into a solid.
+Implement a 2D water ripple simulation where users can place two oscillating point sources to generate distinct constructive and destructive interference patterns.
+Build a grid-based Navier-Stokes fluid solver where dragging the mouse paints colored dye that swirls and creates authentic von Kármán vortex streets.
+Visualize atomic ferromagnetism with a grid of flipping binary spins that naturally align into domains and exhibit a sudden phase transition at the Curie temperature.
+Provide an OS simulator where colored process blocks queue up and are processed by a CPU timeline to compare Round Robin versus Shortest Job First scheduling.
+Show virtual memory allocation by visually mapping fragmented logical pages from a program into disparate physical RAM frames and disk swap space.
+Simulate an orbital mechanics sandbox utilizing the Barnes-Hut algorithm where users can fling planets to form stable solar systems or chaotic multi-star ejections.
+Create an interactive Maxwell-Boltzmann distribution graph linked to a particle box to show how velocity curves flatten and stretch as temperature rises.
+Animate a moving sound source emitting concentric circular wave pulses that bunch up in the direction of travel and spread out behind it.
+Allow users to draw glass prisms with varying indices of refraction to see how a simulated laser beam bends, reflects, and disperses according to Snell's Law.
+Construct an SIR model simulation where dots representing susceptible, infected, and recovered individuals bounce around demonstrating the effect of social distancing.
+Release multiple double pendulums with starting angles offset by tiny degrees to visually trace the rapid divergence characteristic of chaotic systems.
+Setup a 1D track with two sliding blocks of adjustable masses to demonstrate the strict conservation of momentum and kinetic energy during elastic collisions.
+Move an interactive bar magnet through a coiled wire to show how changing magnetic flux generates a visible electrical current and back-EMF opposing the motion.
+Simulate a forest fire model on a cellular grid where lightning sparks fires that spread rapidly through adjacent green trees but stop at empty ash cells.
+Visualize HDD seek algorithms by plotting the path of a read/write head as it services data requests using the Elevator versus Shortest Seek Time First methods.
+Render a 2D metal plate where users apply a heat source and watch the thermal energy diffuse outward according to the continuous heat equation.
+Simulate simple 2D cars with randomized wheel sizes and chassis shapes attempting to navigate a bumpy track, evolving over generations to optimize fitness.
+Place a food source and a nest, watching virtual ants wander randomly until they discover the food and reinforce the shortest path with glowing pheromone trails.
+Create a simulated Mach-Zehnder interferometer to show how a single photon can interfere with itself unless a detector collapses its wave function.
+Model a Lotka-Volterra predator-prey simulation where the population graphs of wolves and rabbits oscillate in an endless, dependent cycle.
+Build a highway traffic simulator to demonstrate how a single car braking slightly causes a backward-propagating phantom traffic jam wave.
+Show CPU caching mechanics by pushing data requests into a limited cache queue and ejecting blocks based on the Least Recently Used policy.
+Visualize random Boolean networks to show how interconnected logical gates can settle into stable attractors or chaotic cycles based on connectivity.
+Stack irregularly shaped 2D polygons and let a physics engine calculate their exact centers of mass, resting contact points, and rotational inertia.
+Heat a simulated fluid from the bottom and cool it from the top to observe the emergence of organized Rayleigh-Bénard convection rolls.
+Recreate the Physarum polycephalum algorithm where millions of independent particles lay and follow chemical trails to form highly efficient transportation networks.
+Visualize the internet as a web of interconnected nodes where simulated random surfers traverse links and naturally pool in the most highly connected hub pages.
+Pitch the user against various AI personalities in an iterated prisoner’s dilemma to see if they can deduce the AI's hidden strategy through gameplay.
+Populate a spatial grid with cooperators and defectors, updating each cell based on its neighbors' payouts to show how cooperation forms protective clusters.
+Simulate a population of Hawks and Doves competing for food, adjusting the cost of injury to watch the population stabilize at an evolutionary mixed strategy.
+Run an interactive auction for a dollar bill where the second-highest bidder must also pay, visually mapping the psychological trap of sunk cost escalation.
+Provide a draggable 2x2 payoff matrix that automatically highlights strictly dominated strategies and identifies any pure or mixed Nash equilibria.
+Create a cooperative hunting simulation illustrating that while hunting a stag yields higher rewards, the risk of a partner defecting prevents coordination.
+Build a multiplayer resource pool where users extract virtual fish to show that if the collective extraction rate exceeds the spawn rate the ecosystem collapses.
+Allow users to input ranked-choice preferences for candidates and dynamically switch between First-Past-The-Post and Borda Count to see different winners.
+Simulate a scenario where agents use predictive models to decide whether to attend a crowded bar, proving that widespread use of a single winning strategy causes it to fail.
+Create an interactive economic market where two competing firms adjust their production quantities to find the optimal intersection of Cournot best-response curves.
+Let the user offer a split of a monetary prize to an AI where if the AI rejects the split as unfair both parties receive absolutely nothing.
+Visualize a job market screening game where high-ability and low-ability workers pay varying costs to acquire education solely as a signal to employers.
+Structure a turn-based game where passing the pot increases its value but taking the pot ends the game, highlighting the paradox of backward induction.
+Simulate agents choosing between two rooms where the payout only goes to the room with fewer people, forcing the evolution of contrarian strategies.
+Ask two players to pick a value between 2 and 100, penalizing the higher guesser to show how rational deduction leads both to the lowest possible value.
+Implement the Gale-Shapley algorithm to visually pair medical students with hospitals to prove the mathematical stability of the resulting matching market.
+Create a group contribution pool with a multiplier demonstrating how the introduction of a punishment mechanism suppresses free-rider behavior.
+Place two ice cream stands on a linear beach and let them strategically relocate, showing why competitors inevitably cluster at the exact center of the market.
+Simulate Braess's Paradox by adding a high-speed road to a traffic network and watching the overall travel time increase due to selfish routing choices.
+Graph the probability distributions of rock-paper-scissors in real-time to show how any deviation from a balanced mixed strategy guarantees exploitation.
+Analyze poker game theory by graphing the optimal ratio of bluffs to value bets based on pot odds to make an opponent indifferent to calling.
+Visualize the distribution of gold among strictly rational hierarchical pirates to demonstrate the extreme logical conclusions of majority voting.
+Simulate an investment where a sender passes money that triples in value and waits to see what percentage the receiver benevolently returns.
+Populate a grid with two types of agents who desire a slight preference for similar neighbors, showing how micro-motives inevitably lead to macro-segregation.
+Model the bystander effect by showing how increasing the number of witnesses mathematically decreases the probability that any single individual will act.
+Provide a baseline economic experiment where the user has absolute power to distribute an endowment to reveal metrics on human altruism versus pure rationality.
+Graph the mixed strategy equilibrium of an employer deciding whether to audit an employee while the employee decides whether to shirk their duties.
+Visually represent the Nash bargaining solution by finding the exact point on a feasible set curve that maximizes the product of both players' utilities.
+Design an interactive Vickrey second-price auction to mathematically prove that bidding one's true valuation is always the absolute dominant strategy.
+Simulate a sequential decision process where later agents ignore their own private information and blindly follow the actions of their predecessors in an information cascade.
+Design a mascot character beside a password input field that squints, smiles, or looks worried based on the real-time entropy of the typed string.
+Create a day and night mode toggle switch relying purely on HTML checkbox states and CSS adjacent sibling selectors to animate the sun into a moon.
+Compare a standard loading bar against a skeleton screen to visually demonstrate how the latter significantly reduces the user's perceived wait time.
+Build an interactive form that uses non-intrusive hover tooltips for secondary information and reserves intrusive modal popups exclusively for destructive actions.
+Implement a submit button that morphs into a loading spinner upon click and finally expands into a green checkmark to provide closed-loop feedback.
+Provide an interactive canvas where users tweak light angle and elevation sliders to instantly generate the CSS box-shadows required for soft-UI neumorphism.
+Develop a grid of interactive cards that utilize subtle 3D CSS transforms and shadow expansions on hover to dynamically communicate clickability.
+Show the difference between free scrolling and CSS scroll-snapping by aligning a horizontal carousel of images perfectly to the viewport edge.
+Create a translucent floating UI panel utilizing the backdrop-filter blur CSS property to dynamically distort the background image underneath it.
+Visualize the DOM manipulation behind infinite scrolling by showing old, off-screen list elements being physically destroyed and recycled to save memory.
+Animate an input field that physically shakes horizontally to mimic a head shake when a user attempts to submit an incorrectly formatted email address.
+Build a kanban board interaction that features a subtle tilt and drop-shadow enlargement while a card is being dragged to indicate its Z-index elevation.
+Contrast a mandatory screen-darkening product tour against a subtle pulsating UI hotspot that allows the user to discover features at their own pace.
+Animate a three-line hamburger menu icon so that the top and bottom lines rotate to form an X while the middle line fades out entirely.
+Create a CSS Grid visualization where a complex magazine layout smoothly reflows its named grid areas as the user manually resizes the browser window.
+Implement a mobile pull-to-refresh interaction where the downward drag tension physically stretches a rubber-band-like SVG arc before snapping back.
+Use a staggered CSS animation to make the items of a dropdown menu cascade downwards sequentially rather than appearing instantly.
+Demonstrate fluid typography by tying font size to clamp functions and viewport units to scale the text dynamically without relying on static media queries.
+Animate a bottom-corner floating action button that spirals outward upon clicking to reveal three secondary sub-action icons.
+Provide a real-time WCAG accessibility checker that overlays pass and fail badges on UI text as the user adjusts the foreground and background color pickers.
+Implement a shimmering CSS gradient across empty gray placeholder boxes to simulate data loading and actively manage user anticipation.
+Deconstruct a parallax effect by providing a side-view of the 3D web page to show how background layers translate at slower speeds than foreground elements.
+Create a custom SVG checkbox where clicking it triggers an organic, self-drawing stroke animation of the checkmark path.
+Design a notification bell icon that rings with a CSS keyframe vibration while a red unread badge scales up from zero with a satisfying elastic bounce.
+Implement a custom geometric mouse cursor that magnetically snaps to and encompasses clickable UI buttons when hovering near them.
+Show a header that shrinks its padding and drops a subtle shadow to become a sticky navigation bar only after the user scrolls past the hero section.
+Animate a FAQ accordion list using CSS grid transitions to ensure the expanding text pushes subsequent content down smoothly without layout jumping.
+Design a numerical input stepper where clicking the plus or minus buttons causes the numbers to vertically slide in and out like a mechanical odometer.
+Implement a dark mode switch that uses a circular CSS clip-path animation to sweep the new theme across the screen starting from the user's click point.
+Build a UI element that responds to different input types with a light color change on mouse hover but a deep physical depression effect upon a touch-screen tap.
+Render a Raft cluster where users can manually pause a leader node to watch election timeout timers expire and a new leader successfully emerge.
+Display an array of unsorted bars and slowly step through a Quicksort algorithm highlighting the moving pivot and the recursive swapping of elements.
+Visually map an SQL join by drawing explicit bezier curves connecting matching keys from two raw tables into a unified output table.
+Provide a grid where users draw maze walls and watch the A-star algorithm color-code the expanding search frontier based on its heuristic distance to the goal.
+Allow users to insert sequential numbers into a binary tree, triggering an automatic visual rotation of the nodes to maintain strict AVL height balance.
+Build an animated race bar chart of historical data where the horizontal bars physically overtake each other to represent shifting ranks over a temporal axis.
+Use a physics-based force-directed layout to visualize a social network where nodes naturally cluster based on mutual connections and repel when unrelated.
+Simulate an open-addressing hash table by dropping values into array buckets and visually showing linear probing when a collision occurs.
+Represent matrix multiplication by physically sliding the rows of the first matrix over the columns of the second matrix while highlighting dot product summations.
+Animate Dijkstra's algorithm on a weighted graph, showing the shortest path tree expanding outward like water filling a network of varying-width pipes.
+Visually demonstrate database indexing by showing a B-Tree node splitting and pushing its median value up to the parent node when its capacity is exceeded.
+Create an interactive autocorrect visualizer where typing letters traverses down the branches of a Trie and highlights all valid word endings below that node.
+Model a Chord distributed hash table ring where inserting a key-value pair visually hashes the key and routes the data to the correct virtual node.
+Plot a complex audio wave and apply a Fast Fourier Transform to instantly generate an interactive histogram of its constituent frequencies.
+Build a Tic-Tac-Toe game that visualizes the AI Minimax decision tree branching out to terminal states and passing the scores back up to the root.
+Diagram the multi-phase Paxos consensus algorithm by sending prepare and accept messages between proposer and acceptor nodes to agree on a single value.
+Visualize the overlapping subproblems of the Longest Common Subsequence algorithm by filling out a 2D memoization grid step-by-step.
+Show a large dataset being physically split into chunks, processed by independent worker nodes, and then funneled into a combined output for MapReduce.
+Take a user's text string to count the character frequencies and visually construct the binary Huffman tree used to achieve lossless data compression.
+Demonstrate a Bloom filter by hashing an element three times, flipping the corresponding array bits to one, and showing how false positives can occur mathematically.
+Generate an interactive heat map matrix of a dataset where hovering over a heavily saturated square reveals the strong correlation between those two specific variables.
+Run Kruskal's algorithm on a constellation of points by drawing the shortest possible lines to connect them all without ever forming a closed cycle.
+Visualize a JVM memory heap where surviving objects are physically promoted from the Eden space to Survivor spaces and eventually to the Old Generation.
+Scatter random data points and drop centroids, updating their positions iteratively until they settle into the center of the optimal K-Means data clusters.
+Build a simplified blockchain where altering the data in a previous block visually alters its hash to break the cryptographic chain of all subsequent blocks.
+Clarify tensor mathematics by mapping a scalar as a dot, a vector as an arrow, a matrix as a flat grid, and a 3D tensor as an interactive cube of numbers.
+Illustrate a Depth-First Search traversing a labyrinth by leaving a trail of breadcrumbs and visually backtracking only when a dead-end is reached.
+Graph a complex web of university course prerequisites, then use Kahn's algorithm to physically untangle the graph into a linear, valid sequence of classes.
+Plot 3D data points and cast shadows onto an adjustable 2D plane, rotating it to find the angle that preserves the maximum data variance for principal component analysis.
+Insert nodes into a binary search tree and watch the newly accessed node automatically rotate itself repeatedly until it reaches the root position in a Splay Tree.
 Create a web-based truth table generator that parses propositional logic formulas and builds an interactive HTML table.
 Program a basic Conway's Game of Life simulation on an HTML Canvas where users can click to toggle cells and adjust the tick rate.
 Construct an interactive D3.js visualization of the Mandelbrot set that allows users to zoom and pan using the mouse.
