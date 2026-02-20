@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpolnet 2 | Weak Memory Models</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Weak Memory Models (TSO)</h1>
+        <p>Explore how Store Buffers cause execution anomalies.</p>
+    </header>
+
+    <div class="controls">
+        <label for="litmus-select">Scenario:</label>
+        <select id="litmus-select">
+            <option value="SB">Store Buffering (SB)</option>
+            <option value="MP">Message Passing (MP)</option>
+            <option value="LB">Load Buffering (LB)</option>
+        </select>
+        <button id="reset-btn">Reset</button>
+    </div>
+
+    <div class="simulation-container">
+        <!-- Thread 1 -->
+        <div class="thread-column" id="thread-1">
+            <h2>Thread 1</h2>
+            <div class="registers">
+                <h3>Registers</h3>
+                <div class="register-list" id="t1-regs">
+                    <!-- Registers will be injected here -->
+                </div>
+            </div>
+            <div class="instructions">
+                <h3>Instructions</h3>
+                <div class="instruction-list" id="t1-instructions">
+                    <!-- Instructions injected here -->
+                </div>
+                <button class="step-btn" id="t1-step">Step T1</button>
+            </div>
+            <div class="store-buffer">
+                <h3>Store Buffer</h3>
+                <div class="buffer-list" id="t1-buffer">
+                    <!-- Buffer items injected here -->
+                </div>
+                <button class="flush-btn" id="t1-flush" disabled>Flush T1</button>
+            </div>
+        </div>
+
+        <!-- Main Memory -->
+        <div class="memory-column">
+            <h2>Main Memory</h2>
+            <div class="memory-grid" id="main-memory">
+                <!-- Memory cells injected here -->
+            </div>
+
+            <div class="status-panel">
+                <h3>Status</h3>
+                <p id="status-message">Ready.</p>
+                <div id="anomaly-indicator" class="hidden">ANOMALY DETECTED!</div>
+            </div>
+        </div>
+
+        <!-- Thread 2 -->
+        <div class="thread-column" id="thread-2">
+            <h2>Thread 2</h2>
+            <div class="registers">
+                <h3>Registers</h3>
+                <div class="register-list" id="t2-regs">
+                    <!-- Registers will be injected here -->
+                </div>
+            </div>
+            <div class="instructions">
+                <h3>Instructions</h3>
+                <div class="instruction-list" id="t2-instructions">
+                    <!-- Instructions injected here -->
+                </div>
+                <button class="step-btn" id="t2-step">Step T2</button>
+            </div>
+            <div class="store-buffer">
+                <h3>Store Buffer</h3>
+                <div class="buffer-list" id="t2-buffer">
+                    <!-- Buffer items injected here -->
+                </div>
+                <button class="flush-btn" id="t2-flush" disabled>Flush T2</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <p><strong>Step:</strong> Execute next instruction. Stores go to buffer. Loads check buffer then memory.</p>
+        <p><strong>Flush:</strong> Move oldest store from buffer to main memory.</p>
+    </div>
+</body>
+</html>

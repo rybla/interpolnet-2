@@ -1,4 +1,3 @@
-Build a drag-and-drop instruction reordering tool to demonstrate how weak memory models lead to out-of-order execution anomalies.
 Develop an interactive Piet interpreter that traces a cursor through a pixel art grid to show how color transitions dictate program logic.
 Create a 2D tape visualizer for Brainfuck where a mechanical read/write head moves physically to execute loops and pointer increments.
 Visualize the call stack of a recursive Fibonacci function as a fractal tree that blooms downward and highlights overlapping subproblems.

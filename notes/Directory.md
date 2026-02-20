@@ -168,3 +168,46 @@ An interactive visualization of the Mark-and-Sweep garbage collection algorithm.
 - **Algorithm & Animation**:
     - **Mark**: BFS/DFS traversal from Roots. Animate the "discovery" of nodes with a delay. Change node color to "Marked" state.
     - **Sweep**: Iterate through all nodes. If `!marked`, animate removal. If `marked`, reset `marked` flag for next cycle and revert color.
+
+## Weak Memory Models [[demo](https://rybla.github.io/interpolnet-2/weak-memory-models)]
+
+An interactive visualization of hardware memory models, specifically focusing on Total Store Order (TSO) to demonstrate how buffering stores can lead to counter-intuitive execution results (anomalies).
+
+### Features
+- **Dual-Thread Simulation**: Users control two concurrent threads of execution.
+- **Operational TSO Model**:
+    - **Instruction Queues**: Each thread has a sequence of Load and Store instructions.
+    - **Store Buffers**: Visual representation of the FIFO buffer where stores are held before committing to main memory.
+    - **Main Memory**: Shared global state for variables (x, y).
+    - **Registers**: Local thread state (r1, r2).
+- **Interactive Scheduling**:
+    - **Step**: Execute the next instruction in a thread.
+    - **Flush**: Commit the oldest store from a thread's buffer to main memory.
+- **Litmus Test Presets**: Easily load classic concurrency scenarios:
+    - **Store Buffering (SB)**: The classic example where `r1=0, r2=0` is possible despite `x=1, y=1`.
+    - **Message Passing (MP)**: Shows safety in TSO (but would fail in weaker models).
+    - **Independent Reads**: Shows how independent loads can be reordered (or not, depending on the model, though TSO preserves load-load).
+- **Anomaly Detection**: The system highlights when a final state is reached that would be impossible under Sequential Consistency.
+
+### Design Goals
+- **Demystify Concurrency**: Show *mechanistically* why reordering happens (it's just buffering!), rather than just abstract rules.
+- **Gamification**: The user acts as the "scheduler", trying to trigger specific edge cases by carefully interleaving steps and flushes.
+- **Visual Clarity**: Bright, distinct colors for different values/variables to easily track data flow from registers to buffers to memory.
+
+### Implementation Plan
+- **HTML Structure**: A layout with three main sections: Thread 1 (Left), Main Memory (Center), Thread 2 (Right). Each thread section includes its Instruction Queue, Registers, and Store Buffer.
+- **State Management**:
+    - A central store object tracking: `programCounters` for T1/T2, `storeBuffers` (queues of `{addr, val}`), `registers` (map), and `memory` (map).
+    - History stack for "Undo" functionality.
+- **Interaction Logic**:
+    - `Step(threadId)`:
+        - If `Load`: Check local buffer for address; if hit, return value; else read main memory. Update register.
+        - If `Store`: Push `{addr, val}` to local Store Buffer.
+    - `Flush(threadId)`: Pop oldest store from buffer, write to main memory.
+- **Rendering**:
+    - Use CSS Grid for the layout.
+    - Animate the movement of values:
+        - From Instruction to Buffer (on Store).
+        - From Buffer to Memory (on Flush).
+        - From Memory/Buffer to Register (on Load).
+    - Use `requestAnimationFrame` for smooth transitions of "data packets".
