@@ -100,3 +100,35 @@ An interactive tool that visualizes the Hindley-Milner type inference algorithm.
 - **UI/UX**:
     - Split screen: Code input on one side, Visualization on the other.
     - Color coding for type variables to track them easily.
+
+## Dynamic AST Visualizer [[demo](https://rybla.github.io/interpolnet-2/dynamic-ast-visualizer)]
+
+An interactive tool that visualizes the Abstract Syntax Tree (AST) of a custom C-like programming language in real-time. As the user types code, the tree structure grows, prunes, and updates dynamically.
+
+### Features
+- **Real-time Parsing**: Code is parsed on every keystroke (with debouncing) to generate an AST.
+- **Dynamic Tree Visualization**: The AST is rendered as a node-link diagram using SVG.
+- **Bidirectional Highlighting**:
+    - Hovering over a node in the tree highlights the corresponding code in the editor.
+    - Hovering over code highlights the corresponding node in the tree.
+- **Collapsible Branches**: Users can click on tree nodes to collapse or expand branches to focus on specific parts of the code.
+- **Zoom and Pan**: The visualization area supports zooming and panning to navigate large ASTs.
+
+### Design Goals
+- **Educational**: Provide a clear visual representation of how source code translates into a hierarchical structure.
+- ** responsiveness**: Ensure the visualization updates smoothly and feels responsive to user input.
+- **Aesthetics**: Use a clean, modern design with smooth animations for tree updates (nodes entering/exiting).
+
+### Implementation Plan
+- **Parser**: Implement a recursive descent parser for a subset of C-like syntax.
+    - Supported constructs: `function`, `var`, `if`, `while`, `return`, binary operations, function calls.
+    - Output: A JSON-like tree structure where each node contains its type, value (if applicable), children, and source code range (start/end indices).
+- **Layout Engine**: Implement a tree layout algorithm (e.g., Reingold-Tilford) to calculate x/y coordinates for each node.
+- **Renderer**:
+    - Use SVG for rendering nodes (circles/rectangles) and edges (lines/curves).
+    - Use CSS transitions for smooth movement of nodes when the tree structure changes.
+- **Code Editor**: A `textarea` for input, with a synchronized overlay for syntax highlighting and range highlighting.
+- **Interaction Logic**:
+    - Map source ranges to AST nodes.
+    - Handle mouse events for hovering and clicking.
+    - Implement zoom/pan logic for the SVG container.
