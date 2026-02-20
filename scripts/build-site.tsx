@@ -6,7 +6,7 @@ import {
   type DemoManifest,
   dist_dirpath,
 } from "@/constants";
-import { do_ } from "@/utility";
+import { do_, getAllDemoSlugs } from "@/utility";
 import fs from "fs";
 import z from "zod";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -23,10 +23,10 @@ fs.cpSync(public_dirpath, dist_dirpath, { recursive: true, force: true });
 
 console.log("Reading demo manifests");
 
-const demo_dirnames = fs.readdirSync(public_dirpath);
+const demo_slugs = getAllDemoSlugs();
 const demo_manifests: DemoManifest[] = [];
 
-for (const demo_slug of demo_dirnames) {
+for (const demo_slug of demo_slugs) {
   const demo_dirpath = `${public_dirpath}/${demo_slug}`;
 
   if (!fs.statSync(demo_dirpath).isDirectory()) continue;

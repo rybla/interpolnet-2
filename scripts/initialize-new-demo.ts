@@ -6,6 +6,7 @@ import {
   public_dirpath,
   root_url,
 } from "@/constants";
+import { getAllDemoSlugs } from "@/utility";
 import { argument, object, string } from "@optique/core";
 import { run } from "@optique/run";
 import fs from "fs";
@@ -34,6 +35,15 @@ const parser = object({
 const config = run(parser, {
   programName: "./initialize-new-demo",
 });
+
+// -----------------------------------------------------------------------------
+
+if (getAllDemoSlugs().includes(config.slug)) {
+  console.error(
+    "The given SLUG_NAME is invalid since there already exists a demo with that SLUG_NAME. Choose a slightly different string for SLUG_NAME and run this command again.",
+  );
+  process.exit(1);
+}
 
 // -----------------------------------------------------------------------------
 
