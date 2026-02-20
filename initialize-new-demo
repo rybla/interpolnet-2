@@ -1,0 +1,1 @@
+bun run scripts/initialize-new-demo $0 $1

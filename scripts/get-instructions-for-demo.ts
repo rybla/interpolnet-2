@@ -12,9 +12,9 @@ These are instructions for implementing a new demo.
 
 Now that you have the description of the demo you must implement, run this command to initialize the setup for the new demo:
 
-${cqBlock("sh", "bun run scripts/initialize-new-demo.sh <DEMO_NAME> <DEMO_SLUG>")}
+${cqBlock("sh", "bun run scripts/initialize-new-demo.ts <DEMO_NAME> <DEMO_SLUG>")}
 
-Here, ${cq("<DEMO_NAME>")} is the human-readable name for your new demo, and ${cq("<DEMO_SLUG>")} is a slug version of the name.
+Here, ${cq("<DEMO_NAME>")} is the human-readable name for your new demo, and ${cq("<DEMO_SLUG>")} is a slug version of the name. Note that ${cq("<DEMO_NAME>")} and ${cq("<DEMO_SLUG>")} will be referenced in later instructions.
 
 This command does two things:
 
@@ -24,5 +24,9 @@ This command does two things:
 Now, you should replace the placeholder text in ${cq(directory_filepath)}, which looks like "${directory_new_demo_placeholder_text("<DEMO_NAME>")}" (where "<DEMO_NAME>" is your demo's name) with a flushed-out comprehensive description of what your demo is, what are the specific features, what are the design goal, and a basic outline of the implementation plan. Be creative! Make sure to follow the demo description you were given earlier.
 
 Finally, you must implement the demo according to your flushed-out and comprehensive description of the demo and implementation plan in ${cq(path.join(public_dirpath, "<DEMO_SLUG>"))}. That directory has been initialized with some template files which you should edit to implement the demo.
+
+Once you've finished implementing the demo, run this command for the next instructions on validating your demo implementation:
+
+${cqBlock("sh", "bun run scripts/get-instructions-for-validation.ts")}
 `.trim(),
 );

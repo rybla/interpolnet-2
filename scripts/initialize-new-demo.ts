@@ -31,7 +31,9 @@ const parser = object({
   }),
 });
 
-const config = run(parser);
+const config = run(parser, {
+  programName: "./initialize-new-demo",
+});
 
 // -----------------------------------------------------------------------------
 

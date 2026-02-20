@@ -36,10 +36,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
 
-      - name: Build dist
+      - name: Build site
         run: |
           bun install --frozen-lockfile
-          bun run scripts/build.tsx
+          bun run scripts/build-site.tsx
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5

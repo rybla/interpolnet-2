@@ -14,6 +14,8 @@ export const instructions_filepath = path.join(
   "Instructions.md",
 );
 
+export const demo_descriptions_filepath = "demo-descriptions.txt";
+
 export const demo_slug_pattern = /^[a-zA-Z0-9_-]+$/;
 export const demo_slug_schema = z.string().regex(demo_slug_pattern);
 
@@ -26,3 +28,5 @@ export const demo_manifest_schema = z.object({
 export function directory_new_demo_placeholder_text(name: string) {
   return `TODO: comprehensive description of new demo "${name}"`;
 }
+
+export const screenshots_dirpath = "screenshots";

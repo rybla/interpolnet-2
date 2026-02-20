@@ -1,0 +1,25 @@
+Build an interactive lambda calculus evaluator that visually steps through beta reductions and highlights bound variables as the execution progresses (Citation: Standard programming languages theory educational tools).
+Develop a simple Hindley-Milner type inference visualizer where users type functional programming expressions and see the unification tree update in real-time (Citation: Programming languages theory visualization standards).
+Create a web-based truth table generator that parses propositional logic formulas and builds an interactive HTML table (Citation: Mathematical logic coursework applications).
+Program a basic Conway's Game of Life simulation on an HTML Canvas where users can click to toggle cells and adjust the tick rate (Citation: MDN Web Docs Game Development tutorials).
+Construct an interactive D3.js visualization of the Mandelbrot set that allows users to zoom and pan using the mouse (Citation: GeeksforGeeks Top 10 Data Visualization Libraries).
+Implement a simple 2D collision detection demo using JavaScript and HTML Canvas where bouncing shapes change color upon intersection (Citation: MDN Web Docs 2D/3D Games on the Web).
+Design an iterative prisoner's dilemma simulation where users can pit different strategies against each other and view the payoff matrix as a live Chart.js graph (Citation: SitePoint 15 JavaScript Libraries).
+Build a UI design playground that lets users tweak CSS variables for a mock dashboard and immediately see the results on typography and layout (Citation: LearnUI Design Exercises).
+Develop a Markov chain text generator visualization that displays the state transition graph using SVG while generating sample text dynamically (Citation: Standard mathematical modeling concepts).
+Create an interactive L-system fractal generator where users can define custom axioms and production rules to draw plants or geometric shapes on a canvas (Citation: Mathematical graphics tutorials).
+Program an interactive sorting algorithm visualizer that uses CSS animations to swap DOM elements representing an array of numbers (Citation: Reddit r/webdev beginner projects).
+Build a Nash equilibrium calculator that accepts a 2x2 payoff matrix via HTML inputs and highlights the optimal strategies in a styled CSS grid (Citation: Standard game theory web tools).
+Implement a basic raycaster in JavaScript that renders a pseudo-3D maze onto a 2D HTML Canvas, complete with simple keyboard movement (Citation: Classic JavaScript game tutorials).
+Develop a visual state machine designer where users can drag and drop nodes, connect them with SVG lines, and simulate inputs to watch the active state transition (Citation: UI/UX interactive data modeling concepts).
+Create an interactive color palette generator that uses mathematical formulas in HSL space to suggest aesthetically pleasing UI schemes (Citation: LearnUI Design color theory exercises).
+Build a simple physics engine demo simulating rigid body dynamics and elastic collisions on a canvas with adjustable gravity and friction sliders (Citation: Ten Minute Physics GitHub Pages).
+Program a web-based natural deduction proof assistant that allows users to construct logic proofs step-by-step using a drag-and-drop HTML interface (Citation: Mathematical logic proof system implementations).
+Implement an interactive boids flocking simulation that visually demonstrates emergent behavior based on separation, alignment, and cohesion rules (Citation: Complex systems web simulations).
+Develop a CSS flexbox interactive cheat sheet that visually reshuffles mock content boxes when users select different layout properties (Citation: MDN Web Docs UI concepts).
+Create a real-time data visualization dashboard using Plotly.js to display simulated mathematical functions with smooth CSS animations (Citation: Programming Historian Plotly tutorial).
+Build an interactive abstract syntax tree visualizer that parses simple strings and renders the tree dynamically using HTML Canvas (Citation: Standard programming languages theory educational tools).
+Develop a web-based Turing machine simulator featuring a draggable tape and a visual state transition table updated via JavaScript (Citation: Mathematical logic web applications).
+Implement an interactive UI for exploring graph coloring algorithms, allowing users to draw nodes and edges before applying a mathematical coloring strategy (Citation: Graph theory visualization standards).
+Create a web-based auction simulator demonstrating game theory concepts like the Vickrey auction using HTML forms and a live leaderboard (Citation: Game theory interactive tutorials).
+Design an interactive Bézier curve editor using HTML Canvas where users can drag control points and see the mathematical polynomials update in real-time (Citation: MDN Web Docs graphics tutorials).

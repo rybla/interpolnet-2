@@ -8,6 +8,6 @@ Carefully read ${cq("README.md")} to understand an overview of this project.
 
 Then, run this command to get your next instructions:
 
-${cqBlock("sh", "bun run scripts/get-task-instructions.ts")}
+${cqBlock("sh", "bun run scripts/get-instructions-for-task.ts")}
 `.trim(),
 );
