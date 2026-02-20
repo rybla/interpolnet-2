@@ -1,4 +1,3 @@
-Develop a simple Hindley-Milner type inference visualizer where users type functional programming expressions and see the unification tree update in real-time.
 Create a web-based truth table generator that parses propositional logic formulas and builds an interactive HTML table.
 Program a basic Conway's Game of Life simulation on an HTML Canvas where users can click to toggle cells and adjust the tick rate.
 Construct an interactive D3.js visualization of the Mandelbrot set that allows users to zoom and pan using the mouse.
