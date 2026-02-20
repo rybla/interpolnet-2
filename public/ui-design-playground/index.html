@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Design Playground</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Control Panel -->
+        <aside class="control-panel">
+            <h2>Design Tokens</h2>
+
+            <div class="control-group">
+                <h3>Colors</h3>
+                <label>
+                    Primary Color
+                    <input type="color" id="color-primary" value="#3b82f6">
+                </label>
+                <label>
+                    Background Color
+                    <input type="color" id="color-background" value="#f3f4f6">
+                </label>
+                <label>
+                    Surface Color
+                    <input type="color" id="color-surface" value="#ffffff">
+                </label>
+                <label>
+                    Text Color
+                    <input type="color" id="color-text" value="#1f2937">
+                </label>
+            </div>
+
+            <div class="control-group">
+                <h3>Typography</h3>
+                <label>
+                    Base Font Size (px)
+                    <input type="range" id="font-size-base" min="12" max="24" value="16">
+                    <span class="value-display">16px</span>
+                </label>
+                <label>
+                    Font Family
+                    <select id="font-family">
+                        <option value="system-ui, sans-serif">System UI</option>
+                        <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                        <option value="'Times New Roman', Times, serif">Serif</option>
+                        <option value="'Courier New', Courier, monospace">Monospace</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <h3>Spacing & Layout</h3>
+                <label>
+                    Base Spacing (px)
+                    <input type="range" id="spacing-base" min="4" max="32" value="16">
+                    <span class="value-display">16px</span>
+                </label>
+                <label>
+                    Border Radius (px)
+                    <input type="range" id="border-radius" min="0" max="32" value="8">
+                    <span class="value-display">8px</span>
+                </label>
+            </div>
+
+            <button id="reset-btn" class="reset-btn">Reset Defaults</button>
+        </aside>
+
+        <!-- Mock Dashboard -->
+        <main class="dashboard-preview">
+            <div class="dashboard-container">
+                <header class="dashboard-header">
+                    <div class="logo">Dashboard</div>
+                    <nav>
+                        <a href="#" class="active">Overview</a>
+                        <a href="#">Analytics</a>
+                        <a href="#">Settings</a>
+                    </nav>
+                    <div class="user-profile">
+                        <div class="avatar">JD</div>
+                    </div>
+                </header>
+
+                <div class="dashboard-content">
+                    <div class="sidebar-nav">
+                        <ul>
+                            <li class="active">Home</li>
+                            <li>Projects</li>
+                            <li>Tasks</li>
+                            <li>Messages <span class="badge">3</span></li>
+                            <li>Reports</li>
+                        </ul>
+                    </div>
+
+                    <div class="main-area">
+                        <h1>Overview</h1>
+
+                        <div class="stats-grid">
+                            <div class="card stat-card">
+                                <h3>Total Revenue</h3>
+                                <p class="stat-value">$45,231</p>
+                                <p class="stat-change positive">+20.1% from last month</p>
+                            </div>
+                            <div class="card stat-card">
+                                <h3>Active Users</h3>
+                                <p class="stat-value">2,345</p>
+                                <p class="stat-change positive">+15% from last month</p>
+                            </div>
+                            <div class="card stat-card">
+                                <h3>Bounce Rate</h3>
+                                <p class="stat-value">42%</p>
+                                <p class="stat-change negative">-5% from last month</p>
+                            </div>
+                        </div>
+
+                        <div class="content-grid">
+                            <div class="card chart-card">
+                                <h3>Traffic Source</h3>
+                                <div class="mock-chart">
+                                    <div class="bar" style="height: 60%"></div>
+                                    <div class="bar" style="height: 80%"></div>
+                                    <div class="bar" style="height: 40%"></div>
+                                    <div class="bar" style="height: 90%"></div>
+                                    <div class="bar" style="height: 50%"></div>
+                                    <div class="bar" style="height: 70%"></div>
+                                    <div class="bar" style="height: 30%"></div>
+                                </div>
+                            </div>
+
+                            <div class="card form-card">
+                                <h3>Quick Action</h3>
+                                <form>
+                                    <div class="form-group">
+                                        <label for="project-name">Project Name</label>
+                                        <input type="text" id="project-name" placeholder="Enter project name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category">Category</label>
+                                        <select id="category">
+                                            <option>Design</option>
+                                            <option>Development</option>
+                                            <option>Marketing</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" class="btn btn-secondary">Cancel</button>
+                                        <button type="button" class="btn btn-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
