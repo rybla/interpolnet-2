@@ -16,7 +16,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 console.log("Removing old dist directory");
 fs.rmSync(dist_dirpath, { recursive: true, force: true });
 
-console.log("Copying public directory to dist new directory");
+console.log("Copying public directory to new dist directory");
 fs.cpSync(public_dirpath, dist_dirpath, { recursive: true, force: true });
 
 // -----------------------------------------------------------------------------
