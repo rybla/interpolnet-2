@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closure Bubbles</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="matter.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Closure Bubbles</h1>
+        <p>Visualize how closures retain variable scopes</p>
+    </header>
+    <div id="container">
+        <div id="code-panel">
+            <div id="code-display">
+                <div class="code-line" id="line-1">function makeCounter() {</div>
+                <div class="code-line indent-1" id="line-2">let count = 0;</div>
+                <div class="code-line indent-1" id="line-3">return function() {</div>
+                <div class="code-line indent-2" id="line-4">count++;</div>
+                <div class="code-line indent-2" id="line-5">return count;</div>
+                <div class="code-line indent-1" id="line-6">};</div>
+                <div class="code-line" id="line-7">}</div>
+                <div class="code-line" id="line-8">let myCounter = makeCounter();</div>
+                <div class="code-line" id="line-9">myCounter();</div>
+                <div class="code-line" id="line-10">myCounter();</div>
+            </div>
+            <div id="controls">
+                <button id="step-btn">Next Step</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+            <div id="description">
+                <p id="step-description">Click "Next Step" to start the simulation.</p>
+            </div>
+        </div>
+        <div id="canvas-container"></div>
+    </div>
+</body>
+</html>

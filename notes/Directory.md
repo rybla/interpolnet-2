@@ -319,3 +319,41 @@ An interactive visualization of the recursive Fibonacci sequence calculation as 
     - Use **SVG** for the visualization to allow for clean scaling and easy DOM event handling (hovering).
     - Use CSS transitions for color changes and opacity.
 - **UI Overlay**: A minimal control panel for `n`, speed, and the memoization toggle.
+
+## Closure Bubbles [[demo](https://rybla.github.io/interpolnet-2/closure-bubbles)]
+
+An interactive visualization that illustrates JavaScript closures by representing function scopes as physical bubbles. Variables are particles trapped inside these bubbles. The demo demonstrates how an inner function (closure) retains access to its parent's scope (the outer bubble) even after the parent function has finished executing, preventing the parent scope from being "popped" (garbage collected).
+
+### Features
+- **Physical Metaphor**:
+    - **Scopes as Bubbles**: Functions are represented as semi-transparent, bouncy bubbles.
+    - **Variables as Particles**: Variables are physical objects floating inside their respective scope bubbles.
+    - **Closures as Tethers**: Returned inner functions maintain a physical connection or containment relationship with their parent scope, visually anchoring it.
+- **Interactive Execution**:
+    - **Step-by-Step**: Users step through a code snippet to see the line-by-line execution.
+    - **Dynamic Creation**: Watch bubbles inflate as functions are called and variables are declared.
+    - **Persistence**: Observe how a "closure" keeps the outer bubble alive while other non-closed scopes pop and vanish.
+- **Variable Access Visualization**:
+    - **Scope Chain Lookup**: When a variable is accessed, a visual line traces from the active function up the bubble chain to find the variable.
+    - **Mutation**: See variable particles change color or value when modified by a closure.
+
+### Design Goals
+- **Tangible "Trapping"**: The primary goal is to make the concept of "captured variables" feel physical. The user should see that the variable *cannot* leave and the scope *cannot* disappear because it is held by the closure.
+- **Physics-based Fun**: The playfulness of bouncing bubbles makes the abstract concept of memory management more engaging and less dry.
+- **Clear Distinction**: Visually separate "active execution" from "retained memory".
+
+### Implementation Plan
+- **Physics Engine**: Use a custom lightweight physics engine or a library (like Matter.js) to simulate:
+    - **Containers**: Scopes are circular boundaries.
+    - **Bodies**: Variables are small circles colliding inside.
+    - **Constraints**: Closures are linked to their parent scopes.
+- **Visuals**:
+    - **Canvas API**: Render the physics simulation.
+    - **Styling**: Use a "soap bubble" aesthetic with specular highlights and wobble effects.
+    - **Code View**: Display the source code and highlight the active line.
+- **Simulation Logic**:
+    - Hardcode a specific closure scenario (e.g., a counter generator or a function factory).
+    - Map each line of code to a specific animation/physics event (e.g., `let x = 1` spawns a particle).
+- **Interactions**:
+    - "Next Step" button to advance the code.
+    - Mouse interaction to poke and drag bubbles (to prove they are physical objects).
