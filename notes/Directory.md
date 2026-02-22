@@ -357,3 +357,46 @@ An interactive visualization that illustrates JavaScript closures by representin
 - **Interactions**:
     - "Next Step" button to advance the code.
     - Mouse interaction to poke and drag bubbles (to prove they are physical objects).
+
+## Structural Subtyping Puzzle [[demo](https://rybla.github.io/interpolnet-2/structural-subtyping-puzzle)]
+
+An interactive puzzle game that visualizes the concept of structural subtyping and generic constraints in programming languages like TypeScript. Users drag and drop "Data Blocks" (representing objects/values) into "Type Slots" (representing interfaces/expected types) to see if they fit.
+
+### Features
+- **Visual Type Checking**:
+    - **Interface Slots**: Represented as sockets with specific "ports" (indentations) for required properties.
+    - **Data Blocks**: Represented as puzzle pieces with "connectors" (protrusions) for their properties.
+    - **Fitting Logic**: A block fits a slot if it has *at least* the connectors required by the slot. Extra connectors on the block are allowed (structural subtyping), but missing connectors cause rejection.
+- **Generics Support**:
+    - Visualizes generic types (e.g., `Container<T>`) using nested shapes or colors.
+    - Demonstrates constraints (e.g., `T extends Shape`) by requiring the inner shape to match a specific pattern.
+- **Interactive Playground**:
+    - **Challenge Mode**: A series of levels where the user must find the correct data block for a given function signature.
+    - **Sandbox Mode**: Users can combine properties to create custom blocks and test them against various interfaces.
+- **Code Correspondence**:
+    - Hovering over any visual element displays its equivalent TypeScript code (interface definition or object literal).
+    - Successful matches show the "function call" that would execute.
+
+### Design Goals
+- **Intuitive Understanding**: Replace abstract type theory rules with physical intuitions (fitting shapes, connecting plugs).
+- **Clear Feedback**: Immediate visual feedback when a type mismatch occurs (e.g., a red highlight on the missing property).
+- **Playfulness**: Make the act of "type checking" feel like solving a satisfying spatial puzzle.
+
+### Implementation Plan
+- **Data Model**:
+    - Define a schema for `Type` (Interface) and `Value` (Object).
+    - `Type` structure: `{ name: string, properties: { [key: string]: Type } }`.
+    - `Value` structure: `{ properties: { [key: string]: Value } }`.
+- **Renderer**:
+    - Use **SVG** for crisp, scalable graphics.
+    - **Dynamic Shape Generation**: Algorithmically generate SVG paths for blocks and slots based on their properties.
+        - Each property (e.g., `id: number`, `name: string`) maps to a specific connector shape/position on the block edge.
+    - **Generics**: Render generic parameters as "inlays" or specific color modifications.
+- **Interaction**:
+    - Implement drag-and-drop using mouse/touch events.
+    - **Collision Detection**: Simple bounding box or distance check to detect when a block is hovered over a slot.
+    - **Validation Logic**: On drop, recursively check if the dragged Value structure satisfies the Target Type structure.
+- **UI/Layout**:
+    - **Sidebar**: A "Part Picker" containing available Data Blocks.
+    - **Main Area**: The "Type Checking Zone" with active Interface Slots.
+    - **Code Panel**: A floating or fixed panel showing the TS syntax.
