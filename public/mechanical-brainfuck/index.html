@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Mechanical Brainfuck</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Mechanical Brainfuck</h1>
+        <p>A skeuomorphic 2D tape visualizer.</p>
+      </header>
+
+      <main>
+        <section class="controls-panel">
+          <div class="code-editor-container">
+            <label for="code-input">Code Tape:</label>
+            <textarea id="code-input" spellcheck="false">++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.</textarea>
+          </div>
+
+          <div class="controls">
+            <button id="btn-reset" title="Reset">⏮ Reset</button>
+            <button id="btn-step" title="Step">⏯ Step</button>
+            <button id="btn-play-pause" title="Play/Pause">▶ Play</button>
+
+            <div class="speed-control">
+              <label for="speed-slider">Speed:</label>
+              <input type="range" id="speed-slider" min="1" max="60" value="10">
+            </div>
+          </div>
+        </section>
+
+        <section class="visualization-panel">
+          <div class="canvas-container">
+            <canvas id="tape-canvas"></canvas>
+          </div>
+
+          <div class="output-container">
+            <label>Output:</label>
+            <pre id="output-display"></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
