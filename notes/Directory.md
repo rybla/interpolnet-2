@@ -252,3 +252,38 @@ An interactive Piet interpreter that traces a cursor through a pixel art grid to
 - **File Handling**:
     - Use the File API to read uploaded images.
     - Parse image data to a 2D array of color values (normalizing to Piet's standard 20 colors).
+
+## Mechanical Brainfuck [[demo](https://rybla.github.io/interpolnet-2/mechanical-brainfuck)]
+
+A 2D tape visualizer for Brainfuck where a mechanical read/write head moves physically to execute loops and pointer increments. This demo brings the abstract concept of the Brainfuck tape to life with a skeuomorphic, mechanical design.
+
+### Features
+- **2D Tape Grid**: The tape is visualized not just as a 1D strip, but as a winding 2D path (e.g., a Hilbert curve or a snake-like pattern) to fit more memory on the screen while maintaining a mechanical aesthetic.
+- **Mechanical Head**: A detailed, animated read/write head that physically traverses the tape.
+- **Execution Animation**:
+    - **Move**: The head slides or rolls to the next cell.
+    - **Increment/Decrement**: Mechanical gears or digits spin to change the value in the current cell.
+    - **Loop**: The head physically travels back to the start of the loop, emphasizing the control flow.
+- **Code Editor**: A text area to input Brainfuck code with syntax highlighting for the 8 commands.
+- **Controls**: Play, Pause, Step, and Speed control.
+- **Memory View**: A zoomed-out view or a side panel showing the state of the memory cells.
+
+### Design Goals
+- **Tangibility**: Make the execution of Brainfuck code feel physical and tangible.
+- **Visual Engagement**: The mechanical movement and animations should be satisfying to watch.
+- **Clarity**: Despite the skeuomorphic design, the state of the machine (pointer position, current value) should be clearly readable.
+
+### Implementation Plan
+- **Tape Representation**: Use an HTML5 `<canvas>` or SVG to render the 2D tape path. The path will be generated algorithmically (e.g., a snake pattern filling the viewport).
+- **Mechanical Head**:
+    - Implement a sprite or SVG graphic for the head.
+    - Use CSS transitions or the Web Animations API to animate its movement along the tape path.
+    - Animate value changes (e.g., a rolling counter effect).
+- **Interpreter**:
+    - Implement a standard Brainfuck interpreter in JavaScript.
+    - Map the linear memory array to the 2D tape coordinates.
+    - Support standard commands: `+`, `-`, `<`, `>`, `[`, `]`, `.`, `,`.
+- **UI/UX**:
+    - **Editor**: A simple code editor overlay or panel.
+    - **Controls**: Playback controls (Play/Pause/Step/Reset) and a speed slider.
+    - **Output**: A simulated "printer" or display for the output characters.
