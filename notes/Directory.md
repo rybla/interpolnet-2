@@ -287,3 +287,35 @@ A 2D tape visualizer for Brainfuck where a mechanical read/write head moves phys
     - **Editor**: A simple code editor overlay or panel.
     - **Controls**: Playback controls (Play/Pause/Step/Reset) and a speed slider.
     - **Output**: A simulated "printer" or display for the output characters.
+
+## Fibonacci Fractal Tree [[demo](https://rybla.github.io/interpolnet-2/fibonacci-fractal-tree)]
+
+An interactive visualization of the recursive Fibonacci sequence calculation as a downward-growing fractal tree. This demo illustrates the concept of recursion, the structure of the call stack, and the redundancy of overlapping subproblems in a naive implementation.
+
+### Features
+- **Fractal Growth**: Watch the tree "bloom" as you increase the Fibonacci number. The tree grows downward, with each branch representing a recursive call.
+- **Interactive Controls**:
+    - **Increase/Decrease n**: Adjust the input number `n` to see how the tree complexity explodes exponentially.
+    - **Animation Speed**: Control how fast the recursion unfolds.
+- **Subproblem Highlighting**:
+    - **Hover Effects**: Hovering over a node highlights all identical subproblems (e.g., all instances of `fib(2)`) to visualize redundancy.
+    - **Memoization Mode**: A toggle to enable memoization. When active, the visualization shows how the tree is pruned, calculating each unique subproblem only once.
+- **Visual Feedback**:
+    - **Golden Ratio Aesthetics**: Use a color palette inspired by the golden ratio and nature (greens, golds, earth tones).
+    - **Dynamic Edges**: Lines connecting nodes animate as if growing.
+
+### Design Goals
+- **Educational Intuition**: Provide a visceral sense of "exponential growth" through the visual density of the tree.
+- **Contrast**: Clearly show the difference between naive recursion (bushy, redundant tree) and memoized recursion (linear-ish, pruned tree).
+- **Aesthetic Appeal**: Create a visualization that is beautiful to look at, resembling a biological plant or a mathematical fractal.
+
+### Implementation Plan
+- **Recursive Logic**: Implement a generator or an async recursive function to yield the state of the tree step-by-step for animation.
+- **Layout Algorithm**: Use a recursive tree layout algorithm.
+    - Root at the top.
+    - Children split at angles (e.g., +/- 15-30 degrees) or spread horizontally.
+    - Branch length and thickness may decrease with depth to enhance the "fractal" look.
+- **Rendering**:
+    - Use **SVG** for the visualization to allow for clean scaling and easy DOM event handling (hovering).
+    - Use CSS transitions for color changes and opacity.
+- **UI Overlay**: A minimal control panel for `n`, speed, and the memoization toggle.

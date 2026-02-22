@@ -1,4 +1,3 @@
-Visualize the call stack of a recursive Fibonacci function as a fractal tree that blooms downward and highlights overlapping subproblems.
 Illustrate JavaScript closures by showing variables trapped in nested physical bubbles that persist even after the outer function executes.
 Design a visual type-checker that fits interlocking puzzle pieces together to demonstrate structural subtyping and generic constraints.
 Build an interactive regex engine that draws a non-deterministic finite automaton graph and animates string matching state transitions.

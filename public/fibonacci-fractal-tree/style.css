@@ -1,0 +1,257 @@
+:root {
+  --bg-color: #0f1c15;
+  --text-color: #e0e0e0;
+  --primary-color: #2ecc71; /* Green for normal nodes */
+  --secondary-color: #e67e22; /* Orange for memoized */
+  --highlight-color: #f1c40f; /* Gold for highlights */
+  --edge-color: #555;
+  --panel-bg: rgba(20, 30, 25, 0.85);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  overflow: hidden; /* Prevent scrollbars */
+  width: 100vw;
+  height: 100vh;
+}
+
+#svg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  /* Grid pattern background for a nice techy feel */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+#ui-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  background-color: var(--panel-bg);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  max-width: 300px;
+  transition: opacity 0.3s ease;
+}
+
+/* Hide UI on very small screens or make it collapsible (simple version here) */
+@media (max-width: 600px) {
+  #ui-container {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    border-radius: 12px 12px 0 0;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+}
+
+h1 {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+.control-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkbox-label {
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  margin-right: 10px;
+}
+
+input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+#legend {
+  margin-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.dot.normal {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 5px var(--primary-color);
+}
+
+.dot.memoized {
+  background-color: var(--secondary-color);
+  border: 1px dashed white;
+}
+
+.dot.highlight {
+  background-color: var(--highlight-color);
+  box-shadow: 0 0 8px var(--highlight-color);
+}
+
+#stats {
+  margin-top: 15px;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+#stats p {
+  margin: 3px 0;
+}
+
+/* SVG Styles */
+svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+svg:active {
+  cursor: grabbing;
+}
+
+.node circle {
+  fill: var(--bg-color); /* Initial state before blooming */
+  stroke: var(--primary-color);
+  stroke-width: 2px;
+  transition: all 0.3s ease;
+}
+
+.node text {
+  font-size: 12px;
+  fill: var(--text-color);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-family: monospace;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.node.visible circle {
+  fill: var(--bg-color); /* Actually, let's keep fill dark and stroke colored */
+}
+
+.node.visible text {
+  opacity: 1;
+}
+
+/* Specific node types */
+.node.normal circle {
+  stroke: var(--primary-color);
+  fill: rgba(46, 204, 113, 0.1);
+}
+
+.node.memoized circle {
+  stroke: var(--secondary-color);
+  stroke-dasharray: 4 2;
+  fill: rgba(230, 126, 34, 0.1);
+}
+
+.node:hover circle {
+  fill: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Highlight state (for identical subproblems) */
+.node.highlight-related circle {
+  stroke: var(--highlight-color);
+  stroke-width: 3px;
+  fill: rgba(241, 196, 15, 0.2);
+  filter: drop-shadow(0 0 5px var(--highlight-color));
+}
+
+.link {
+  fill: none;
+  stroke: var(--edge-color);
+  stroke-width: 1.5px;
+  stroke-opacity: 0.6;
+  transition: stroke 0.3s ease;
+}
+
+.link.highlight-related {
+  stroke: var(--highlight-color);
+  stroke-width: 2px;
+  stroke-opacity: 1;
+}
+
+/* Animation classes */
+.node {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.4s, transform 0.4s;
+  transform-origin: center;
+}
+
+.node.bloomed {
+  opacity: 1;
+  transform: scale(1);
+}

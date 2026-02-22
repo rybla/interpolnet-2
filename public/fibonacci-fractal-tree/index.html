@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Fibonacci Fractal Tree</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="ui-container">
+      <h1>Fibonacci Fractal Tree</h1>
+
+      <div class="control-group">
+        <label for="n-input">Fibonacci(n): <span id="n-value">5</span></label>
+        <input type="range" id="n-input" min="0" max="15" value="5" step="1">
+      </div>
+
+      <div class="control-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="memo-toggle">
+          <span>Enable Memoization</span>
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label for="speed-input">Animation Speed: <span id="speed-value">1x</span></label>
+        <input type="range" id="speed-input" min="1" max="100" value="20">
+      </div>
+
+      <div class="control-group">
+        <button id="reset-btn">Replay Animation</button>
+      </div>
+
+      <div id="legend">
+        <div class="legend-item">
+          <span class="dot normal"></span> Standard Call
+        </div>
+        <div class="legend-item">
+          <span class="dot memoized"></span> Memoized / Pruned
+        </div>
+        <div class="legend-item">
+          <span class="dot highlight"></span> Overlapping Subproblem
+        </div>
+      </div>
+
+      <div id="stats">
+        <p>Total Calls: <span id="total-calls">0</span></p>
+        <p>Max Depth: <span id="max-depth">0</span></p>
+      </div>
+    </div>
+
+    <div id="svg-container">
+      <!-- SVG will be injected here by script.js -->
+    </div>
+  </body>
+</html>
