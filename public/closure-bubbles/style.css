@@ -1,0 +1,140 @@
+:root {
+    --bg-color: #0f0f13;
+    --text-color: #e0e0e0;
+    --code-bg: #1e1e24;
+    --highlight: #64ffda;
+    --active-line: #334455;
+    --bubble-color: rgba(100, 255, 218, 0.2);
+    --bubble-border: #64ffda;
+    --accent: #ff6b6b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 1rem;
+    background-color: #1a1a20;
+    text-align: center;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
+}
+
+h1 {
+    margin-bottom: 0.2rem;
+    color: var(--highlight);
+}
+
+#container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+#code-panel {
+    width: 350px;
+    background-color: var(--code-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-right: 1px solid #333;
+    flex-shrink: 0;
+    overflow-y: auto;
+}
+
+#code-display {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    background: #111;
+    padding: 1rem;
+    border-radius: 5px;
+    line-height: 1.5;
+}
+
+.code-line {
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.code-line.active {
+    background-color: var(--active-line);
+    color: var(--highlight);
+    font-weight: bold;
+}
+
+.indent-1 { padding-left: 20px; }
+.indent-2 { padding-left: 40px; }
+
+#controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    background-color: var(--highlight);
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#description {
+    background: #252530;
+    padding: 1rem;
+    border-radius: 5px;
+    line-height: 1.4;
+    font-size: 0.95rem;
+}
+
+#canvas-container {
+    flex: 1;
+    background-color: var(--bg-color);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    #container {
+        flex-direction: column;
+    }
+
+    #code-panel {
+        width: 100%;
+        height: 40%;
+        border-right: none;
+        border-bottom: 1px solid #333;
+    }
+
+    #canvas-container {
+        height: 60%;
+    }
+}
