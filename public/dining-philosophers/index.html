@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpolnet 2 | Dining Philosophers</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dining Philosophers</h1>
+            <p>A visualization of the classic synchronization problem and deadlock.</p>
+        </header>
+
+        <main>
+            <div class="canvas-container">
+                <canvas id="simulation-canvas"></canvas>
+            </div>
+
+            <aside class="controls">
+                <div class="control-group buttons">
+                    <button id="btn-start" class="btn primary">Start</button>
+                    <button id="btn-pause" class="btn secondary">Pause</button>
+                    <button id="btn-reset" class="btn danger">Reset</button>
+                </div>
+
+                <div class="control-group">
+                    <label for="slider-think">Thinking Duration</label>
+                    <div class="slider-row">
+                        <input type="range" id="slider-think" min="500" max="5000" step="100" value="2000">
+                        <span id="val-think">2000ms</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="slider-eat">Eating Duration</label>
+                    <div class="slider-row">
+                        <input type="range" id="slider-eat" min="500" max="5000" step="100" value="2000">
+                        <span id="val-eat">2000ms</span>
+                    </div>
+                </div>
+
+                <div class="control-group checkbox-group">
+                    <input type="checkbox" id="checkbox-timeout" checked>
+                    <label for="checkbox-timeout">Enable Timeout (Prevent Deadlock)</label>
+                </div>
+
+                <div class="control-group" id="timeout-slider-group">
+                    <label for="slider-timeout">Wait Timeout</label>
+                    <div class="slider-row">
+                        <input type="range" id="slider-timeout" min="100" max="3000" step="100" value="1000">
+                        <span id="val-timeout">1000ms</span>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <h3>Legend</h3>
+                    <div class="legend-grid">
+                        <div class="legend-item"><span class="color-box thinking"></span> Thinking</div>
+                        <div class="legend-item"><span class="color-box hungry"></span> Hungry</div>
+                        <div class="legend-item"><span class="color-box eating"></span> Eating</div>
+                        <div class="legend-item"><span class="color-box deadlocked"></span> Deadlocked</div>
+                    </div>
+                </div>
+
+                <div id="status-message">Status: Ready</div>
+            </aside>
+        </main>
+    </div>
+</body>
+</html>

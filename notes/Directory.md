@@ -436,8 +436,52 @@ An interactive regular expression engine that visualizes the conversion of a reg
     - Maintain a `currentStates` set.
 - **Visualization**:
     - **Graph Layout**: Use a simple layered graph layout (dagre-like) or force-directed layout to position nodes. A simple layer-based approach works well for Thomson NFAs as they have a natural left-to-right flow.
-    - **Rendering**: Use SVG for crisp scaling, text labels, and styling.
-- **UI/UX**:
+    - **Rendering**: Use SVG for rendering nodes (circles/rectangles) and edges (lines/curves).
+    - **UI/UX**:
     - **Inputs**: Top bar with Regex and Test String inputs.
     - **Controls**: Play/Pause, Step Forward, Reset buttons.
     - **Status**: Visual indicator for "Match" or "No Match".
+
+## Dining Philosophers [[demo](https://rybla.github.io/interpolnet-2/dining-philosophers)]
+
+An interactive simulation of the classic Dining Philosophers problem, illustrating synchronization issues in concurrent systems. Users can observe philosophers as they think, get hungry, and attempt to eat, while manipulating mutex timeout variables to explore deadlock scenarios and resolution strategies.
+
+### Features
+- **Visual Simulation**: 5 Philosophers sitting around a table with 5 forks.
+    - Philosophers have states: Thinking (Idle), Hungry (Waiting for forks), Eating (Holding two forks).
+    - Forks have states: Free, Taken.
+- **Interactive Controls**:
+    - **Mutex Timeout**: Sliders to adjust how long a philosopher waits for a fork before giving up (or infinite wait to induce deadlock).
+    - **Eating Duration**: Sliders to adjust how long a philosopher eats.
+    - **Thinking Duration**: Sliders to adjust how long a philosopher thinks.
+- **Deadlock Visualization**:
+    - Visual indicators when a deadlock occurs (all philosophers holding one fork and waiting for the other).
+    - "Reset" button to break the deadlock manually.
+- **Resource State Tracking**: Real-time display of fork ownership and philosopher status.
+- **Algorithm Options**: Toggle between naive (wait indefinitely) and smart (timeout and retry/randomized wait) strategies.
+
+### Design Goals
+- **Educational**: Clearly demonstrate the conditions for deadlock (Circular Wait, Hold and Wait, No Preemption, Mutual Exclusion).
+- **Interactive**: Allow users to "break" the system by setting bad parameters, then fix it.
+- **Aesthetic**: A clean, abstract "dinner party" aesthetic, focusing on the state logic.
+- **Responsive**: Works on various screen sizes.
+
+### Implementation Plan
+- **State Management**:
+    - Central `Simulation` object managing the loop.
+    - `Philosopher` class: `id`, `state`, `leftFork`, `rightFork`, `timers`, `color`.
+    - `Fork` class: `id`, `owner`.
+    - `requestAnimationFrame` loop to update states.
+- **Logic**:
+    - State Machine: `Thinking` -> `Hungry` -> `Eating` -> `Thinking`.
+    - `Hungry`: Try to acquire left fork. If successful, try right fork.
+    - If wait time > timeout, release held fork (if any) and go back to `Hungry` (or `Thinking` briefly).
+- **Rendering**:
+    - **Canvas API**: Draw the table, philosophers (circles), and forks (lines).
+    - **Animations**:
+        - Smooth transition of forks to philosophers.
+        - Color pulses for state changes.
+        - Progress bars for eating/thinking duration.
+- **UI**:
+    - Control panel with sliders for global parameters.
+    - Legend for states.
