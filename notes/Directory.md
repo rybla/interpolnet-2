@@ -400,3 +400,44 @@ An interactive puzzle game that visualizes the concept of structural subtyping a
     - **Sidebar**: A "Part Picker" containing available Data Blocks.
     - **Main Area**: The "Type Checking Zone" with active Interface Slots.
     - **Code Panel**: A floating or fixed panel showing the TS syntax.
+
+## Interactive Regex Engine [[demo](https://rybla.github.io/interpolnet-2/regex-engine)]
+
+An interactive regular expression engine that visualizes the conversion of a regex pattern into a Non-Deterministic Finite Automaton (NFA) graph and animates the string matching process state-by-state. This tool helps users understand the underlying mechanics of how regex engines work.
+
+### Features
+- **Regex Input**: A text input field where users can type a regular expression. Supports basic operators: concatenation, union (`|`), Kleene star (`*`), and parentheses `()`.
+- **String Input**: A text input field to test strings against the compiled regex.
+- **NFA Visualization**:
+    - **Graph Rendering**: The regex is compiled into an NFA using Thomson's Construction algorithm. The resulting graph is rendered with states (nodes) and transitions (edges).
+    - **Epsilon Transitions**: Clearly distinguishes epsilon transitions (automatic jumps) from character transitions.
+- **Interactive Matching**:
+    - **Step-by-Step Animation**: Users can step through the matching process character by character.
+    - **Active States Highlighting**: At each step, the set of active NFA states is highlighted.
+    - **Path Tracing**: Visualizes how the engine explores multiple paths simultaneously (or backtracking, depending on the conceptual model shown, here NFA simulation avoids backtracking by keeping a set of states).
+- **Match Result**: Indicates success or failure based on whether an accepting state is reached after consuming the input string.
+
+### Design Goals
+- **Educational Value**: Demystify regex by showing the state machine it compiles to.
+- **Visual Clarity**: Use a clean, directed graph layout. States should be clearly labeled (Start, End).
+- **Responsiveness**: The graph layout should update automatically as the regex changes.
+
+### Implementation Plan
+- **Regex Parser**:
+    - Implement a parser (recursive descent or shunting-yard) to convert the regex string into a structured AST (e.g., `Concat`, `Union`, `Star`, `Char`).
+    - Handle operator precedence and grouping.
+- **NFA Compiler**:
+    - Implement Thomson's Construction to convert the AST into an NFA graph structure.
+    - NFA Structure: States, Transitions (input char or epsilon).
+- **NFA Simulation**:
+    - Implement the NFA matching algorithm:
+        - `epsilonClosure(states)`: Find all reachable states via epsilon transitions.
+        - `move(states, char)`: Find all reachable states via a specific character transition.
+    - Maintain a `currentStates` set.
+- **Visualization**:
+    - **Graph Layout**: Use a simple layered graph layout (dagre-like) or force-directed layout to position nodes. A simple layer-based approach works well for Thomson NFAs as they have a natural left-to-right flow.
+    - **Rendering**: Use SVG for crisp scaling, text labels, and styling.
+- **UI/UX**:
+    - **Inputs**: Top bar with Regex and Test String inputs.
+    - **Controls**: Play/Pause, Step Forward, Reset buttons.
+    - **Status**: Visual indicator for "Match" or "No Match".

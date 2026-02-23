@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Regex Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Regex Engine</h1>
+            <p>Visualize how regular expressions are compiled and executed.</p>
+        </header>
+
+        <main>
+            <div class="controls-panel">
+                <div class="input-group">
+                    <label for="regex-input">Regular Expression</label>
+                    <input type="text" id="regex-input" placeholder="(a|b)*abb" value="(a|b)*abb">
+                </div>
+                <div class="input-group">
+                    <label for="string-input">Test String</label>
+                    <input type="text" id="string-input" placeholder="abb" value="abb">
+                </div>
+            </div>
+
+            <div class="actions-panel">
+                <button id="btn-compile" class="primary">Compile Regex</button>
+                <div class="separator"></div>
+                <button id="btn-play">Play</button>
+                <button id="btn-step">Step</button>
+                <button id="btn-reset">Reset</button>
+                <div class="speed-control">
+                    <label for="speed-slider">Speed</label>
+                    <input type="range" id="speed-slider" min="100" max="2000" step="100" value="1000">
+                </div>
+            </div>
+
+            <div class="visualization-container">
+                <svg id="nfa-canvas" width="800" height="400">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+
+            <div class="status-panel">
+                <div id="match-status" class="status-indicator">Ready</div>
+                <div id="active-states-list" class="status-detail">Active States: None</div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built for Interpolnet 2</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
