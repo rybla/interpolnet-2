@@ -75,6 +75,11 @@ function Index() {
       </head>
       <body>
         <div className="title">{app_name}</div>
+        <div className="nav">
+          <a className="nav-item" href="https://github.com/rybla/interpolnet-2">
+            [github]
+          </a>
+        </div>
         <div className="menu">
           {demo_manifests.map((demo_manifest, i) => (
             <a className="menu-item" href={`./${demo_manifest.slug}/`} key={i}>
