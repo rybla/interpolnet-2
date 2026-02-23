@@ -527,3 +527,49 @@ An interactive visualization that represents functional monads (specifically `Id
 - **UI**:
     - **Toolbar**: Draggable nodes (using HTML Drag and Drop API or mouse events).
     - **Control Panel**: Buttons to spawn values, switch Monad mode, and reset the belt.
+
+## Scope Topography [[demo](https://rybla.github.io/interpolnet-2/scope-topography)]
+
+An interactive visualization that maps code scopes (global, function, block) to a 3D topographical terrain. This demo uses the metaphor of elevation to explain variable shadowing: inner scopes are "higher" plateaus that physically obscure or shadow variables defined in lower, outer scopes.
+
+### Features
+- **Split View Interface**:
+    - **Code Editor**: A text area on the left where users can write JavaScript code. It supports `var`, `let`, `const`, functions, and block scopes `{ ... }`.
+    - **Topographical Map**: A 3D isometric or top-down visualization on the right representing the scope chain as a terrain.
+- **Terrain Visualization**:
+    - **Global Scope**: The base "sea level" terrain.
+    - **Nested Scopes**: Functions and blocks create raised plateaus or hills on top of their parent scope's terrain. The deeper the nesting, the higher the elevation.
+    - **Variables as Landmarks**: Variables declared in a scope are rendered as structures (e.g., flags, towers, or crystals) standing on that scope's plateau.
+- **Shadowing Mechanics**:
+    - **Visual Shadowing**: When a variable in an inner scope (high plateau) has the same name as one in an outer scope (low ground), the high variable physically stands above the low one.
+    - **View Modes**:
+        - **Top-Down**: The high variable literally covers the low one, demonstrating "shadowing" perfectly.
+        - **Isometric**: Users can see the layers and understand that the outer variable still exists "underneath" or "outside" the inner scope.
+- **Interactive Highlighting**:
+    - **Code-to-Map**: Moving the cursor in the code editor highlights the corresponding active scope plateau on the map.
+    - **Map-to-Code**: Hovering over a plateau on the map highlights the scope by brightening it.
+
+### Design Goals
+- **Spatial Intuition**: Convert the abstract concept of "lexical scope" into a concrete spatial relationship (containment = elevation).
+- **Literal Shadowing**: Make the term "variable shadowing" visual and self-explanatory.
+- **Dynamic Exploration**: Allow users to type their own code and immediately see the topological consequences.
+
+### Implementation Plan
+- **Parser**:
+    - Implement a simple JavaScript parser (using a library like Acorn or a custom Babel-based traverse if feasible, or a simplified regex/recursive parser for the demo's scope) to detect scopes and variable declarations.
+    - Output a tree structure: `ScopeNode { id, type, range, variables: [], children: [] }`.
+- **Terrain Generation**:
+    - **Layout Algorithm**: Map the nested `ScopeNode` tree to 2D rectangles.
+        - Global scope = full canvas.
+        - Inner scopes = smaller rectangles contained within parent rectangles.
+    - **Rendering**:
+        - Use **HTML5 Canvas** for drawing the isometric terrain.
+        - Draw "slabs" for scopes: stacked rectangles with a pseudo-3D extrusion effect.
+        - Assign distinct colors to different scope depths.
+- **Variable Rendering**:
+    - Draw icons/sprites at calculated positions on the slabs.
+    - Ensure variables with same names are aligned (conceptually) or just placed within their respective scope bounds.
+- **Interaction Logic**:
+    - Listen to `input` events on the editor (debounced).
+    - Re-parse and re-render the map.
+    - Handle `mousemove` to hit-test the map elements or map code cursor position to the AST node.
