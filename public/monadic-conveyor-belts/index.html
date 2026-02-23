@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Monadic Conveyor Belts</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <h1>Monadic Conveyor Belts</h1>
+        <p>Visualize functional monads as protective conveyor belts.</p>
+      </header>
+
+      <div class="main-content">
+        <aside class="sidebar">
+          <div class="panel">
+            <h2>Monad Type</h2>
+            <div class="monad-selector">
+              <label>
+                <input type="radio" name="monad-type" value="identity" checked>
+                Identity
+              </label>
+              <label>
+                <input type="radio" name="monad-type" value="maybe">
+                Maybe
+              </label>
+              <label>
+                <input type="radio" name="monad-type" value="result">
+                Result
+              </label>
+            </div>
+            <p id="monad-description">Baseline: Wraps value in a box.</p>
+          </div>
+
+          <div class="panel">
+            <h2>Processing Nodes</h2>
+            <p>Drag nodes onto the belt.</p>
+            <div class="nodes-container">
+              <div class="node-draggable" draggable="true" data-type="add" data-val="2">
+                <span class="node-icon">+</span> + 2
+              </div>
+              <div class="node-draggable" draggable="true" data-type="multiply" data-val="2">
+                <span class="node-icon">×</span> × 2
+              </div>
+              <div class="node-draggable" draggable="true" data-type="subtract" data-val="5">
+                <span class="node-icon">-</span> - 5
+              </div>
+              <div class="node-draggable" draggable="true" data-type="isEven">
+                <span class="node-icon">?</span> isEven?
+              </div>
+              <div class="node-draggable" draggable="true" data-type="isPositive">
+                <span class="node-icon">?</span> isPos?
+              </div>
+              <div class="node-draggable" draggable="true" data-type="toString">
+                <span class="node-icon">T</span> toString
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Controls</h2>
+             <div class="control-group">
+                <button id="spawn-btn">Spawn Value</button>
+                <input type="number" id="spawn-input" value="10" style="width: 60px;">
+             </div>
+             <div class="control-group">
+                <button id="reset-btn">Reset Belt</button>
+             </div>
+              <div class="control-group">
+                <label>Speed: <input type="range" id="speed-slider" min="1" max="10" value="3"></label>
+             </div>
+          </div>
+        </aside>
+
+        <main class="visualization-area">
+          <svg id="conveyor-svg" width="100%" height="100%" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="belt-pattern" x="0" y="0" width="20" height="10" patternUnits="userSpaceOnUse">
+                 <rect x="0" y="0" width="2" height="10" fill="#444" />
+              </pattern>
+            </defs>
+            <g id="belt-layer"></g>
+            <g id="nodes-layer"></g>
+            <g id="items-layer"></g>
+          </svg>
+           <div id="drop-zone-overlay" class="hidden">Drop Node Here</div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

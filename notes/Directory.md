@@ -485,3 +485,45 @@ An interactive simulation of the classic Dining Philosophers problem, illustrati
 - **UI**:
     - Control panel with sliders for global parameters.
     - Legend for states.
+
+## Monadic Conveyor Belts [[demo](https://rybla.github.io/interpolnet-2/monadic-conveyor-belts)]
+
+An interactive visualization that represents functional monads (specifically `Identity`, `Maybe`, and `Result`) as protective conveyor belts. This demo helps users build an intuition for how Monads handle "wrapped" values, managing side effects (like failure or absence) automatically while allowing pure functions to operate on the underlying data.
+
+### Features
+- **Conveyor Belt Pipeline**: A visual assembly line where values travel from left to right through a series of "Processing Nodes".
+- **Monad Selector**: Users can switch between different Monad types, changing the behavior of the belt:
+    - **Identity**: The baseline. Values are simply wrapped in a box and processed.
+    - **Maybe**: Values are wrapped in a "Maybe Box". Some operations might fail (producing `None`/Empty Box). Subsequent nodes automatically ignore empty boxes, preventing crashes.
+    - **Result**: Values are wrapped in a "Result Crate". Operations can succeed or fail with an error message. Error crates bypass subsequent processing nodes.
+- **Interactive Nodes**: Users can drag and drop function nodes onto the belt:
+    - **Math Ops**: `+ 2`, `x 3`, `- 5`.
+    - **Logic Ops**: `isEven?` (Fails/None if odd), `isPositive?`.
+    - **Transformation**: `toString`.
+- **Visualized Bind**:
+    - When an item enters a node, the animation explicitly shows the "Bind" operation:
+        1. **Unwrap**: The protective box opens.
+        2. **Apply**: The pure function operates on the raw value inside.
+        3. **Re-wrap**: The result is placed back into a new box (or an empty/error box if the function failed) and sent along.
+- **Value Injection**: Users can spawn raw values (numbers) onto the belt to watch them flow through their custom pipeline.
+
+### Design Goals
+- **Intuitive "Bind"**: Demystify the `bind` (>>=) operator by showing it as the mechanical process of opening, applying, and sealing.
+- **Safety Visualization**: Visually demonstrate how Monads "protect" the pipeline. For example, show an empty `Maybe` box gliding safely through a `divide by 2` node without causing an error, because the node never touches the inside.
+- **Composability**: Show that complex behaviors (like error handling) can be composed from simple, pure functions glued together by the Monadic structure.
+
+### Implementation Plan
+- **Engine**:
+    - **Monad Definitions**: Classes for `Identity`, `Maybe`, `Result`. Each has a `bind(func)` method (conceptually) and a visual representation state.
+    - **Pipeline**: An array of `Node` objects (functions).
+    - **Item**: The travelling object, holding a `MonadicValue`.
+- **Renderer (SVG)**:
+    - **Belt**: An animated SVG path (conveyor belt treads moving).
+    - **Nodes**: SVG groups representing the machines.
+    - **Items**: SVG groups representing Boxes/Crates.
+- **Animation**:
+    - Use `requestAnimationFrame` for smooth movement.
+    - Implement a state machine for items interacting with nodes: `Approaching` -> `Entering` -> `Unwrapping` -> `Transforming` -> `Rewrapping` -> `Exiting`.
+- **UI**:
+    - **Toolbar**: Draggable nodes (using HTML Drag and Drop API or mouse events).
+    - **Control Panel**: Buttons to spawn values, switch Monad mode, and reset the belt.

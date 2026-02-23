@@ -1,0 +1,219 @@
+:root {
+  --bg-color: #f0f2f5;
+  --panel-bg: #ffffff;
+  --primary-color: #3498db;
+  --accent-color: #e74c3c;
+  --text-color: #333;
+  --border-color: #ddd;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: var(--panel-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.panel:last-child {
+  border-bottom: none;
+}
+
+.panel h2 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.monad-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+#monad-description {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+.nodes-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.node-draggable {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: grab;
+  font-size: 0.9rem;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.node-draggable:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.node-draggable:active {
+  cursor: grabbing;
+}
+
+.node-icon {
+  font-weight: bold;
+  margin-right: 4px;
+  color: var(--primary-color);
+}
+
+.control-group {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.visualization-area {
+  flex: 1;
+  position: relative;
+  background-color: #e8eaed;
+  overflow: hidden;
+}
+
+#conveyor-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#drop-zone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(52, 152, 219, 0.2);
+  border: 2px dashed var(--primary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  color: var(--primary-color);
+  pointer-events: none; /* Let events pass through to SVG */
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+#drop-zone-overlay.active {
+  opacity: 1;
+}
+
+/* SVG Elements Styling */
+.belt-path {
+  fill: none;
+  stroke: #555;
+  stroke-width: 4;
+}
+
+.belt-surface {
+  fill: url(#belt-pattern);
+}
+
+.node-group rect {
+  fill: #fff;
+  stroke: #333;
+  stroke-width: 2;
+  rx: 5;
+}
+
+.node-group text {
+  font-family: monospace;
+  font-size: 14px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.item-box rect {
+  fill: #f39c12;
+  stroke: #d35400;
+  stroke-width: 2;
+}
+
+.item-box text {
+  fill: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
