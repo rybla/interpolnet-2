@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scope Topography</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <div class="editor-pane">
+            <textarea id="code-editor" spellcheck="false">// Try adding some nested scopes!
+let globalVar = "I am global";
+
+function outer() {
+  let outerVar = "I am outer";
+
+  if (true) {
+    let blockVar = "I am block scoped";
+    let globalVar = "I shadow global!";
+  }
+}
+</textarea>
+        </div>
+        <div class="visualization-pane">
+            <div class="controls">
+                <button id="view-top-down" class="active">Top-Down</button>
+                <button id="view-isometric">Isometric</button>
+            </div>
+            <canvas id="terrain-canvas"></canvas>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
