@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Absurdist Volume Slider</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Absurdist Volume Slider</h1>
+        <p>Drag, Aim, Fire. Destroy the target to set the volume.</p>
+      </header>
+
+      <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="volume-display" class="hidden">
+          <h2>Volume Set</h2>
+          <div id="volume-value">0%</div>
+          <button id="reset-btn">Reset</button>
+        </div>
+        <div id="instructions">
+          Drag back to power up the catapult.
+        </div>
+      </div>
+
+      <div id="debug-panel">
+        <span>Destruction: <span id="destruction-metric">0</span></span>
+      </div>
+    </div>
+  </body>
+</html>
