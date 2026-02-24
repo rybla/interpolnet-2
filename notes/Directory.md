@@ -573,3 +573,38 @@ An interactive visualization that maps code scopes (global, function, block) to 
     - Listen to `input` events on the editor (debounced).
     - Re-parse and re-render the map.
     - Handle `mousemove` to hit-test the map elements or map code cursor position to the AST node.
+
+## Brutalist Spatial Chaos [[demo](https://rybla.github.io/interpolnet-2/brutalist-spatial-chaos)]
+
+An experimental navigation menu that defies standard usability heuristics by embracing a brutalist aesthetic and chaotic physics. The menu grid actively reorganizes itself, elements overlap and flash in neon colors, and the cursor acts as a magnetic repulsor, forcing the user to "chase" the links they want to click.
+
+### Features
+- **Chaotic Grid Reorganization**: The navigation menu is not static. It periodically (or responsively) breaks its own grid, shuffling items into overlapping, misaligned positions.
+- **Magnetic Repulsion**: The user's cursor emits a "magnetic field" that pushes menu items away. The closer the cursor gets, the stronger the repulsion force, making it challenging to click a specific link.
+- **Aggressive Aesthetics**:
+    - **Neon Palette**: High-contrast, flashing neon colors (lime green, hot pink, electric blue) against a harsh black or dark gray background.
+    - **Overlapping Elements**: Items do not respect boundaries; they stack, intersect, and obscure each other.
+    - **Raw Typography**: Use of bold, mono-spaced, or distorted fonts to enhance the "brutalist" feel.
+- **Interactive Glitches**: Hovering or clicking triggers visual glitches, screen tearing effects, or sudden color inversions.
+- **Responsive Chaos**: The chaos adapts to screen size, ensuring the experience remains usable (albeit frustratingly so) on mobile devices.
+
+### Design Goals
+- **Anti-Design**: Deliberately break rules of alignment, spacing, and predictability to create a memorable, if disorienting, experience.
+- **Gamification**: Turn the simple act of navigation into a mini-game of skill and patience.
+- **Visceral Feedback**: Every interaction should feel impactful, with immediate visual and physics-based responses.
+
+### Implementation Plan
+- **Physics Engine**:
+    - Implement a custom, lightweight physics system using requestAnimationFrame.
+    - **Entities**: Menu items are physics bodies with position, velocity, and dimensions.
+    - **Forces**: Implement a repulsion force from the mouse cursor and a weak attraction force to a target "home" position (so items don't fly off-screen permanently).
+    - **Collision**: Optional simple collision detection to make items bounce off each other or the screen edges.
+- **Rendering**:
+    - **DOM-based**: Use absolute positioning for menu items (`div`s) within a container. Update `transform: translate(x, y)` every frame for performance.
+    - **CSS**: Use CSS variables for colors to easily implement flashing/strobing effects. Use `mix-blend-mode: difference` or `exclusion` to handle overlapping text legibility and create interesting visual artifacts.
+- **Behavior Loop**:
+    - **Idle State**: Items drift slowly or jitter.
+    - **Interaction**: On mousemove, calculate distance to each item. Apply repulsion vector if within radius.
+    - **Chaos Timer**: Every few seconds, randomize the "home" positions of the items to completely restructure the layout.
+- **Responsiveness**:
+    - On touch devices, the "repulsion" might need to be toned down or changed to a "scatter on touch" interaction to ensure links are clickable.
