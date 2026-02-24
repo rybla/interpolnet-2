@@ -646,3 +646,36 @@ A volume control interface that embraces inefficiency and humor by requiring the
     - `mousedown`/`touchstart`: Start aiming.
     - `mousemove`/`touchmove`: Update aim vector.
     - `mouseup`/`touchend`: Apply force to the rock and release.
+
+## Depth-Layout Finger Menu [[demo](https://rybla.github.io/interpolnet-2/depth-layout-finger-menu)]
+
+A monochromatic 3D tunnel interface where navigation happens along the Z-axis. Users scroll (or drag) to move forward/backward through layers of menu items. Items scale exponentially as they approach the "camera" (screen surface), simulating a flight through the menu. Inactive layers (too far or too close) fade into the background fog. Clicking an item activates a nested function or submenu, potentially triggering a warp-speed transition or a smooth camera pan to a new tunnel branch.
+
+### Features
+- **3D Tunnel Visualization**: A perspective view of menu items arranged in layers along the Z-axis.
+- **Z-Axis Scrolling**: Scroll wheel or touch-drag controls the camera's Z-position, effectively flying through the tunnel.
+- **Exponential Scaling**: Items close to the viewer are large; items further away shrink rapidly, creating a strong sense of depth.
+- **Atmospheric Fog**: Items fade out based on their distance from the optimal viewing plane, blending into the background color.
+- **Monochromatic Aesthetic**: A strict single-color palette (e.g., Matrix green, Cyberpunk cyan, or a stark white-on-black) for a cohesive, futuristic look.
+- **Interactive Hover/Focus**: Active items (closest to the specific Z-plane) highlight or pulse when focused.
+
+### Design Goals
+- **Immersion**: Make the user feel like they are physically traveling through the interface.
+- **Cleanliness**: A strict monochromatic theme focuses attention on structure and motion.
+- **Fluidity**: Smooth 60fps animations for scrolling and transitions.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas for performance and 3D rendering (custom simple 3D projection).
+- **Data Structure**: A tree of menu nodes. Each node has a label, icon, and children.
+- **State**:
+    - `cameraZ`: Current depth position.
+    - `layers`: Array of menu items currently visible.
+    - `theme`: Color constants.
+- **Rendering (Canvas)**:
+    - **Projection**: Map (x, y, z) 3D coordinates to (screenX, screenY) using perspective projection: `scale = focalLength / (focalLength + z + cameraZ)`.
+    - **Loop**: Clear canvas -> Update positions based on input -> Sort by depth (painters algorithm) -> Draw items with calculated scale and opacity.
+    - **Fog**: `globalAlpha` or color mixing based on `z` distance.
+- **Interaction**:
+    - `wheel`: Increment/decrement `cameraZ`.
+    - `touchmove`: Map vertical drag to `cameraZ`.
+    - `click`: If item is clicked, animate transition to submenu (reset `cameraZ` or fly into the item).

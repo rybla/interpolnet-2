@@ -1,0 +1,59 @@
+:root {
+  --bg-color: #050505;
+  --primary-color: #00ffaa;
+  --secondary-color: #008855;
+  --text-color: #00ffaa;
+  --font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let clicks pass through to canvas */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#breadcrumbs {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px var(--primary-color);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#breadcrumbs:hover {
+  text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+}
+
+#instructions {
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0.7;
+  padding-bottom: 20px;
+}
