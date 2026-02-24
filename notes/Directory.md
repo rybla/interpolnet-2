@@ -608,3 +608,41 @@ An experimental navigation menu that defies standard usability heuristics by emb
     - **Chaos Timer**: Every few seconds, randomize the "home" positions of the items to completely restructure the layout.
 - **Responsiveness**:
     - On touch devices, the "repulsion" might need to be toned down or changed to a "scatter on touch" interaction to ensure links are clickable.
+
+## Absurdist Volume Slider [[demo](https://rybla.github.io/interpolnet-2/absurdist-volume-slider)]
+
+A volume control interface that embraces inefficiency and humor by requiring the user to operate a physics-based catapult. To set the volume, the user must aim and launch a rock at a distant target structure. The resulting volume level is dynamically determined by the impact coordinates and the magnitude of structural destruction.
+
+### Features
+- **Physics-Based Catapult**:
+    - **Drag-to-Aim**: Users pull back on the catapult arm to set tension (power) and angle.
+    - **Trajectory Preview**: A dotted line shows the predicted path of the projectile.
+- **Destructible Environment**:
+    - **Target Structure**: A tower of blocks or a bullseye that reacts physically to impacts.
+    - **Debris**: Blocks tumble and fall realistically using 2D rigid body physics (Verlet integration).
+- **Dynamic Volume Calculation**:
+    - **Precision**: Hitting the "bullseye" or a specific sweet spot sets the volume to 100%.
+    - **Chaos Factor**: The amount of destruction (number of toppled blocks) can add a multiplier or fine-tune the level.
+    - **Visual Indicator**: A giant speaker or volume bar updates in real-time as the destruction settles.
+- **Audio Feedback**:
+    - **Sound Effects**: Satisfying "thud", "crash", and "crumble" sounds (synthesized or simple samples).
+    - **Volume Test**: A sample loop plays at the newly set volume to confirm the setting.
+
+### Design Goals
+- **Absurdity**: Highlight the ridiculousness of using a siege weapon for a simple UI task.
+- **Visceral Satisfaction**: Make the act of destroying the UI feel heavy and impactful.
+- **Gamification**: Turn volume adjustment into a skill-based mini-game.
+
+### Implementation Plan
+- **Physics Engine**: Implement a custom lightweight Verlet integration engine to handle particles, constraints, collisions, and gravity.
+- **Rendering**:
+    - Use **HTML5 Canvas** for high-performance rendering of the physics objects.
+    - Draw the catapult, rock, and target blocks with a consistent, perhaps "sketchy" or "blueprint" aesthetic.
+- **Game Loop**:
+    - `Update`: Step the physics simulation.
+    - `Draw`: Clear canvas, render all bodies.
+    - `Check State`: Detect when the rock stops or falls off-screen to finalize the volume reading.
+- **Interaction Logic**:
+    - `mousedown`/`touchstart`: Start aiming.
+    - `mousemove`/`touchmove`: Update aim vector.
+    - `mouseup`/`touchend`: Apply force to the rock and release.
