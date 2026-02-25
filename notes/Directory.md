@@ -718,3 +718,48 @@ A manifesto on web impermanence that features text characters physically detachi
     - **Vertex Shader**: Simple point rendering.
     - **Fragment Shader**: Solid color (white/grey).
     - **Loop**: Clear buffer -> Update Physics -> Draw Arrays.
+
+## Skeuomorphic Savings Jar [[demo](https://rybla.github.io/interpolnet-2/skeuomorphic-savings-jar)]
+
+A financial dashboard that requires users to allocate their funds by physically dragging physics-enabled 3D coins into rendered glass jars. This demo emphasizes the tactile satisfaction of saving money through realistic collision physics, acoustic feedback, and high-fidelity rendering of glass and metal materials.
+
+### Features
+- **3D Physics Environment**:
+    - **Coins**: Realistic 3D models of coins (e.g., gold, silver, bronze) that react to gravity, collisions, and user interaction.
+    - **Jars**: Glass jars with refractive properties that contain the coins. They have physical boundaries that contain the coins.
+    - **Interactivity**: Users can click and drag coins to move them. Releasing a coin lets it fall.
+- **Skeuomorphic Design**:
+    - **Material Rendering**: High-quality rendering of metallic coins and glass jars using WebGL/Three.js or similar technology.
+    - **Shadows and Refraction**: Realistic shadows cast by the coins and jars, and refraction effects through the glass.
+- **Audio Feedback**:
+    - **Collision Sounds**: Procedural or sampled sounds that trigger when coins hit each other or the glass jar, varying based on velocity and material.
+    - **Ambience**: Subtle background sounds to enhance immersion.
+- **Financial Dashboard Elements**:
+    - **Allocation Tracking**: The system tracks which jar each coin is in and updates a UI dashboard showing the total funds allocated to different categories (e.g., "Vacation", "Emergency", "Gadgets").
+    - **Labels**: Jars are labeled with their specific purpose.
+
+### Design Goals
+- **Tactile Satisfaction**: The primary goal is to make the act of saving money feel substantial and rewarding through physics and sound.
+- **Visual Realism**: Push the boundaries of web-based 3D rendering to create a convincing illusion of physical objects.
+- **Playfulness**: Turn a mundane task (budget allocation) into a playful, physics-based toy.
+
+### Implementation Plan
+- **Tech Stack**:
+    - **Three.js**: For 3D rendering (scene, camera, lights, meshes, materials).
+    - **Cannon-es**: For 3D physics simulation (rigid bodies, collisions, gravity).
+- **Scene Setup**:
+    - **Camera**: Fixed perspective looking slightly down at a table surface.
+    - **Lighting**: carefully placed lights to enhance the metallic and glass materials (e.g., environment map, point lights).
+    - **Objects**:
+        - **Jars**: Cylinder geometries with an open top. Physics bodies will need to be compound shapes to approximate the hollow cylinder.
+        - **Coins**: Cylinder geometries with custom textures/materials. Physics bodies are cylinders.
+        - **Table**: A static plane for coins to rest on initially.
+- **Interaction Logic**:
+    - **Raycasting**: Use Three.js Raycaster to map mouse/touch input to 3D world coordinates.
+    - **Drag and Drop**: Create a "Mouse Joint" or spring constraint in the physics engine to pull the clicked coin towards the cursor/finger position.
+- **Audio System**:
+    - Listen for collision events from the physics engine.
+    - Trigger sound samples with volume/pitch modulated by impact velocity.
+- **UI Overlay**:
+    - HTML/CSS overlay for the dashboard statistics (Total Saved, Category Breakdowns).
+    - Update logic: Check coin positions periodically (or on sleep) to determine which jar they are inside and update totals.
