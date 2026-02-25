@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Skeuomorphic Savings Jar</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./three.min.js"></script>
+    <script type="module" src="./script.js"></script>
+  </head>
+  <body>
+    <div id="ui-overlay">
+      <header>
+        <h1>Skeuomorphic Savings Jar</h1>
+        <p>Drag coins to jars to allocate funds.</p>
+      </header>
+      <div id="dashboard">
+        <div class="total-saved-container">
+          Total Saved: <span id="total-saved">$0</span>
+        </div>
+        <div class="categories-container">
+          <ul id="categories">
+            <li id="cat-vacation">Vacation: $0</li>
+            <li id="cat-emergency">Emergency: $0</li>
+            <li id="cat-gadgets">Gadgets: $0</li>
+          </ul>
+        </div>
+        <button id="reset-btn">Reset</button>
+      </div>
+    </div>
+  </body>
+</html>
