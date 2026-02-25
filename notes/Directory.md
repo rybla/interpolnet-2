@@ -805,3 +805,35 @@ A side-by-side comparison game that challenges the user to identify microscopic 
     - Define a library of "Components" (Buttons, Cards, Navbars, Inputs).
     - Define a library of "Mutations" (Color shift, Padding shift, Font weight, Border radius).
     - Randomly select a component and a mutation for each level.
+
+## Audio Reactive Interface [[demo](https://rybla.github.io/interpolnet-2/audio-reactive-interface)]
+
+A music player should feature a play button, timeline, and volume slider composed entirely of an active frequency waveform, where the structural integrity of the UI vibrates violently to the bass track, requiring the user to accurately click rapidly moving targets to pause the music.
+
+### Features
+- **Waveform UI Elements**: The Play/Pause button, Timeline, and Volume Slider are rendered as continuous lines or shapes that are directly modulated by the audio's frequency spectrum.
+- **Bass-Driven Instability**: Low-frequency signals (bass) cause the entire interface to shake, distort, and displace, simulating physical vibration.
+- **Procedural Audio Generation**: Uses the Web Audio API to generate a rhythmic, bass-heavy beat in real-time, eliminating the need for external audio files.
+- **Dynamic Hit Detection**: Interaction targets (click zones) move in sync with the visual distortion, forcing the user to track the UI elements with their mouse to successfully interact.
+- **Visual Feedback**: A high-contrast, oscilloscope-inspired aesthetic (e.g., neon green/blue on black) to emphasize the waveform nature of the interface.
+
+### Design Goals
+- **Synesthesia**: Create a direct, visible link between the sound energy and the interface form.
+- **Gamified Anti-Usability**: Intentionally degrade usability in a fun, rhythmic way to challenge the user's precision and timing.
+- **Performance**: Maintain a smooth 60fps framerate even with heavy canvas redrawing and audio analysis.
+
+### Implementation Plan
+- **Audio Engine**:
+    - Use `AudioContext` with `OscillatorNodes` (Sawtooth/Square waves) and `GainNodes` to create a sequencer loop.
+    - Route audio through an `AnalyserNode` to capture FFT (Fast Fourier Transform) data.
+    - Implement a "Kick" drum synthesis for heavy bass impacts.
+- **Renderer**:
+    - **Canvas API**: Render all UI components on a single full-screen canvas.
+    - **Shape Distortion**:
+        - **Play Button**: A triangle path where vertices are displaced by specific frequency bins.
+        - **Timeline**: A horizontal line that deforms into a wave based on the time-domain data.
+        - **Volume**: A vertical slider that expands/contracts with volume levels.
+    - **Global Shake**: Apply a random translation `(dx, dy)` to the canvas context based on the average amplitude of the bass frequencies (0-100Hz).
+- **Interaction Logic**:
+    - **Hit Testing**: Because the shapes move, standard DOM events won't work. Implement custom raycasting/point-in-path checks against the *current* transformed coordinates of the UI shapes.
+    - **State Management**: Track `isPlaying`, `volume`, and `currentTime`.
