@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Pixel Peeping</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./confetti.js" defer></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header class="game-header">
+      <div class="header-left">
+        <h1>Pixel Peeping</h1>
+        <p class="subtitle">Spot the Sub-Pixel Bug</p>
+      </div>
+      <div class="header-right">
+        <div class="stat-box">
+          <span class="stat-label">Level</span>
+          <span class="stat-value" id="level-display">1</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span class="stat-value" id="score-display">0</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="game-area">
+      <div id="stage" class="stage-container">
+        <div class="panel-container">
+          <div class="panel-label">Reference (Perfect)</div>
+          <div id="reference-container" class="preview-panel">
+            <!-- Dynamic Content -->
+          </div>
+        </div>
+        <div class="panel-container">
+          <div class="panel-label">Candidate (Flawed)</div>
+          <div id="candidate-container" class="preview-panel">
+            <!-- Dynamic Content -->
+          </div>
+        </div>
+      </div>
+
+      <!-- The Loupe -->
+      <div id="loupe" class="loupe">
+        <div id="loupe-view" class="loupe-view">
+          <!-- Cloned Content -->
+        </div>
+        <div class="loupe-crosshair"></div>
+      </div>
+
+      <!-- Feedback Overlay -->
+      <div id="feedback-overlay" class="feedback-overlay hidden">
+        <div class="feedback-content">
+          <h2 id="feedback-title">Correct!</h2>
+          <p id="feedback-message">Padding was 1px off.</p>
+          <button id="next-level-btn" class="primary-btn">Next Level</button>
+        </div>
+      </div>
+    </main>
+
+    <div class="instructions-footer">
+      <p>Move mouse to magnify. Find the error in the Candidate panel. Click to verify.</p>
+    </div>
+  </body>
+</html>
