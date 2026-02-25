@@ -679,3 +679,42 @@ A monochromatic 3D tunnel interface where navigation happens along the Z-axis. U
     - `wheel`: Increment/decrement `cameraZ`.
     - `touchmove`: Map vertical drag to `cameraZ`.
     - `click`: If item is clicked, animate transition to submenu (reset `cameraZ` or fly into the item).
+
+## Degrading Typography [[demo](https://rybla.github.io/interpolnet-2/degrading-typography)]
+
+A manifesto on web impermanence that features text characters physically detaching from the Document Object Model and falling away if the user hovers their mouse over them too slowly. This demo renders the font via a WebGL particle system that crumbles into digital dust scattered across the viewport.
+
+### Features
+- **WebGL Particle Typography**:
+    - **Font Rendering**: Text is rendered not as standard HTML elements but as a dense collection of thousands of individual particles in a WebGL context.
+    - **Fidelity**: At rest, the particles perfectly align to form crisp, readable characters of a serif manifesto-style font.
+    - **Crumbling Physics**: Upon triggering, the particles lose their cohesion and become subject to a physics simulation (gravity, collision, drag), causing the letter to disintegrate into dust.
+- **Interaction Model**:
+    - **Hover Sensitivity**: The degradation is triggered by *slow* mouse movement. If the user moves quickly, the text remains stable. If they linger or drift slowly over a character, it detects the "stagnation" and begins to crumble.
+    - **Permanent Decay**: Once a character crumbles, it does not reform. The text is permanently lost for the session, emphasizing the theme of impermanence.
+- **Aesthetic**:
+    - **Manifesto Style**: Large, centered, high-contrast typography (e.g., bright white on deep black) presenting a statement about the fleeting nature of digital content.
+    - **Particle Visuals**: Particles are small, pixel-like points that scatter realistically.
+
+### Design Goals
+- **Thematic Resonance**: Connect the user's behavior (lingering/reading slowly) directly to the destruction of the content. To read is to destroy.
+- **Visual Impact**: Create a "wow" moment when the solid text dissolves into fluid particles.
+- **Performance**: Use WebGL to handle the thousands of particles required for high-quality text representation without lagging the browser.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas + WebGL (via a lightweight wrapper or raw API).
+- **Text Processing**:
+    - **Offscreen Canvas**: Render the manifesto text string to an offscreen 2D canvas.
+    - **Sampling**: Iterate through the pixel data of the offscreen canvas. For every non-transparent pixel, spawn a particle at that `(x, y)` coordinate.
+    - **Optimization**: Store particle positions in a Float32Array for fast WebGL buffer updates.
+- **Particle System**:
+    - **Attributes**: Position `(x, y)`, Velocity `(vx, vy)`, State `(Stable, Falling)`.
+    - **Physics Kernel**: In the animation loop, update falling particles: `y += vy`, `vy += gravity`. Add some horizontal spread `vx` based on mouse interaction direction.
+- **Interaction Logic**:
+    - **Mouse Tracking**: Track mouse position and speed (delta distance / delta time).
+    - **Trigger**: Check if mouse is over a "stable" particle's initial position AND speed < threshold.
+    - **Explosion**: If triggered, switch particle state to `Falling` and assign random initial velocities.
+- **Rendering**:
+    - **Vertex Shader**: Simple point rendering.
+    - **Fragment Shader**: Solid color (white/grey).
+    - **Loop**: Clear buffer -> Update Physics -> Draw Arrays.
