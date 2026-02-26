@@ -906,3 +906,43 @@ An experimental storytelling platform that abandons traditional vertical scrolli
 - **Interaction**:
     - `wheel` events map to the "progress" variable.
     - Smooth damping/lerping to ensure fluid movement.
+
+## Overlapping Z-Index Puzzle [[demo](https://rybla.github.io/interpolnet-2/overlapping-z-index-puzzle)]
+
+A modal window system where alert boxes continuously stack upon one another, creating a towering, claustrophobic mess of interconnected error messages. To close them, the user must solve a complex sliding tile puzzle of UI frames, manipulating their z-index and position to reveal the "Close" buttons buried underneath.
+
+### Features
+- **Infinite Modal Stacking**: New modal windows appear at regular intervals or upon interaction, stacking on top of existing ones with deep drop shadows.
+- **Z-Index Manipulation**: Users can click and drag modals to move them, but their stacking order (z-index) is constrained or linked to other modals.
+- **Sliding Tile Mechanics**:
+    - **Interconnected Movement**: Moving one modal might shift others, or a modal might be "pinned" by another on top of it.
+    - **Hidden Controls**: The "Close" or "Dismiss" buttons are often obscured by overlapping frames. Users must slide the top layers away to access the controls of the bottom layers.
+- **Visual Chaos**:
+    - **Shadows**: Deep, semi-transparent box shadows to emphasize the height of the stack.
+    - **Themes**: Each modal simulates a different OS or error style (Windows 95, MacOS, Linux, Modern Flat), adding to the visual noise.
+- **Puzzle Logic**:
+    - **Locks**: Some modals might be "locked" until a specific key or condition (found in another modal) is met.
+    - **Shuffle**: A "Shuffle" button that randomly rearranges the z-indices, potentially making the puzzle harder or easier.
+
+### Design Goals
+- **Claustrophobia**: Evoke the feeling of a computer crashing or being overwhelmed by popups.
+- **Problem Solving**: Turn the annoyance of popups into a spatial reasoning puzzle.
+- **Satisfaction**: The relief of finally clearing the screen, one modal at a time.
+
+### Implementation Plan
+- **Data Structure**:
+    - `Modal`: `{ id, x, y, width, height, zIndex, content, isLocked, dependencies: [] }`.
+    - `Stack`: An array of active `Modal` objects.
+- **Renderer**:
+    - **DOM-based**: Use standard HTML `div` elements for the modals to ensure they look and feel like real UI windows.
+    - **CSS Grid/Flex**: Not suitable here; absolute positioning is key.
+    - **Z-Index Management**: Dynamically assign `z-index` styles based on the `Stack` order.
+- **Interaction Logic**:
+    - **Drag and Drop**: Implement custom drag logic. When dragging a modal, check for collisions or constraints with other modals.
+    - **Click Handling**: Event bubbling/capture to determine which modal was clicked.
+    - **Puzzle Mechanics**:
+        - "Pinning": If Modal A is "pinned" by Modal B, A cannot be moved until B is moved away or closed.
+        - "Key Finding": Clicking a button in Modal A unlocks Modal B.
+- **Game Loop**:
+    - **Spawner**: Periodically spawn a new modal if the count is below a threshold.
+    - **Win Condition**: When the stack is empty (or below a manageable number), display a "System Stable" message.
