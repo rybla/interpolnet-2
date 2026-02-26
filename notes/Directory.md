@@ -874,3 +874,35 @@ An interface entirely devoid of hover states or visual affordances should force 
         - Draw the wave rings themselves.
 - **Interaction Logic**:
     - `click`: Spawn a new `Wave` at cursor coordinates. Check collision with `UIElement`s. If a click is *inside* a revealed (or even unrevealed) element, trigger its action (e.g., "Navigate to About").
+
+## Infinite Scroll Labyrinth [[demo](https://rybla.github.io/interpolnet-2/infinite-scroll-labyrinth)]
+
+An experimental storytelling platform that abandons traditional vertical scrolling for an infinite, omnidirectional canvas. Text wraps in massive spiral patterns, disorienting the user as the camera continuously rotates and swoops through dynamic 3D transitions to follow the text path.
+
+### Features
+- **3D Text Path**: Text is arranged along a complex, non-linear path (e.g., a 3D spiral, a helix, or a knot).
+- **Dynamic Camera Movement**: The camera isn't static. It follows the text, rotating to keep the current reading line horizontal while the rest of the world spins around it.
+- **Omnidirectional Scrolling**: Scrolling doesn't just move up/down; it advances the camera along the 3D path.
+- **Atmospheric Visuals**: Background elements (stars, fog, floating geometric shapes) provide depth and context to the 3D space.
+- **Typography**: High-contrast, legible typography that remains readable even when the camera is in motion.
+
+### Design Goals
+- **Disorientation**: To challenge the user's spatial awareness and break the convention of "top-down" reading.
+- **Immersion**: To make the user feel like they are traveling *through* the story, not just looking at it.
+- **Flow**: To create a sense of continuous, fluid motion.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Data Structure**:
+    - A path definition (e.g., a Catmull-Rom spline) that defines the trajectory of the text.
+    - Text segments positioned along this spline.
+- **Rendering**:
+    - Use `TextGeometry` or `Troika-Three-Text` for high-quality 3D text rendering.
+    - Calculate the position and rotation of each text character or segment so it aligns with the tangent and normal of the curve at that point.
+- **Camera Logic**:
+    - The camera's position is determined by a "progress" variable (0 to 1 along the path).
+    - The camera's look-at target is a point slightly ahead on the path.
+    - The camera's up vector is derived from the curve's torsion/normal to create the twisting effect.
+- **Interaction**:
+    - `wheel` events map to the "progress" variable.
+    - Smooth damping/lerping to ensure fluid movement.
