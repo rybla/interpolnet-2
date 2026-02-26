@@ -837,3 +837,40 @@ A music player should feature a play button, timeline, and volume slider compose
 - **Interaction Logic**:
     - **Hit Testing**: Because the shapes move, standard DOM events won't work. Implement custom raycasting/point-in-path checks against the *current* transformed coordinates of the UI shapes.
     - **State Management**: Track `isPlaying`, `volume`, and `currentTime`.
+
+## Blind Navigation [[demo](https://rybla.github.io/interpolnet-2/blind-navigation)]
+
+An interface entirely devoid of hover states or visual affordances should force users to infer clickability solely through trial and error, maintaining the screen as an absolute flat plane while clicks emit sonar-like shockwaves to temporarily illuminate the hidden bounding boxes of buttons.
+
+### Features
+- **Invisible Interface**: The initial state of the screen is completely blank or uniform, with no visible buttons, links, or text.
+- **Sonar Interaction**:
+    - **Click/Tap**: Clicking anywhere on the screen emits a "shockwave" or ripple effect from the cursor position.
+    - **Echolocation**: As the shockwave expands, it momentarily reveals the outlines or filled shapes of hidden UI elements (buttons, navigation items) when it intersects them. The reveal is fleeting, fading back to invisibility as the wave passes or dissipates.
+- **Hidden Structure**:
+    - **Navigation Menu**: A standard website layout (header, sidebar, content area) is hidden in the void.
+    - **Interactive Elements**: Buttons and links are functional but invisible until "pinged".
+- **Feedback**:
+    - **Audio**: A subtle "ping" sound accompanies the visual shockwave, with pitch or volume changing based on proximity to hidden elements.
+    - **Success State**: Successfully clicking a hidden button triggers a distinct visual feedback (e.g., a permanent light-up or a page transition) to confirm the action.
+
+### Design Goals
+- **Sensory Deprivation**: Force users to rely on active exploration rather than passive scanning.
+- **Gamification**: Turn navigation into a game of "Battleship" or echolocation.
+- **Atmosphere**: Create a mysterious, dark, and immersive experience.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas for the shockwave and reveal effects.
+- **Data Structure**:
+    - `UIElement`: Class defining hidden areas `{x, y, width, height, type, action}`.
+    - `Wave`: Class for active shockwaves `{x, y, radius, intensity}`.
+- **Rendering**:
+    - **Base Layer**: A dark/black background.
+    - **Hidden Layer**: Offscreen canvas or data structure containing the UI layout.
+    - **Effect Layer**: On every frame:
+        - Update wave radii.
+        - For each wave, calculate its distance to every `UIElement`.
+        - If a wave intersects an element, render the element with opacity based on the intersection intensity.
+        - Draw the wave rings themselves.
+- **Interaction Logic**:
+    - `click`: Spawn a new `Wave` at cursor coordinates. Check collision with `UIElement`s. If a click is *inside* a revealed (or even unrevealed) element, trigger its action (e.g., "Navigate to About").
