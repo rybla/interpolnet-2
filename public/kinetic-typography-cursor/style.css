@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #111;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  cursor: crosshair; /* Indicate interactivity */
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let clicks pass through to canvas */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#instructions {
+  position: absolute;
+  top: 20px;
+  font-size: 1.2rem;
+  color: #888;
+  opacity: 0.8;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#proceed-btn {
+  pointer-events: auto; /* Re-enable clicks for the button */
+  padding: 15px 40px;
+  margin-top: 150px; /* Push it down below the target area */
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #111;
+  background-color: #0f0; /* Neon green */
+  border: none;
+  border-radius: 0; /* Sharp edges */
+  cursor: pointer;
+  opacity: 0; /* Hidden initially */
+  transform: scale(0.8);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+  visibility: hidden; /* Hide from screen readers initially */
+}
+
+#proceed-btn.visible {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+}
+
+#proceed-btn:hover {
+  background-color: #5f5;
+  box-shadow: 0 0 20px #0f0;
+}
