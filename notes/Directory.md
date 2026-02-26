@@ -946,3 +946,44 @@ A modal window system where alert boxes continuously stack upon one another, cre
 - **Game Loop**:
     - **Spawner**: Periodically spawn a new modal if the count is below a threshold.
     - **Win Condition**: When the stack is empty (or below a manageable number), display a "System Stable" message.
+
+## Kinetic Typography Cursor [[demo](https://rybla.github.io/interpolnet-2/kinetic-typography-cursor)]
+
+A landing page where the typography actively flees from the user's cursor, utilizing flocking algorithms. The user must herd the letters into a designated bounding box to form a legible sentence and enable navigation.
+
+### Features
+- **Fleeing Typography**: Letters behave like boids (bird-oid objects) that are repelled by the mouse cursor.
+- **Flocking Behavior**: Letters have cohesion (stay close to neighbors), separation (don't crowd too much), and alignment (move in the same direction) behaviors, but with a strong repulsion force from the cursor.
+- **Herding Mechanic**: The user must use the cursor to "push" the chaotic cloud of letters into a specific target area (a "corral" or bounding box).
+- **Legibility State**:
+    - **Chaos Mode**: Letters are scattered and rotating randomly.
+    - **Order Mode**: When contained within the target area, the letters snap into a readable sentence or word (e.g., "ENTER" or "WELCOME").
+- **Navigation**: Once the sentence is formed and held for a brief moment, a "Proceed" button or link becomes active/clickable.
+
+### Design Goals
+- **Playful Frustration**: Turn the passive act of reading into an active game of chase.
+- **Dynamic Aesthetics**: Use high-contrast, large typography (e.g., bold sans-serif) that looks striking in both chaotic and ordered states.
+- **Interactive Narrative**: The user "writes" the message by forcing the letters to cooperate.
+
+### Implementation Plan
+- **Physics Engine**:
+    - Implement a custom Boids algorithm.
+    - **Entities**: Each letter is a boid with `position`, `velocity`, `acceleration`.
+    - **Forces**:
+        - `Separation`: Steer to avoid crowding local flockmates.
+        - `Cohesion`: Steer to move toward the average position of local flockmates.
+        - `Alignment`: Steer towards the average heading of local flockmates.
+        - `Flee`: Strong repulsion force inversely proportional to distance from mouse cursor.
+        - `Containment`: A weaker force keeping them generally on screen, but allowing them to be pushed around.
+        - `Snap`: A special force that activates when inside the target box, pulling each letter towards its correct relative position in the sentence.
+- **Rendering**:
+    - **Canvas API**: Use HTML5 Canvas for high-performance rendering of many moving text elements.
+    - **Text Rendering**: `ctx.fillText` for each boid. Rotation based on velocity vector or smooth transition to 0 when snapping.
+- **Game Loop**:
+    - Update positions based on forces.
+    - Check if all boids are within the target bounding box.
+    - If yes, increase a "cohesion" counter. If counter > threshold, trigger "Success" state (letters lock in place, button appears).
+    - Render frame.
+- **UI**:
+    - A visible "Target Zone" (dashed line box).
+    - Visual feedback when letters enter the zone (e.g., they glow or slow down).
