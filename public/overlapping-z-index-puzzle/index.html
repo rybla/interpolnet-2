@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overlapping Z-Index Puzzle</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="A modal window system where alert boxes continuously stack upon one another.">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="desktop">
+        <div id="taskbar">
+            <button id="start-btn">START</button>
+            <div id="clock">12:00 PM</div>
+        </div>
+        <div id="modal-container"></div>
+
+        <div id="intro-overlay">
+            <div class="intro-box">
+                <h1>SYSTEM ERROR</h1>
+                <p>Critical failure imminent. Too many processes running.</p>
+                <p>Solve the sliding tile puzzle of windows to clear the stack.</p>
+                <button id="begin-btn">INITIALIZE RECOVERY</button>
+            </div>
+        </div>
+
+        <div id="win-screen" class="hidden">
+            <div class="win-box">
+                <h1>SYSTEM STABLE</h1>
+                <p>All threats neutralized.</p>
+                <button id="reset-btn">REBOOT SYSTEM</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

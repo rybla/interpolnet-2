@@ -1,0 +1,211 @@
+:root {
+    --bg-color: #008080; /* Windows 95 Teal */
+    --modal-bg: #c0c0c0;
+    --modal-border-light: #ffffff;
+    --modal-border-dark: #404040;
+    --title-bar-blue: #000080;
+    --title-text: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+#desktop {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+#modal-container {
+    width: 100%;
+    height: calc(100% - 40px);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#taskbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: var(--modal-bg);
+    border-top: 2px solid var(--modal-border-light);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 99999;
+}
+
+#start-btn {
+    font-weight: bold;
+    padding: 5px 15px;
+    border: 2px outset var(--modal-border-light);
+    background: var(--modal-bg);
+    cursor: pointer;
+}
+
+#start-btn:active {
+    border: 2px inset var(--modal-border-light);
+}
+
+#clock {
+    margin-left: auto;
+    padding: 5px 10px;
+    border: 2px inset var(--modal-border-light);
+    background: var(--modal-bg);
+}
+
+/* Modal Styles */
+.modal {
+    position: absolute;
+    background-color: var(--modal-bg);
+    border: 2px outset var(--modal-border-light);
+    box-shadow: 10px 10px 20px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+    max-width: 400px;
+    cursor: grab;
+    transition: transform 0.1s;
+}
+
+.modal.dragging {
+    cursor: grabbing;
+    opacity: 0.9;
+}
+
+.modal-header {
+    background-color: var(--title-bar-blue);
+    color: var(--title-text);
+    padding: 2px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    height: 30px;
+}
+
+.modal-body {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.modal-footer {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 5px 15px;
+    border: 2px outset var(--modal-border-light);
+    background: var(--modal-bg);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-btn:active {
+    border: 2px inset var(--modal-border-light);
+}
+
+.modal-btn.locked {
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Themes */
+.modal.theme-win95 {
+    /* Default styles */
+}
+
+.modal.theme-mac {
+    border: 1px solid #000;
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+    font-family: 'Geneva', sans-serif;
+    border-radius: 4px;
+}
+.modal.theme-mac .modal-header {
+    background: repeating-linear-gradient(
+        to bottom,
+        #ddd,
+        #ddd 1px,
+        #fff 2px
+    );
+    color: black;
+    border-bottom: 1px solid #000;
+}
+
+.modal.theme-terminal {
+    background-color: #000;
+    border: 2px solid #0f0;
+    color: #0f0;
+    font-family: 'VT323', monospace;
+    box-shadow: 0 0 10px #0f0;
+}
+.modal.theme-terminal .modal-header {
+    background-color: #0f0;
+    color: #000;
+}
+.modal.theme-terminal .modal-btn {
+    background: #000;
+    border: 1px solid #0f0;
+    color: #0f0;
+}
+.modal.theme-terminal .modal-btn:hover {
+    background: #0f0;
+    color: #000;
+}
+
+/* Overlays */
+#intro-overlay, #win-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100000;
+    color: white;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.intro-box, .win-box {
+    background: var(--modal-bg);
+    color: black;
+    padding: 40px;
+    border: 4px outset var(--modal-border-light);
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+#begin-btn, #reset-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+}
