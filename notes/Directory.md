@@ -1021,3 +1021,42 @@ A multi-layered website that utilizes extreme parallax scrolling to create a vis
     - **Algorithm**: Pre-calculate specific scroll positions where a target *should* be visible. Place "windows" (gaps in the obstacles) on the upper layers at precisely those coordinates, but fill the rest of the layer with occluding blocks.
 - **Interaction**:
     - CSS `pointer-events`: Ensure the "windows" allow clicks to pass through to the underlying layers, or manage hit-testing manually if CSS clipping is insufficient.
+
+## Friction-Based Form Fields [[demo](https://rybla.github.io/interpolnet-2/friction-based-form)]
+
+An intentionally frustrating contact form where fields are "frozen" and must be "warmed up" by vigorously rubbing the mouse over them to generate friction heat. This demo explores the concept of physical interaction metaphors in digital interfaces, turning the simple act of focusing an input into a strenuous physical activity.
+
+### Features
+- **Frozen State**: Input fields initially appear "frozen" with icy textures, low opacity, and are disabled, preventing any keyboard input.
+- **Friction Logic**:
+    - **Heat Generation**: Detects the velocity of mouse movements over the field. Higher velocity generates more heat (kinetic energy conversion).
+    - **Cooling System**: Heat dissipates rapidly over time. If the user stops interacting or moves too slowly, the field re-freezes.
+- **Visual Feedback**:
+    - **Thermometers**: A dynamic temperature gauge next to each input shows the current heat level.
+    - **Thawing Animation**: As temperature rises, a frost overlay opacity decreases, and the field's border begins to glow.
+    - **Particle Effects**: A particle system generates sparks or steam when the friction level is high, adding visceral feedback.
+- **Interactive Thresholds**: Fields only become active/editable when the temperature exceeds a specific "thaw point" (e.g., 80%). Dropping below this point disables the field again.
+
+### Design Goals
+- **Playful Frustration**: To make a mundane task (filling a form) surprisingly physical and challenging.
+- **Metaphorical UI**: To implement a literal interpretation of "warming up" a cold engine or object.
+- **Visual Reward**: To provide satisfying particle and animation feedback that makes the effort feel "productive" despite the inefficiency.
+
+### Implementation Plan
+- **HTML**:
+    - A standard contact form structure (Name, Email, Subject, Message).
+    - Wrapper elements for each input to contain the frost overlays and thermometers.
+    - A full-screen `<canvas>` overlay for the particle system.
+- **CSS**:
+    - **Theming**: A cold, wintery color palette (blues, whites, grays).
+    - **Textures**: Use CSS gradients or SVG filters to create a frosted glass effect.
+    - **States**: Classes like `.frozen` and `.thawed` to control opacity, pointer-events, and border styles.
+- **JavaScript (Physics Engine)**:
+    - **Class `HeatManager`**: Manages the temperature state of each field.
+        - `update()` loop handles cooling (temperature decay).
+        - `addHeat(velocity)` increments temperature based on mouse speed.
+    - **Input Handling**: Listen for `mousemove` events to calculate velocity vectors.
+    - **Rendering Loop**:
+        - Update DOM elements (thermometer height, opacity).
+        - Toggle `disabled` attribute on inputs based on temperature.
+        - Drive the particle system on the canvas.
