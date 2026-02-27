@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nostalgic OS Window Chaos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <canvas id="trail-canvas"></canvas>
+    <div id="desktop-ui">
+        <!-- Windows will be dynamically added here -->
+    </div>
+
+    <div id="bsod-overlay" class="hidden">
+        <p>A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) + 00010E36. The current application will be terminated.</p>
+        <p>* Press any key to terminate the current application.</p>
+        <p>* Press CTRL+ALT+DEL again to restart your computer. You will lose any unsaved information in all applications.</p>
+        <br>
+        <p>Press any key to continue_</p>
+    </div>
+
+    <div id="taskbar">
+        <button id="start-button">
+            <div class="start-icon"></div>
+            Start
+        </button>
+        <div class="taskbar-divider"></div>
+        <div id="taskbar-windows">
+            <!-- Taskbar items will go here -->
+        </div>
+        <div class="taskbar-divider"></div>
+        <div id="clock">12:00 PM</div>
+    </div>
+
+    <div id="start-menu" class="hidden">
+        <div class="start-menu-sidebar">
+            <span class="vertical-text">WINDOWS 95</span>
+        </div>
+        <div class="start-menu-items">
+            <div class="menu-item" onclick="windowManager.spawnWindow('notepad')">
+                <span class="icon notepad-icon"></span>
+                <span>Notepad</span>
+            </div>
+            <div class="menu-item" onclick="windowManager.spawnWindow('error')">
+                <span class="icon error-icon"></span>
+                <span>Critical Error</span>
+            </div>
+            <div class="menu-item" onclick="windowManager.spawnWindow('image')">
+                <span class="icon image-icon"></span>
+                <span>My Picture.bmp</span>
+            </div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="windowManager.triggerBSOD()">
+                <span class="icon shutdown-icon"></span>
+                <span>Shut Down...</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
