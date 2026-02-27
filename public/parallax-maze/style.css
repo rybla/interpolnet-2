@@ -1,0 +1,111 @@
+:root {
+  --bg-color: #050505;
+  --layer-0: #111;
+  --layer-1: #222;
+  --layer-2: #333;
+  --layer-3: #444;
+  --accent: #0f0;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-color);
+  color: #fff;
+  overflow-x: hidden;
+  font-family: monospace;
+}
+
+#world {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  perspective: 1000px;
+  overflow: hidden;
+  /* Ensure clicks pass through empty space */
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Children will re-enable pointer-events */
+  will-change: transform;
+}
+
+.wall {
+  position: absolute;
+  background: #333;
+  border: 1px solid #555;
+  box-shadow: 0 0 10px rgba(0,0,0,0.8);
+  pointer-events: auto; /* Block clicks */
+}
+
+/* Layer specific styling for depth */
+.layer-0 .wall { background: #1a1a1a; border-color: #2a2a2a; opacity: 0.8; }
+.layer-1 .wall { background: #2a2a2a; border-color: #3a3a3a; opacity: 0.9; }
+.layer-2 .wall { background: #3a3a3a; border-color: #4a4a4a; opacity: 1.0; }
+.layer-3 .wall { background: #4a4a4a; border-color: #5a5a5a; box-shadow: 0 0 20px rgba(0,0,0,0.9); }
+
+
+.target {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #0f0 0%, #050 70%, transparent 100%);
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 0 0 15px #0f0;
+  animation: pulse 2s infinite;
+  z-index: 10; /* Ensure it's above layer walls if on same layer, but usually targets are on deep layers */
+}
+
+.target.found {
+  background: radial-gradient(circle, #00f 0%, #005 70%, transparent 100%);
+  box-shadow: 0 0 15px #00f;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+#scroll-proxy {
+  width: 1px;
+  /* Height will be set by JS */
+}
+
+#hud {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.8);
+  padding: 15px;
+  border: 1px solid #0f0;
+  border-radius: 5px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.score {
+  font-size: 1.2rem;
+  color: #0f0;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-top: 5px;
+}

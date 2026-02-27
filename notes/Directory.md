@@ -987,3 +987,37 @@ A landing page where the typography actively flees from the user's cursor, utili
 - **UI**:
     - A visible "Target Zone" (dashed line box).
     - Visual feedback when letters enter the zone (e.g., they glow or slow down).
+## Parallax Maze [[demo](https://rybla.github.io/interpolnet-2/parallax-maze)]
+
+A multi-layered website that utilizes extreme parallax scrolling to create a visual maze. The user must scroll up and down repeatedly to align gaps in the foreground and background layers to reveal hidden hyperlinks that are otherwise obscured by the overlapping z-layers.
+
+### Features
+- **Multi-Layered Parallax**: The environment consists of multiple distinct layers moving at significantly different speeds.
+- **Obscuration Mechanics**:
+    - **Occlusion**: Walls and obstacles on faster foreground layers frequently block the view of items on slower background layers.
+    - **Alignment Puzzles**: Key interactive elements (targets) are only visible and clickable when specific "windows" in the foreground align with the target in the background.
+- **Visual Depth**:
+    - **Atmospheric Perspective**: Layers fade into darkness or change color saturation based on their depth (z-index).
+    - **Dynamic Lighting**: Targets emit a glow that can be glimpsed through cracks, guiding the user.
+- **Scavenger Hunt**: The goal is to find and click a series of hidden targets scattered throughout the long vertical scroll range.
+
+### Design Goals
+- **Spatial Reasoning**: Challenge the user to predict how scrolling will shift the layers relative to each other.
+- **Exploration**: Encourage scanning the entire "depth" of the page, not just the surface.
+- **Immersion**: Create a sense of peering into a deep, complex machine or cavern.
+
+### Implementation Plan
+- **HTML Structure**:
+    - A main `#world` container.
+    - Multiple `.layer` containers, each `position: fixed` but transformed via JS.
+    - A proxy scroll element (tall empty div) to drive the browser's native scrollbar.
+- **Parallax Engine**:
+    - Listen to `window.scrollY`.
+    - Apply `transform: translateY(-scrollY * speedFactor)` to each layer.
+    - Background layers move slowly (low factor), foreground layers move fast (high factor).
+- **Level Design**:
+    - **Targets**: Placed on the deepest layer.
+    - **Obstacles**: Placed on intermediate and foreground layers.
+    - **Algorithm**: Pre-calculate specific scroll positions where a target *should* be visible. Place "windows" (gaps in the obstacles) on the upper layers at precisely those coordinates, but fill the rest of the layer with occluding blocks.
+- **Interaction**:
+    - CSS `pointer-events`: Ensure the "windows" allow clicks to pass through to the underlying layers, or manage hit-testing manually if CSS clipping is insufficient.
