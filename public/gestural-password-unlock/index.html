@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestural Password Unlock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui-overlay">
+        <header>
+            <h1>Gestural Password Unlock</h1>
+            <p>Twist slices to set or unlock.</p>
+        </header>
+
+        <div id="hash-display">
+            <span id="hash-label">CURRENT HASH:</span>
+            <span id="hash-value">INITIALIZING...</span>
+        </div>
+
+        <div id="controls">
+            <div class="mode-switch">
+                <button id="mode-set" class="active">Set Password</button>
+                <button id="mode-unlock">Unlock</button>
+            </div>
+
+            <button id="action-btn">SAVE PASSWORD</button>
+            <button id="reset-btn">RESET CUBE</button>
+        </div>
+
+        <div id="status-message"></div>
+    </div>
+
+    <script src="three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
