@@ -1095,3 +1095,44 @@ A retro-themed web experience that simulates a crashing Windows 95 desktop. The 
 - **UI/UX**:
     - A Taskbar at the bottom with a Start button menu to spawn new windows.
     - Sound effects for error chords and clicks to enhance the retro feel.
+
+## Gestural Password Unlock [[demo](https://rybla.github.io/interpolnet-2/gestural-password-unlock)]
+
+A security interface should replace the traditional password field with a 3D geometric shape that the user must manipulate using complex, multi-touch trackpad gestures to solve a Rubik's Cube-style puzzle, mapping the final configuration to a cryptographic hash function to grant access.
+
+### Features
+- **3D Interactive Puzzle**:
+    - **Geometric Lock**: A 3x3x3 cube structure resembling a Rubik's Cube serves as the input mechanism.
+    - **Gesture Control**: Users rotate individual slices of the cube using drag gestures.
+    - **State-Based Hashing**: The specific permutation of the cube's sub-units determines the "password".
+- **Security Logic**:
+    - **Set Password Mode**: Users manipulate the cube to a secret configuration and save it as their gesture key.
+    - **Unlock Mode**: Users must replicate the exact sequence of rotations or final state to unlock the system.
+    - **Visual Hashing**: As the user interacts, a real-time "hash" visualization (e.g., a changing hex code or color pattern) updates to show the complexity of the current state.
+- **Aesthetic**:
+    - **Futuristic Interface**: Glowing neon edges, metallic surfaces, and a dark, cyber-security themed background.
+    - **Smooth Animations**: High-frame-rate transitions for slice rotations and camera movements.
+
+### Design Goals
+- **Novelty**: reimagine the mundane act of password entry as a tactile, spatial puzzle.
+- **Security Theater**: Emphasize the "high-tech" feel of the security mechanism, even if the underlying logic is just a state comparison.
+- **Engagement**: Make the unlocking process fun and satisfying.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scene Setup**:
+    - **Camera**: OrbitControls for viewing the cube from different angles.
+    - **Lighting**: Point lights and ambient light to highlight the metallic materials.
+    - **Object**: A group of 27 "cubies" (small cubes) arranged in a grid.
+- **Interaction Logic**:
+    - **Raycasting**: Detect which face and which cubie is clicked.
+    - **Drag Handling**: Calculate the drag vector to determine which slice to rotate (X, Y, or Z axis).
+    - **Rotation Animation**:
+        1. Group the affected cubies.
+        2. Rotate the group 90 degrees.
+        3. Ungroup and update the individual cubies' transforms to reflect the new position.
+- **State Management**:
+    - Serialize the position and orientation of each cubie into a string.
+    - Compare current string vs. saved string for authentication.
+- **UI**:
+    - Overlay for "Set Password", "Unlock", and status messages ("Access Granted", "Access Denied").
