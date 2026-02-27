@@ -1,0 +1,195 @@
+:root {
+  --bg-color: #e0f7fa;
+  --form-bg: rgba(255, 255, 255, 0.8);
+  --input-bg: #fff;
+  --text-color: #0d47a1;
+  --frost-color: rgba(200, 230, 255, 0.9);
+  --mercury-color: #ff5252;
+  --thawed-border: #00e676;
+  --frozen-border: #b3e5fc;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-family);
+  overflow: hidden;
+  color: var(--text-color);
+}
+
+#particleCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.container {
+  position: relative;
+  background: var(--form-bg);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  backdrop-filter: blur(5px);
+  z-index: 1;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #01579b;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #0277bd;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #0277bd;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+
+input, textarea, button {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--frozen-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--input-bg);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button {
+  cursor: pointer;
+  background: #0288d1;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+}
+
+button:hover {
+  background: #0277bd;
+}
+
+button:disabled {
+  background: #b0bec5;
+  cursor: not-allowed;
+}
+
+/* Frost Overlay */
+.frost-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E"),
+              linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(200,230,255,0.9) 100%);
+  opacity: 0.95;
+  pointer-events: none; /* Allows mouse events to pass through to input for friction detection? No, we need to capture events on wrapper */
+  mix-blend-mode: hard-light;
+  transition: opacity 0.2s ease;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.frost-overlay::after {
+  content: '❄️';
+  font-size: 1.5rem;
+  opacity: 0.7;
+}
+
+/* Input states */
+input:disabled, textarea:disabled, button:disabled {
+  color: rgba(0,0,0,0.3);
+  background-color: #f0f8ff;
+}
+
+input:not(:disabled), textarea:not(:disabled), button:not(:disabled) {
+  border-color: var(--thawed-border);
+  box-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+}
+
+/* Thermometer */
+.thermometer {
+  position: absolute;
+  right: -25px;
+  bottom: 0;
+  width: 10px;
+  height: 100%;
+  background: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #bdbdbd;
+}
+
+.mercury {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to top, #2196f3, #ff5252);
+  transition: height 0.1s linear;
+}
+
+.button-wrapper {
+    margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container {
+    padding: 1.5rem;
+    width: 90%;
+  }
+
+  .thermometer {
+    right: -15px;
+    width: 6px;
+  }
+}
