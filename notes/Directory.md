@@ -1238,3 +1238,33 @@ An interactive visualization that animates the process of currying by showing a 
     - Animate the transition between uncurried and curried states using CSS classes.
     - Implement the evaluation logic: flow values into the blocks, animate the calculation, and output the result.
     - Update the code snippet based on the current state and provided arguments.
+
+## Event Loop Visualizer [[demo](https://rybla.github.io/interpolnet-2/event-loop-visualizer)]
+
+The Event Loop Visualizer demo illustrates the inner workings of the JavaScript event loop through a physical, animated metaphor.
+
+### Features
+*   **Central Execution Stack:** A visually distinct area representing the call stack.
+*   **Physical Queues:** Separate queues for the Task Queue (Macrotasks), Microtask Queue, and Web APIs.
+*   **Animated Transfers:** Tasks visually move from their respective queues onto the execution stack.
+*   **Control Panel:** Buttons to add different types of tasks (Synchronous code, `setTimeout`, `Promise`, etc.) to the system.
+*   **Speed Control:** A slider to adjust the speed of the visualization for easier comprehension.
+
+### Design Goals
+*   **Clarity over Complexity:** Abstract away unnecessary details to focus on the core flow of tasks between queues and the stack.
+*   **Engaging Metaphor:** Use a physical, factory-like aesthetic (conveyor belts, distinct bins) to make abstract concepts concrete.
+*   **Distinct Color Scheme:** Use a unique palette (e.g., neon accents against a dark theme) to differentiate the stack, microtasks, and macrotasks.
+*   **Responsive:** Ensure the layout adapts gracefully to different screen sizes, perhaps stacking the queues vertically on mobile.
+
+### Implementation Plan
+1.  **HTML Structure:** Create containers for the Execution Stack, Web API area, Task Queue, Microtask Queue, and a control panel for user input.
+2.  **CSS Styling:** Apply a consistent, vibrant color scheme. Use CSS Grid/Flexbox for layout. Define CSS animations or transitions for moving task elements.
+3.  **JavaScript Logic:**
+    *   Maintain an internal state for the stack and queues.
+    *   Implement an `EventLoopManager` class that ticks at a set interval (controlled by the speed slider).
+    *   During each tick, logic will decide the next action:
+        *   If the stack is not empty, process the top item (animate it out).
+        *   If the stack is empty, check the Microtask Queue. If not empty, move an item to the stack.
+        *   If both stack and Microtask Queue are empty, check the Task Queue. If not empty, move an item to the stack.
+    *   Handle user inputs to push new task representations into the appropriate queues/Web API area (simulating delay for `setTimeout`).
+    *   Synchronize the logical state with DOM updates (creating, moving, and removing DOM elements representing tasks).
