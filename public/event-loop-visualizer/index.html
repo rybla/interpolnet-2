@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Loop Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Event Loop Visualizer</h1>
+            <p>Visualize the JavaScript Event Loop. Click the buttons below to add tasks.</p>
+        </header>
+
+        <div class="controls">
+            <button id="btn-sync" class="btn btn-sync">Add Sync Code</button>
+            <button id="btn-macrotask" class="btn btn-macrotask">Add setTimeout</button>
+            <button id="btn-microtask" class="btn btn-microtask">Add Promise</button>
+            <div class="speed-control">
+                <label for="speed-slider">Speed: <span id="speed-display">1x</span></label>
+                <input type="range" id="speed-slider" min="0.1" max="3" step="0.1" value="1">
+            </div>
+        </div>
+
+        <div class="visualization-grid">
+            <div class="area call-stack-area">
+                <h2>Call Stack</h2>
+                <div class="stack-container" id="call-stack">
+                    <!-- Tasks will be appended here -->
+                </div>
+            </div>
+
+            <div class="area web-api-area">
+                <h2>Web APIs</h2>
+                <div class="api-container" id="web-apis">
+                    <!-- Timers/Promises waiting will be here -->
+                </div>
+            </div>
+
+            <div class="area queue-area microtask-queue-area">
+                <h2>Microtask Queue</h2>
+                <div class="queue-container" id="microtask-queue">
+                    <!-- Promises ready to execute -->
+                </div>
+            </div>
+
+            <div class="area queue-area task-queue-area">
+                <h2>Task Queue (Macrotasks)</h2>
+                <div class="queue-container" id="task-queue">
+                    <!-- setTimeouts ready to execute -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
