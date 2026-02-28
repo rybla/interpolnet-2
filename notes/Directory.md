@@ -1200,3 +1200,41 @@ An aggressive UI design that applies simulated physical recoil to all interactiv
   - The recovery will be handled by a CSS `transition` with a custom `cubic-bezier` timing function to simulate a spring settling, or via a `requestAnimationFrame` loop for more complex physics.
 - **State Management**:
   - A `cooling-down` class will be toggled on the main container. While active, CSS `pointer-events: none` will be applied to prevent further interactions until the UI has settled.
+
+## Currying Visualizer [[demo](https://rybla.github.io/interpolnet-2/currying-visualizer)]
+
+An interactive visualization that animates the process of currying by showing a multi-argument function physically breaking apart into a chain of single-argument function boxes.
+
+### Features
+- **Function Visualization**: A central area displays a function as a physical block with "ports" or "slots" for its arguments.
+- **Currying Animation**:
+    - **Uncurried State**: The function is a single, large block requiring multiple inputs simultaneously.
+    - **Curried State**: The single block smoothly splits apart into a sequence of smaller, chained blocks. Each block takes one input and returns the next block in the chain.
+- **Interactive Evaluation**:
+    - Users can input values into the argument slots.
+    - When evaluated, the visualization animates the data flowing through the function.
+    - In the curried state, the evaluation can be step-by-step: supplying one argument returns a "partially applied" function block waiting for the next argument.
+- **Code Correspondence**:
+    - A dynamic code snippet below the visualization updates to show the JavaScript/TypeScript equivalent of the current state (e.g., `add(x, y, z)` vs `add(x)(y)(z)`).
+    - When arguments are supplied, the code snippet highlights the corresponding partially applied state.
+
+### Design Goals
+- **Demystify Currying**: Transform an abstract functional programming concept into a concrete, mechanical process.
+- **Visual Clarity**: Use clear shapes and animations to illustrate the difference between a multi-arity function and a sequence of unary functions.
+- **Engaging Aesthetics**: Employ a clean, modern design with satisfying "snap" and "break" animations for the function blocks.
+
+### Implementation Plan
+- **HTML Structure**:
+    - A main container for the visualization stage.
+    - A control panel with "Curry/Uncurry" toggle, "Evaluate" button, and reset.
+    - A code display area.
+- **Styling (CSS)**:
+    - Use CSS Flexbox to layout the function blocks.
+    - Implement CSS transitions for the splitting and joining animations. The "uncurried" block will visually appear as a single unit, which then separates into individual blocks connected by arrows or pipes.
+    - Define a distinct color palette (e.g., warm oranges/yellows for function blocks, cool blues for data).
+- **Interactive Logic (JavaScript)**:
+    - Manage the state (`isCurried`, `arguments`, `evaluationStep`).
+    - Render the function blocks dynamically based on the state.
+    - Animate the transition between uncurried and curried states using CSS classes.
+    - Implement the evaluation logic: flow values into the blocks, animate the calculation, and output the result.
+    - Update the code snippet based on the current state and provided arguments.
