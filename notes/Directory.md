@@ -1136,3 +1136,41 @@ A security interface should replace the traditional password field with a 3D geo
     - Compare current string vs. saved string for authentication.
 - **UI**:
     - Overlay for "Set Password", "Unlock", and status messages ("Access Granted", "Access Denied").
+
+## Schrodinger's Checkbox [[demo](https://rybla.github.io/interpolnet-2/schrodingers-checkbox)]
+
+A settings menu featuring "quantum" checkboxes that exist in a superposition of both checked and unchecked states. These checkboxes rapidly oscillate between the two states until the user focuses their cursor on them, at which point the wavefunction collapses randomly into a definitive boolean value (checked or unchecked). This demo explores quantum mechanics concepts (superposition and observation-induced wavefunction collapse) applied to a standard user interface element.
+
+### Features
+- **Quantum Superposition State**:
+    - By default, the checkboxes are in a "superposition" state, visually vibrating and oscillating rapidly between a checked and unchecked appearance.
+    - A custom CSS animation (`@keyframes oscillate`) creates a blurred, glitchy, or vibrating effect to represent the uncertainty of the state.
+- **Wavefunction Collapse**:
+    - **Observation**: When a user hovers their mouse cursor over a checkbox, focuses it via keyboard navigation, or touches it on a mobile device, the "observation" occurs.
+    - **Random Collapse**: The superposition state is broken, and the checkbox randomly "collapses" into either a checked (true) or unchecked (false) state with a 50% probability.
+    - **Definitive Visuals**: Once collapsed, the checkbox stops vibrating and displays a clear, solid checkmark or an empty box, glowing to indicate its finalized state.
+- **Quantum Theming**:
+    - The settings menu features options with a scientific or sci-fi flavor (e.g., "Enable Dark Matter Simulation", "Entangle Particles", "Sync Multiverse Timelines").
+    - The aesthetic uses a dark background with neon cyan and magenta accents, reminiscent of sci-fi interfaces and quantum computing visuals.
+
+### Design Goals
+- **Conceptual Playfulness**: To map the abstract concept of Schrodinger's Cat and quantum superposition onto a familiar, mundane UI component.
+- **Visual Feedback**: To clearly communicate the transition from a chaotic, uncertain state to a stable, observed state through strong visual cues and animations.
+- **Unpredictability**: To introduce an element of chance into a system where users normally expect deterministic control.
+
+### Implementation Plan
+- **HTML Structure**:
+    - A main `#settings-menu` container.
+    - A list of `.setting-row` items, each containing:
+        - A `.quantum-checkbox` (a custom `div` or `button` acting as the checkbox).
+        - A `.setting-label` with the setting text.
+- **CSS Styling**:
+    - **Theme**: Dark background (`#0b0f19`), neon text and borders (`#00ffcc`, `#ff00ff`), monospace fonts.
+    - **Animations**: An `oscillate` keyframe animation that rapidly changes the opacity, scale, or background color of the checkbox to simulate superposition.
+    - **States**: Classes for `.superposition`, `.collapsed-true`, and `.collapsed-false` with distinct visual styles (e.g., glowing effects for collapsed states).
+- **JavaScript Logic**:
+    - **Class `QuantumCheckbox`**: Manages the state and behavior of each checkbox.
+        - `constructor`: Initializes the element, sets the initial state to 'superposition', and attaches event listeners (`mouseenter`, `focus`, `touchstart`).
+        - `collapse()`: The core method triggered by "observation". It stops the oscillation animation, randomly selects a boolean value, updates the element's classes, and removes the observation event listeners to lock the state.
+    - **Initialization**: Find all `.quantum-checkbox` elements in the DOM and instantiate a `QuantumCheckbox` object for each.
+    - Ensure code is structured to support testing in both browser and Node.js environments by conditionally executing DOM logic and exporting classes.
