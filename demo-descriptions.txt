@@ -1,4 +1,3 @@
-Recoil-Enabled Buttons: An aggressive UI design should apply simulated physical recoil to all interactive buttons, so that clicking a submission form physically knocks the browser window backward in 3D space and requires a brief cool-down period before the UI stabilizes enough to be clicked again.
 Animate the process of currying by showing a multi-argument function physically breaking apart into a chain of single-argument function boxes.
 Visualize the JavaScript event loop with physical queues transferring tasks, microtasks, and Web API callbacks onto a central execution stack.
 Illustrate heap fragmentation by having users drag unequally sized blocks into a memory array until allocation fails despite sufficient free space.

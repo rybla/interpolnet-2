@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Recoil-Enabled Buttons</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="recoil-container">
+      <div id="ui-panel">
+        <header class="panel-header">
+          <h1>System Override</h1>
+          <div class="status-indicator"></div>
+        </header>
+
+        <form id="recoil-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label for="target-coords">Target Coordinates</label>
+            <input type="text" id="target-coords" placeholder="X: 34 Y: 92 Z: 11" />
+          </div>
+
+          <div class="form-group">
+            <label for="yield-payload">Payload Yield</label>
+            <input type="range" id="yield-payload" min="1" max="100" value="50" />
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn-cancel" data-recoil-force="5">Abort</button>
+            <button type="submit" class="btn-submit" data-recoil-force="20">Engage Target</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

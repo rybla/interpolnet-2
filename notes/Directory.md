@@ -1174,3 +1174,29 @@ A settings menu featuring "quantum" checkboxes that exist in a superposition of 
         - `collapse()`: The core method triggered by "observation". It stops the oscillation animation, randomly selects a boolean value, updates the element's classes, and removes the observation event listeners to lock the state.
     - **Initialization**: Find all `.quantum-checkbox` elements in the DOM and instantiate a `QuantumCheckbox` object for each.
     - Ensure code is structured to support testing in both browser and Node.js environments by conditionally executing DOM logic and exporting classes.
+
+## Recoil-Enabled Buttons [[demo](https://rybla.github.io/interpolnet-2/recoil-enabled-buttons)]
+
+An aggressive UI design that applies simulated physical recoil to all interactive buttons. Clicking a button physically knocks the browser window backward in 3D space, requiring a brief cool-down period before the UI stabilizes enough to be interacted with again.
+
+### Features
+- **Physics-Based Recoil**: Clicking any button applies a sudden, powerful 3D transform (`rotateX`, `rotateY`, `translateZ`) to the entire form or UI container, simulating the kickback of a heavy weapon.
+- **Cool-Down Period**: After a click, the UI becomes momentarily disabled. The interface slowly "springs" back to its original position over a few seconds, during which inputs cannot be focused or clicked.
+- **Dynamic Impact**: Different buttons may have different recoil profiles based on their perceived "weight" or importance (e.g., a "Submit" button kicks harder than a "Cancel" button).
+- **Aggressive Aesthetics**: High-contrast, tactical, or brutalist design language. Dark backgrounds with stark, neon accents (like targeting reticles or warning colors).
+
+### Design Goals
+- **Visceral Feedback**: Make the simple act of clicking feel incredibly weighty and consequential.
+- **Intentional Frustration**: Introduce a playful anti-pattern by making rapid clicking impossible, forcing users to be deliberate with their inputs.
+- **3D Immersion**: Utilize CSS 3D transforms to create a strong sense of depth and physical space within the browser window.
+
+### Implementation Plan
+- **HTML/CSS Structure**:
+  - The `body` or a main wrapper needs a strong `perspective` value.
+  - The main form/UI container will hold all the inputs and buttons.
+  - Buttons will be styled to look heavy, perhaps with inset shadows or metallic gradients.
+- **Animation Mechanics**:
+  - The recoil effect will be achieved by instantly applying a `transform` via JavaScript on click.
+  - The recovery will be handled by a CSS `transition` with a custom `cubic-bezier` timing function to simulate a spring settling, or via a `requestAnimationFrame` loop for more complex physics.
+- **State Management**:
+  - A `cooling-down` class will be toggled on the main container. While active, CSS `pointer-events: none` will be applied to prevent further interactions until the UI has settled.
