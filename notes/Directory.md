@@ -1286,3 +1286,28 @@ Provide an intuitive, hands-on analogy for understanding why heap fragmentation 
 **Implementation Outline:**
 * **HTML/CSS**: Responsive grid layout with a cyberpunk color scheme (neon cyan, magenta, dark backgrounds). CSS grid for the memory array.
 * **JavaScript**: Pointer events for custom drag-and-drop handling. A core state manager tracking an array of memory units (Free vs. Allocated by Block ID). Logic to calculate contiguous free segments and handle allocation failures with CSS class toggling for shake animations.
+
+## Compiler Assembly Line [[demo](https://rybla.github.io/interpolnet-2/compiler-assembly-line)]
+
+An interactive visualization that represents the compilation process as a physical factory assembly line. Source code enters the factory, gets chopped into tokens by the Lexer, assembled into an Abstract Syntax Tree (AST) by the Parser, and finally stamped into machine code instructions by the Code Generator.
+
+### Features
+- **Assembly Line Visualization**: A conveyor belt that moves code fragments through three distinct machine stations: Lexer, Parser, and Code Generator.
+- **Lexical Analysis (Tokenizer)**: The first machine chops raw text strings into discrete, categorized tokens (keywords, identifiers, operators, literals), represented as color-coded blocks.
+- **Syntax Parsing (AST Construction)**: The second machine takes the stream of token blocks and visually snaps them together into a tree structure (Abstract Syntax Tree).
+- **Code Generation**: The final machine takes the AST and translates it into a sequence of low-level assembly/machine code instructions.
+- **Interactive Code Input**: A text area allowing users to type simple expressions (e.g., `let x = 5 + 3;`) and watch them go through the pipeline.
+- **Step-by-Step Execution**: Controls to play, pause, or step through the compilation pipeline one stage at a time.
+
+### Design Goals
+- **Educational Demystification**: Break down the complex phases of a compiler into intuitive, physical analogies.
+- **Industrial Aesthetic**: Use a factory-themed UI with conveyor belts, gears, mechanical presses, and distinct color-coding for each pipeline stage.
+- **Fluid Animation**: Smooth transitions as text becomes tokens, tokens become trees, and trees become machine code.
+
+### Implementation Plan
+- **HTML/CSS**: Construct a responsive layout featuring the code editor, the three machine stations (Lexer, Parser, Generator), and the conveyor belt connecting them.
+- **Compiler Logic (JavaScript)**:
+  - Implement a basic Lexer that uses regex or string scanning to produce an array of token objects.
+  - Implement a simple recursive descent Parser to build an AST from the tokens.
+  - Implement a basic Code Generator to walk the AST and produce mock assembly instructions.
+- **Animation System**: Manage the state of items on the conveyor belt using `requestAnimationFrame` or CSS transitions, transitioning their visual representation as they pass through each machine.

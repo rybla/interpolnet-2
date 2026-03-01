@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Compiler Assembly Line</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Compiler Assembly Line</h1>
+        <p>A physical factory representing the compilation process</p>
+      </header>
+
+      <main>
+        <section id="controls-section">
+          <div class="input-group">
+            <label for="source-code">Source Code Input:</label>
+            <input type="text" id="source-code" value="let x = 5 + 3;" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="buttons">
+            <button id="btn-play">Play</button>
+            <button id="btn-pause">Pause</button>
+            <button id="btn-step">Step</button>
+            <button id="btn-reset">Reset</button>
+          </div>
+        </section>
+
+        <section id="factory-floor">
+          <div class="conveyor-belt"></div>
+
+          <div class="stations">
+            <div class="station" id="station-lexer">
+              <div class="machine-head"></div>
+              <div class="machine-body">
+                <h2>Lexer</h2>
+                <div class="status">Idle</div>
+              </div>
+            </div>
+
+            <div class="station" id="station-parser">
+              <div class="machine-head"></div>
+              <div class="machine-body">
+                <h2>Parser</h2>
+                <div class="status">Idle</div>
+              </div>
+            </div>
+
+            <div class="station" id="station-generator">
+              <div class="machine-head"></div>
+              <div class="machine-body">
+                <h2>Generator</h2>
+                <div class="status">Idle</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="items-container">
+            <!-- Items like raw text, tokens, AST, machine code will be injected here -->
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
