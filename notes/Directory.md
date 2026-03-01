@@ -1311,3 +1311,36 @@ An interactive visualization that represents the compilation process as a physic
   - Implement a simple recursive descent Parser to build an AST from the tokens.
   - Implement a basic Code Generator to walk the AST and produce mock assembly instructions.
 - **Animation System**: Manage the state of items on the conveyor belt using `requestAnimationFrame` or CSS transitions, transitioning their visual representation as they pass through each machine.
+
+## Promise Flow Visualizer [[demo](https://rybla.github.io/interpolnet-2/promise-flow-visualizer)]
+
+An interactive visualization that maps asynchronous JavaScript promises as branching paths that glow green upon resolution or red upon rejection to trigger downstream clauses.
+
+### Features
+- **Promise Graph Visualization**: Displays a flow chart representing a chain of JavaScript Promises, including `then()`, `catch()`, `finally()`, `Promise.all()`, and `Promise.race()`.
+- **Interactive State Toggling**: Users can interact with the initial "source" promises to set their future state to either "Resolve" or "Reject".
+- **Flow Animation**: Upon clicking "Run", the visualization animates the execution flow.
+  - Paths traversed by a resolved promise glow bright green.
+  - Paths traversed by a rejected promise glow bright red.
+  - Unreached or pending paths remain dim.
+- **Node Status Indicators**: Each node in the graph clearly indicates its current state (Pending, Fulfilled, Rejected) and the value or error it holds.
+- **Dynamic Code Snippet**: A side panel displays the equivalent JavaScript code for the currently displayed graph, highlighting the active line as the animation progresses.
+
+### Design Goals
+- **Demystify Asynchrony**: Provide a concrete, spatial metaphor for the often abstract and confusing concepts of Promise chaining and error propagation.
+- **Visual Feedback**: Use strong colors and animations (glowing paths) to clearly distinguish between success and failure paths.
+- **Intuitive Interaction**: Allow users to experiment with different success/failure scenarios to see how the downstream flow reacts.
+
+### Implementation Plan
+- **HTML Structure**:
+  - A main container for the SVG graph.
+  - A control panel for interacting with source nodes and triggering the run.
+  - A code view panel.
+- **CSS Styling**:
+  - Dark theme with high-contrast neon colors (green for resolve, red for reject).
+  - Use SVG CSS animations (e.g., animating `stroke-dashoffset`) to create the glowing path effect.
+- **JavaScript Logic**:
+  - Implement a `Graph` data structure to represent the nodes and their connections (edges).
+  - Each node represents a Promise-like operation.
+  - Implement a simulation engine that traverses the graph based on the user-defined initial states, propagating the resolve/reject signals down the edges.
+  - Synchronize the logical traversal with visual SVG animations and code highlighting.
