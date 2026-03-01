@@ -1268,3 +1268,21 @@ The Event Loop Visualizer demo illustrates the inner workings of the JavaScript 
         *   If both stack and Microtask Queue are empty, check the Task Queue. If not empty, move an item to the stack.
     *   Handle user inputs to push new task representations into the appropriate queues/Web API area (simulating delay for `setTimeout`).
     *   Synchronize the logical state with DOM updates (creating, moving, and removing DOM elements representing tasks).
+
+## Heap Fragmentation Visualizer [[demo](https://rybla.github.io/interpolnet-2/heap-fragmentation-visualizer)]
+
+The Heap Fragmentation Visualizer is a web demonstration illustrating the concept of memory fragmentation. Users can drag irregularly sized memory blocks into a visual contiguous memory array. As blocks are allocated and later freed, gaps are created. The demonstration specifically visualizes how an allocation can fail even if the *total* free memory is sufficient, because the *contiguous* free memory is insufficient due to fragmentation.
+
+**Features:**
+* **Block Palette**: Draggable memory blocks of varying sizes (e.g., 2, 3, 5 units).
+* **Memory Array Visualizer**: A graphical representation of contiguous memory units.
+* **Allocation and Deallocation**: Dragging blocks to the array allocates them; clicking allocated blocks frees them.
+* **Statistics Panel**: Real-time display of total free space, maximum contiguous free space, and fragmentation level.
+* **Visual Feedback**: Neon, cyberpunk aesthetic with active drag states, successful allocation pulsing, and failure "shake" animations when an allocation request cannot be satisfied.
+
+**Design Goal:**
+Provide an intuitive, hands-on analogy for understanding why heap fragmentation causes out-of-memory errors despite having enough raw bytes available. The cyberpunk theme adds a tech-centric atmosphere appropriate for memory management concepts.
+
+**Implementation Outline:**
+* **HTML/CSS**: Responsive grid layout with a cyberpunk color scheme (neon cyan, magenta, dark backgrounds). CSS grid for the memory array.
+* **JavaScript**: Pointer events for custom drag-and-drop handling. A core state manager tracking an array of memory units (Free vs. Allocated by Block ID). Logic to calculate contiguous free segments and handle allocation failures with CSS class toggling for shake animations.
