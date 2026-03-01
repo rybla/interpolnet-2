@@ -1,0 +1,405 @@
+:root {
+  --bg-color: #1e1e24;
+  --text-color: #f5f5f5;
+  --accent: #f2a900;
+
+  --machine-bg: #40404a;
+  --machine-border: #666;
+  --belt-color: #2b2b36;
+  --belt-stripe: #4d4d5e;
+
+  --token-keyword: #ff79c6;
+  --token-identifier: #50fa7b;
+  --token-operator: #ffb86c;
+  --token-literal: #bd93f9;
+
+  --ast-bg: #282a36;
+  --ast-border: #6272a4;
+
+  --mc-bg: #000;
+  --mc-text: #0f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+header {
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#controls-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--machine-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid var(--machine-border);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 1;
+}
+
+.input-group label {
+  font-weight: bold;
+}
+
+#source-code {
+  flex-grow: 1;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-family: monospace;
+  background: #111;
+  color: #fff;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background: #ffcc00;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Factory Floor */
+#factory-floor {
+  position: relative;
+  height: 400px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px dashed var(--machine-border);
+}
+
+/* Conveyor Belt */
+.conveyor-belt {
+  position: absolute;
+  top: 60%;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--belt-color),
+    var(--belt-color) 20px,
+    var(--belt-stripe) 20px,
+    var(--belt-stripe) 40px
+  );
+  border-top: 4px solid #111;
+  border-bottom: 8px solid #111;
+  box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.conveyor-belt.running {
+  animation: moveBelt 1s linear infinite;
+}
+
+@keyframes moveBelt {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+
+/* Stations */
+.stations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 5%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.station {
+  position: relative;
+  width: 180px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.machine-head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 150px;
+  background: linear-gradient(180deg, var(--machine-bg) 0%, #222 100%);
+  border: 4px solid var(--machine-border);
+  border-radius: 0 0 10px 10px;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+
+.station.processing .machine-head {
+  transform: translateX(-50%) translateY(30px);
+}
+
+.machine-head::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.station.processing .machine-head::after {
+  background: #ff0055;
+  box-shadow: 0 0 15px #ff0055;
+}
+
+.machine-body {
+  height: 35%;
+  background: var(--machine-bg);
+  border: 4px solid var(--machine-border);
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 2;
+  box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
+}
+
+.machine-body h2 {
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.status {
+  background: #111;
+  padding: 0.2rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #888;
+}
+
+.station.processing .status {
+  color: #0f0;
+  box-shadow: 0 0 5px #0f0;
+}
+
+/* Dynamic Items traveling on belt */
+#items-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.item {
+  position: absolute;
+  top: 60%;
+  left: -200px;
+  transform: translateY(-50%);
+  transition: none; /* JS will handle position */
+}
+
+/* Raw Text Box */
+.raw-text {
+  background: #fff;
+  color: #000;
+  padding: 10px 20px;
+  border: 3px solid #333;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 1.2rem;
+  box-shadow: 3px 3px 0 #000;
+  white-space: nowrap;
+}
+
+/* Tokens Array */
+.tokens-container {
+  display: flex;
+  gap: 5px;
+  background: rgba(0,0,0,0.5);
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.token {
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #222;
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+}
+
+.token.keyword { background: var(--token-keyword); }
+.token.identifier { background: var(--token-identifier); }
+.token.operator { background: var(--token-operator); }
+.token.literal { background: var(--token-literal); }
+.token.punctuation { background: #fff; }
+
+/* AST Tree */
+.ast-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--ast-bg);
+  border: 2px solid var(--ast-border);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.ast-node {
+  background: #444;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  margin: 2px;
+  border: 1px solid #777;
+  text-align: center;
+}
+
+.ast-children {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  position: relative;
+}
+
+.ast-children::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 1px;
+  height: 6px;
+  background: #fff;
+}
+
+/* Machine Code List */
+.machine-code {
+  background: var(--mc-bg);
+  color: var(--mc-text);
+  padding: 10px;
+  border: 2px solid #333;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  box-shadow: 0 0 10px rgba(0,255,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.mc-instruction {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .stations {
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0;
+  }
+  .station {
+    width: 100%;
+    height: 100px;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 2px solid var(--machine-border);
+  }
+  .machine-head {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    margin-right: 20px;
+  }
+  .machine-body {
+    height: auto;
+    width: auto;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+  .conveyor-belt {
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+  }
+}
