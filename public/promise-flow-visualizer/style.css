@@ -1,0 +1,267 @@
+:root {
+  --bg-color: #12141c;
+  --panel-bg: #1a1e29;
+  --text-primary: #e0e6ed;
+  --text-secondary: #8a96a8;
+  --border-color: #2c3245;
+
+  --resolve-color: #00ffcc;
+  --resolve-glow: rgba(0, 255, 204, 0.4);
+
+  --reject-color: #ff0044;
+  --reject-glow: rgba(255, 0, 68, 0.4);
+
+  --pending-color: #445566;
+  --pending-bg: #1e222e;
+
+  --node-bg: #232838;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 1rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--resolve-color);
+}
+
+header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  flex: 1;
+  margin: 0 2rem;
+}
+
+.controls button {
+  background-color: var(--node-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin-left: 0.5rem;
+}
+
+.controls button:hover {
+  background-color: #2c3245;
+}
+
+#run-btn {
+  background-color: rgba(0, 255, 204, 0.1);
+  border-color: var(--resolve-color);
+  color: var(--resolve-color);
+}
+
+#run-btn:hover {
+  background-color: rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 10px var(--resolve-glow);
+}
+
+main {
+  display: flex;
+  flex: 1;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+#visualization {
+  flex: 3;
+  background-color: var(--panel-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+#code-panel {
+  flex: 1;
+  background-color: var(--panel-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+#code-panel h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+pre {
+  background-color: #0b0c10;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.code-line {
+  display: block;
+  transition: all 0.3s ease;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.code-line.active-resolve {
+  background-color: rgba(0, 255, 204, 0.15);
+  color: var(--resolve-color);
+  text-shadow: 0 0 5px var(--resolve-glow);
+}
+
+.code-line.active-reject {
+  background-color: rgba(255, 0, 68, 0.15);
+  color: var(--reject-color);
+  text-shadow: 0 0 5px var(--reject-glow);
+}
+
+/* SVG Node Styles */
+.node rect {
+  fill: var(--node-bg);
+  stroke: var(--border-color);
+  stroke-width: 2;
+  rx: 6;
+  ry: 6;
+  transition: all 0.3s ease;
+}
+
+.node text.title {
+  fill: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.node text.status {
+  fill: var(--text-secondary);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.node.interactive {
+  cursor: pointer;
+}
+
+.node.interactive:hover rect {
+  stroke: #fff;
+}
+
+.node-toggle-text {
+  font-size: 10px;
+  fill: var(--text-secondary);
+  pointer-events: none;
+}
+
+/* Node States */
+.node.pending rect {
+  stroke: var(--pending-color);
+}
+
+.node.resolved rect {
+  stroke: var(--resolve-color);
+  fill: rgba(0, 255, 204, 0.05);
+  filter: url(#glow-resolve);
+}
+.node.resolved text.status { fill: var(--resolve-color); }
+
+.node.rejected rect {
+  stroke: var(--reject-color);
+  fill: rgba(255, 0, 68, 0.05);
+  filter: url(#glow-reject);
+}
+.node.rejected text.status { fill: var(--reject-color); }
+
+/* SVG Edge Styles */
+.edge path {
+  fill: none;
+  stroke: var(--pending-color);
+  stroke-width: 3;
+  transition: stroke 0.3s ease;
+}
+
+/* Edge States and Animations */
+.edge.resolved path {
+  stroke: var(--resolve-color);
+  stroke-dasharray: 10;
+  animation: flow-resolve 1s linear infinite;
+  filter: url(#glow-resolve);
+}
+
+.edge.rejected path {
+  stroke: var(--reject-color);
+  stroke-dasharray: 10;
+  animation: flow-reject 1s linear infinite;
+  filter: url(#glow-reject);
+}
+
+@keyframes flow-resolve {
+  from { stroke-dashoffset: 20; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes flow-reject {
+  from { stroke-dashoffset: 20; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+  #app {
+    padding: 0.5rem;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  header p {
+    margin: 0;
+  }
+
+  main {
+    flex-direction: column;
+  }
+
+  #visualization {
+    flex: 2;
+  }
+
+  #code-panel {
+    flex: 1;
+  }
+}
