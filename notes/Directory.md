@@ -1344,3 +1344,33 @@ An interactive visualization that maps asynchronous JavaScript promises as branc
   - Each node represents a Promise-like operation.
   - Implement a simulation engine that traverses the graph based on the user-defined initial states, propagating the resolve/reject signals down the edges.
   - Synchronize the logical traversal with visual SVG animations and code highlighting.
+
+## Visual Lambda Beta Reduction [[demo](https://rybla.github.io/interpolnet-2/visual-lambda-beta-reduction)]
+
+**Visual Lambda Beta Reduction** is an interactive, visual substitution engine for Lambda calculus that animates beta-reductions step-by-step using colored geometric shapes.
+
+### Description & Features
+- Represents lambda expressions as physical, colored geometric blocks.
+  - Variables are shapes (e.g. circles, squares) distinguished by color.
+  - Abstractions (λx.M) are represented as container blocks with an "input slot" matching the bound variable's color/shape.
+  - Applications (M N) are represented as two blocks positioned adjacently.
+- Users can click on a valid application to trigger a step-by-step beta reduction animation.
+- The animation visually demonstrates substitution:
+  - The argument block is highlighted.
+  - The abstraction's body is scanned for matching bound variables.
+  - The argument block gracefully duplicates and flies to replace each matching variable inside the abstraction body.
+  - Finally, the abstraction envelope and original argument block fade out, leaving the substituted body.
+- Supports nested expressions and basic combinators (e.g., Identity, Mockingbird, Kestrel). Users can select from a dropdown of examples or build simple expressions.
+- Includes a "Step" button to manually control the reduction process, alongside "Reset" and "Example" selectors.
+
+### Design Goals
+- **Intuitive Understanding:** Make the abstract concepts of lambda calculus and beta reduction concrete and tactile through spatial relationships and consistent color coding.
+- **Engaging Animations:** Use fluid transitions (e.g., shapes flying to their substituted positions) to clarify the substitution mechanism.
+- **Aesthetic:** A modern, clean look using pastel colors for variables, soft shadows for depth (indicating nesting), and clear typography.
+
+### Implementation Plan
+- **Data Structure:** Implement an AST for lambda expressions (Variable, Abstraction, Application).
+- **Layout Engine:** Write a function to recursively calculate the visual size and position of each AST node, laying them out from left to right, and grouping abstractions inside rounded rectangles.
+- **Rendering:** Use HTML/CSS/JS (with DOM elements or SVG/Canvas) to render the AST based on the layout engine's calculations. CSS transitions will be heavily used.
+- **Reduction Logic:** Implement a safe substitution function that tracks the original DOM elements and their destinations.
+- **Animation Orchestrator:** Manage the sequence of steps: highlighting the redex, moving clones of the argument to target positions, fading out the abstraction wrapper, and recalculating the final layout.

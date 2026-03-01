@@ -1,4 +1,3 @@
-Create a visual substitution engine for Lambda calculus that visually reduces beta-reductions step-by-step using colored geometric shapes.
 Demonstrate pointer aliasing in C by showing multiple floating arrows pointing to a single memory cell where changing one alters the base value.
 Provide a visual canvas where users draw circles and arrows to define a finite state machine that automatically generates the switch-case code.
 Step through compiled Java bytecode instructions while highlighting the specific stack memory pushes and pops at the virtual machine level.
