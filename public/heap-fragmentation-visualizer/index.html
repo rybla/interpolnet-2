@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Heap Fragmentation Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Heap Fragmentation Visualizer</h1>
+        <p>Drag unequally sized memory blocks into the heap. Click an allocated block to free it.</p>
+      </header>
+
+      <main>
+        <section id="stats-panel">
+          <div class="stat">
+            <span class="label">Total Free Space:</span>
+            <span class="value" id="stat-total-free">32 units</span>
+          </div>
+          <div class="stat">
+            <span class="label">Max Contiguous Free:</span>
+            <span class="value" id="stat-max-contiguous">32 units</span>
+          </div>
+        </section>
+
+        <section id="memory-container">
+          <h2>Memory Heap Array</h2>
+          <div id="memory-array">
+            <!-- 32 memory cells will be generated here -->
+          </div>
+        </section>
+
+        <section id="palette-container">
+          <h2>Block Palette</h2>
+          <div id="block-palette">
+            <!-- Draggable blocks: Size 2, 3, 5 -->
+            <div class="draggable-block size-2" data-size="2">
+              <span class="block-label">Size 2</span>
+            </div>
+            <div class="draggable-block size-3" data-size="3">
+              <span class="block-label">Size 3</span>
+            </div>
+            <div class="draggable-block size-5" data-size="5">
+              <span class="block-label">Size 5</span>
+            </div>
+          </div>
+        </section>
+      </main>
+      <div id="drag-layer"></div>
+    </div>
+  </body>
+</html>
