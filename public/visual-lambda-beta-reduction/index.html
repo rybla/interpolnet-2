@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Visual Lambda Beta Reduction</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Visual Lambda Beta Reduction</h1>
+      <p>Interactive, visual substitution engine for Lambda calculus.</p>
+    </header>
+
+    <div id="controls">
+      <div class="control-group">
+        <label for="example-select">Example:</label>
+        <select id="example-select">
+          <option value="identity">Identity: (λx.x) y</option>
+          <option value="mockingbird">Mockingbird: (λx.x x) (λy.y y)</option>
+          <option value="kestrel">Kestrel (True): (λx.λy.x) a b</option>
+          <option value="kite">Kite (False): (λx.λy.y) a b</option>
+          <option value="omega">Omega (Infinite): (λx.x x) (λx.x x)</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <button id="step-btn" class="primary-btn">Step</button>
+        <button id="reset-btn" class="secondary-btn">Reset</button>
+      </div>
+    </div>
+
+    <main>
+      <div id="ast-container"></div>
+
+      <div id="message-container">
+        <p id="message-text">Select an example and click "Step" or click a valid application directly.</p>
+      </div>
+    </main>
+  </body>
+</html>
