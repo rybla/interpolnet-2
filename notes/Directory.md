@@ -1374,3 +1374,26 @@ An interactive visualization that maps asynchronous JavaScript promises as branc
 - **Rendering:** Use HTML/CSS/JS (with DOM elements or SVG/Canvas) to render the AST based on the layout engine's calculations. CSS transitions will be heavily used.
 - **Reduction Logic:** Implement a safe substitution function that tracks the original DOM elements and their destinations.
 - **Animation Orchestrator:** Manage the sequence of steps: highlighting the redex, moving clones of the argument to target positions, fading out the abstraction wrapper, and recalculating the final layout.
+
+## Pointer Aliasing [[demo](https://rybla.github.io/interpolnet-2/pointer-aliasing)]
+
+The Pointer Aliasing demo visualizes how multiple pointers in C can point to the same memory location, demonstrating the concept of pointer aliasing.
+
+Features:
+- A central memory cell representing a block of memory holding an integer value (e.g., `int target = 42;`).
+- Multiple floating pointer blocks (e.g., `*ptr1`, `*ptr2`, `*ptr3`) that visually point to the central memory cell.
+- Each pointer block has an input field allowing the user to modify the value of the memory cell it points to.
+- When a value is updated through a pointer, a visual "data flow" animation travels from the pointer to the central memory cell.
+- Once the data reaches the central cell, it updates its value, and active CSS pulse animations trigger on both the central cell and all other aliasing pointers to emphasize that they all observe the change.
+- A dark, code-editor-style theme using monospace fonts (like Fira Code or Consolas) and neon accent colors to evoke a low-level programming aesthetic.
+
+Design Goals:
+- Provide a clear, intuitive visual metaphor for pointer aliasing, a concept that often confuses beginner C programmers.
+- Use passive animations (like gentle floating of the pointer blocks) to make the demo feel alive and interactive.
+- Use active animations (like pulsing and data flow) to provide immediate, satisfying feedback when the user interacts with the pointers.
+- Ensure the layout is responsive and mobile-friendly, adapting the arrangement of the pointers and the central cell for smaller screens.
+
+Implementation Plan:
+- **HTML**: Create a container for the demo, a central `.memory-cell` div, and multiple `.pointer-block` divs. SVG lines or CSS borders will be used to draw the connections between the pointers and the central cell.
+- **CSS**: Apply a dark theme with syntax-highlighting-inspired colors. Define keyframe animations for the floating effect (`passive-float`), the update pulse (`active-pulse`), and the data flow visual.
+- **JavaScript**: Manage the state of the central memory cell and the pointers. Attach event listeners to the input fields in the pointer blocks. When an input changes, update the central state, trigger the data flow animation, and subsequently update the DOM values and trigger pulse animations on all affected elements.
