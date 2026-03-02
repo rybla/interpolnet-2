@@ -3397,3 +3397,29 @@ An interactive orbital mechanics sandbox that simulates the gravitational intera
 - **Physics Engine**: Use a numerical integration method (like semi-implicit Euler) to update positions and velocities based on net gravitational forces.
 - **Rendering**: Use the HTML5 Canvas API to render the planets and their trails efficiently.
 - **UI & Interaction**: Implement a modern, responsive control panel overlay and pointer events on the canvas for flinging new bodies.
+## C Pointer Aliasing Visualizer [[demo](https://rybla.github.io/interpolnet-2/c-pointer-aliasing)]
+
+An interactive tool demonstrating pointer aliasing in C by showing multiple floating arrows pointing to a single memory cell where changing one alters the base value.
+
+### Features
+- **Central Memory Cell**: A visual representation of a memory cell holding a value (e.g., an integer).
+- **Floating Pointers**: Multiple draggable, interactive pointer cards representing variables (e.g., `*ptr1`, `*ptr2`) that alias the same memory address.
+- **Animated Arrows**: SVG paths connecting each pointer card to the central memory cell, dynamically updating their positions as pointers are dragged around the screen.
+- **Real-time Value Updates**: Changing the value via an input field on one pointer card instantly propagates the change to the central memory cell and subsequently updates all other pointer cards, visually demonstrating the aliasing effect.
+- **Code Representation**: A side panel displaying equivalent C code dynamically updating based on user interactions.
+
+### Design Goals
+- **Clear Conceptual Mapping**: Make the abstract concept of memory aliasing concrete through a visual, interconnected system.
+- **Interactivity and Playfulness**: Engage users by allowing them to physically manipulate pointers and see immediate effects on the shared state.
+- **Distinct Aesthetic**: Use a modern, slightly technical aesthetic with a unique color scheme (e.g., vibrant orange and teal on a dark background) and monospace typography.
+
+### Implementation Plan
+- **HTML Structure**: A main workspace area for the memory cell and pointers, and a side panel for the C code snippet.
+- **State Management**: A single JavaScript state object representing the central memory value and the list of active pointers.
+- **Rendering**:
+    - DOM elements for the central memory cell and pointer cards.
+    - An SVG overlay spanning the workspace to draw the animated connection arrows (`<path>`) between pointers and the memory cell.
+- **Interactivity**:
+    - Implement drag-and-drop for pointer cards using mouse and touch events.
+    - Attach event listeners to input fields on pointer cards to update the central state.
+- **Animation**: Use `requestAnimationFrame` to continuously update the SVG path coordinates as pointers are dragged, ensuring smooth visual connections.

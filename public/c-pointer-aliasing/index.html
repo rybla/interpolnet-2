@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | C Pointer Aliasing Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+        <header>
+            <h1>C Pointer Aliasing Visualizer</h1>
+            <p>Demonstrating how multiple pointers can refer to the same memory location. Updating one updates all.</p>
+        </header>
+
+        <main id="workspace">
+            <!-- SVG Overlay for animated arrows -->
+            <svg id="arrow-overlay">
+                <!-- Paths will be injected dynamically -->
+            </svg>
+
+            <!-- Memory Cell -->
+            <div id="memory-cell" class="memory-block">
+                <div class="memory-label">Address: <span class="memory-address">0x7ffe10a8</span></div>
+                <div class="memory-value-display" id="main-value">0</div>
+            </div>
+
+            <!-- Pointer Cards Container (Initially Empty, dynamically populated) -->
+            <div id="pointers-container">
+            </div>
+
+            <button id="add-pointer-btn">Add Pointer</button>
+
+        </main>
+
+        <aside id="side-panel">
+            <h2>Equivalent C Code</h2>
+            <pre id="code-snippet"><code>int main() {
+    int value = 0;
+    // Pointers will appear here
+    return 0;
+}</code></pre>
+        </aside>
+    </div>
+  </body>
+</html>
