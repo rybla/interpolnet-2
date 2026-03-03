@@ -1461,3 +1461,31 @@ The Java Bytecode VM demo is an interactive, visual simulation of a stack-based 
     - **Instruction Set**: Implement functions for each supported opcode that mutate the VM state.
     - **Execution Loop**: A `setInterval` or `requestAnimationFrame` loop to handle automated execution.
     - **DOM Updates**: Functions to re-render or animate DOM elements based on VM state changes. Crucially, when an instruction executes, orchestrate CSS animations to visually represent the data flow (e.g., creating a temporary DOM element that flies from a local variable slot to the top of the stack during an `iload`).
+
+## Hoisting Visualizer [[demo](https://rybla.github.io/interpolnet-2/hoisting-visualizer)]
+
+[Demo Link](/public/hoisting-visualizer/)
+
+### Description
+The Hoisting Visualizer is an interactive educational tool that physically animates the concept of variable and function hoisting in JavaScript. By visually lifting declarations (like `var` and `function`) to the top of an execution context container before executing the remaining code, users can intuitively grasp how the JavaScript engine parses and prepares code during the creation phase.
+
+### Features
+*   **Execution Context Container:** A designated physical area representing the current scope or execution context.
+*   **Draggable/Editable Code Lines:** Users can input or modify lines of JavaScript code within the container.
+*   **Physical Lifting Animation:** When the "Simulate Engine Parsing" button is clicked, declarations (`var`, `function`) physically detach from their initial positions and smoothly animate upwards to the top of the container.
+*   **Code Execution Simulation:** After hoisting, the code can be stepped through, showing how assignments and initializations remain in place.
+*   **Distinct Styling:** Uses a unique "Blueprint" color scheme (deep blues, whites, and bright yellow/orange highlights for declarations) with a monospace typography appropriate for code.
+
+### Design Goals
+*   **Clarify a Complex Concept:** Hoisting is often confusing for beginners. This demo aims to make the invisible parsing step of the JS engine visible and tangible.
+*   **Interactive Learning:** By allowing users to write their own code or use presets, they can actively test their understanding.
+*   **Engaging Animations:** The use of smooth, physical transitions (e.g., using CSS transforms and transitions) will make the "lifting" action satisfying and memorable.
+
+### Implementation Plan
+1.  **HTML Structure:** Create a main container for the Execution Context. Inside, have a list of code lines (either div-based or list-based) that can hold code snippets. Include controls (buttons) for triggering the animations.
+2.  **CSS Styling:** Apply the "Blueprint" theme. Use absolute positioning or CSS Grid/Flexbox with `transform` properties to allow elements to move freely during the animation phase. Ensure it is responsive.
+3.  **JavaScript Logic:**
+    *   Parse the input code to identify declarations (`var`, `function`).
+    *   Calculate the initial and target positions of the elements using `getBoundingClientRect()`.
+    *   Apply CSS `transform` (translations) to physically move the declaration elements to the top of the container while pushing other lines down.
+    *   Handle the timing and sequencing of the animations.
