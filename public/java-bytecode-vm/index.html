@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Bytecode VM Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Java Bytecode VM Simulator</h1>
+            <div class="controls">
+                <select id="preset-select">
+                    <option value="arithmetic">Basic Arithmetic</option>
+                    <option value="factorial">Factorial</option>
+                    <option value="fibonacci">Fibonacci</option>
+                    <option value="conditional">Conditionals</option>
+                </select>
+                <button id="btn-step" class="btn">Step</button>
+                <button id="btn-play" class="btn">Play</button>
+                <button id="btn-pause" class="btn" disabled>Pause</button>
+                <button id="btn-reset" class="btn">Reset</button>
+                <label for="speed-slider" class="speed-label">Speed:</label>
+                <input type="range" id="speed-slider" min="100" max="2000" value="1000" step="100" class="slider">
+            </div>
+        </header>
+        <main class="vm-grid">
+            <section class="panel instructions-panel">
+                <h2>Bytecode Instructions</h2>
+                <div class="code-container">
+                    <ol id="instruction-list" class="instruction-list">
+                        <!-- Instructions will be populated here -->
+                    </ol>
+                </div>
+            </section>
+
+            <section class="panel stack-panel">
+                <h2>Operand Stack</h2>
+                <div id="stack-container" class="stack-container">
+                    <!-- Stack items will be pushed here -->
+                </div>
+                <div class="stack-base">Stack Base</div>
+            </section>
+
+            <section class="panel locals-panel">
+                <h2>Local Variables</h2>
+                <div id="locals-container" class="locals-container">
+                    <!-- Local variables will be shown here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Container for flying animation elements -->
+        <div id="animation-layer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

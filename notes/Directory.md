@@ -1418,3 +1418,46 @@ This demo provides a visual canvas where users can intuitively draw finite state
   - Handle pointer events (down, move, up) on the SVG to support dragging nodes and drawing edges.
   - Compute edge paths dynamically, including self-loops and curved paths for bidirectional transitions.
   - Generate the code string by iterating through nodes and their outgoing edges, formatting it as standard `switch` statements.
+
+## Java Bytecode VM [[demo](https://rybla.github.io/interpolnet-2/java-bytecode-vm)]
+
+The Java Bytecode VM demo is an interactive, visual simulation of a stack-based Java Virtual Machine. Users can step through compiled Java bytecode instructions and observe real-time updates to the operand stack, local variables array, and program counter. It demystifies the low-level execution model of Java programs.
+
+### Features
+- **Bytecode Execution**: A simulated JVM that executes a subset of common Java bytecode instructions, including `bipush`, `iload`, `istore`, `iadd`, `isub`, `imul`, `goto`, `ifeq`, `if_icmpeq`, `iinc`, and `return`.
+- **Interactive Stepping**: Users can execute the bytecode step-by-step or run it automatically, with controls to adjust execution speed.
+- **Visual State Tracking**:
+    - **Operand Stack**: A dynamic visual stack where values are explicitly pushed and popped. Animations highlight operations like adding two values.
+    - **Local Variables**: A numbered array showing the current state of local variables. Highlighting indicates when a variable is read or written.
+    - **Instruction List**: A scrollable view of the loaded bytecode program. The active instruction (Program Counter) is prominently highlighted.
+- **Code Presets**: Includes multiple pre-compiled bytecode examples representing common Java concepts:
+    - Basic Arithmetic
+    - Factorial (using a loop)
+    - Fibonacci sequence
+    - Conditionals (if/else)
+- **Active and Passive Animations**:
+    - Passive: Gentle glowing or pulsing on the active instruction to draw focus.
+    - Active: Smooth translations when values move between the stack, local variables, and the instruction itself. Values pushed to the stack animate from the source (instruction or local variable).
+
+### Design Goals
+- **Educational Clarity**: Make the abstract concept of a stack machine concrete and easy to follow.
+- **Visual Causality**: Ensure every change in state (stack, variables) is visually linked to the specific instruction that caused it through animation.
+- **Developer Aesthetic**: A UI inspired by IDE debuggers, utilizing a clean, dark-mode color scheme (e.g., `#1e1e1e` background, syntax-highlighted code colors like `#d4d4d4` for text, `#569cd6` for keywords, `#b5cea8` for numbers).
+- **Responsive Layout**: Arrange the three main components (Instructions, Stack, Locals) in a flexible grid that adapts to different screen sizes.
+
+### Implementation Plan
+- **HTML Structure**:
+    - A main grid layout containing three primary panels:
+        1. **Code Panel**: Displays the list of instructions.
+        2. **Stack Panel**: A vertical flex container for the operand stack.
+        3. **Locals Panel**: A horizontal or vertical list for local variables.
+    - A control bar with Play, Pause, Step, and Reset buttons, plus a dropdown for selecting presets.
+- **CSS Styling**:
+    - Define a custom dark theme using CSS variables.
+    - Use Flexbox for internal panel layouts and CSS Grid for the overall page structure.
+    - Define CSS transitions for stack item insertion/removal (e.g., scaling and translating) and for highlighting active rows.
+- **JavaScript Logic**:
+    - **VM State**: Create a class or object managing the `programCounter`, `operandStack` (array), `localVariables` (array), and `instructions` (array of parsed objects).
+    - **Instruction Set**: Implement functions for each supported opcode that mutate the VM state.
+    - **Execution Loop**: A `setInterval` or `requestAnimationFrame` loop to handle automated execution.
+    - **DOM Updates**: Functions to re-render or animate DOM elements based on VM state changes. Crucially, when an instruction executes, orchestrate CSS animations to visually represent the data flow (e.g., creating a temporary DOM element that flies from a local variable slot to the top of the stack during an `iload`).
