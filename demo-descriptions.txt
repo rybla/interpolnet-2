@@ -1,4 +1,3 @@
-Step through compiled Java bytecode instructions while highlighting the specific stack memory pushes and pops at the virtual machine level.
 Animate JavaScript variable hoisting by physically lifting declarations to the top of an execution context container before code execution.
 Visualize Rust ownership rules by representing variables as physical tokens that can only be held by one function scope at a time.
 Build a tool that shows how functional pattern matching acts as a visual sieve filtering data structures through specific shape templates.
