@@ -1,4 +1,3 @@
-Provide a visual canvas where users draw circles and arrows to define a finite state machine that automatically generates the switch-case code.
 Step through compiled Java bytecode instructions while highlighting the specific stack memory pushes and pops at the virtual machine level.
 Animate JavaScript variable hoisting by physically lifting declarations to the top of an execution context container before code execution.
 Visualize Rust ownership rules by representing variables as physical tokens that can only be held by one function scope at a time.

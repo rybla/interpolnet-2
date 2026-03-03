@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finite State Machine Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="title-container">
+            <h1>FSM Generator</h1>
+            <p>Draw states and transitions to generate a finite state machine's switch-case code.</p>
+        </div>
+        <div class="controls">
+            <button id="add-state-btn" class="btn">Add State</button>
+            <button id="clear-btn" class="btn btn-danger">Clear</button>
+        </div>
+        <div class="instructions">
+            <ul>
+                <li><strong>Drag</strong> states to move them.</li>
+                <li><strong>Shift + Drag</strong> between states to draw a transition.</li>
+                <li><strong>Double-click</strong> state/transition text to edit.</li>
+                <li><strong>Select</strong> a state/transition and press <strong>Delete</strong> to remove.</li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="canvas-container" id="canvas-container">
+            <svg id="fsm-svg" tabindex="0">
+                <defs>
+                    <marker id="arrowhead" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" class="marker-path" />
+                    </marker>
+                    <marker id="arrowhead-selected" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" class="marker-path-selected" />
+                    </marker>
+                    <!-- Marker for drawing new transition line -->
+                    <marker id="arrowhead-drawing" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" class="marker-path-drawing" />
+                    </marker>
+                </defs>
+
+                <g id="links-layer"></g>
+                <g id="drawing-layer"></g>
+                <g id="nodes-layer"></g>
+            </svg>
+        </section>
+
+        <section class="code-container">
+            <div class="code-header">
+                <h2>Generated Code</h2>
+            </div>
+            <pre><code id="generated-code" class="language-c"></code></pre>
+        </section>
+    </main>
+
+    <!-- Text Input Overlay (for editing labels) -->
+    <div id="text-editor" class="text-editor hidden">
+        <input type="text" id="label-input" autocomplete="off" />
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

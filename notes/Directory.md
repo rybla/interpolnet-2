@@ -1397,3 +1397,24 @@ Implementation Plan:
 - **HTML**: Create a container for the demo, a central `.memory-cell` div, and multiple `.pointer-block` divs. SVG lines or CSS borders will be used to draw the connections between the pointers and the central cell.
 - **CSS**: Apply a dark theme with syntax-highlighting-inspired colors. Define keyframe animations for the floating effect (`passive-float`), the update pulse (`active-pulse`), and the data flow visual.
 - **JavaScript**: Manage the state of the central memory cell and the pointers. Attach event listeners to the input fields in the pointer blocks. When an input changes, update the central state, trigger the data flow animation, and subsequently update the DOM values and trigger pulse animations on all affected elements.
+
+## Finite State Machine Generator [[demo](https://rybla.github.io/interpolnet-2/fsm-generator)]
+
+This demo provides a visual canvas where users can intuitively draw finite state machines (FSMs) by creating circles (states) and connecting them with arrows (transitions). As the user interacts with the canvas to design the FSM, the application dynamically generates and updates the corresponding C/C++ style `switch-case` code in real-time.
+
+### Features
+- **Interactive Canvas**: Add, move, and connect states using mouse/touch interactions.
+- **Dynamic Code Generation**: Automatically generates a structured `switch-case` skeleton based on the current graph topology.
+- **State & Transition Naming**: Double-click on states or transitions to rename them or set transition conditions.
+- **Theme**: A clean, "blueprint" aesthetic with a dark blue background, grid pattern, and bright cyan/orange accents for contrast.
+- **Animations**: Smooth transitions when adding nodes, hover effects on interactable elements, and pulsating active states.
+- **Responsive Design**: Adapts to mobile and desktop layouts, ensuring the canvas and code view are optimally sized.
+
+### Implementation Plan
+- **HTML**: A split-screen layout (or stacked on mobile) with an SVG element for the canvas and a `<pre><code>` block for the generated code.
+- **CSS**: Custom properties for the blueprint theme, grid background using CSS gradients, and flexbox/grid for layout.
+- **JavaScript**:
+  - Maintain a state object containing nodes and edges.
+  - Handle pointer events (down, move, up) on the SVG to support dragging nodes and drawing edges.
+  - Compute edge paths dynamically, including self-loops and curved paths for bidirectional transitions.
+  - Generate the code string by iterating through nodes and their outgoing edges, formatting it as standard `switch` statements.
