@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rust Ownership Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Rust Ownership Visualizer</h1>
+      <p>Drag variables between function scopes to transfer ownership. Variables can only be owned by one scope at a time.</p>
+    </header>
+
+    <main class="scopes-container">
+      <div class="scope-box" id="scope-main" data-scope-id="main">
+        <div class="scope-header">fn main() { ... }</div>
+        <div class="token-container">
+          <!-- Tokens will go here -->
+          <div class="variable-token" id="token-s1" data-token-id="s1" draggable="true">
+            <span class="var-type">String</span>
+            <span class="var-name">s1</span>
+            <span class="var-value">"hello"</span>
+          </div>
+          <div class="variable-token" id="token-v" data-token-id="v" draggable="true">
+            <span class="var-type">Vec&lt;i32&gt;</span>
+            <span class="var-name">v</span>
+            <span class="var-value">[1, 2, 3]</span>
+          </div>
+        </div>
+        <div class="status-msg"></div>
+      </div>
+
+      <div class="scope-box" id="scope-process" data-scope-id="process">
+        <div class="scope-header">fn process(data) { ... }</div>
+        <div class="token-container">
+          <!-- Tokens will go here -->
+        </div>
+        <div class="status-msg"></div>
+      </div>
+
+      <div class="scope-box" id="scope-calculate" data-scope-id="calculate">
+        <div class="scope-header">fn calculate(items) { ... }</div>
+        <div class="token-container">
+          <!-- Tokens will go here -->
+        </div>
+        <div class="status-msg"></div>
+      </div>
+    </main>
+
+    <div class="controls">
+      <button id="reset-btn">Reset Demo</button>
+      <button id="clone-btn">Clone Variable</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

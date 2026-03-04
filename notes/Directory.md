@@ -1489,3 +1489,26 @@ The Hoisting Visualizer is an interactive educational tool that physically anima
     *   Calculate the initial and target positions of the elements using `getBoundingClientRect()`.
     *   Apply CSS `transform` (translations) to physically move the declaration elements to the top of the container while pushing other lines down.
     *   Handle the timing and sequencing of the animations.
+
+## Rust Ownership Visualizer [[demo](https://rybla.github.io/interpolnet-2/rust-ownership-visualizer)]
+
+This demo visualizes the core concepts of Rust's ownership model by representing variables as physical tokens that can be dragged and dropped between different function scopes. It enforces the rule that each token can only be held by one function scope at a time.
+
+### Features
+- Drag and drop tokens representing variables between distinct, labeled function scope containers (e.g., `main()`, `process_data()`, `calculate_sum()`).
+- Only one scope can own a specific variable token at any given time.
+- Attempting to use a variable that has been moved visually demonstrates a compilation error or disabled state.
+- Cloning a variable creates a distinct visual copy of the token.
+- Scopes highlight when a token is dragged over them to indicate they can accept ownership.
+- Distinct color coding for tokens and scopes using a Rust-inspired theme (dark background, orange accents).
+- Animations when a token is moved or when ownership is transferred.
+
+### Design Goal
+To provide an intuitive, physical metaphor for Rust's abstract ownership rules, helping learners grasp the concept of moving values instead of simply copying them, and understanding why a value is no longer accessible in its original scope after a move.
+
+### Implementation Plan
+- Use HTML `div` elements to represent the function scopes and the variable tokens.
+- Implement drag-and-drop functionality using the Pointer Events API (`pointerdown`, `pointermove`, `pointerup`) or the HTML5 Drag and Drop API to move tokens.
+- State management in JavaScript to track the current owner of each token and prevent multiple ownership.
+- Use CSS transitions for smooth movement of tokens and pulsing animations to indicate active/draggable tokens.
+- Implement responsive layout using CSS Flexbox or Grid to ensure the demo is usable on mobile devices.
