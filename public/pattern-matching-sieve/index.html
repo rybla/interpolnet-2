@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Matching Sieve</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Pattern Matching Sieve</h1>
+        <p>A visual representation of functional pattern matching as a structural sieve.</p>
+    </header>
+
+    <main>
+        <section id="spawner-controls">
+            <h2>Data Spawner</h2>
+            <div class="controls">
+                <button id="spawn-circle-red">Spawn Red Circle</button>
+                <button id="spawn-square-blue">Spawn Blue Square</button>
+                <button id="spawn-triangle-yellow">Spawn Yellow Triangle</button>
+                <button id="spawn-random">Spawn Random Shape</button>
+            </div>
+        </section>
+
+        <section id="sieve-area">
+            <div id="drop-zone-container">
+                <div id="drop-zone"></div>
+            </div>
+
+            <div id="pipeline-container">
+                <div class="sieve-row" id="row-1">
+                    <div class="sieve" data-pattern='{"type":"circle","color":"red"}'>
+                        <div class="sieve-label">case { type: "circle", color: "red" }</div>
+                        <div class="sieve-hole red-circle-hole"></div>
+                    </div>
+                    <div class="match-bin">
+                        <div class="bin-label">Matched Items</div>
+                        <div class="bin-items" id="bin-1"></div>
+                    </div>
+                </div>
+
+                <div class="sieve-row" id="row-2">
+                    <div class="sieve" data-pattern='{"type":"square","color":"blue"}'>
+                        <div class="sieve-label">case { type: "square", color: "blue" }</div>
+                        <div class="sieve-hole blue-square-hole"></div>
+                    </div>
+                    <div class="match-bin">
+                        <div class="bin-label">Matched Items</div>
+                        <div class="bin-items" id="bin-2"></div>
+                    </div>
+                </div>
+
+                <div class="sieve-row" id="row-3">
+                    <div class="sieve" data-pattern='{"type":"triangle"}'>
+                        <div class="sieve-label">case { type: "triangle", color: _ }</div>
+                        <div class="sieve-hole triangle-hole"></div>
+                    </div>
+                    <div class="match-bin">
+                        <div class="bin-label">Matched Items</div>
+                        <div class="bin-items" id="bin-3"></div>
+                    </div>
+                </div>
+
+                <div class="sieve-row catch-all" id="row-4">
+                    <div class="sieve" data-pattern='{}'>
+                        <div class="sieve-label">case _</div>
+                        <div class="sieve-hole catch-all-hole"></div>
+                    </div>
+                    <div class="match-bin">
+                        <div class="bin-label">Catch-All Bin</div>
+                        <div class="bin-items" id="bin-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

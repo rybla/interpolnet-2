@@ -1,4 +1,3 @@
-Build a tool that shows how functional pattern matching acts as a visual sieve filtering data structures through specific shape templates.
 Show interactive binary logic gates where toggling 32-bit integer switches immediately reveals the resulting XOR, AND, and bit-shift transformations.
 Contrast standard recursion against tail-call optimization by showing how the latter reuses a single stack frame instead of stacking them endlessly.
 Deconstruct the IEEE 754 floating-point standard visually by allowing users to toggle sign, exponent, and mantissa bits to see the decimal value.
