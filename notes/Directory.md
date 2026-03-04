@@ -1512,3 +1512,38 @@ To provide an intuitive, physical metaphor for Rust's abstract ownership rules, 
 - State management in JavaScript to track the current owner of each token and prevent multiple ownership.
 - Use CSS transitions for smooth movement of tokens and pulsing animations to indicate active/draggable tokens.
 - Implement responsive layout using CSS Flexbox or Grid to ensure the demo is usable on mobile devices.
+
+## Pattern Matching Sieve [[demo](https://rybla.github.io/interpolnet-2/pattern-matching-sieve)]
+
+An interactive visualization showing how functional pattern matching acts as a visual sieve filtering data structures through specific shape templates.
+
+### Features
+- **Data Spawner**: Users can generate complex data structures represented as nested blocks or colorful shapes with properties like \`type\`, \`color\`, and \`value\`.
+- **Vertical Sieve Pipeline**: A cascading series of "sieves" representing pattern matching clauses (e.g., \`case {type: "circle", color: "red"}\`).
+- **Visual Filtering Animation**:
+  - Data blocks fall from the top of the screen.
+  - When a block hits a sieve, it pauses.
+  - The sieve visually expands or scans the block, checking its properties against the sieve's pattern template.
+  - If it matches, the block glows green and is pulled horizontally into a "Match Bin", and its destructured variables (e.g., \`value\`) are displayed.
+  - If it does not match, the block glows red, the sieve visually rejects it (a slight bounce), and it falls to the next sieve.
+- **Catch-All Basin**: A final \`case _\` sieve at the bottom that catches anything that falls through the previous templates.
+
+### Design Goals
+- **Intuitive "Filtering" Metaphor**: Translate the abstract concept of structural pattern matching into a literal physical process of sieving or sorting.
+- **Destructuring Visibility**: Clearly show how variables are bound when a match succeeds by extracting those pieces of the data block visually.
+- **Engaging Aesthetics**: A satisfying, semi-physical animation style with clean, rounded UI elements and a dark theme with vibrant neon accents (e.g., cyan, magenta, and bright yellow).
+
+### Implementation Plan
+- **HTML Structure**:
+  - A left column serving as the vertical "drop zone" for the data blocks.
+  - Sieve elements stacked vertically within the drop zone.
+  - Output bins extending to the right of each sieve.
+  - A control panel at the top to spawn random data shapes.
+- **Styling (CSS)**:
+  - Use CSS Flexbox/Grid for layout.
+  - Define custom animations and transitions for falling (\`transform: translateY\`), matching (glowing and horizontal translation), and rejecting (shaking).
+- **Interactive Logic (JavaScript)**:
+  - Define a set of patterns objects to represent the sieves.
+  - Create a \`DataBlock\` class to manage the state and DOM element of each falling piece of data.
+  - Implement a recursive \`isMatch(data, pattern)\` function.
+  - Use a simple animation loop (\`requestAnimationFrame\` or CSS transition event listeners) to move blocks between sieves and trigger the match evaluation logic at each step.
