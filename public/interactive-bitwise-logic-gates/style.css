@@ -1,0 +1,263 @@
+:root {
+    --bg-color: #0d1117;
+    --panel-bg: #161b22;
+    --text-color: #c9d1d9;
+    --bit-off-bg: #21262d;
+    --bit-off-border: #30363d;
+    --bit-on-bg: #238636;
+    --bit-on-shadow: 0 0 10px rgba(35, 134, 54, 0.6);
+    --hover-bg: #30363d;
+
+    /* Operation Colors */
+    --op-and: #ff7b72;
+    --op-or: #79c0ff;
+    --op-xor: #d2a8ff;
+    --op-not: #ffa657;
+    --op-shift: #a5d6ff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Fira Code', monospace;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 20px;
+    line-height: 1.6;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+header p {
+    font-size: 1rem;
+    color: #8b949e;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.panel {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--bit-off-border);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.panel:hover {
+    transform: translateY(-2px);
+}
+
+.input-panel {
+    border-left: 4px solid var(--bit-on-bg);
+}
+
+.panel h2 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.panel-header h2 {
+    margin-bottom: 0;
+}
+
+.decimal-value {
+    font-size: 0.9rem;
+    color: #8b949e;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.decimal-value span {
+    color: #fff;
+    font-weight: bold;
+}
+
+.register {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: space-between;
+}
+
+.byte-group {
+    display: flex;
+    gap: 2px;
+}
+
+.bit {
+    width: 24px;
+    height: 36px;
+    background-color: var(--bit-off-bg);
+    border: 1px solid var(--bit-off-border);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease-in-out;
+    position: relative;
+}
+
+.bit::after {
+    content: "0";
+    font-size: 14px;
+    font-weight: bold;
+    color: #8b949e;
+    transition: color 0.15s ease;
+}
+
+.bit.active {
+    background-color: var(--bit-on-bg);
+    border-color: var(--bit-on-bg);
+    box-shadow: var(--bit-on-shadow);
+    transform: translateY(-2px);
+}
+
+.bit.active::after {
+    content: "1";
+    color: #fff;
+}
+
+.bit:not(.read-only .bit):hover {
+    background-color: var(--hover-bg);
+    border-color: #8b949e;
+}
+
+.bit:not(.read-only .bit):active {
+    transform: scale(0.95);
+}
+
+.read-only .bit {
+    cursor: default;
+}
+
+.bit-label {
+    position: absolute;
+    bottom: -18px;
+    font-size: 10px;
+    color: #484f58;
+}
+
+.bit:nth-child(4n) {
+    margin-right: 4px;
+}
+
+/* Specific Operation Colors */
+.op-and { border-left: 4px solid var(--op-and); }
+.op-and .bit.active { background-color: var(--op-and); border-color: var(--op-and); box-shadow: 0 0 10px rgba(255, 123, 114, 0.4); }
+
+.op-or { border-left: 4px solid var(--op-or); }
+.op-or .bit.active { background-color: var(--op-or); border-color: var(--op-or); box-shadow: 0 0 10px rgba(121, 192, 255, 0.4); }
+
+.op-xor { border-left: 4px solid var(--op-xor); }
+.op-xor .bit.active { background-color: var(--op-xor); border-color: var(--op-xor); box-shadow: 0 0 10px rgba(210, 168, 255, 0.4); }
+
+.op-not { border-left: 4px solid var(--op-not); }
+.op-not .bit.active { background-color: var(--op-not); border-color: var(--op-not); box-shadow: 0 0 10px rgba(255, 166, 87, 0.4); }
+
+.op-lshift, .op-rshift, .op-urshift { border-left: 4px solid var(--op-shift); }
+.op-lshift .bit.active, .op-rshift .bit.active, .op-urshift .bit.active {
+    background-color: var(--op-shift);
+    border-color: var(--op-shift);
+    box-shadow: 0 0 10px rgba(165, 214, 255, 0.4);
+    color: #0d1117;
+}
+.op-lshift .bit.active::after, .op-rshift .bit.active::after, .op-urshift .bit.active::after { color: #0d1117; }
+
+
+.description {
+    font-size: 0.85rem;
+    color: #8b949e;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Animations for interaction feedback */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.bit.changed {
+    animation: pulse 0.3s ease-out;
+}
+
+@media (min-width: 1024px) {
+    .grid-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .bit {
+        width: 18px;
+        height: 28px;
+    }
+
+    .bit::after {
+        font-size: 12px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .register {
+        gap: 2px;
+    }
+
+    .bit {
+        width: 14px;
+        height: 24px;
+    }
+
+    .bit::after {
+        font-size: 10px;
+    }
+
+    .bit:nth-child(4n) {
+        margin-right: 2px;
+    }
+}

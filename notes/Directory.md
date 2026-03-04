@@ -1547,3 +1547,26 @@ An interactive visualization showing how functional pattern matching acts as a v
   - Create a \`DataBlock\` class to manage the state and DOM element of each falling piece of data.
   - Implement a recursive \`isMatch(data, pattern)\` function.
   - Use a simple animation loop (\`requestAnimationFrame\` or CSS transition event listeners) to move blocks between sieves and trigger the match evaluation logic at each step.
+
+## Interactive Bitwise Logic Gates [[demo](https://rybla.github.io/interpolnet-2/interactive-bitwise-logic-gates)]
+
+This demo is an interactive tool for visualizing 32-bit binary logic gates and operations.
+
+### Features
+- Two 32-bit switch arrays representing binary inputs (Input A and Input B).
+- Real-time computation and display of bitwise operations: XOR, AND, OR.
+- Real-time computation and display of bit-shift operations: Left Shift (<<), Right Shift (>>), and Unsigned Right Shift (>>>).
+- Each output is visualized using 32-bit switch arrays, which are read-only but dynamically update to reflect the result.
+- A decimal representation is shown alongside each 32-bit binary representation.
+- Fully responsive design, adapting cleanly to mobile and desktop screens.
+- Interactive and satisfying toggle animations.
+
+### Design Goals
+- Provide an intuitive visual representation of how individual bits are affected by bitwise operations.
+- Make the abstract concept of bitwise math tangible and interactive.
+- Use distinct neon-themed colors to differentiate between operations (e.g., green for AND, blue for OR, purple for XOR) for a tech-oriented visual style.
+
+### Implementation Plan
+- **HTML**: Layout the structural elements, including rows of bits for Input A, Input B, and various operation outputs.
+- **CSS**: Apply a dark tech theme. Utilize CSS Grid/Flexbox for laying out 32 bits into manageable chunks (e.g., 4 bytes of 8 bits). Add hover and toggle animations to the switches.
+- **JavaScript**: Maintain state for Input A and Input B as 32-bit unsigned integers. Add event listeners to the input switches to toggle bits and update state. On state change, recalculate outputs for AND, OR, XOR, <<, >>, >>> and update the DOM efficiently.
