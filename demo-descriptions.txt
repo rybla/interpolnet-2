@@ -1,4 +1,3 @@
-Deconstruct the IEEE 754 floating-point standard visually by allowing users to toggle sign, exponent, and mantissa bits to see the decimal value.
 Illustrate object-oriented dynamic dispatch by showing a virtual method table routing function calls to the correct subclass implementation.
 Create a Lisp macro visualizer that expands concise syntax into deep parenthetical trees before the actual evaluation phase begins.
 Map software dependencies as an interconnected plumbing network where an injector module explicitly routes required service fluids into components.

@@ -1590,3 +1590,24 @@ The "Tail Call Optimization Visualizer" demo contrasts standard recursion agains
 - **HTML:** Two main columns for the two recursive approaches, each containing a code snippet view and a visual call stack container. A control panel at the top for setting inputs and starting the simulation.
 - **CSS:** Flexbox for layout. Define CSS keyframes for stack frame operations. Frames in standard recursion will stack visually using `flex-direction: column-reverse`. Use a distinct, unique, and consistent color scheme.
 - **JavaScript:** State machine to simulate the step-by-step execution of both recursive functions. Manipulate the DOM to add/remove elements for standard recursion, and update the text content of a single element for TCO recursion. Use `setInterval` for the animation loop.
+
+## IEEE 754 Visualizer [[demo](https://rybla.github.io/interpolnet-2/ieee-754-visualizer)]
+
+Deconstruct the IEEE 754 floating-point standard visually by allowing users to toggle sign, exponent, and mantissa bits to see the decimal value.
+
+### Features
+- A 32-bit switch array representing a single-precision floating-point number.
+- Three distinct colored sections: 1 Sign bit, 8 Exponent bits, and 23 Mantissa (fraction) bits.
+- Real-time updates: toggling any bit instantly recalculates and displays the decimal representation.
+- Detailed breakdown of the formula: $(-1)^{	ext{sign}} 	imes (1 + 	ext{mantissa}) 	imes 2^{	ext{exponent} - 127}$ with live values plugged in.
+- Shows special cases such as Zero, Infinity, and NaN automatically based on bit patterns.
+
+### Design Goals
+- Make the complex IEEE 754 standard intuitive by breaking down its components visually.
+- Use a distinct color palette (e.g., red for sign, green for exponent, blue for mantissa) to clearly differentiate the three parts of the floating point number.
+- Ensure the interface is responsive and works well on both mobile and desktop screens.
+
+### Implementation Plan
+- **HTML:** Create a container with 32 toggleable bit buttons, grouped visually into Sign (1), Exponent (8), and Mantissa (23). Below the bits, create an area to display the formula breakdown and the final decimal value.
+- **CSS:** Use flexbox or grid for layout, ensuring bits wrap cleanly on smaller screens. Apply distinct colors to the three sections. Add hover effects and transition animations for bit toggles.
+- **JavaScript:** Add event listeners to each bit. Maintain an array of 32 booleans (or 0s/1s). On change, calculate the sign, exponent, and mantissa values according to the IEEE 754 standard. Update the UI with the detailed breakdown and final result, taking care to handle special cases like Infinity and NaN.
