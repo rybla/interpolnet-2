@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | IEEE 754 Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <h1>IEEE 754 Single-Precision Visualizer</h1>
+        <p>Deconstruct the 32-bit floating-point standard.</p>
+      </header>
+
+      <main>
+        <div class="bits-container">
+          <div class="section sign-section">
+            <h2 class="section-title sign-title">Sign (1 bit)</h2>
+            <div class="bits-row" id="sign-bits">
+              <!-- Bits will be injected here -->
+            </div>
+          </div>
+
+          <div class="section exp-section">
+            <h2 class="section-title exp-title">Exponent (8 bits)</h2>
+            <div class="bits-row" id="exp-bits">
+              <!-- Bits will be injected here -->
+            </div>
+          </div>
+
+          <div class="section frac-section">
+            <h2 class="section-title frac-title">Mantissa (23 bits)</h2>
+            <div class="bits-row" id="frac-bits">
+              <!-- Bits will be injected here -->
+            </div>
+          </div>
+        </div>
+
+        <div class="calculation-container">
+          <div class="formula-box">
+            <div class="formula-math">
+              <span class="sign-color" id="calc-sign">(-1)<sup>0</sup></span> &times;
+              <span class="exp-color" id="calc-exp">2<sup>0 - 127</sup></span> &times;
+              <span class="frac-color" id="calc-frac">(1 + 0)</span>
+            </div>
+            <div class="formula-breakdown">
+              <div><strong class="sign-color">Sign:</strong> <span id="val-sign">1</span></div>
+              <div><strong class="exp-color">Exponent:</strong> <span id="val-exp">2<sup>-127</sup></span> (Raw: <span id="val-exp-raw">0</span>)</div>
+              <div><strong class="frac-color">Mantissa:</strong> <span id="val-frac">1.0</span></div>
+            </div>
+          </div>
+
+          <div class="result-box">
+            <h2>Result</h2>
+            <div class="final-result" id="final-result">0</div>
+            <div class="hex-result" id="hex-result">0x00000000</div>
+            <div class="special-case" id="special-case"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
