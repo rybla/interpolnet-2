@@ -1611,3 +1611,25 @@ Deconstruct the IEEE 754 floating-point standard visually by allowing users to t
 - **HTML:** Create a container with 32 toggleable bit buttons, grouped visually into Sign (1), Exponent (8), and Mantissa (23). Below the bits, create an area to display the formula breakdown and the final decimal value.
 - **CSS:** Use flexbox or grid for layout, ensuring bits wrap cleanly on smaller screens. Apply distinct colors to the three sections. Add hover effects and transition animations for bit toggles.
 - **JavaScript:** Add event listeners to each bit. Maintain an array of 32 booleans (or 0s/1s). On change, calculate the sign, exponent, and mantissa values according to the IEEE 754 standard. Update the UI with the detailed breakdown and final result, taking care to handle special cases like Infinity and NaN.
+
+## Virtual Method Table Visualizer [[demo](https://rybla.github.io/interpolnet-2/virtual-method-table-visualizer)]
+
+
+The Virtual Method Table Visualizer is an educational tool designed to demystify how object-oriented languages implement dynamic dispatch. It interactively illustrates how a virtual method call is routed to the correct subclass implementation using a Virtual Method Table (vtable).
+
+### Features
+- **Class Definitions & VTables**: Displays a Base Class and multiple Subclasses, each with its corresponding Virtual Method Table.
+- **Instance Creation**: Users can instantiate objects of different classes (e.g., Base, Subclass A, Subclass B).
+- **Interactive Dispatch**: Clicking a method (like `speak()`) on an instantiated object triggers an animated sequence tracing the execution path.
+- **Visual Tracing**: An animated highlight physically traces the flow from the object instance -> to its implicit vtable pointer -> to the class's vtable -> to the specific method implementation.
+- **Execution Log**: A console-like execution log captures and displays the final output of the method call.
+
+### Design Goals
+- **Clarity**: Simplify complex internal compiler mechanisms into an accessible, physical metaphor.
+- **Feedback**: Use distinct visual animations (like tracing paths or glowing boxes) to make the implicit behavior of dynamic dispatch explicit and visible.
+- **Aesthetics**: Employ a consistent, technical color scheme (e.g., monospace fonts, distinct colors for different classes) with responsive design to ensure it is mobile-friendly.
+
+### Implementation Plan
+- **HTML**: Structure the UI with distinct sections for Class Blueprints/VTables, Object Instances, and an Execution Log.
+- **CSS**: Apply styling using a unique color palette for each class type to clearly differentiate them. Use CSS transitions and animations to visualize the dispatch flow.
+- **JavaScript**: Manage the state of object instances. Handle user interactions (instantiation, method calls). Calculate positions of DOM elements using `getBoundingClientRect()` to dynamically draw or animate SVG arrows/highlights tracing the dispatch sequence from the object to the method implementation.

@@ -1,0 +1,335 @@
+:root {
+    --bg-color: #0f172a;
+    --text-color: #e2e8f0;
+    --header-color: #38bdf8;
+
+    --animal-color: #64748b;
+    --animal-bg: rgba(100, 116, 139, 0.1);
+
+    --dog-color: #22c55e;
+    --dog-bg: rgba(34, 197, 94, 0.1);
+
+    --cat-color: #ef4444;
+    --cat-bg: rgba(239, 68, 68, 0.1);
+
+    --log-bg: #1e293b;
+    --border-radius: 8px;
+
+    --path-color: #fbbf24;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--header-color);
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 0.9em;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    flex-grow: 1;
+    position: relative;
+    z-index: 10;
+}
+
+h2 {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.classes-container, .instances-container {
+    flex: 1 1 300px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+button {
+    background: #334155;
+    color: #f8fafc;
+    border: 1px solid #475569;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background: #475569;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+#btn-create-animal { border-color: var(--animal-color); }
+#btn-create-dog { border-color: var(--dog-color); }
+#btn-create-cat { border-color: var(--cat-color); }
+
+/* Class Blueprints */
+.class-block {
+    border: 2px solid;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    background: #1e293b;
+    position: relative;
+}
+
+.class-block.base-class { border-color: var(--animal-color); }
+.class-block.dog-class { border-color: var(--dog-color); }
+.class-block.cat-class { border-color: var(--cat-color); }
+
+.class-header {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.base-class .class-header { color: var(--animal-color); }
+.dog-class .class-header { color: var(--dog-color); }
+.cat-class .class-header { color: var(--cat-color); }
+
+/* VTables */
+.vtable {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #475569;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.vtable-header {
+    font-size: 0.85em;
+    color: #94a3b8;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed #475569;
+    padding-bottom: 5px;
+}
+
+.vtable-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    margin: 2px 0;
+    border-radius: 3px;
+    background: #0f172a;
+    transition: background 0.3s, box-shadow 0.3s;
+    font-size: 0.9em;
+}
+
+.vtable-row.highlight {
+    background: var(--path-color);
+    color: #000;
+    box-shadow: 0 0 10px var(--path-color);
+}
+
+.method-name {
+    font-weight: bold;
+}
+
+.method-impl {
+    color: #cbd5e1;
+}
+.vtable-row.highlight .method-impl { color: #000; }
+
+/* Instances */
+.instances-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.instance-card {
+    border: 1px solid #475569;
+    background: #1e293b;
+    border-radius: var(--border-radius);
+    padding: 15px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.instance-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 5px;
+}
+
+.instance-card[data-type="Animal"] .instance-type { color: var(--animal-color); }
+.instance-card[data-type="Dog"] .instance-type { color: var(--dog-color); }
+.instance-card[data-type="Cat"] .instance-type { color: var(--cat-color); }
+
+.instance-id {
+    color: #94a3b8;
+    font-size: 0.8em;
+}
+
+.vptr-field {
+    font-size: 0.85em;
+    color: #94a3b8;
+    background: #0f172a;
+    padding: 5px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+.instance-methods {
+    display: flex;
+    gap: 10px;
+}
+
+.method-btn {
+    flex: 1;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 4px;
+    padding: 8px;
+    color: #f8fafc;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.method-btn:hover {
+    background: #475569;
+}
+
+.method-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.method-btn.active {
+    background: var(--path-color);
+    color: #000;
+    border-color: var(--path-color);
+    box-shadow: 0 0 10px var(--path-color);
+}
+
+/* Execution Log */
+.execution-log-container {
+    margin-top: 30px;
+    border-top: 1px solid #334155;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.log {
+    width: 100%;
+    max-width: 600px;
+    height: 150px;
+    background: var(--log-bg);
+    border: 1px solid #475569;
+    border-radius: var(--border-radius);
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.log-entry {
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-5px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.log-entry.animal { color: var(--animal-color); }
+.log-entry.dog { color: var(--dog-color); }
+.log-entry.cat { color: var(--cat-color); }
+.log-entry.system { color: #94a3b8; font-style: italic; }
+
+/* SVG Overlay for drawing dispatch paths */
+.svg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.dispatch-path {
+    fill: none;
+    stroke: var(--path-color);
+    stroke-width: 2;
+    stroke-dasharray: 10, 5;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 3px var(--path-color));
+}
+
+@keyframes dashFlow {
+    from { stroke-dashoffset: 30; }
+    to { stroke-dashoffset: 0; }
+}
+
+.path-animated {
+    animation: dashFlow 0.5s linear infinite;
+}
+
+.dispatch-circle {
+    fill: var(--path-color);
+    filter: drop-shadow(0 0 5px var(--path-color));
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+}
