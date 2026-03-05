@@ -1,4 +1,3 @@
-Illustrate object-oriented dynamic dispatch by showing a virtual method table routing function calls to the correct subclass implementation.
 Create a Lisp macro visualizer that expands concise syntax into deep parenthetical trees before the actual evaluation phase begins.
 Map software dependencies as an interconnected plumbing network where an injector module explicitly routes required service fluids into components.
 Allow users to draw an arbitrary continuous wave and watch it decompose into a mechanical chain of rotating Fourier series epicycles.
