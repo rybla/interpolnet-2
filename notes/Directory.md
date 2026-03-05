@@ -1633,3 +1633,22 @@ The Virtual Method Table Visualizer is an educational tool designed to demystify
 - **HTML**: Structure the UI with distinct sections for Class Blueprints/VTables, Object Instances, and an Execution Log.
 - **CSS**: Apply styling using a unique color palette for each class type to clearly differentiate them. Use CSS transitions and animations to visualize the dispatch flow.
 - **JavaScript**: Manage the state of object instances. Handle user interactions (instantiation, method calls). Calculate positions of DOM elements using `getBoundingClientRect()` to dynamically draw or animate SVG arrows/highlights tracing the dispatch sequence from the object to the method implementation.
+
+## Lisp Macro Visualizer [[demo](https://rybla.github.io/interpolnet-2/lisp-macro-visualizer)]
+
+A Lisp macro visualizer that demonstrates the powerful concept of macros as programs that write programs. It visually expands concise, high-level syntax into deeper parenthetical abstract syntax trees (ASTs) before the evaluation phase.
+
+### Features
+- **Interactive Macro Expansion**: Users can click on macro calls within a displayed Lisp form to see them physically expand, step-by-step, into their underlying macro-expanded code.
+- **Visual AST Representation**: Lisp forms are rendered not just as text, but as nested structural blocks. As a macro expands, new sub-trees animate into existence, pushing sibling nodes aside using smooth CSS transitions.
+- **Preset Macro Examples**: Includes classic Lisp macros like `(unless condition body...)` expanding to `(if (not condition) (progn body...))`, or `(let ((x 1)) x)` expanding to `((lambda (x) x) 1)`.
+- **Retro Lisp Machine Aesthetic**: The UI employs a vintage terminal color scheme with monospaced typography, subtle scanlines, and glowing S-expressions to evoke a classic Lisp development environment.
+
+### Implementation Plan
+- **HTML**: Create a responsive layout with a header, a sidebar/row for preset selection, and a large main visualization canvas.
+- **CSS**: Apply retro styling with neon greens/ambers on dark backgrounds, using Flexbox to structure the nested S-expression blocks, and CSS transitions to animate the expansion of nodes.
+- **JavaScript**:
+  - Implement a simple Lisp parser to convert strings into a nested AST representation.
+  - Create a rendering function that translates the AST into nested DOM elements.
+  - Implement a macro expander function that knows how to transform specific AST patterns.
+  - Handle click events on macro nodes to trigger expansion, calculate the new AST, and animate the DOM replacement smoothly.
