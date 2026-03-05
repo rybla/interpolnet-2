@@ -1652,3 +1652,23 @@ A Lisp macro visualizer that demonstrates the powerful concept of macros as prog
   - Create a rendering function that translates the AST into nested DOM elements.
   - Implement a macro expander function that knows how to transform specific AST patterns.
   - Handle click events on macro nodes to trigger expansion, calculate the new AST, and animate the DOM replacement smoothly.
+
+## Dependency Injection Plumbing [[demo](https://rybla.github.io/interpolnet-2/dependency-injection-plumbing)]
+
+**Dependency Injection Plumbing** is an interactive visual metaphor for software dependency injection. It maps software dependencies as an interconnected plumbing network where an **Injector** module explicitly routes required service "fluids" (dependencies) into **Components**.
+
+### Design Goals
+- Visually demonstrate the concept of Dependency Injection (DI) without code.
+- Provide an industrial, plumbing-themed UI with pipes, valves, and distinct glowing fluids representing different services (e.g., Database, Logger, Authentication).
+- Clear feedback on when a component is "ready" (all dependencies satisfied) vs "waiting".
+
+### Features
+- **The Injector**: A central reservoir that holds different colored fluids (services).
+- **Valves**: Interactive elements that can be clicked to open or close the flow of specific fluids to different parts of the network.
+- **Pipes**: SVG-based pipes that visually transport the fluids from the injector to the components. The fluids animate flowing through the pipes when valves are opened.
+- **Components**: Endpoints that require specific fluids to function. They have indicator lights that turn green and animate when all required dependencies are met.
+
+### Implementation Outline
+- **HTML**: Uses an SVG layer for drawing complex pipe paths, overlaid with HTML elements for the Injector, Components, and interactive valve controls.
+- **CSS**: Industrial dark theme. CSS animations (specifically `stroke-dashoffset`) are used on SVG paths to simulate the flow of fluid through pipes. Components have states (inactive/active) visualized with glowing box-shadows.
+- **JavaScript**: Manages the state of valves, updates the SVG paths to show active fluid flow based on valve states, and checks if components have received all their required dependencies to toggle their active state.
