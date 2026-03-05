@@ -1570,3 +1570,23 @@ This demo is an interactive tool for visualizing 32-bit binary logic gates and o
 - **HTML**: Layout the structural elements, including rows of bits for Input A, Input B, and various operation outputs.
 - **CSS**: Apply a dark tech theme. Utilize CSS Grid/Flexbox for laying out 32 bits into manageable chunks (e.g., 4 bytes of 8 bits). Add hover and toggle animations to the switches.
 - **JavaScript**: Maintain state for Input A and Input B as 32-bit unsigned integers. Add event listeners to the input switches to toggle bits and update state. On state change, recalculate outputs for AND, OR, XOR, <<, >>, >>> and update the DOM efficiently.
+
+## Tail Call Optimization Visualizer [[demo](https://rybla.github.io/interpolnet-2/tail-call-optimization-visualizer)]
+
+The "Tail Call Optimization Visualizer" demo contrasts standard recursion against tail-call optimization. It visualizes call stacks for both approaches by evaluating a simple recursive function (like factorial).
+
+**Features:**
+- Side-by-side visualization of call stacks for standard recursion and tail-call optimized recursion.
+- Visual representation of stack frames being pushed, updated, and popped using smooth CSS transitions and animations.
+- Code snippets for both implementations highlighting the differences in structure.
+- Adjustable input parameters to see how the stack depth changes.
+
+**Design Goals:**
+- Provide an intuitive understanding of why TCO is more memory-efficient by showing how it reuses a single stack frame instead of stacking them endlessly.
+- Use distinct colors for standard and TCO to emphasize the contrast.
+- Ensure the layout is responsive, stacking the side-by-side view vertically on mobile devices.
+
+**Implementation Plan:**
+- **HTML:** Two main columns for the two recursive approaches, each containing a code snippet view and a visual call stack container. A control panel at the top for setting inputs and starting the simulation.
+- **CSS:** Flexbox for layout. Define CSS keyframes for stack frame operations. Frames in standard recursion will stack visually using `flex-direction: column-reverse`. Use a distinct, unique, and consistent color scheme.
+- **JavaScript:** State machine to simulate the step-by-step execution of both recursive functions. Manipulate the DOM to add/remove elements for standard recursion, and update the text content of a single element for TCO recursion. Use `setInterval` for the animation loop.
