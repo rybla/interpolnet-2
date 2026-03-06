@@ -1,4 +1,3 @@
-Show how a sine wave is approximated by drawing the sequential addition of Taylor polynomial terms that slowly wrap around the true curve.
 Create an interactive Mandelbrot set where clicking any coordinate instantly maps and animates the corresponding Julia set iteration on a secondary canvas.
 Simulate hyperbolic geometry using the Poincaré disk model where users can draw straight lines that visually curve towards the boundary.
 Represent integer partitions as interactive Ferrers diagrams where users can rotate the grid to visually prove conjugate partition theorems.
