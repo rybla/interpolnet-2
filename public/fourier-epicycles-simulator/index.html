@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourier Epicycles Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui-container">
+        <h1>Fourier Epicycles Simulator</h1>
+        <p>Draw any single continuous curve to watch it decompose into a mechanical chain of rotating epicycles.</p>
+        <div class="controls">
+            <button id="clear-btn">Clear Canvas</button>
+            <span id="status-text">Status: Waiting for drawing...</span>
+        </div>
+    </div>
+
+    <div id="canvas-container">
+        <canvas id="drawing-canvas"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
