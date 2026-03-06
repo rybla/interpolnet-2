@@ -1,4 +1,3 @@
-Visualize a 2D grid where manipulating the values of a 2x2 matrix dynamically shears, rotates, and scales the entire coordinate space.
 Build an interactive Ulam spiral that zooms out indefinitely allowing users to highlight quadratic equations to search for diagonal prime clustering.
 Show how a sine wave is approximated by drawing the sequential addition of Taylor polynomial terms that slowly wrap around the true curve.
 Create an interactive Mandelbrot set where clicking any coordinate instantly maps and animates the corresponding Julia set iteration on a secondary canvas.

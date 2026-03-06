@@ -1,0 +1,181 @@
+:root {
+  --bg-color: #0b0c10;
+  --panel-bg: #1f2833;
+  --text-main: #c5c6c7;
+  --accent-cyan: #66fcf1;
+  --accent-teal: #45a29e;
+  --vector-i: #ff4b4b; /* Reddish for i-hat */
+  --vector-j: #4b88ff; /* Bluish for j-hat */
+  --grid-original: rgba(197, 198, 199, 0.15);
+  --grid-transformed: rgba(102, 252, 241, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+header h1 {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  main {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.canvas-container {
+  flex: 1;
+  background-color: var(--panel-bg);
+  border: 1px solid var(--accent-teal);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* aspect-ratio to keep it square */
+  aspect-ratio: 1 / 1;
+  max-height: 600px;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+}
+
+canvas:active {
+  cursor: grabbing;
+}
+
+.controls {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+section {
+  background-color: var(--panel-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent-teal);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--accent-teal);
+  padding-bottom: 0.5rem;
+}
+
+.matrix-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--accent-cyan);
+}
+
+.matrix-bracket {
+  font-weight: 300;
+  transform: scaleY(2);
+  display: inline-block;
+  user-select: none;
+}
+
+.matrix-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0 1rem;
+}
+
+.matrix-inputs input {
+  width: 60px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--accent-teal);
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.matrix-inputs input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(102, 252, 241, 0.5);
+}
+
+/* Coloring specific inputs for i-hat and j-hat correspondence */
+#m00, #m10 {
+  border-left: 3px solid var(--vector-i);
+}
+
+#m01, #m11 {
+  border-left: 3px solid var(--vector-j);
+}
+
+.preset-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+button {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--accent-teal);
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+button:hover {
+  background-color: rgba(69, 162, 158, 0.2);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(102, 252, 241, 0.3);
+}
+
+button:active {
+  transform: scale(0.95);
+}

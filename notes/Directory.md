@@ -1708,3 +1708,21 @@ An interactive 3D visualization of conic sections, allowing users to adjust a sl
 - **Controls**:
     - OrbitControls for camera manipulation.
     - HTML input sliders linked to the plane's rotation and position properties.
+
+## Linear Transformation Visualizer [[demo](https://rybla.github.io/interpolnet-2/linear-transformation-visualizer)]
+
+A 2D web-based visualization tool that illustrates how 2x2 matrices act as linear transformations on a coordinate space. The demo displays a standard Cartesian grid with an original set of basis vectors ($i$ and $j$), alongside a superimposed, interactive transformed grid.
+
+### Features
+- **Matrix Input Matrix:** A dynamic 2x2 input grid where users can manipulate the numeric values of the transformation matrix.
+- **Real-time Rendering:** The canvas updates smoothly in real-time as users modify the input matrix or drag the basis vectors on the grid directly.
+- **Basis Vector Manipulation:** Users can click and drag the transformed basis vectors on the visual grid, which automatically calculates and updates the corresponding 2x2 matrix values.
+- **Visual Grid Overlay:** Shows the original, undeformed grid in a faint color behind the brightly-colored transformed grid to provide clear visual context of the shear, rotation, and scaling effects.
+- **Preset Transformations:** Quick-action buttons to apply common linear transformations (e.g., Identity, Shear, 90-degree Rotation, Reflection, Projection).
+- **Responsive Design:** Ensures that both the matrix controls and the canvas scale properly on desktop and mobile displays.
+
+### Implementation Details
+- **HTML/CSS:** Responsive layout utilizing CSS Grid/Flexbox to position a control panel (with the 2x2 matrix inputs and preset buttons) alongside a main `<canvas>` area. A clean, dark-themed UI is implemented with glowing neon accents.
+- **Canvas API (JavaScript):** Custom vanilla JS rendering loop that calculates the linear transformation for grid lines and vectors. It iteratively draws vertical and horizontal grid lines using `ctx.transform(a, b, c, d, e, f)` or manual vector math for flexibility.
+- **Interactivity:** Uses mouse/touch event listeners on the canvas to detect dragging of the basis vector endpoints. It calculates the closest vector, updates the respective matrix values, and immediately triggers a re-render.
+- **Animations:** Employs CSS transitions for UI elements and potentially `requestAnimationFrame` for smooth interpolation when preset transformations are triggered.
