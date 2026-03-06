@@ -1,4 +1,3 @@
-Design a grid transformation tool that highlights the specific eigenvectors that scale but do not rotate during a linear matrix transformation.
 Provide a sandbox for drawing nodes and edges while an algorithm automatically color-codes the graph to prove the Four Color Theorem.
 Map the paths of the Collatz sequence as a branching organic tree structure that always funnels down to the root node of one.
 Animate the continuous topological deformation of a coffee mug morphing smoothly into a donut to explain homeomorphism.

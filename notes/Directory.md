@@ -1865,3 +1865,26 @@ The Derivative Visualizer is an interactive educational tool that illustrates th
     - **Interaction**: Implement pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to handle dragging the points. Constrain the dragging so the points always stay on the mathematical curve.
     - **Logic**: Calculate the slope $m = \frac{y_2 - y_1}{x_2 - x_1}$. If $|x_2 - x_1| < \epsilon$, snap the points together, calculate the true derivative $f'(x_1)$, and draw the tangent line.
     - **Readout**: Update the DOM elements in the overlay with the real-time slope calculations.
+
+## Eigenvector Visualizer [[demo](https://rybla.github.io/interpolnet-2/eigenvector-visualizer)]
+
+A grid transformation tool that highlights the specific eigenvectors that scale but do not rotate during a linear matrix transformation.
+
+### Features
+- **Interactive Grid Overlay**: A Cartesian grid showing unit vectors alongside standard vectors which are morphed dynamically via 2x2 matrix transformations.
+- **Customizable Matrix Entries**: Sliders or input fields for each cell of the 2x2 matrix to explore different types of linear transformations like shear, scale, rotation, etc.
+- **Real-Time Eigenvector Highlighting**: Eigenvectors computed from the matrix are distinctly drawn. When the transformation occurs, these specific vectors dynamically show that they only scale, keeping their original directional span.
+- **Animations**: Fluid passive animations emphasizing interactive components, and active animations showing the before-and-after states of the transformation mapping.
+
+### Design Goals
+- **Math Visualization**: Demystify the concept of eigenvectors, giving a physical, geometric intuition rather than just a mathematical definition.
+- **Engaging UI**: Provide robust controls, clear tooltips, and responsive feedback within a distinct and immersive visual theme to encourage exploration.
+- **Mobile Friendly Layout**: Ensure the matrix controls and visualization canvas scale seamlessly to small screens.
+
+### Implementation Plan
+- **HTML**: Include a `<canvas>` element for the 2D visualizer alongside a set of controls for the matrix entries (`a, b, c, d`).
+- **CSS**: Adopt Interpolnet 2's theme standard, ensuring typography and colors reflect interactive states with active transitions. Implement flexbox/grid layouts ensuring responsiveness.
+- **JavaScript**:
+  - Implement rendering logic on the HTML5 Canvas to handle inverse-Y transformations so cartesian logic holds.
+  - Implement a 2x2 matrix transformation engine.
+  - Implement the mathematical logic to compute eigenvectors and eigenvalues of the real 2x2 matrix and trace these highlighted lines on the canvas overlay.
