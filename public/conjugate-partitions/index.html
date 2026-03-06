@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conjugate Partitions</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+        <div id="controls-panel">
+            <h1>Conjugate Partitions</h1>
+            <p class="description">
+                A visual proof of conjugate partition theorems using Ferrers diagrams. Enter a sequence of non-increasing positive integers separated by commas.
+            </p>
+            <div class="input-group">
+                <input type="text" id="partition-input" value="5, 4, 2, 2, 1" placeholder="e.g., 5, 4, 2, 2, 1">
+                <button id="render-btn">Render</button>
+            </div>
+            <div class="error-message" id="error-message"></div>
+            <button id="conjugate-btn" class="action-btn">Conjugate (Rotate)</button>
+        </div>
+
+        <div id="diagram-container">
+            <div id="ferrers-grid"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

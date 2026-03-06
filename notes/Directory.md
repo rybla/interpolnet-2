@@ -1820,3 +1820,23 @@ This demo allows users to intuitively explore non-Euclidean geometry. By clickin
   - Handle coordinates translation from screen space to the normalized unit disk.
   - Calculate the intersection points and appropriate angles to draw the arc using the HTML5 Canvas `arc` method.
   - Manage interaction states (start dragging, moving, releasing) and store persistent lines.
+
+## Conjugate Partitions [[demo](https://rybla.github.io/interpolnet-2/conjugate-partitions)]
+
+The Conjugate Partitions demo provides an interactive visualization of integer partitions using Ferrers diagrams. The user can input a sequence of integers representing the partition. The demo renders this partition as a grid of distinct, interactable circles (dots).
+
+The core feature is the rotation/conjugation animation. When the user clicks the "Conjugate" button, the entire Ferrers diagram smoothly animates its transformation into its conjugate partition. This is mathematically equivalent to reflecting the diagram across its main diagonal.
+
+### Design Goals:
+- **Responsive & Mobile-Friendly:** The layout consists of a floating panel for input controls and a central, expansive canvas area for the Ferrers diagram. The diagram scales appropriately to fit the screen.
+- **Visual Clarity:** Dots use bright, cohesive colors and smooth CSS transitions. Passive hover animations indicate interactivity.
+- **Mathematical Precision:** The grid reflection visually proves theorems relating to conjugate partitions by demonstrating the one-to-one correspondence between a partition and its conjugate.
+
+### Implementation Outline:
+- **HTML/CSS:** A responsive flexbox layout. A control panel with a text input for the partition sequence (comma-separated integers) and a trigger button.
+- **JavaScript:**
+  - Parse the input string into an array of integers, validating that it forms a valid partition (non-increasing sequence of positive integers).
+  - Dynamically generate DOM elements (dots) for each block in the Ferrers diagram.
+  - Calculate grid positions (x, y) for each dot based on its index.
+  - Implement the conjugation logic by calculating the transposed positions (y, x).
+  - Apply CSS `transform` translations to animate the dots from their original to their conjugated positions.
