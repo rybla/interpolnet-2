@@ -1840,3 +1840,28 @@ The core feature is the rotation/conjugation animation. When the user clicks the
   - Calculate grid positions (x, y) for each dot based on its index.
   - Implement the conjugation logic by calculating the transposed positions (y, x).
   - Apply CSS `transform` translations to animate the dots from their original to their conjugated positions.
+
+## Derivative Visualizer [[demo](https://rybla.github.io/interpolnet-2/derivative-visualizer)]
+
+The Derivative Visualizer is an interactive educational tool that illustrates the concept of a derivative in calculus. It allows users to physically interact with a secant line by sliding its anchor points closer together along a curve, demonstrating how it smoothly transitions into the tangent line as the distance between the points approaches zero.
+
+### Features
+- **Interactive Curve**: A beautifully rendered mathematical curve (e.g., $f(x) = \sin(x)$ or a cubic function).
+- **Draggable Anchor Points**: Two distinct points on the curve that define a secant line. Users can drag these points along the path of the function.
+- **Dynamic Secant Line**: A line passing through the two anchor points that updates in real-time as the points are moved.
+- **Tangent Transition**: When the two points are dragged sufficiently close to each other, they visually "snap" together. The secant line smoothly transforms into the tangent line, and its color/style changes to indicate the transition.
+- **Math Readout Overlay**: A clear, heads-up display showing the current coordinates of the points, the calculated slope of the secant/tangent line, and the equation of the line.
+
+### Design Goals
+- **Demystify Calculus**: Transform the abstract definition of a derivative ($f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$) into a concrete, physical interaction.
+- **Visual Feedback**: Use color and animation to clearly distinguish between the secant line (two points, average rate of change) and the tangent line (one point, instantaneous rate of change).
+- **Aesthetics**: A clean, modern "dark mode" mathematical theme with high-contrast neon accents (e.g., cyan for the curve, magenta for the secant line, bright yellow for the tangent).
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen container for an HTML5 `<canvas>` element. An overlay `<div>` positioned absolutely to display the math readout. CSS will define the dark theme and handle simple animations like pulsing text when the tangent is formed.
+- **JavaScript (Canvas API)**:
+    - **Coordinate System**: Implement a function to map mathematical coordinates to canvas pixel coordinates, inverting the Y-axis.
+    - **Rendering**: Draw the axes, the function curve, the two anchor points, and the connecting line.
+    - **Interaction**: Implement pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to handle dragging the points. Constrain the dragging so the points always stay on the mathematical curve.
+    - **Logic**: Calculate the slope $m = \frac{y_2 - y_1}{x_2 - x_1}$. If $|x_2 - x_1| < \epsilon$, snap the points together, calculate the true derivative $f'(x_1)$, and draw the tangent line.
+    - **Readout**: Update the DOM elements in the overlay with the real-time slope calculations.
