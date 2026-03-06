@@ -1676,3 +1676,35 @@ A Lisp macro visualizer that demonstrates the powerful concept of macros as prog
 ## Fourier Epicycles Simulator [[demo](https://rybla.github.io/interpolnet-2/fourier-epicycles-simulator)]
 
 This demo allows users to draw an arbitrary continuous wave and watch it decompose into a mechanical chain of rotating Fourier series epicycles. The canvas gives users the freedom to trace any single contiguous curve. Once drawing stops, the application uses the Discrete Fourier Transform (DFT) to analyze the complex path, finding a sum of complex exponentials representing the frequencies, amplitudes, and phases of the drawn line. Then, an animated mechanical chain of rotating epicycles—each circle representing one term from the Fourier series—starts tracing out the drawing in real time. The demo features unique, distinct typography, a visually appealing dark theme for mathematical representations, interactive UI buttons for clearing the screen, and mobile-friendly touch support. It provides an intuitive, interactive way to understand the underlying principles of the Fourier transform and its capability to represent complex periodic functions through simple circular motions.
+
+## Conic Sections Visualizer [[demo](https://rybla.github.io/interpolnet-2/conic-sections-visualizer)]
+
+An interactive 3D visualization of conic sections, allowing users to adjust a slicing plane to intersect a double cone, dynamically generating circles, ellipses, parabolas, and hyperbolas in real-time.
+
+### Features
+- **3D Interactive Scene**: A double cone rendered in a 3D environment that can be rotated and zoomed.
+- **Adjustable Slicing Plane**: Users can manipulate the angle and offset of a slicing plane to intersect the cone.
+- **Real-time Intersection Visualization**: The intersection of the plane and the cone is visually highlighted, revealing the shape of the conic section.
+- **Dynamic Identification**: The system automatically calculates and displays the current type of conic section (Circle, Ellipse, Parabola, or Hyperbola) based on the plane's angle and offset.
+- **UI Controls**: Intuitive sliders for precisely adjusting the plane's angle and vertical offset.
+
+### Design Goals
+- **Educational Value**: Provide a clear, visual intuition for how different conic sections are derived from a single geometric structure.
+- **Visual Clarity**: Use translucent materials and contrasting colors to ensure the intersection is always visible and distinct.
+- **Aesthetics**: A dark, sci-fi inspired theme with neon accents (e.g., bright orange and pink against a deep violet background).
+- **Responsive Interface**: A mobile-friendly control panel overlaid on the 3D canvas.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scene Setup**:
+    - Two cones joined at their apexes. Use `MeshPhysicalMaterial` with transparency, transmission, and roughness to create a glass-like appearance.
+    - A plane mesh representing the slicing plane, styled with a distinct, semi-transparent color.
+- **Clipping Logic**:
+    - Use Three.js `clippingPlanes` feature. Apply a clipping plane to the cone's material so that the portion of the cone 'above' the slicing plane is visually removed, revealing the cross-section.
+    - Alternatively, or additionally, trace the intersection curve mathematically and render it using a `Line` or `TubeGeometry`.
+- **Math and Identification**:
+    - Calculate the intersection type based on the angle of the slicing plane relative to the cone's generating angle.
+    - Update the UI label dynamically.
+- **Controls**:
+    - OrbitControls for camera manipulation.
+    - HTML input sliders linked to the plane's rotation and position properties.
