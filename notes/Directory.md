@@ -1751,3 +1751,29 @@ An interactive Ulam spiral that zooms out indefinitely allowing users to highlig
     - A coordinate mapping algorithm to calculate the $(x, y)$ canvas position for any integer $n$ in the spiral.
     - A rendering loop using `requestAnimationFrame` that handles zooming, panning, and drawing the spiral points efficiently.
     - Dynamic calculation of the sequence $f(n) = an^2 + bn + c$ and matching these results against the visible spiral numbers.
+
+## Taylor Series Sine Wave Approximation [[demo](https://rybla.github.io/interpolnet-2/taylor-series-sine-wave)]
+
+An interactive visualization showing how a sine wave is approximated by drawing the sequential addition of Taylor polynomial terms that slowly wrap around the true curve.
+
+### Features
+- **Sine Wave Baseline**: A visual baseline showing the true sine wave for reference.
+- **Taylor Polynomial Terms**: Animates the sequential addition of Taylor series terms ($x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots$).
+- **Interactive Term Slider**: Users can control the number of terms added to the approximation, up to a large number of terms to see how the approximation improves.
+- **Real-time Drawing**: As terms are added, the approximated curve visually "wraps" around the true sine wave curve, expanding outwards from the center ($x=0$).
+- **Visual Distinction**: Distinct colors for the true sine wave (e.g., dim gray) and the approximation (e.g., bright neon cyan).
+- **Mathematical Formula**: A dynamic mathematical equation showing the current terms being added.
+
+### Design Goals
+- **Educational Value**: Provide an intuitive visual representation of how Taylor series build up a complex function from simple polynomial terms.
+- **Smooth Animation**: Ensure fluid transitions and drawing animations as terms are added or removed.
+- **Aesthetics**: A dark, mathematical theme with glowing neon colors for high contrast and modern look.
+
+### Implementation Plan
+- **HTML**: A responsive container holding a full-screen canvas for the visualization, an overlay for the mathematical formula, and a control panel with a slider for the number of terms.
+- **CSS**: Dark background, neon colors for the drawn lines, and styled sliders.
+- **JavaScript (Canvas API)**:
+    - Real-time rendering loop using `requestAnimationFrame`.
+    - Mathematical functions to calculate the true sine wave and the Taylor polynomial approximation.
+    - Animation logic to smoothly transition between different numbers of terms, perhaps interpolating the newest term's contribution for a smooth "wrapping" effect.
+    - Responsive handling to update canvas size and scaling on window resize.
