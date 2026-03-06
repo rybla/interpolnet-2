@@ -1777,3 +1777,26 @@ An interactive visualization showing how a sine wave is approximated by drawing 
     - Mathematical functions to calculate the true sine wave and the Taylor polynomial approximation.
     - Animation logic to smoothly transition between different numbers of terms, perhaps interpolating the newest term's contribution for a smooth "wrapping" effect.
     - Responsive handling to update canvas size and scaling on window resize.
+
+## Mandelbrot Julia Mapping [[demo](https://rybla.github.io/interpolnet-2/mandelbrot-julia-mapping)]
+
+**Mandelbrot Julia Mapping**
+This demo features an interactive Mandelbrot set where clicking any coordinate instantly maps and animates the corresponding Julia set iteration on a secondary canvas.
+
+**Features:**
+- An interactive primary canvas displaying the Mandelbrot set.
+- Hover effects indicating interactivity on the Mandelbrot set.
+- A secondary canvas displaying the corresponding Julia set for the clicked point `c = a + bi`.
+- Visual indicators (crosshairs/pins) on the Mandelbrot set showing the selected coordinate.
+- Smooth transitions when generating a new Julia set.
+- Side-by-side layout on desktop, stacking vertically on mobile.
+
+**Design Goals:**
+- Provide a responsive layout displaying both fractals clearly.
+- Employ a distinct typography and color scheme (e.g., deep purples, neon cyan accents) suitable for the "Interpolnet 2" aesthetic.
+- Ensure passive animations (such as a slight ambient glow) and active animations (like ripple effects on click) guide the user.
+
+**Implementation Plan:**
+- `index.html`: Layout with headers, instructions, and two `<canvas>` elements within a responsive grid/flex container.
+- `style.css`: Apply custom variables, responsive media queries, and animations (pulse, glow).
+- `script.js`: Implement the main mathematical loop to generate fractals. The Mandelbrot set will be pre-rendered. An event listener on the Mandelbrot canvas calculates the normalized `c` coordinate, updates the UI (drawing a marker), and triggers a recalculation/redraw on the Julia canvas.
