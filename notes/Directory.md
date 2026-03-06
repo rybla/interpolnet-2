@@ -1800,3 +1800,31 @@ This demo features an interactive Mandelbrot set where clicking any coordinate i
 - `index.html`: Layout with headers, instructions, and two `<canvas>` elements within a responsive grid/flex container.
 - `style.css`: Apply custom variables, responsive media queries, and animations (pulse, glow).
 - `script.js`: Implement the main mathematical loop to generate fractals. The Mandelbrot set will be pre-rendered. An event listener on the Mandelbrot canvas calculates the normalized `c` coordinate, updates the UI (drawing a marker), and triggers a recalculation/redraw on the Julia canvas.
+
+## Hyperbolic Geometry Simulator [[demo](https://rybla.github.io/interpolnet-2/hyperbolic-geometry)]
+
+An interactive simulation of hyperbolic geometry using the Poincaré disk model. This tool allows users to explore non-Euclidean geometry by drawing geodesics (hyperbolic "straight lines") that visually curve towards the boundary of the disk.
+
+### Features
+- **Interactive Poincaré Disk**: A prominent circular canvas representing the hyperbolic plane where the entire universe is contained within a unit disk.
+- **Geodesic Drawing**: Users can click and drag to draw lines between any two points. The simulator mathematically calculates and renders the correct circular arc that intersects the disk's boundary orthogonally.
+- **Dynamic Calculation**: Real-time rendering of the hyperbolic line while the user is dragging to place the second point.
+- **Infinite Boundary**: Visual representation of the boundary (infinity) with a subtle, pulsing glow to emphasize that distances grow exponentially towards the edge.
+- **Aesthetic**: A deep space, cosmic theme featuring a dark background with vibrant, glowing neon geodesics (e.g., cyan, magenta, and electric blue).
+- **Responsive Canvas**: The disk automatically scales to fit both mobile and desktop screens, preserving the mathematical coordinate system.
+
+### Design Goals
+- **Intuitive Exploration**: Make the counter-intuitive nature of hyperbolic geometry feel natural and tangible through interactive drawing.
+- **Visual Feedback**: Use smooth animations for line creation and glowing effects to provide satisfying, immediate feedback.
+- **Educational Demystification**: Clearly illustrate that "straight lines" in this geometry appear curved to a Euclidean observer, yet perfectly follow the rules of the space.
+
+### Implementation Plan
+- **HTML Structure**: A central canvas element for the disk, accompanied by a floating control panel (Clear, Undo buttons) and an explanatory title.
+- **CSS Styling**: A dark theme utilizing CSS variables. Neon glow effects achieved via canvas shadow properties and CSS filters.
+- **JavaScript Core**:
+    - **Coordinate Mapping**: Transform screen coordinates to the normalized `[-1, 1]` range of the unit disk.
+    - **Geodesic Math**: Solve the system of linear equations to find the center `(cx, cy)` and radius `R` of the circle passing through two points `P1, P2` that is orthogonal to the unit circle:
+        `2 * x1 * cx + 2 * y1 * cy = x1^2 + y1^2 + 1`
+        `2 * x2 * cx + 2 * y2 * cy = x2^2 + y2^2 + 1`
+    - **Canvas Rendering**: Use `ctx.arc` to draw the specific segment of the calculated circle between the two points. Handle the edge case where points are collinear with the origin (drawing a straight line).
+    - **Interaction Loop**: Manage `mousedown`, `mousemove`, and `mouseup` events to support real-time preview of the geodesic being drawn.
