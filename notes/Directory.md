@@ -1800,3 +1800,23 @@ This demo features an interactive Mandelbrot set where clicking any coordinate i
 - `index.html`: Layout with headers, instructions, and two `<canvas>` elements within a responsive grid/flex container.
 - `style.css`: Apply custom variables, responsive media queries, and animations (pulse, glow).
 - `script.js`: Implement the main mathematical loop to generate fractals. The Mandelbrot set will be pre-rendered. An event listener on the Mandelbrot canvas calculates the normalized `c` coordinate, updates the UI (drawing a marker), and triggers a recalculation/redraw on the Julia canvas.
+
+## Poincaré Disk Simulator [[demo](https://rybla.github.io/interpolnet-2/poincare-disk-simulator)]
+
+The Poincaré Disk Simulator is an interactive visualization of hyperbolic geometry using the Poincaré disk model. In this model, the entire hyperbolic plane is mapped to the interior of a unit disk. Geodesics (straight lines in hyperbolic space) are represented as circular arcs that meet the boundary of the disk at right angles, or straight line segments that pass through the center of the disk.
+
+This demo allows users to intuitively explore non-Euclidean geometry. By clicking and dragging inside the disk, users can draw geodesics and visually see how "straight lines" curve towards the boundary, illustrating the concept that distances grow exponentially closer to the edge, making the boundary infinitely far away.
+
+**Features:**
+- **Interactive Drawing:** Click and drag to define the start and end points of a hyperbolic straight line.
+- **Dynamic Arc Calculation:** The system computes the unique circular arc orthogonal to the boundary disk that passes through the user's two points.
+- **Neon Synthwave Aesthetic:** Uses a distinct, glowing neon color scheme with dark backgrounds.
+- **Visual Feedback:** Animations and glowing effects indicate interactions and line creation.
+
+**Implementation Outline:**
+- **HTML/CSS:** A responsive, mobile-friendly interface featuring a central full-screen canvas and a floating UI panel with instructions and a "Clear" button.
+- **JavaScript (Math & Interaction):**
+  - Implement point inversion in a circle to find the center and radius of the geodesic arcs.
+  - Handle coordinates translation from screen space to the normalized unit disk.
+  - Calculate the intersection points and appropriate angles to draw the arc using the HTML5 Canvas `arc` method.
+  - Manage interaction states (start dragging, moving, releasing) and store persistent lines.
