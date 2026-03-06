@@ -1,0 +1,234 @@
+:root {
+  --bg-color: #121212;
+  --panel-bg: #1e1e1e;
+  --text-main: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --accent-color: #00ffcc;
+  --accent-hover: #00e0b0;
+  --border-color: #333333;
+  --eigen-1: #ff007f;
+  --eigen-2: #ffcc00;
+  --input-bg: #2d2d2d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.6;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  color: var(--accent-color);
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+header p {
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  gap: 24px;
+}
+
+.controls-panel {
+  flex: 0 0 300px;
+  background-color: var(--panel-bg);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.controls-panel h2, .controls-panel h3 {
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.matrix-input-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  background: var(--bg-color);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.matrix-row {
+  display: flex;
+  gap: 12px;
+}
+
+.matrix-row input {
+  width: 70px;
+  height: 40px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 1.1rem;
+  text-align: center;
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: monospace;
+}
+
+.matrix-row input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 255, 204, 0.2);
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+button {
+  background-color: var(--input-bg);
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 204, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Passive animation on interactive buttons */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 255, 204, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0); }
+}
+
+#btn-animate {
+  animation: pulse 2s infinite;
+}
+
+#btn-animate:hover {
+  animation: none;
+}
+
+.eigenvector-info {
+  flex: 1;
+}
+
+#eigen-info-content {
+  font-family: monospace;
+  font-size: 0.95rem;
+  background: var(--bg-color);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  min-height: 100px;
+  color: var(--text-muted);
+}
+
+.eigen-item {
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.eigen-1-text {
+  color: var(--eigen-1);
+  font-weight: bold;
+}
+
+.eigen-2-text {
+  color: var(--eigen-2);
+  font-weight: bold;
+}
+
+.visualization-panel {
+  flex: 1;
+  background-color: var(--panel-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+canvas {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  background-color: #080808;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .controls-panel {
+    flex: none;
+    width: 100%;
+  }
+
+  .visualization-panel {
+    min-height: 400px;
+  }
+}
