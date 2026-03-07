@@ -1,4 +1,3 @@
-Visualize the Riemann Zeta function mapped onto a 3D landscape to explore the topography of the critical line where non-trivial zeros reside.
 Build a one-dimensional cellular automaton explorer focusing on Rule 30 to show how simple binary rules generate chaotic fractal triangles.
 Link the uniform circular motion of a point on a wheel directly to the generation of a simple harmonic sine wave on an adjacent scrolling graph.
 Reveal the recursive linear interpolations that construct a cubic Bézier curve by showing the moving scaffolding lines dynamically.
