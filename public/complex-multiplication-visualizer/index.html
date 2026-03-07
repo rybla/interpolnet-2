@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Complex Number Multiplication Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+      <div id="controls-panel">
+        <h1>Complex Multiplication</h1>
+
+        <div class="vector-input z1-input">
+          <div class="vector-header">
+            <span class="vector-label">Vector z₁</span>
+            <span class="vector-color-dot" style="background: var(--z1-color);"></span>
+          </div>
+          <div class="input-row">
+            <label for="z1-real">Re:</label>
+            <input type="number" id="z1-real" step="0.1" value="1.5">
+          </div>
+          <div class="input-row">
+            <label for="z1-imag">Im:</label>
+            <input type="number" id="z1-imag" step="0.1" value="1.0">
+          </div>
+          <div class="polar-readout" id="z1-polar"></div>
+        </div>
+
+        <div class="vector-input z2-input">
+          <div class="vector-header">
+            <span class="vector-label">Vector z₂</span>
+            <span class="vector-color-dot" style="background: var(--z2-color);"></span>
+          </div>
+          <div class="input-row">
+            <label for="z2-real">Re:</label>
+            <input type="number" id="z2-real" step="0.1" value="-1.0">
+          </div>
+          <div class="input-row">
+            <label for="z2-imag">Im:</label>
+            <input type="number" id="z2-imag" step="0.1" value="1.5">
+          </div>
+          <div class="polar-readout" id="z2-polar"></div>
+        </div>
+
+        <div class="vector-result">
+          <div class="vector-header">
+            <span class="vector-label">Result z₃ = z₁ × z₂</span>
+            <span class="vector-color-dot" style="background: var(--z3-color);"></span>
+          </div>
+          <div class="result-readout">
+            <div id="z3-rect"></div>
+            <div id="z3-polar"></div>
+          </div>
+        </div>
+
+        <div class="explanation">
+          <p>Multiplication means:</p>
+          <ul>
+            <li><strong>Scaling:</strong> |z₃| = |z₁| × |z₂|</li>
+            <li><strong>Rotation:</strong> ∠z₃ = ∠z₁ + ∠z₂</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
