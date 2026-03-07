@@ -1912,3 +1912,29 @@ An interactive graph drawing sandbox that visualizes the Four Color Theorem by a
   - Implement pointer events to handle node creation (click on empty space) and edge creation (drag from one node to another).
   - Implement a backtracking 4-coloring algorithm that runs efficiently on small to medium graphs upon any topology change.
   - Create a rendering loop that draws the edges as lines and the nodes as colored circles.
+
+## Collatz Conjecture Tree [[demo](https://rybla.github.io/interpolnet-2/collatz-conjecture-tree)]
+
+The Collatz Conjecture Tree is an interactive visualization of the Collatz sequence, mapped as a branching organic tree structure that always funnels down to the root node of 1.
+
+### Features
+- **Dynamic Tree Visualization**: The Collatz sequence for user-input numbers is calculated and added to the tree in real-time.
+- **Organic Layout**: The tree is rendered with a hierarchical, organic layout, using Bezier curves to connect nodes to simulate branches and roots. The structure funnels downwards to the root node of 1.
+- **Animation**: When a new number is added, its path is animated as it falls down the tree to the root.
+- **Pan and Zoom**: Users can explore the infinitely expanding tree structure using click-and-drag panning and scroll-to-zoom functionalities on the canvas.
+- **Interactive UI**: An overlay provides a text input to easily add new starting numbers to the tree.
+
+### Design Goals
+- **Bioluminescent Aesthetic**: A dark background with glowing nodes and paths to represent the organic, almost cellular structure of the Collatz sequences merging together.
+- **Mathematical Exploration**: Allow users to visualize how wildly different starting numbers eventually converge into the same familiar branches before hitting the 4-2-1 loop.
+- **Performance**: Use HTML5 Canvas to handle the rendering of potentially thousands of nodes efficiently.
+
+### Implementation Plan
+- **HTML**: A full-screen `<canvas>` for rendering and an absolute-positioned floating UI panel for input.
+- **CSS**: A dark theme with glowing accents for buttons and inputs.
+- **JavaScript Core**:
+    - Manage a graph data structure representing the tree. The root is 1. Edges are directed from `n` to `n/2` (if `n` is even) or `3n+1` (if `n` is odd).
+    - Implement the Collatz logic to generate the path for a given number.
+    - Implement a tree layout algorithm to assign `(x, y)` coordinates to each node. `y` is based on the distance from the root (1). `x` is based on preventing overlap among siblings and branches.
+    - Render the nodes and edges using `requestAnimationFrame`. Draw lines as smooth bezier curves.
+    - Handle pan and zoom transformations using the Canvas API's `translate` and `scale`.
