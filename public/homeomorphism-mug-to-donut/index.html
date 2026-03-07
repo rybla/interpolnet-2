@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Homeomorphism: Mug to Donut</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./three.min.js"></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-panel">
+      <h1>Homeomorphism: Mug to Donut</h1>
+      <p>
+        Observe the continuous topological deformation of a coffee mug morphing smoothly into a donut (torus) and back again.
+      </p>
+
+      <div class="control-group">
+        <label for="morph-slider">Deformation Progress</label>
+        <div class="slider-container">
+          <span>Mug</span>
+          <input type="range" id="morph-slider" min="0" max="1" step="0.01" value="0" />
+          <span>Donut</span>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button id="play-pause-btn" class="active">Auto-Play: ON</button>
+        <button id="wireframe-btn">Wireframe: OFF</button>
+      </div>
+
+      <div class="info-section">
+        <h3>What is Homeomorphism?</h3>
+        <p>
+          In topology, two spaces are homeomorphic if they can be deformed into each other by a continuous, invertible mapping—without any cutting or gluing. Because both a coffee mug and a donut have exactly one hole, they are topologically equivalent!
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
