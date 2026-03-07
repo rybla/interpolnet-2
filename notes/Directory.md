@@ -1989,3 +1989,37 @@ An interactive complex plane where multiplying two complex numbers visually demo
   - Implement a `requestAnimationFrame` render loop to smoothly update the canvas.
   - Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to allow dragging the endpoints of vectors $z_1$ and $z_2$.
   - Provide helper functions to map between logical mathematical coordinates and canvas screen coordinates (accounting for inverted Y-axis).
+
+## Riemann Zeta 3D Visualizer [[demo](https://rybla.github.io/interpolnet-2/riemann-zeta-3d)]
+
+An interactive 3D visualization that maps the complex-valued Riemann Zeta function onto a 3D landscape. This tool allows users to explore the topography of the function, particularly focusing on the "critical line" where non-trivial zeros reside.
+
+### Features
+- **3D Landscape Visualization**: The complex plane is represented as a 2D surface (Real part $\sigma$ on one axis, Imaginary part $t$ on another axis). The height ($Z$-axis) represents the magnitude $|\zeta(\sigma + it)|$ or the real/imaginary parts.
+- **Critical Line Highlighting**: The critical line ($\sigma = \frac{1}{2}$) is distinctly marked, allowing users to visually track the valleys where the function approaches zero.
+- **Interactive Exploration**: Users can rotate, pan, and zoom the 3D landscape using mouse or touch controls.
+- **Hover Information**: Hovering over the landscape with the cursor displays a readout of the current complex coordinate $s = \sigma + it$ and the computed value of $\zeta(s)$.
+- **Dynamic Calculation**: The $\zeta(s)$ values are calculated dynamically using an approximation formula (like the Dirichlet eta function for $\sigma > 0$) directly in JavaScript.
+- **Color Mapping**: The surface is colored based on the phase (argument) or magnitude of $\zeta(s)$, creating a striking, rainbow-colored landscape where colors indicate the direction of the complex value.
+
+### Design Goals
+- **Mathematical Intuition**: Provide a visceral, spatial understanding of one of the most famous unsolved problems in mathematics (the Riemann Hypothesis).
+- **Aesthetic Quality**: Create a beautiful, mesmerizing visualization that looks like an alien landscape, combining math and art.
+- **Performance**: Use WebGL (via Three.js) and optimized math functions to ensure the large number of vertices in the landscape can be rendered and interacted with smoothly.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Mathematical Engine**:
+    - Implement a complex number class or utilize a lightweight library for complex arithmetic (addition, multiplication, exponentiation).
+    - Implement an approximation of the Riemann Zeta function. The Dirichlet $\eta$ function ($\eta(s) = (1 - 2^{1-s})\zeta(s)$) is a good choice for the critical strip $0 < \sigma < 1$.
+- **Scene Setup**:
+    - Create a `PlaneGeometry` with a high number of segments to represent the complex plane grid.
+    - Instead of relying on complex custom shaders (which might fail in headless testing environments), calculate the $Z$-position (height) for each vertex on the CPU based on the magnitude $|\zeta(\sigma + it)|$.
+    - Map the $\sigma$ and $t$ ranges appropriately (e.g., $\sigma$ from $-2$ to $2$, $t$ from $0$ to $40$).
+    - Update the vertex positions dynamically or statically upon initialization.
+- **Rendering & Materials**:
+    - Use vertex colors to color the landscape based on the phase of the zeta value (using `HSL` where hue is the phase).
+    - Add a distinct line geometry to clearly mark the critical line $\sigma = 0.5$.
+- **Interaction**:
+    - Add `OrbitControls` for camera movement.
+    - Implement a `Raycaster` to intersect the plane and calculate the corresponding $s$ coordinate to display in the UI readout.
