@@ -2076,3 +2076,36 @@ An interactive physics and math visualization that directly links the uniform ci
     - **Drawing the Wheel**: Draw a circle on the left side. Calculate the point coordinates `(x, y) = (cx + R * cos(theta), cy + R * sin(theta))`.
     - **Drawing the Wave**: Maintain an array or buffer of past y-values. Shift them to the right to create a scrolling effect, and draw the line connecting these historical points.
     - **Connecting Link**: Draw a dashed line from the point on the circle to the start of the wave graph.
+
+## Cubic Bezier Curve Interpolation Visualizer [[demo](https://rybla.github.io/interpolnet-2/cubic-bezier-interpolation-visualizer)]
+
+An interactive visualizer that reveals the recursive linear interpolations underlying a cubic Bézier curve. It dynamically shows the moving scaffolding lines that construct the curve point by point as the parameter $t$ varies from 0 to 1.
+
+### Features
+- **Draggable Control Points**: Users can interactively drag four control points ($P_0, P_1, P_2, P_3$) on the canvas to reshape the cubic Bézier curve.
+- **Dynamic Scaffolding Construction**: Real-time rendering of the three levels of linear interpolation:
+  - Level 1: Three lines connecting the four control points.
+  - Level 2: Two moving line segments interpolating along the Level 1 lines.
+  - Level 3: One moving line segment interpolating along the Level 2 lines.
+  - Final Point: A single moving point tracing the actual cubic curve.
+- **Interactive Time Control**: A slider to manually adjust the interpolation parameter $t \in [0, 1]$, along with a Play/Pause button for automatic animation.
+- **Trail Visualization**: A fading or solid trail indicating the fully drawn path of the Bézier curve.
+
+### Design Goals
+- **Intuitive Deconstruction**: Demystify Bézier curves by breaking them down into simple, intuitive linear interpolations, emphasizing De Casteljau's algorithm.
+- **Vibrant Aesthetics**: Employ a dark, blueprint-style theme with distinct, glowing neon colors for each level of interpolation to make the recursive structure clear at a glance.
+- **Responsive Interactions**: Provide smooth, immediate feedback as points are dragged, ensuring it feels like a physical, mechanical linkage. Mobile-friendly touch support.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` with an absolutely positioned UI panel overlay for the controls (slider and buttons).
+- **CSS**: Dark theme styling. Distinct accent colors defined for the UI components and canvas drawing. Responsive Flexbox layout for the control panel.
+- **JavaScript (Canvas API)**:
+  - Track states for four control points $(x, y)$ and the interpolation parameter $t$.
+  - Implement a rendering loop using `requestAnimationFrame`.
+  - Draw the recursive linear interpolations explicitly:
+    - Draw control points and base lines.
+    - Calculate and draw $L_1$ points (interpolation between $P_i$ and $P_{i+1}$).
+    - Calculate and draw $L_2$ points (interpolation between $L_1$ points).
+    - Calculate and draw the final point (interpolation between $L_2$ points).
+  - Trace the entire cubic Bézier curve path statically in the background to show the final shape.
+  - Implement mouse/touch event listeners (`pointerdown`, `pointermove`, `pointerup`) to support dragging control points.
