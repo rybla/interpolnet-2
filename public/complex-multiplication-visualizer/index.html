@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Complex Multiplication Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+      <div id="overlay">
+        <h1>Complex Multiplication</h1>
+        <div class="card">
+          <div class="row z1-row">
+            <span class="label">z₁</span>
+            <span class="value" id="z1-val"></span>
+          </div>
+          <div class="row z1-row polar">
+            <span class="label"></span>
+            <span class="value" id="z1-polar"></span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row z2-row">
+            <span class="label">z₂</span>
+            <span class="value" id="z2-val"></span>
+          </div>
+          <div class="row z2-row polar">
+            <span class="label"></span>
+            <span class="value" id="z2-polar"></span>
+          </div>
+        </div>
+        <div class="card result-card">
+          <div class="row z3-row">
+            <span class="label">z₃ = z₁ × z₂</span>
+            <span class="value" id="z3-val"></span>
+          </div>
+          <div class="row z3-row polar">
+            <span class="label"></span>
+            <span class="value" id="z3-polar"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

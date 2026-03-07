@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap");
+
+:root {
+  --bg-color: #0d1117;
+  --grid-color: #1f2937;
+  --axis-color: #4b5563;
+  --text-color: #e5e7eb;
+
+  --z1-color: #00ffcc;
+  --z2-color: #ff00ff;
+  --z3-color: #ffd700;
+
+  --overlay-bg: rgba(13, 17, 23, 0.85);
+  --overlay-border: rgba(255, 255, 255, 0.1);
+  --overlay-blur: blur(12px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden;
+  touch-action: none;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+canvas:active {
+  cursor: grabbing;
+}
+
+#overlay {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 320px;
+  background: var(--overlay-bg);
+  backdrop-filter: var(--overlay-blur);
+  -webkit-backdrop-filter: var(--overlay-blur);
+  border: 1px solid var(--overlay-border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+}
+
+h1 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-card {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--overlay-border);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+}
+
+.polar {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.z1-row { color: var(--z1-color); }
+.z2-row { color: var(--z2-color); }
+.z3-row { color: var(--z3-color); }
+
+@media (max-width: 600px) {
+  #overlay {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    padding: 16px;
+    gap: 12px;
+  }
+}
