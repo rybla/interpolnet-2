@@ -1962,3 +1962,30 @@ Animate the continuous topological deformation of a coffee mug morphing smoothly
   - Generate the geometry for both the mug and the donut. A common approach is to use a high-resolution base geometry (like a cylinder or a custom shape) and define morph targets, or manually interpolate vertices in the render loop based on a `progress` value (0 to 1).
   - Use `requestAnimationFrame` for the render loop to smoothly animate the morphing when auto-play is enabled.
   - Wire up the UI controls to adjust the `progress` value, toggle wireframe materials, and play/pause the animation.
+
+## Complex Number Multiplication Visualizer [[demo](https://rybla.github.io/interpolnet-2/complex-multiplication-visualizer)]
+
+An interactive complex plane where multiplying two complex numbers visually demonstrates the scaling of magnitude and the addition of angles. Users can intuitively grasp complex multiplication through interactive manipulation of vectors in real-time.
+
+### Features
+- **Interactive Complex Plane**: A central canvas where users can see the origin (0,0), unit circle, and axes representing the Real and Imaginary parts of complex numbers.
+- **Draggable Vectors**: Two distinct vectors, $z_1$ and $z_2$, can be dragged around the complex plane to dynamically update their values.
+- **Real-time Multiplication Visualization**: A third vector, $z_3 = z_1 \times z_2$, is calculated and drawn in real-time.
+- **Angle Addition Animation**: Visual arcs from the positive real axis show the angles of $z_1$ ($\theta_1$) and $z_2$ ($\theta_2$), and a larger arc shows how the angle of $z_3$ is exactly $\theta_1 + \theta_2$.
+- **Magnitude Scaling**: The lengths (magnitudes) of the vectors are highlighted. An expanding/contracting indicator clarifies that the magnitude of $z_3$ is the product of the magnitudes of $z_1$ and $z_2$.
+- **Control Panel**: A side or floating UI panel allowing precise manual entry of the real and imaginary components of $z_1$ and $z_2$, alongside a readout of their polar forms ($re^{i\theta}$) and the final calculation.
+
+### Design Goals
+- **Educational Clarity**: Make the abstract concept of complex multiplication geometric and intuitive. Emphasize that complex multiplication is a rotation *and* a scaling.
+- **Engaging Aesthetics**: Employ a clean, dark-themed "blueprint" or "neon" aesthetic (e.g., deep blue background with bright cyan, magenta, and yellow vectors) to make the math look striking.
+- **Responsiveness**: Ensure the visualizer works seamlessly on both desktop and mobile devices, utilizing touch events for dragging points.
+
+### Implementation Plan
+- **HTML Layout**: A full-screen `<canvas>` with an absolutely positioned UI panel overlay containing inputs and readouts.
+- **CSS**: Adopt a cohesive dark theme with specific accent colors for $z_1$, $z_2$, and $z_3$. Utilize CSS Grid or Flexbox for the control panel.
+- **JavaScript**:
+  - Implement a `Complex` class to handle math operations (addition, multiplication, polar conversion).
+  - Use HTML5 Canvas API for rendering the grid, axes, unit circle, vectors (arrows), and angle arcs.
+  - Implement a `requestAnimationFrame` render loop to smoothly update the canvas.
+  - Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to allow dragging the endpoints of vectors $z_1$ and $z_2$.
+  - Provide helper functions to map between logical mathematical coordinates and canvas screen coordinates (accounting for inverted Y-axis).
