@@ -1888,3 +1888,29 @@ A grid transformation tool that highlights the specific eigenvectors that scale 
   - Implement rendering logic on the HTML5 Canvas to handle inverse-Y transformations so cartesian logic holds.
   - Implement a 2x2 matrix transformation engine.
   - Implement the mathematical logic to compute eigenvectors and eigenvalues of the real 2x2 matrix and trace these highlighted lines on the canvas overlay.
+
+## Four Color Theorem Prover [[demo](https://rybla.github.io/interpolnet-2/four-color-theorem-prover)]
+
+The Four Color Theorem Prover provides an interactive sandbox for drawing nodes and edges while a background algorithm automatically color-codes the graph to prove the Four Color Theorem. This theorem states that no more than four colors are required to color the regions of any map such that no two adjacent regions have the same color. This demo translates this into a planar graph representation.
+
+### Features
+- **Interactive Sandbox**: Users can click to place nodes (representing map regions) and drag between nodes to create edges (representing adjacencies).
+- **Auto-Coloring Algorithm**: As the user modifies the graph, the system dynamically recalculates colors for all nodes. It uses a maximum of four distinct colors (e.g., Red, Blue, Green, Yellow).
+- **Planarity Enforcement**: A visual or physical constraint prevents edges from crossing, or clearly indicates when a graph becomes non-planar (since the theorem only applies to planar graphs).
+- **Animations**:
+    - **Passive Animations**: Nodes softly pulse to indicate interactivity.
+    - **Active Animations**: Smooth color transitions occur when the algorithm reassigns node colors, and edges animate when being drawn.
+
+### Design Goals
+- **Educational Exploration**: Allow users to intuitively construct complex maps/graphs and instantly see the four-color theorem in action.
+- **Visual Clarity**: Distinct, high-contrast colors to ensure no confusion between adjacent nodes.
+- **Blueprint Aesthetic**: A clean, technical aesthetic with a dark background and brightly colored nodes and edges, emphasizing the mathematical nature of the demo.
+- **Responsiveness**: Ensures the sandbox canvas is perfectly usable on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` setup with minimal UI overlays. CSS handles the dark theme and font styles.
+- **JavaScript**:
+    - Manage state for an array of `nodes` and `edges`.
+    - Implement an event loop to handle pointer interactions (`mousedown`, `mousemove`, `mouseup`) for drawing.
+    - Implement a graph coloring algorithm (e.g., Welsh-Powell or a backtracking constraint solver) restricted to 4 colors, running on each graph modification.
+    - Render nodes and edges to the canvas, animating color properties via interpolation.
