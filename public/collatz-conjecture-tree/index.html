@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Collatz Conjecture Tree</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="tree-canvas"></canvas>
+    <div id="ui-panel">
+      <h1>Collatz Conjecture Tree</h1>
+      <p>Enter a number to add its sequence to the tree:</p>
+      <div class="input-group">
+        <input type="number" id="number-input" placeholder="e.g., 27" min="1" step="1">
+        <button id="add-btn">Add Number</button>
+      </div>
+      <div class="controls">
+        <button id="reset-btn">Reset View</button>
+        <button id="clear-btn">Clear Tree</button>
+      </div>
+    </div>
+  </body>
+</html>
