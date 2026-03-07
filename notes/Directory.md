@@ -2050,3 +2050,29 @@ An interactive one-dimensional cellular automaton explorer that focuses on Rule 
     - Implement the Rule 30 logic: `next_state = (left ^ (center | right))`.
     - Use `requestAnimationFrame` for a smooth rendering loop.
     - Draw the cells as small rectangles on the canvas. When the canvas fills up, visually scroll the image data up by one cell height and draw the new row at the bottom.
+
+## Circular Motion Sine Wave [[demo](https://rybla.github.io/interpolnet-2/circular-motion-sine-wave)]
+
+An interactive physics and math visualization that directly links the uniform circular motion of a point on a rotating wheel to the generation of a simple harmonic sine wave on an adjacent, continuously scrolling graph.
+
+### Features
+- **Rotating Wheel**: A visually distinct circle on the left representing uniform circular motion. A point on the circumference rotates at a constant speed.
+- **Scrolling Graph**: An adjacent canvas on the right that continuously plots the vertical displacement (y-value) of the rotating point over time, creating a perfect sine wave.
+- **Connecting Line**: A dynamic, glowing horizontal line connecting the point on the wheel directly to the leading edge of the sine wave, visually demonstrating that the wave's height is exactly the point's height.
+- **Interactive Controls**: Users can adjust the speed of rotation (frequency) and the radius of the wheel (amplitude) using sliders. The graph updates in real-time.
+- **Trace Toggle**: An option to show the underlying angle tracing inside the circle.
+
+### Design Goals
+- **Educational Intuition**: Make the connection between circular motion and trigonometry (sine waves) visceral and obvious through direct physical linkage.
+- **Aesthetics**: A dark, sci-fi/blueprint aesthetic with high-contrast neon colors (e.g., cyan for the circle, magenta for the wave, yellow for the connecting line).
+- **Responsive Layout**: On desktop, the wheel and graph sit side-by-side. On mobile, they resize to maintain the visual connection.
+
+### Implementation Plan
+- **HTML Structure**: A responsive container holding a single `<canvas>` element and a control panel for sliders. We will use a single canvas to easily draw the connecting line across the two visual areas.
+- **CSS Styling**: A dark theme background, custom-styled range inputs for the controls, and responsive flexbox/grid layout.
+- **JavaScript (Canvas API)**:
+    - **State Management**: Track current angle, angular velocity, and radius.
+    - **Rendering Loop**: Use `requestAnimationFrame` to update the angle, clear the canvas, and redraw.
+    - **Drawing the Wheel**: Draw a circle on the left side. Calculate the point coordinates `(x, y) = (cx + R * cos(theta), cy + R * sin(theta))`.
+    - **Drawing the Wave**: Maintain an array or buffer of past y-values. Shift them to the right to create a scrolling effect, and draw the line connecting these historical points.
+    - **Connecting Link**: Draw a dashed line from the point on the circle to the start of the wave graph.
