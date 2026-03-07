@@ -1888,3 +1888,27 @@ A grid transformation tool that highlights the specific eigenvectors that scale 
   - Implement rendering logic on the HTML5 Canvas to handle inverse-Y transformations so cartesian logic holds.
   - Implement a 2x2 matrix transformation engine.
   - Implement the mathematical logic to compute eigenvectors and eigenvalues of the real 2x2 matrix and trace these highlighted lines on the canvas overlay.
+
+## Four Color Theorem Visualizer [[demo](https://rybla.github.io/interpolnet-2/four-color-theorem-visualizer)]
+
+An interactive graph drawing sandbox that visualizes the Four Color Theorem by automatically coloring nodes such that no two adjacent nodes share the same color.
+
+### Features
+- **Sandbox Drawing**: Users can click to place nodes on a blank canvas and drag between nodes to create edges, building complex graphs.
+- **Automatic 4-Coloring**: Every time a node or edge is added, a backtracking algorithm runs in real-time to re-color the entire graph using only four distinct colors.
+- **Visual Feedback**: Nodes smoothly transition their colors, and active edge creation is shown visually as users drag the mouse.
+- **Conflict Avoidance**: The algorithm ensures that no two connected nodes share the same color, visually proving the theorem on the user's custom graph.
+
+### Design Goals
+- **Intuitive Interaction**: Make graph creation as simple as clicking and dragging.
+- **Real-time Visualization**: Provide immediate, satisfying visual feedback of the coloring algorithm at work.
+- **Distinct Palette**: Use a high-contrast, distinct 4-color palette that stands out against a dark background.
+
+### Implementation Plan
+- **HTML**: Provide a full-screen `<canvas>` element for the sandbox.
+- **CSS**: Ensure a responsive, dark-themed background with crisp, mobile-friendly styles for the canvas.
+- **JavaScript**:
+  - Implement a graph data structure to track nodes and edges.
+  - Implement pointer events to handle node creation (click on empty space) and edge creation (drag from one node to another).
+  - Implement a backtracking 4-coloring algorithm that runs efficiently on small to medium graphs upon any topology change.
+  - Create a rendering loop that draws the edges as lines and the nodes as colored circles.
