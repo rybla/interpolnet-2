@@ -3524,3 +3524,29 @@ An interactive 3D visualization demonstrating the topological homeomorphism betw
 - **Interaction**:
     - HTML range input mapped to the $t$ parameter.
     - `OrbitControls` for camera manipulation.
+## Riemann Zeta Function Topography [[demo](https://rybla.github.io/interpolnet-2/riemann-zeta-topography)]
+
+The Riemann Zeta Function Topography demo visualizes the complex-valued Riemann Zeta function mapped onto a 3D landscape to explore the topography of the critical line where non-trivial zeros reside.
+
+### Features
+- **3D Interactive Landscape**: A continuous 3D surface representing the magnitude of the Riemann Zeta function on the complex plane. Users can rotate, zoom, and pan around the surface to explore peaks and valleys.
+- **The Critical Line ($Re(s) = 0.5$)**: A visually distinct path highlighting the critical line where all non-trivial zeros are conjectured to exist according to the Riemann Hypothesis.
+- **Zero Indicators**: Distinct markers placed exactly at the locations of the first few non-trivial zeros (e.g., $s = 0.5 + 14.13i, 0.5 + 21.02i$).
+- **Color Mapping**: The height (magnitude) and phase (argument) of the zeta function are mapped to vivid colors, showing the intricate topography of the function's poles and zeros.
+- **Controls**: An interactive UI panel with a slider to adjust the range of the imaginary axis ($Im(s)$), allowing exploration of zeros higher up the critical line, and a toggle to switch between magnitude and phase coloring.
+
+### Design Goals
+- **Mathematical Topography**: Help users intuitively grasp the complex behavior of the Riemann Zeta function by turning it into an interactive terrain.
+- **Educational Impact**: Highlight the critical line and clearly demonstrate the location of non-trivial zeros in an engaging, visual way.
+- **Responsive 3D Graphics**: Use Three.js to render a performant, smooth, and interactive 3D surface that works seamlessly on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML Layout**: A full-screen container for the 3D canvas and an absolutely positioned UI panel for controls.
+- **CSS**: Adopt Interpolnet 2's dark theme, with a floating glassmorphic control panel and consistent typography.
+- **JavaScript**:
+  - Implement a mathematical approximation of the Riemann Zeta function for the complex plane (e.g., using Dirichlet eta function or similar methods for regions near the critical strip).
+  - Use Three.js to create a `ParametricGeometry` or dynamically updated `PlaneGeometry` where the z-coordinate (height) corresponds to the magnitude $|\zeta(s)|$.
+  - Implement custom shaders (`ShaderMaterial`) to color the surface based on magnitude and phase, ensuring visual clarity.
+  - Implement `OrbitControls` for user interaction.
+  - Add specific 3D markers (spheres or pins) at known non-trivial zero coordinates.
+  - Wire up UI controls to update the mathematical domain and re-render the surface dynamically.
