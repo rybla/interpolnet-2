@@ -2023,3 +2023,30 @@ An interactive 3D visualization that maps the complex-valued Riemann Zeta functi
 - **Interaction**:
     - Add `OrbitControls` for camera movement.
     - Implement a `Raycaster` to intersect the plane and calculate the corresponding $s$ coordinate to display in the UI readout.
+## Rule 30 Explorer [[demo](https://rybla.github.io/interpolnet-2/rule-30-explorer)]
+
+An interactive one-dimensional cellular automaton explorer that focuses on Rule 30. It demonstrates how a remarkably simple set of binary rules applied to a single starting cell can generate complex, chaotic, and seemingly random fractal patterns (like the Sierpiński triangle-like structures).
+
+### Features
+- **Real-Time Generation**: Watch the cellular automaton grow row by row as the rule is applied iteratively.
+- **Rule Visualization**: A visual key showing the 8 possible states for a cell and its neighbors (e.g., 111, 110, 101) and the resulting outcome for the next generation based on Rule 30.
+- **Interactive Controls**:
+    - **Play/Pause**: Control the generation process.
+    - **Speed Slider**: Adjust how fast new rows are generated.
+    - **Step**: Manually advance the simulation by one generation.
+    - **Reset**: Clear the canvas and start over with a single active cell in the center.
+- **Infinite Canvas**: The automaton is drawn on a canvas that smoothly scrolls upwards as new rows are added at the bottom, creating a continuous flow of chaotic patterns.
+
+### Design Goals
+- **Educational Clarity**: Make the connection between the simple local rule (Rule 30) and the complex global pattern obvious.
+- **Aesthetics**: A striking dark theme with a distinct, consistent color scheme. High contrast (e.g., bright neon cyan for active cells against a deep navy or black background) to emphasize the fractal triangles.
+- **Mesmerizing Flow**: The continuous generation should feel satisfying and slightly hypnotic.
+
+### Implementation Plan
+- **HTML**: A split layout (desktop) or stacked layout (mobile) featuring a control panel (with the rule key and buttons) and a large, central `<canvas>` element for rendering.
+- **CSS**: Apply a cohesive dark theme. Use flexbox/grid for responsive layout. Add subtle hover states to controls.
+- **JavaScript (Canvas API)**:
+    - Maintain a 1D array representing the current state (row).
+    - Implement the Rule 30 logic: `next_state = (left ^ (center | right))`.
+    - Use `requestAnimationFrame` for a smooth rendering loop.
+    - Draw the cells as small rectangles on the canvas. When the canvas fills up, visually scroll the image data up by one cell height and draw the new row at the bottom.
