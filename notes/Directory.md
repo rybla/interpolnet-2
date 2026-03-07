@@ -1938,3 +1938,31 @@ The Collatz Conjecture Tree is an interactive visualization of the Collatz seque
     - Implement a tree layout algorithm to assign `(x, y)` coordinates to each node. `y` is based on the distance from the root (1). `x` is based on preventing overlap among siblings and branches.
     - Render the nodes and edges using `requestAnimationFrame`. Draw lines as smooth bezier curves.
     - Handle pan and zoom transformations using the Canvas API's `translate` and `scale`.
+
+## Homeomorphism Visualizer [[demo](https://rybla.github.io/interpolnet-2/homeomorphism-visualizer)]
+
+
+An interactive 3D visualization demonstrating the topological homeomorphism between a coffee mug and a donut (torus). Users can smoothly morph the shape between the two states to intuitively understand how they are topologically equivalent.
+
+### Features
+- **3D Morphing Animation**: A continuous, smooth transition between a coffee mug with a handle and a standard torus.
+- **Interactive Control**: A slider allowing users to manually control the morphing progress ($t \in [0, 1]$) forwards and backwards in real-time.
+- **Visual Feedback**: The surface is rendered with a dynamic material (e.g., a wireframe or a glossy shaded material) to clearly show how the geometry stretches and deforms without tearing or gluing.
+- **Camera Controls**: Standard 3D orbit controls (rotate, zoom, pan) to inspect the object from any angle during the transformation.
+
+### Design Goals
+- **Educational Intuition**: Provide a visceral, interactive proof of the classic "a coffee mug is a donut" topological joke.
+- **Visual Clarity**: Ensure the geometry never intersects itself in a confusing way during the morph, maintaining the illusion of a solid, stretchy material.
+- **Aesthetics**: A clean, modern look consistent with Interpolnet 2's theme, using perhaps a vibrant, glowing wireframe against a dark background.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Geometry Generation**:
+    - Instead of loading external models, mathematically generate the surface using parametric equations.
+    - Define a parametric surface function $S(u, v, t)$ that interpolates between the parametric equations of a mug ($t=0$) and a torus ($t=1$).
+    - Construct a `THREE.ParametricGeometry` (or a custom `BufferGeometry` populated via a vertex shader for better performance) that evaluates this function.
+- **Morphing Logic**:
+    - If using a vertex shader (recommended for smooth 60fps), pass the morph parameter $t$ as a uniform. The shader calculates the interpolated position for every vertex on the GPU.
+- **Interaction**:
+    - HTML range input mapped to the $t$ parameter.
+    - `OrbitControls` for camera manipulation.
