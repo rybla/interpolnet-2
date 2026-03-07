@@ -3475,3 +3475,25 @@ The Four Color Theorem Prover provides an interactive sandbox for drawing nodes 
     - Implement an event loop to handle pointer interactions (`mousedown`, `mousemove`, `mouseup`) for drawing.
     - Implement a graph coloring algorithm (e.g., Welsh-Powell or a backtracking constraint solver) restricted to 4 colors, running on each graph modification.
     - Render nodes and edges to the canvas, animating color properties via interpolation.
+## Collatz Sequence Tree [[demo](https://rybla.github.io/interpolnet-2/collatz-sequence-tree)]
+
+An interactive visualization of the Collatz conjecture (also known as the 3n + 1 problem). Users can input starting numbers, and the demo visually maps the paths of the resulting Collatz sequences as a branching, organic tree structure that always funnels down to the root node of 1.
+
+### Features
+- **Dynamic Tree Building:** Users can enter any positive integer, and the demo calculates the sequence and animates its addition to the existing tree structure.
+- **Organic Layout:** The tree utilizes a custom layout algorithm that positions the root node (1) at the center or bottom, with branches expanding outwards organically as new numbers and sequences are added.
+- **Visual Feedback:** Numbers that share a path visually merge, demonstrating how different starting points converge onto common sequences before finally reaching 1.
+- **Interactive Nodes:** Hovering over or clicking a node highlights the specific path from that number down to 1.
+- **Color Coding:** Branches are color-coded based on sequence length or maximum value reached, creating a visually striking representation of the conjecture's complexity.
+
+### Design Goals
+- **Mathematical Exploration:** Provide an intuitive and beautiful way to visualize one of mathematics' most famous unsolved problems.
+- **Organic Aesthetics:** Break away from rigid grid layouts to represent the sequences as a growing, interconnected natural structure (like a tree or roots).
+- **Responsive Visualization:** Ensure the canvas fluidly scales and pans to accommodate the expanding tree as more sequences are explored, maintaining performance and readability on all devices.
+
+### Implementation Plan
+- **HTML/CSS:** A full-screen container with a prominent, styled input field and a "Generate" button. A `<canvas>` element spans the background for rendering the tree. The theme will be dark and space-like, using glowing neon colors for the tree branches.
+- **Sequence Generation (JS):** A core function to calculate the Collatz sequence for a given $n$: if even, $n/2$; if odd, $3n+1$. The function tracks the sequence until it reaches 1.
+- **Data Structure:** Maintain a directed acyclic graph (DAG) or tree structure where each node represents a number in the sequence, and edges represent the transitions. Nodes will store their value, parent(s), children, and computed coordinates for rendering.
+- **Layout Algorithm:** A custom force-directed or specialized tree layout algorithm that calculates node positions. The root node (1) is anchored. The algorithm will position parent nodes further away, attempting to avoid edge crossings and maintain an organic, balanced look.
+- **Rendering & Animation (Canvas API):** Use `requestAnimationFrame` to smoothly animate new sequences being added. Draw connecting lines (edges) and circles (nodes) with varying colors and thicknesses based on the sequence data.
