@@ -1938,3 +1938,27 @@ The Collatz Conjecture Tree is an interactive visualization of the Collatz seque
     - Implement a tree layout algorithm to assign `(x, y)` coordinates to each node. `y` is based on the distance from the root (1). `x` is based on preventing overlap among siblings and branches.
     - Render the nodes and edges using `requestAnimationFrame`. Draw lines as smooth bezier curves.
     - Handle pan and zoom transformations using the Canvas API's `translate` and `scale`.
+
+## Homeomorphism: Mug to Donut [[demo](https://rybla.github.io/interpolnet-2/homeomorphism-mug-to-donut)]
+
+Animate the continuous topological deformation of a coffee mug morphing smoothly into a donut to explain homeomorphism.
+
+### Features
+- **3D Morphing Animation**: A 3D coffee mug smoothly and continuously deforms into a donut (torus) and back again.
+- **Interactive Control**: Users can manually control the morphing progress using a slider, allowing them to inspect intermediate topological states.
+- **Auto-Play**: A button to toggle continuous, automatic animation back and forth between the two shapes.
+- **Wireframe Mode**: An option to toggle wireframe rendering to better visualize the vertices and polygons as they transform.
+
+### Design Goals
+- **Intuitive Topology**: Visually demonstrate the mathematical concept that a mug and a donut are topologically equivalent (homeomorphic) because they both have exactly one hole.
+- **Engaging Visuals**: Provide a smooth, visually appealing 3D animation using distinct, consistent colors and a clean layout.
+- **Educational Interactivity**: Let users pause and scrub the animation to understand how the continuous deformation happens without cutting or gluing the surface.
+
+### Implementation Plan
+- **HTML**: A container for the 3D canvas and a UI panel overlay with controls (slider, play/pause toggle, wireframe toggle).
+- **CSS**: Styling for the layout, adopting the consistent dark theme and typography of Interpolnet 2, ensuring responsive and mobile-friendly controls.
+- **JavaScript (Three.js)**:
+  - Setup a Three.js scene, camera, renderer, and lights.
+  - Generate the geometry for both the mug and the donut. A common approach is to use a high-resolution base geometry (like a cylinder or a custom shape) and define morph targets, or manually interpolate vertices in the render loop based on a `progress` value (0 to 1).
+  - Use `requestAnimationFrame` for the render loop to smoothly animate the morphing when auto-play is enabled.
+  - Wire up the UI controls to adjust the `progress` value, toggle wireframe materials, and play/pause the animation.
