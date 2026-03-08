@@ -2109,3 +2109,30 @@ An interactive visualizer that reveals the recursive linear interpolations under
     - Calculate and draw the final point (interpolation between $L_2$ points).
   - Trace the entire cubic Bézier curve path statically in the background to show the final shape.
   - Implement mouse/touch event listeners (`pointerdown`, `pointermove`, `pointerup`) to support dragging control points.
+## Conway's Game of Life WebGL [[demo](https://rybla.github.io/interpolnet-2/conways-game-of-life-webgl)]
+
+A massive, interactive web-based implementation of Conway's Game of Life utilizing WebGL for high-performance rendering and simulation of millions of cells.
+
+### Features
+- **Massive Canvas**: An infinitely panning and zooming canvas running a dense Game of Life simulation, supporting 1024x1024 grid cells.
+- **Interactive Stamping Tools**: Users can place single cells, or use pre-configured stamps to instantly spawn complex structures like Gliders and Gosper Glider Guns into the simulation.
+- **Simulation Controls**: Play, Pause, and Step functionalities to observe the chaotic evolution of the cellular automaton at different speeds.
+- **Pan and Zoom Navigation**: Intuitive mouse and touch controls to explore the massive grid.
+- **High-Performance WebGL**: Uses ping-pong framebuffers and fragment shaders to calculate the next generation of cells entirely on the GPU, allowing for massive scale and fluid framerates.
+- **Clear Canvas**: A tool to instantly wipe the board clean and start fresh.
+
+### Design Goals
+- **Raw Performance**: Demonstrate the power of WebGL for parallel processing by offloading the entire Game of Life rule evaluation to the GPU.
+- **Interactive Sandbox**: Provide users with the tools to easily create and observe complex, emergent behaviors without painstakingly drawing them cell by cell.
+- **Hacker Aesthetic**: A distinct visual style utilizing a stark black background with glowing, bright neon green cells, evoking classic retro-computing or cyberpunk themes.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the WebGL rendering, overlaid with a floating, responsive control panel for tools and simulation controls.
+- **CSS Styling**: A dark theme with distinct neon green accents, glowing hover effects, and a modern, slightly brutalist UI layout.
+- **JavaScript (WebGL)**:
+    - **Initialization**: Set up a WebGL context with floating-point or unsigned byte textures.
+    - **Ping-Pong Textures**: Create two textures (Current State and Next State) and alternatingly bind them as input and output framebuffers.
+    - **Simulation Shader**: A fragment shader that reads the 8 neighboring pixels from the Current State texture and applies Conway's rules (survive with 2 or 3 neighbors, birth with 3) to output the Next State.
+    - **Display Shader**: A fragment shader that maps the current texture to the screen, applying panning and zooming transformations based on user input.
+    - **Tool Logic**: Implement `texSubImage2D` to allow writing specific pixel patterns (stamps) directly into the Current State texture based on mouse clicks and the selected tool.
+    - **Game Loop**: A `requestAnimationFrame` loop that runs the simulation shader (when playing) and then runs the display shader to render the result.
