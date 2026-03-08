@@ -2261,3 +2261,31 @@ An interactive HTML5 Canvas demo visualizing Fortune's algorithm, a sweep-line a
         - **Background Canvas**: Draw the vertical distance between the previous frame's beach line and the current frame's beach line, coloring it according to which seed "owns" that section of the beach line.
         - **Foreground Canvas**: Clear the canvas. Draw the seed points, the straight horizontal sweep line, and the complex beach line curve.
     - **Interaction**: Handle pointer events to add new points, generating a random bright color for each.
+
+## Minimax Saddle Point Surface [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-point-surface)]
+
+An interactive 3D multivariable calculus visualization where a rolling ball naturally settles into the minimax saddle point.
+
+### Features
+- **3D Saddle Surface**: A parametric surface representing a hyperbolic paraboloid (e.g., $f(x, z) = x^2 - z^2$).
+- **Minimax Dynamics**: A rolling ball is simulated using a custom physics loop based on gradient descent along the $x$-axis and gradient ascent along the $z$-axis, naturally finding the saddle point.
+- **Interactive Dragging**: Users can drag the ball to different starting positions using a Raycaster, observing how it always returns to the saddle point.
+- **Visual Feedback**: The surface is rendered with a wireframe or grid texture to clearly show the curvature, while the ball is distinctly colored.
+
+### Design Goals
+- **Educational Intuition**: Provide a visceral, geometric understanding of what a saddle point is in multivariable calculus.
+- **Engaging Aesthetics**: Use a clean, scientific aesthetic (dark background with glowing neon grid lines).
+- **Responsiveness**: Ensure the 3D canvas scales to fit any screen size and supports touch interactions for dragging the ball.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scene Setup**:
+    - A parametric geometry to draw the saddle surface.
+    - A sphere mesh representing the ball.
+    - Orbit controls for camera manipulation.
+- **Physics Simulation**:
+    - Update the ball's $(x, z)$ coordinates each frame based on the gradient of the surface function $f(x, z)$.
+    - The new $y$ coordinate is computed as $f(x, z)$.
+- **Interaction Logic**:
+    - Implement a raycaster to allow the user to grab and drag the ball across the surface.
+    - Disable physics updates while the ball is being dragged, resuming once released.
