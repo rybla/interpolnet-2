@@ -2203,3 +2203,31 @@ An interactive physical clock face visualization that represents modular arithme
   - **State Management**: Track the modulus `N`, operands `a` and `b`, and the selected operation.
   - **Rendering**: Use HTML5 Canvas to draw the clock face, placing numbers evenly around the circumference.
   - **Animation Logic**: Calculate the paths for addition and multiplication. Use `requestAnimationFrame` to animate drawing the arcs and paths wrapping around the circle. Use easing functions for smooth motion.
+## Markov Chain Frog [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog)]
+
+A web-based interactive visualization of a Markov Chain, conceptualized as a network of Lilypads. A frog jumps between these Lilypads, and the jumps are determined by weighted probability arrows connecting them.
+
+### Features
+- **Interactive Lilypads (States)**: Users can click on the canvas to add new Lilypads to the pond, representing the states in the Markov chain.
+- **Weighted Probability Arrows (Transitions)**: Users can drag from one Lilypad to another to create directed arrows representing transition probabilities.
+- **Weight Adjustment**: A floating UI panel allows users to select an arrow and adjust its transition weight. The weights outgoing from each Lilypad are automatically normalized to sum to 1 (or 100%).
+- **Animated Frog (The Process)**: A frog character sits on one Lilypad. A "Step" button makes the frog jump to the next Lilypad based on the defined probabilities. An "Auto-Jump" toggle lets the frog jump continuously at a set interval.
+- **Path Highlighting**: When the frog jumps, the specific arrow it traveled across lights up briefly.
+- **State Distribution Chart**: A side panel displays a bar chart showing the frequency of visits to each Lilypad, visually demonstrating the stationary distribution (if it exists) as the frog makes many jumps.
+
+### Design Goals
+- **Intuitive Metaphor**: Use the playful, concrete metaphor of a frog and lilypads to explain the abstract mathematical concept of state transitions and probabilities in a Markov chain.
+- **Engaging Aesthetics**: A vibrant, nature-inspired "pond" theme. Deep blues/greens for the water, bright green for the Lilypads, and a distinct, cute frog character.
+- **Direct Manipulation**: Building the Markov chain should feel like drawing a graph or a mind map, with immediate visual feedback when weights are changed.
+- **Clear Feedback**: The normalization of probabilities should be visually apparent (e.g., arrow thickness changes based on relative weight).
+
+### Implementation Plan
+- **HTML Structure**: A full-screen container holding an HTML5 `<canvas>` for the pond, an overlay `<div>` for the control panel (adding states, adjusting weights, play/pause), and a sidebar `<div>` for the state distribution chart.
+- **CSS Styling**: A cohesive "pond" color palette. The UI panels should have a translucent, frosted glass effect so the pond is still visible underneath.
+- **JavaScript Core**:
+    - **State Management**: A graph data structure where nodes are Lilypads (with `x`, `y` coordinates and a `visitCount`) and edges are transitions (with `source`, `target`, and `weight`).
+    - **Canvas Rendering**: Use `requestAnimationFrame` to draw the pond background, Lilypads, arrows (using Bezier curves for aesthetics and to handle bidirectional links), and the frog.
+    - **Interaction Handling**: Pointer events to handle creating Lilypads (clicking empty space), creating arrows (dragging between Lilypads), and selecting arrows to adjust weights.
+    - **Markov Logic**: A function that takes the frog's current Lilypad, looks at the outgoing normalized probabilities, generates a random number between 0 and 1, and selects the next Lilypad accordingly.
+    - **Animation**: Smoothly animate the frog's jump along the Bezier curve of the chosen arrow.
+    - **Chart Update**: Update the DOM-based bar chart whenever the frog lands on a Lilypad.
