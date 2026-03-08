@@ -2203,3 +2203,27 @@ An interactive physical clock face visualization that represents modular arithme
   - **State Management**: Track the modulus `N`, operands `a` and `b`, and the selected operation.
   - **Rendering**: Use HTML5 Canvas to draw the clock face, placing numbers evenly around the circumference.
   - **Animation Logic**: Calculate the paths for addition and multiplication. Use `requestAnimationFrame` to animate drawing the arcs and paths wrapping around the circle. Use easing functions for smooth motion.
+## Markov Chain Frog Jump [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog-jump)]
+
+A visual simulation of a Markov chain represented as a network of lilypads. A frog jumps between the lilypads according to weighted probability arrows that visually connect them.
+
+### Features
+- **Interactive State Graph**: Three distinct lilypads representing the states in the Markov chain.
+- **Dynamic Transition Probabilities**: Users can adjust the transition probabilities using sliders. The directed arrows between lilypads dynamically update their thickness to reflect these weights.
+- **Simulation Controls**: Play, Pause, and Step buttons to manually or automatically trigger the frog's jumps through the Markov chain.
+- **Frog Animation**: The frog visibly jumps from lilypad to lilypad along the transition arrows, making the state changes obvious.
+- **Path Highlighting**: The active path the frog is taking lights up to clearly indicate the selected transition based on the probabilities.
+
+### Design Goals
+- **Intuitive Understanding**: Connect the abstract mathematical concept of Markov chains and state transitions to a simple, understandable real-world analogy.
+- **Engaging Aesthetics**: Use a nature-inspired color palette with deep water blues, vibrant lilypad greens, and clear contrasting colors for the transition arrows to create a relaxing pond vibe.
+- **Responsiveness**: Ensure the graph and controls scale appropriately and remain usable on both mobile and desktop devices.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` for the simulation, overlaid with a floating UI control panel containing probability sliders and simulation buttons.
+- **CSS Styling**: A pond-themed background with semi-transparent, frosted-glass UI panels and custom-styled range sliders.
+- **JavaScript**:
+  - **State Management**: Track the transition matrix, the frog's current state, and the simulation status (playing, paused, jumping).
+  - **Rendering**: HTML5 Canvas to draw lilypads, curved transition arrows (using quadratic curves to handle bi-directional edges without overlapping), and the frog.
+  - **Animation Logic**: `requestAnimationFrame` loop to animate the frog's parabolic jump along the selected arrow, along with passive bobbing of the lilypads.
+  - **Interactive Logic**: Update the transition probabilities via sliders, normalizing outgoing probabilities so they always sum to 1.0 per state.
