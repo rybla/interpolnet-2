@@ -2231,3 +2231,33 @@ A web-based interactive visualization of a Markov Chain, conceptualized as a net
     - **Markov Logic**: A function that takes the frog's current Lilypad, looks at the outgoing normalized probabilities, generates a random number between 0 and 1, and selects the next Lilypad accordingly.
     - **Animation**: Smoothly animate the frog's jump along the Bezier curve of the chosen arrow.
     - **Chart Update**: Update the DOM-based bar chart whenever the frog lands on a Lilypad.
+
+## Voronoi Diagram Sweep-Line [[demo](https://rybla.github.io/interpolnet-2/voronoi-sweep-line)]
+
+An interactive HTML5 Canvas demo visualizing Fortune's algorithm, a sweep-line algorithm for generating Voronoi diagrams. Users can place random seed points on the canvas, triggering a horizontal sweep line that dynamically constructs the intersecting parabolic beach lines and traces the boundaries of the resulting Voronoi cells.
+
+### Features
+- **Interactive Point Placement**: Clicking anywhere on the canvas dynamically adds a new seed point.
+- **Continuous Sweep-Line Animation**: A horizontal sweep line moves continuously downwards. When a new point is added, its effect on the sweep line and beach line is calculated in real time.
+- **Dynamic Beach Line Rendering**: Above the sweep line, the complex intersection of parabolas (the "beach line") is calculated and drawn continuously, showing how each seed's sphere of influence grows.
+- **Voronoi Cell Filling**: As the sweep line moves, the regions defined by the beach line are filled with distinct colors corresponding to their seed points, persistently drawing the final Voronoi diagram on a background canvas.
+- **Dual Canvas System**: Utilizes a back canvas for persistent painting of the cell colors and boundaries, and a front transparent canvas for rendering the dynamic sweep line, beach line, and seed points smoothly.
+
+### Design Goals
+- **Algorithm Visualization**: Make the complex mechanics of Fortune's algorithm (sweep lines and parabolic beach lines) visually intuitive and understandable.
+- **Striking Aesthetics**: Employ a dark theme with vibrant, randomly generated neon colors for the Voronoi cells and a bright, contrasting color for the sweep line and beach line to make the math look striking.
+- **Performance**: Maintain a smooth 60fps animation even as the number of points and the complexity of the beach line increase, leveraging a dual-canvas optimization.
+- **Responsive**: Ensure the visualization works seamlessly across desktop and mobile sizes, recalculating properly if the window is resized.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen container with two overlapping `<canvas>` elements (`background-canvas` and `foreground-canvas`).
+- **CSS Styling**: A dark theme, utilizing absolute positioning to perfectly overlap the canvases.
+- **JavaScript Core**:
+    - **State Management**: Track an array of `seeds` (x, y, color) and the current `sweepY` position.
+    - **Mathematics**: Implement functions to calculate a parabola given a focus (seed) and directrix (sweep line). Implement a function to find the intersections of these parabolas to determine the valid segments forming the beach line.
+    - **Rendering Loop**: Use `requestAnimationFrame`.
+        - Increment `sweepY`.
+        - For every pixel across the width (or a sampled resolution for performance), calculate the highest parabola `y` value to determine the beach line.
+        - **Background Canvas**: Draw the vertical distance between the previous frame's beach line and the current frame's beach line, coloring it according to which seed "owns" that section of the beach line.
+        - **Foreground Canvas**: Clear the canvas. Draw the seed points, the straight horizontal sweep line, and the complex beach line curve.
+    - **Interaction**: Handle pointer events to add new points, generating a random bright color for each.
