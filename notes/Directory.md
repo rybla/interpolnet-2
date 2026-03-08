@@ -2177,3 +2177,29 @@ Features include:
 - An automatic flush system when a bin reaches maximum capacity to allow for continuous demonstration.
 
 The implementation relies on an explicit physics loop in JavaScript running with `requestAnimationFrame`. Balls are tracked with position, velocity, and state (falling vs. settled). Collision detection is performed radially against the mathematically positioned peg grid. When a ball passes the final row, it determines its destination bin and transitions to a settled stack state. A secondary loop calculates the combinations for the binomial distribution curve plotted over the bins.
+## Modular Arithmetic Clock [[demo](https://rybla.github.io/interpolnet-2/modular-arithmetic-clock)]
+
+An interactive physical clock face visualization that represents modular arithmetic, where addition and multiplication warp around the dial continuously.
+
+### Features
+- **Interactive Clock Face**: A circular dial displaying the numbers from 0 to N-1, where N is the modulus.
+- **Dynamic Modulus Control**: A slider allowing users to change the modulus (N) dynamically, seamlessly re-rendering the clock face.
+- **Addition & Multiplication Modes**: Users can select between addition and multiplication operations to see how they behave in modular arithmetic.
+- **Visual Operations**:
+  - For addition `(a + b) mod N`: An animated arc traces from 0 to `a`, and then from `a` to the result, wrapping around the clock face if necessary.
+  - For multiplication `(a * b) mod N`: Multiple arcs trace the repeated addition of `a`, `b` times, looping around the dial to arrive at the final modulo result.
+- **Interactive Input**: Users can select the operands `a` and `b` via input fields or sliders.
+- **Continuous Warping Animation**: Smooth, satisfying animations that emphasize the "wrap-around" nature of modular arithmetic.
+
+### Design Goals
+- **Intuitive Understanding**: Demystify modular arithmetic (often called "clock math") by directly using its most common real-world analogy.
+- **Engaging Aesthetics**: A retro-futuristic, neon-infused color scheme (e.g., deep dark blue background with bright cyan, magenta, and yellow accents) to make the math visually striking.
+- **Responsiveness**: Ensure the clock and controls scale perfectly for both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML Structure**: A two-panel responsive layout with a control panel on one side (inputs, sliders, operation toggles) and a large `<canvas>` on the other for the clock face.
+- **CSS Styling**: Apply the neon color palette, with glowing effects for active numbers and paths. Implement flexbox/grid for a responsive design.
+- **JavaScript**:
+  - **State Management**: Track the modulus `N`, operands `a` and `b`, and the selected operation.
+  - **Rendering**: Use HTML5 Canvas to draw the clock face, placing numbers evenly around the circumference.
+  - **Animation Logic**: Calculate the paths for addition and multiplication. Use `requestAnimationFrame` to animate drawing the arcs and paths wrapping around the circle. Use easing functions for smooth motion.

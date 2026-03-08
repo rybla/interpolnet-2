@@ -1,0 +1,214 @@
+:root {
+  --bg-color: #0b0f19;
+  --panel-bg: rgba(20, 30, 50, 0.8);
+  --text-main: #e0e0e0;
+  --accent-cyan: #00ffcc;
+  --accent-magenta: #ff00ff;
+  --accent-yellow: #ffff00;
+  --grid-color: rgba(0, 255, 204, 0.1);
+  --border-color: rgba(0, 255, 204, 0.3);
+  --font-family: 'Courier New', Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  max-width: 1600px;
+  background: var(--bg-color);
+}
+
+.control-panel {
+  flex: 0 0 400px;
+  background-color: var(--panel-bg);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  border-right: 2px solid var(--accent-cyan);
+  box-shadow: 5px 0 15px rgba(0, 255, 204, 0.1);
+  overflow-y: auto;
+  z-index: 10;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.control-group label {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  display: flex;
+  justify-content: space-between;
+}
+
+.control-group label span {
+  font-weight: bold;
+}
+
+/* Range Sliders Styling */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  cursor: pointer;
+  margin-top: -8px;
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+#modulus-val { color: var(--accent-cyan); }
+#operand-a-val { color: var(--accent-magenta); }
+#operand-b-val { color: var(--accent-yellow); }
+
+
+.operation-toggle label {
+  margin-bottom: 5px;
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+button:hover {
+  background: rgba(0, 255, 204, 0.1);
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.3);
+}
+
+button.active {
+  background: rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  text-shadow: 0 0 5px var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+}
+
+.readout-panel {
+  margin-top: auto;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.equation {
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.val-a { color: var(--accent-magenta); text-shadow: 0 0 8px var(--accent-magenta); }
+.val-b { color: var(--accent-yellow); text-shadow: 0 0 8px var(--accent-yellow); }
+.val-res { color: var(--accent-cyan); text-shadow: 0 0 8px var(--accent-cyan); }
+#eq-op, .equation span:nth-child(4) { color: var(--text-main); }
+
+.mod-label {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.canvas-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 20px;
+}
+
+canvas {
+  /* Using standard block layout for canvas to handle its own scaling */
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .control-panel {
+    flex: none;
+    height: 45vh;
+    border-right: none;
+    border-bottom: 2px solid var(--accent-cyan);
+  }
+
+  .canvas-container {
+    height: 55vh;
+  }
+}
