@@ -2289,3 +2289,24 @@ An interactive 3D multivariable calculus visualization where a rolling ball natu
 - **Interaction Logic**:
     - Implement a raycaster to allow the user to grab and drag the ball across the surface.
     - Disable physics updates while the ball is being dragged, resuming once released.
+## Golden Spiral [[demo](https://rybla.github.io/interpolnet-2/golden-spiral)]
+
+An interactive visualization demonstrating how the Fibonacci sequence recursively divides a golden rectangle into smaller squares, perfectly tracing the path of a logarithmic spiral.
+
+### Features
+- **Golden Rectangle Recursion**: Visualizes a large starting golden rectangle that is iteratively divided into a square and a smaller golden rectangle.
+- **Logarithmic Spiral**: An animated spiral perfectly traces through the opposite corners of the drawn squares, illustrating the golden spiral.
+- **Continuous Drawing Animation**: The division of squares and the drawing of the spiral arcs are animated to visually demonstrate the construction process.
+
+### Design Goals
+- **Mathematical Clarity**: Clearly show the geometric connection between the Fibonacci sequence (squares) and the golden spiral.
+- **Aesthetic**: Use a beautiful, cohesive color scheme (e.g., a dark background with golden/yellow strokes for the spiral and squares).
+- **Responsive**: Ensure the canvas scales perfectly across different device sizes, centering the spiral within the view.
+
+### Implementation Plan
+- **HTML**: Include a single, full-screen `<canvas>` element.
+- **CSS**: Apply a dark background to the page, reset margins, and configure the canvas to fill the entire viewport.
+- **JavaScript (Canvas API)**:
+    - Compute the optimal starting dimensions of the golden rectangle based on the screen size.
+    - Implement a `requestAnimationFrame` loop to animate the drawing process.
+    - Recursively draw scaled-down squares and quarter-circle arcs, applying the necessary rotation and translation to correctly position them according to the Fibonacci spiral geometry.

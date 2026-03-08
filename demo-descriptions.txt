@@ -1,4 +1,3 @@
-Show the Fibonacci sequence recursively dividing a golden rectangle into smaller squares that perfectly trace the path of a logarithmic spiral.
 Create an interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
 Build an entropy calculator that visually compresses a string of text using a dynamically generated Huffman coding tree based on character frequency.
 Plot a dynamic slope field where users can drop virtual ink drops to trace the distinct solution curves of a given differential equation.
