@@ -2489,3 +2489,37 @@ This demo provides an interactive and educational look at how computer graphics 
 - **JavaScript (Math):** Implement functions to calculate the bounding box of the triangle, compute barycentric coordinates (alpha, beta, gamma) for a given point, and check if a point lies within the triangle.
 - **JavaScript (Rendering):** Use `requestAnimationFrame` for a main loop that incrementally checks pixels within the bounding box. If a pixel is inside the triangle, color it using barycentric interpolation of the vertex colors.
 - **JavaScript (Interaction):** Add pointer event listeners to allow dragging of vertices (triggering a reset of the rasterization) and hook up control buttons to manage the animation loop.
+  - Setup a Three.js scene, camera, renderer, and lights.
+  - Create the coordinate axes and a grid helper.
+  - Render vectors $u$ and $v$ as arrows (`ArrowHelper` or custom meshes).
+  - Use `DragControls` or a custom raycaster implementation to allow dragging the endpoints of $u$ and $v$.
+  - Dynamically calculate the cross product vector and update its corresponding arrow in the scene.
+  - Draw the parallelogram defined by $u$ and $v$ using a custom `BufferGeometry` and update it dynamically.
+
+## Galton Board Binomial Coefficients [[demo](https://rybla.github.io/interpolnet-2/galton-board-binomial)]
+
+A physics simulation of a Galton board (also known as a quincunx or bean machine), which demonstrates the Central Limit Theorem and visually calculates binomial coefficients. Users can drop balls from the top, watching them bounce randomly left or right at each peg, eventually settling into bins at the bottom to form a normal distribution.
+
+### Features
+- **Interactive Physics Engine**: A custom physics simulation that handles rigid body collisions between falling balls and static pegs.
+- **Dynamic Binomial Coefficients**: As balls settle into bins, the bins visually fill up. The bins display both the expected binomial coefficient for that position and the actual count of balls.
+- **Adjustable Parameters**: Users can change the number of peg rows, the bounce properties (restitution), and the spawn rate of the balls.
+- **Visualization Modes**:
+  - **Distribution Overlay**: A theoretical normal distribution curve is overlaid on the bins, scaling dynamically as more balls are dropped.
+  - **Path Tracing**: An option to leave a faint trail behind each ball to visualize its unique path through the maze.
+- **Counters and Stats**: Real-time display of total balls dropped, current balls in motion, and the error margin between the simulated distribution and the theoretical binomial distribution.
+
+### Design Goals
+- **Educational Intuition**: Make the connection between individual random events (a ball bouncing left or right) and macroscopic predictable patterns (the normal distribution) visceral and obvious.
+- **Performance**: Capable of simulating hundreds of balls simultaneously at 60fps using optimized 2D physics.
+- **Aesthetics**: A clean, perhaps slightly "wooden" or "brass" skeuomorphic design, or alternatively, a modern dark theme with bright neon balls, consistent with Interpolnet 2's unique style.
+- **Responsive Layout**: The board scales to fit both desktop and mobile screens, ensuring the physics still work correctly regardless of the canvas size.
+
+### Implementation Plan
+- **HTML Structure**: A main `<canvas>` element for the board and a control panel for parameters and statistics.
+- **CSS Styling**: Responsive flexbox layout, with distinct colors for the UI elements and the canvas border.
+- **JavaScript Core**:
+    - **Physics Engine**: Implement simple circle-circle (ball-peg) and circle-line (ball-wall/floor) collision detection and resolution.
+    - **Galton Logic**: Generate the triangular grid of pegs and the bins at the bottom based on the number of rows.
+    - **Rendering Loop**: Use `requestAnimationFrame` to update positions, resolve collisions, and draw the pegs, balls, bins, and distribution overlay.
+    - **Math Utilities**: Functions to calculate binomial coefficients ($\binom{n}{k}$) and the normal distribution curve.
