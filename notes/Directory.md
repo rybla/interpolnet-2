@@ -2162,3 +2162,18 @@ An interactive 3D coordinate system to show how adjusting two vectors dynamicall
   - Use `DragControls` or a custom raycaster implementation to allow dragging the endpoints of $u$ and $v$.
   - Dynamically calculate the cross product vector and update its corresponding arrow in the scene.
   - Draw the parallelogram defined by $u$ and $v$ using a custom `BufferGeometry` and update it dynamically.
+
+## Galton Board Visualizer [[demo](https://rybla.github.io/interpolnet-2/galton-board-visualizer)]
+
+This demo visually calculates binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution. As a ball falls through each row of pegs, it has a 50% chance of bouncing left or right. The resulting distribution of balls in the collection bins perfectly mirrors the theoretical binomial distribution for $n$ trials (where $n$ is the number of peg rows), which in turn approximates the Gaussian normal distribution curve.
+
+Features include:
+- An interactive HTML5 Canvas displaying the peg maze, falling balls, and collection bins.
+- Dynamic control over the number of peg rows (1 to 20), instantly re-configuring the board and resetting the simulation.
+- A "Simulation Speed" slider to control the rate at which balls are dropped and fall.
+- A continuous overlaid line graph representing the theoretical perfect binomial distribution, scaling as balls fill the bins.
+- A responsive layout that centers the board and scales pegs based on available screen space and row count.
+- Balls that stack realistically within their respective bins using simple rigid-body physics for visual flair.
+- An automatic flush system when a bin reaches maximum capacity to allow for continuous demonstration.
+
+The implementation relies on an explicit physics loop in JavaScript running with `requestAnimationFrame`. Balls are tracked with position, velocity, and state (falling vs. settled). Collision detection is performed radially against the mathematically positioned peg grid. When a ball passes the final row, it determines its destination bin and transitions to a settled stack state. A secondary loop calculates the combinations for the binomial distribution curve plotted over the bins.
