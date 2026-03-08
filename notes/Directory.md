@@ -2310,3 +2310,27 @@ An interactive visualization demonstrating how the Fibonacci sequence recursivel
     - Compute the optimal starting dimensions of the golden rectangle based on the screen size.
     - Implement a `requestAnimationFrame` loop to animate the drawing process.
     - Recursively draw scaled-down squares and quarter-circle arcs, applying the necessary rotation and translation to correctly position them according to the Fibonacci spiral geometry.
+## Galton Board Skew [[demo](https://rybla.github.io/interpolnet-2/galton-board-skew)]
+
+An interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
+
+### Features
+- **Adjustable Skew Probability**: A dynamic slider allows users to change the probability $p$ that a ball bounces right at each peg. By default $p = 0.5$ yielding a normal distribution, but skewing it demonstrates the Poisson approximation of the binomial distribution.
+- **Continuous Simulation Loop**: Balls continuously drop from the top, bouncing against a grid of pegs, building a live histogram in the bins below.
+- **Live Updates**: Changing the probability dynamically updates the trajectory of falling balls immediately without stopping the simulation.
+- **Dynamic Bins**: Bins automatically expand and highlight when balls enter, and visually decay to clearly show the distribution accumulating over time.
+
+### Design Goals
+- **Educational Intuition**: Provide a visceral, real-time visualization of statistical concepts (Binomial, Normal, and Poisson distributions) using an engaging physical analogy.
+- **Aesthetics**: Employ a clean, dark "neon" color scheme with bright, glowing balls and pegs for a modern look.
+- **Responsive & Mobile Friendly**: Ensure the visualization canvas automatically resizes and positions correctly across any screen.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen container with a single `<canvas>` element for the simulation, and an overlaid translucent `<div>` control panel for the skew slider.
+- **CSS Styling**: A dark theme, absolute positioning for the overlay, customized slider styles with hover states.
+- **JavaScript Core**:
+    - **State Management**: Track falling `balls` array, a static grid of `pegs`, and `bins` counting the landed balls.
+    - **Mathematics**: Calculate the physical position of pegs in an equilateral triangle grid. Update ball velocities and positions with gravity.
+    - **Collision Logic**: When a ball intersects a peg radius, resolve the collision and impart a horizontal bounce dictated by the skewed probability $p$.
+    - **Rendering Loop**: Use `requestAnimationFrame` to draw the dark background, pegs, balls, and the resulting histogram bars at the bottom.
+    - **Interaction**: Pointer events to capture slider changes and update the $p$ value in the simulation state in real time.
