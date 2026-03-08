@@ -2334,3 +2334,34 @@ An interactive Galton board where users can skew the peg probabilities to watch 
     - **Collision Logic**: When a ball intersects a peg radius, resolve the collision and impart a horizontal bounce dictated by the skewed probability $p$.
     - **Rendering Loop**: Use `requestAnimationFrame` to draw the dark background, pegs, balls, and the resulting histogram bars at the bottom.
     - **Interaction**: Pointer events to capture slider changes and update the $p$ value in the simulation state in real time.
+## Huffman Entropy Calculator [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-calculator)]
+
+An entropy calculator that visually compresses a string of text using a dynamically generated Huffman coding tree based on character frequency.
+
+### Features
+- **Real-Time Analysis**: As the user types into a text input field, the application instantly calculates character frequencies, probabilities, and the Shannon entropy of the text.
+- **Dynamic Huffman Tree**: A visual representation of the Huffman coding tree is generated and updated in real-time.
+- **Compression Metrics**: Displays the original size (in bits, assuming 8 bits/char), the compressed size (in bits, using the generated Huffman codes), and the resulting compression ratio.
+- **Animated Tree Construction**: Smooth transitions when nodes are added, merged, or repositioned within the tree to help visualize the algorithm's bottom-up building process.
+- **Interactive Code Table**: A dynamic table showing each character, its frequency, and its assigned variable-length binary Huffman code.
+- **Node Highlighting**: Hovering over a character in the table or text input highlights the corresponding path from the root to the leaf node in the visual tree.
+
+### Design Goals
+- **Educational Value**: Demystify the concept of data compression and entropy by providing a tangible, interactive visualization of one of the most fundamental algorithms.
+- **Clarity and Aesthetics**: Use a clean, modern interface with a distinct color palette (e.g., deep background with bright accent colors for nodes and edges) to make the tree structure easily readable.
+- **Responsiveness**: Ensure the tree layout algorithm can handle varying text lengths and adapt to different screen sizes, gracefully scaling or allowing panning/zooming if the tree becomes too large.
+
+### Implementation Plan
+- **HTML Structure**: A layout featuring a text input area, a statistics/metrics panel, a character code table, and a large central canvas or SVG area for the tree visualization.
+- **Data Structures (JavaScript)**:
+    - Implement a `MinHeap` or priority queue to efficiently build the Huffman tree.
+    - Implement a `HuffmanNode` class to represent internal nodes and leaves.
+- **Algorithms**:
+    - **Frequency Counter**: Parse the input string to count character occurrences.
+    - **Tree Builder**: The standard Huffman algorithm: create leaf nodes, repeatedly extract the two minimum frequency nodes, and merge them under a new parent node until one root remains.
+    - **Code Generator**: Traverse the tree from root to leaves, assigning '0' for left branches and '1' for right branches, to determine the binary code for each character.
+    - **Entropy Calculation**: Implement the Shannon entropy formula: $H(X) = - \sum p_i \log_2(p_i)$.
+- **Visualization Engine**:
+    - Use HTML5 Canvas or SVG (SVG might be easier for handling interactions and CSS transitions on nodes).
+    - Implement a tree layout algorithm (like Reingold-Tilford) to calculate the $(x, y)$ coordinates for each node to ensure a clean, non-overlapping display.
+    - Animate node movements using CSS transitions or a `requestAnimationFrame` loop.
