@@ -2136,3 +2136,29 @@ A massive, interactive web-based implementation of Conway's Game of Life utilizi
     - **Display Shader**: A fragment shader that maps the current texture to the screen, applying panning and zooming transformations based on user input.
     - **Tool Logic**: Implement `texSubImage2D` to allow writing specific pixel patterns (stamps) directly into the Current State texture based on mouse clicks and the selected tool.
     - **Game Loop**: A `requestAnimationFrame` loop that runs the simulation shader (when playing) and then runs the display shader to render the result.
+## Cross Product Visualizer [[demo](https://rybla.github.io/interpolnet-2/cross-product-visualizer)]
+
+An interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
+
+### Features
+- **3D Coordinate System**: A central 3D space with X, Y, and Z axes.
+- **Interactive Vectors**: Users can click and drag two initial vectors ($u$ and $v$) around the 3D space to change their direction and magnitude.
+- **Real-time Cross Product Visualization**: A third vector ($u \times v$) is automatically calculated and displayed in real-time, pointing in the orthogonal direction according to the right-hand rule.
+- **Parallelogram Area**: A semi-transparent parallelogram is drawn between the two initial vectors, and its area is dynamically calculated. The length of the cross product vector perfectly corresponds to this area.
+- **Dynamic Readouts**: A UI panel showing the current components of the vectors and the calculated cross product, as well as the area.
+
+### Design Goals
+- **Intuitive Understanding**: Make the abstract concept of a cross product geometric and intuitive by physically linking the area of the parallelogram to the magnitude of the resulting orthogonal vector.
+- **Engaging Aesthetics**: Use a dark, blueprint or neon aesthetic (e.g., dark background with bright cyan, magenta, and yellow vectors) to make the math look striking.
+- **Responsive Interactions**: Ensure the visualizer works seamlessly on both desktop and mobile devices, utilizing touch events for dragging points.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` with an absolutely positioned UI panel overlay for the controls and readouts.
+- **CSS Styling**: A dark theme background, custom-styled UI overlay, and responsive flexbox/grid layout.
+- **JavaScript (Three.js)**:
+  - Setup a Three.js scene, camera, renderer, and lights.
+  - Create the coordinate axes and a grid helper.
+  - Render vectors $u$ and $v$ as arrows (`ArrowHelper` or custom meshes).
+  - Use `DragControls` or a custom raycaster implementation to allow dragging the endpoints of $u$ and $v$.
+  - Dynamically calculate the cross product vector and update its corresponding arrow in the scene.
+  - Draw the parallelogram defined by $u$ and $v$ using a custom `BufferGeometry` and update it dynamically.
