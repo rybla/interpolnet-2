@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Perlin Noise Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="canvas-container">
+        <canvas id="noise-canvas"></canvas>
+        <canvas id="overlay-canvas"></canvas>
+      </div>
+
+      <div id="control-panel" class="panel">
+        <h1>Perlin Noise</h1>
+        <div class="control-group">
+          <label for="resolution-slider">Grid Resolution: <span id="resolution-value">100</span></label>
+          <input type="range" id="resolution-slider" min="20" max="200" step="10" value="100">
+        </div>
+
+        <div class="control-group">
+          <label>Interpolation Method</label>
+          <div class="radio-group">
+            <label><input type="radio" name="interpolation" value="linear"> Linear</label>
+            <label><input type="radio" name="interpolation" value="smoothstep" checked> Smoothstep</label>
+            <label><input type="radio" name="interpolation" value="smootherstep"> Smootherstep</label>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="toggle-label">
+            <input type="checkbox" id="show-grid" checked> Show Grid & Vectors
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="animate-z" checked> Animate Z-Axis (Time)
+          </label>
+        </div>
+      </div>
+
+      <div id="probe-panel" class="panel hidden">
+        <h3>Cell Data</h3>
+        <div class="probe-data">
+          <div class="data-row"><span>Position (Grid):</span> <span id="probe-pos"></span></div>
+          <div class="data-row"><span>Cell Local (u, v):</span> <span id="probe-local"></span></div>
+          <div class="data-row"><span>Interpolation w(u, v):</span> <span id="probe-weight"></span></div>
+          <div class="vectors-grid">
+            <div class="vector-card tl">
+              <div class="card-title">Top Left</div>
+              <div>Grad: <span id="grad-tl"></span></div>
+              <div>Dist: <span id="dist-tl"></span></div>
+              <div>Dot: <span id="dot-tl" class="highlight-cyan"></span></div>
+            </div>
+            <div class="vector-card tr">
+              <div class="card-title">Top Right</div>
+              <div>Grad: <span id="grad-tr"></span></div>
+              <div>Dist: <span id="dist-tr"></span></div>
+              <div>Dot: <span id="dot-tr" class="highlight-cyan"></span></div>
+            </div>
+            <div class="vector-card bl">
+              <div class="card-title">Bottom Left</div>
+              <div>Grad: <span id="grad-bl"></span></div>
+              <div>Dist: <span id="dist-bl"></span></div>
+              <div>Dot: <span id="dot-bl" class="highlight-cyan"></span></div>
+            </div>
+            <div class="vector-card br">
+              <div class="card-title">Bottom Right</div>
+              <div>Grad: <span id="grad-br"></span></div>
+              <div>Dist: <span id="dist-br"></span></div>
+              <div>Dot: <span id="dot-br" class="highlight-cyan"></span></div>
+            </div>
+          </div>
+          <div class="data-row final-result"><span>Final Noise Value:</span> <span id="probe-final" class="highlight-yellow"></span></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
