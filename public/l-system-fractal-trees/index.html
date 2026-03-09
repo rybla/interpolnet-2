@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | L-System Fractal Trees</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="control-panel">
+        <h1>L-System Explorer</h1>
+
+        <div class="control-group">
+          <label for="preset-select">Preset:</label>
+          <select id="preset-select">
+            <option value="fractal-plant">Fractal Plant</option>
+            <option value="sierpinski-triangle">Sierpinski Triangle</option>
+            <option value="dragon-curve">Dragon Curve</option>
+            <option value="koch-curve">Koch Curve</option>
+            <option value="binary-tree">Binary Tree</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="axiom-input">Axiom:</label>
+          <input type="text" id="axiom-input" value="X">
+        </div>
+
+        <div class="control-group">
+          <div class="rules-header">
+            <label>Rules:</label>
+            <button id="add-rule-btn" class="icon-btn" aria-label="Add Rule">+</button>
+          </div>
+          <div id="rules-container">
+            <!-- Rules will be dynamically added here -->
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="iterations-slider">Iterations: <span id="iterations-value">6</span></label>
+          <input type="range" id="iterations-slider" min="1" max="10" value="6">
+        </div>
+
+        <div class="control-group">
+          <label for="angle-slider">Angle (degrees): <span id="angle-value">25</span></label>
+          <input type="range" id="angle-slider" min="0" max="360" value="25" step="0.5">
+        </div>
+
+        <div class="control-group">
+          <label for="length-slider">Starting Length: <span id="length-value">100</span></label>
+          <input type="range" id="length-slider" min="1" max="500" value="100">
+        </div>
+
+        <div class="control-group">
+          <label for="scale-slider">Length Scale Factor: <span id="scale-value">0.5</span></label>
+          <input type="range" id="scale-slider" min="0.1" max="1.5" value="0.5" step="0.05">
+        </div>
+
+        <div class="control-group legend">
+          <h3>Turtle Commands</h3>
+          <ul>
+            <li><code>F</code>: Draw forward</li>
+            <li><code>f</code>: Move forward without drawing</li>
+            <li><code>+</code>: Turn right</li>
+            <li><code>-</code>: Turn left</li>
+            <li><code>[</code>: Save state</li>
+            <li><code>]</code>: Restore state</li>
+            <li><code>X, Y, etc.</code>: Variables (ignored by turtle)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="canvas-container">
+        <canvas id="tree-canvas"></canvas>
+      </div>
+    </div>
+  </body>
+</html>

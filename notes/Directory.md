@@ -2485,3 +2485,31 @@ An interactive WebGL simulation of the Gray-Scott reaction-diffusion model where
     - Attach standard pointer events (`pointerdown`, `pointermove`, `pointerup`) to the canvas.
     - When the pointer is active, pass its normalized coordinates to the simulation shader as uniform variables.
     - The simulation shader will add a "splat" of chemical concentration at those coordinates, simulating the act of painting food.
+## L-System Fractal Trees [[demo](https://rybla.github.io/interpolnet-2/l-system-fractal-trees)]
+
+An interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
+
+### Features
+- **Grammar Editor**: Users can define their own L-system grammar by specifying the axiom and multiple production rules. The interface allows adding, editing, and removing rules dynamically.
+- **Real-Time Expansion**: As the user modifies the grammar or changes the number of iterations, the axiom is instantly expanded into the final string representation, which is then parsed to draw the tree.
+- **Turtle Graphics Renderer**: A fast HTML5 Canvas renderer that interprets the expanded string as turtle commands:
+  - `F`: Draw forward
+  - `+`: Turn right by a specified angle
+  - `-`: Turn left by a specified angle
+  - `[`: Push current state (position and angle) to the stack
+  - `]`: Pop state from the stack
+- **Parameter Controls**: Sliders to adjust the drawing angle, line length, length scaling factor per iteration, and line thickness.
+- **Preset Library**: A dropdown menu with classic L-system examples (e.g., Fractal Plant, Dragon Curve, Sierpinski Triangle) to quickly load and explore interesting fractals.
+
+### Design Goals
+- **Educational Exploration**: Provide an immediate, visual connection between abstract string rewriting rules and complex geometric patterns.
+- **Interactive Feedback**: Ensure that any change in the ruleset or parameters instantly updates the rendering, encouraging experimentation.
+- **Aesthetics**: A clean, nature-inspired or "blueprint" theme with distinct colors for the tree structure and a contrasting background to make the fractals pop. Smooth transitions when switching presets or adjusting parameters.
+
+### Implementation Plan
+- **HTML Structure**: A responsive split layout with a control panel on one side (containing text inputs for axiom/rules, range sliders for parameters, and a preset selector) and a large `<canvas>` on the other for rendering.
+- **CSS Styling**: Apply a distinct color palette with active animations for the inputs and buttons. Use CSS Grid or Flexbox to manage the layout cleanly across different screen sizes.
+- **L-System Logic (JavaScript)**:
+  - Implement a string expansion engine that takes an axiom, a set of rules (e.g., `F -> FF+[+F-F-F]-[-F+F+F]`), and an iteration count, and recursively generates the final instruction string.
+  - Implement a turtle graphics engine that interprets the final string and uses the Canvas 2D API to draw lines, managing a stack for branching structures.
+- **Interactivity**: Attach `input` and `change` event listeners to all controls. Whenever a value changes, re-evaluate the string expansion and re-render the canvas. Use `requestAnimationFrame` if animation (like drawing the tree step-by-step) is implemented.
