@@ -2485,3 +2485,25 @@ An interactive WebGL simulation of the Gray-Scott reaction-diffusion model where
     - Attach standard pointer events (`pointerdown`, `pointermove`, `pointerup`) to the canvas.
     - When the pointer is active, pass its normalized coordinates to the simulation shader as uniform variables.
     - The simulation shader will add a "splat" of chemical concentration at those coordinates, simulating the act of painting food.
+## L-System Fractal Trees [[demo](https://rybla.github.io/interpolnet-2/l-system-fractal-trees)]
+
+An interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees. This demo allows users to dynamically build complex organic shapes through simple, recursive string replacement rules.
+
+### Features
+- **Interactive Grammar Editor**: Input fields for an initial Axiom and a dynamic list of replacement rules (character mapping to replacement string).
+- **Instant Rendering**: As the user types or modifies the rules, the L-system string is expanded and instantly rendered onto a canvas.
+- **Branching Fractals**: The expanded string is interpreted to generate intricate, branching fractal tree structures.
+- **Visual Feedback**: The interface provides immediate visual feedback, allowing for rapid experimentation and discovery of new fractal patterns.
+
+### Design Goals
+- **Educational Exploration**: To provide a hands-on, visual way to understand Lindermayer systems and how simple recursive rules can lead to complex, nature-like structures.
+- **Responsive & Modern**: A clean, dark-themed UI that focuses the user's attention on the colorful fractal drawing, ensuring the layout works seamlessly on both desktop and mobile devices.
+- **Fluid Interactivity**: Ensure the recursive string expansion and canvas rendering are optimized for real-time updates as the user edits the grammar.
+
+### Implementation Plan
+- **HTML Structure**: A responsive split layout with a control panel on one side (or stacked on mobile) containing the Axiom input and dynamic rule inputs, and a main `<canvas>` area on the other.
+- **CSS Styling**: A dark background with neon accents for the UI elements and the fractal drawing itself to make it pop. Passive and active animations will enhance the interactive elements.
+- **JavaScript Logic**:
+    - **L-System Engine**: A string rewriting algorithm that takes the Axiom and applies the Rules.
+    - **Canvas Renderer**: An interpreter that reads the expanded string character by character, dynamically mapping them to canvas drawing operations to create branches and structures.
+    - **Event Listeners**: Attach listeners to the input fields to trigger the L-System expansion and canvas redraw on every change.
