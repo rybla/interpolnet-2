@@ -2365,3 +2365,27 @@ An entropy calculator that visually compresses a string of text using a dynamica
     - Use HTML5 Canvas or SVG (SVG might be easier for handling interactions and CSS transitions on nodes).
     - Implement a tree layout algorithm (like Reingold-Tilford) to calculate the $(x, y)$ coordinates for each node to ensure a clean, non-overlapping display.
     - Animate node movements using CSS transitions or a `requestAnimationFrame` loop.
+## Dynamic Slope Field [[demo](https://rybla.github.io/interpolnet-2/dynamic-slope-field)]
+
+An interactive mathematical visualization tool where users can explore differential equations by interacting with a real-time, dynamic slope field.
+
+### Features
+- **Dynamic Slope Field Grid**: Displays a background grid of slope lines, calculated in real-time based on a user-provided differential equation ($dy/dx = f(x, y)$). The field uses color mapping to indicate the magnitude (steepness) of the slope at each point.
+- **Interactive "Ink" Dropping**: Users can click or tap anywhere on the canvas to drop virtual "ink" particles. These particles are then animated over time, tracing the specific solution curves (integral curves) through the slope field originating from those initial coordinate drops.
+- **Real-Time Equation Parsing**: A floating control panel provides a text input for the user to type in their own equations (e.g., `Math.sin(x) * y`, `-x/y`, `x - y`). As the user types, the background slope field instantly re-renders to reflect the new differential equation.
+- **Continuous Simulation Loop**: The ink drops leave a persistent or slowly fading trail as they are pushed across the canvas by the calculated slopes using a numerical method solver (like Euler's or Runge-Kutta).
+- **Responsive Canvas**: The slope field and particle coordinate system automatically adjust to window resizing, ensuring a consistent visual experience on both mobile and desktop screens.
+
+### Design Goals
+- **Educational Sandbox**: Provide a highly intuitive, tactile way for students and enthusiasts to understand the relationship between a differential equation, its slope field, and the family of specific solution curves. By physically "dropping" points, the abstract concept of initial value problems becomes concrete.
+- **Striking Visuals**: Utilize a dark, scientific theme with glowing, neon accents. The background field should be subtle but clear, while the active ink trails should be bright and distinct (e.g., cyan, magenta, and bright yellow), creating a beautiful flow-art effect over time.
+- **Fluid Performance**: Leverage `requestAnimationFrame` and optimized canvas rendering to ensure that evaluating the equation at hundreds of grid points and animating dozens of particles simultaneously runs at a smooth 60 frames per second.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen `<canvas>` element for the rendering and an absolutely positioned, translucent floating control panel containing the equation input text field.
+- **Math Evaluation Engine**: A custom or restricted evaluation function that safely parses the user's string input into a callable JavaScript function `f(x, y)`, making `Math` object methods available (like `sin`, `cos`, `exp`).
+- **Rendering Loop (Canvas API)**:
+    - **Grid Calculation**: Compute the slope $dy/dx$ at evenly spaced grid points across the visible canvas coordinates. Draw short line segments indicating the angle of the slope. Map the slope magnitude to a color gradient for visual depth.
+    - **Particle System**: Maintain an array of active ink particles (position `(x, y)` and color).
+    - **Animation**: On each frame, iterate through particles. Use a numerical method (e.g., Euler's: $x_{new} = x + \Delta x$, $y_{new} = y + f(x,y)\Delta x$, suitably scaled to screen time/pixels) to update their positions. Draw the new segments of their trails.
+- **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`) on the canvas to instantiate new particles at the mapped coordinate space. Listen to input events on the text field to trigger a full re-evaluation and redraw of the background grid.
