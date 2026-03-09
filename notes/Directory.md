@@ -2389,3 +2389,28 @@ An interactive mathematical visualization tool where users can explore different
     - **Particle System**: Maintain an array of active ink particles (position `(x, y)` and color).
     - **Animation**: On each frame, iterate through particles. Use a numerical method (e.g., Euler's: $x_{new} = x + \Delta x$, $y_{new} = y + f(x,y)\Delta x$, suitably scaled to screen time/pixels) to update their positions. Draw the new segments of their trails.
 - **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`) on the canvas to instantiate new particles at the mapped coordinate space. Listen to input events on the text field to trigger a full re-evaluation and redraw of the background grid.
+## Penrose Tiling Editor [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-editor)]
+
+An interactive HTML5 canvas visualization of a gapless Penrose tiling generated via recursive subdivision (deflation) of kites and darts. Users can drag vertices to symmetrically deform the adjacent tiles while maintaining mathematically sound 10-fold symmetry and a completely gapless interlocking pattern.
+
+### Features
+- **Generative Tiling**: Starts with a simple seed shape (like a sun or star pattern) and uses the deflation algorithm to recursively subdivide kites and darts into a larger, more complex Penrose pattern.
+- **Interactive Deformations**: Users can click and drag the vertices of the tiles. When a vertex is moved, the adjacent connected tiles and their symmetrical counterparts are dynamically deformed.
+- **Symmetry Preservation**: The deformation logic strictly respects the inherent 10-fold symmetry of the Penrose tiling. If one side of a kite/dart is distorted, its matching side and all translationally or rotationally identical counterparts adjust in real time to prevent gaps or overlaps.
+- **Visual Feedback**: Distinct, bright colors differentiate kites from darts, with passive highlight animations indicating draggable vertices and active, satisfying transitions as the user warps the geometry.
+- **Responsive Canvas**: The tiling pattern scales and centers automatically to fill the available screen space, providing a seamless experience on both desktop and mobile devices.
+
+### Design Goals
+- **Mathematical Exploration**: Transform a rigid, famous mathematical concept (aperiodic tiling) into a flexible, playful, and creative toy.
+- **Seamless Interactivity**: Ensure that despite massive continuous geometric transformations, the tiling remains visibly gapless and mathematically valid.
+- **Aesthetic**: Use a distinct, unique, and consistent color scheme (e.g., vibrant jewel tones against a dark background) with clear typography to maintain the Interpolnet 2 visual language.
+
+### Implementation Plan
+- **HTML**: Implement a full-screen `<canvas>` element to act as the drawing surface.
+- **CSS**: Define a dark mode color palette, reset default margins, and ensure the canvas handles touch actions correctly without scrolling the page.
+- **JavaScript (Canvas API)**:
+    - **Data Structures**: Define objects for Kites and Darts, storing their vertices (in 2D space) and hierarchical relationships.
+    - **Deflation Engine**: Implement the standard deflation rules to subdivide a seed pattern into a full tiling covering the screen.
+    - **Rendering Loop**: Use `requestAnimationFrame` to constantly draw the shapes. Use `ctx.fill()` and `ctx.stroke()` with the defined color palette.
+    - **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`). Implement hit detection to find the closest vertex to the cursor.
+    - **Deformation Algorithm**: When a vertex is dragged, calculate the delta vector. Apply this delta to the selected vertex, and then programmatically find all related vertices (due to shared edges and global 10-fold symmetry rules) and apply corresponding symmetric transformations to keep the tiling gapless.
