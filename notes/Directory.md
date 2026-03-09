@@ -2507,3 +2507,26 @@ An interactive grammar ruleset editor where specific axiomatic string expansions
     - **L-System Engine**: A string rewriting algorithm that takes the Axiom and applies the Rules.
     - **Canvas Renderer**: An interpreter that reads the expanded string character by character, dynamically mapping them to canvas drawing operations to create branches and structures.
     - **Event Listeners**: Attach listeners to the input fields to trigger the L-System expansion and canvas redraw on every change.
+## Perlin Noise Visualizer [[demo](https://rybla.github.io/interpolnet-2/perlin-noise-visualizer)]
+
+An interactive visualization that demystifies the generation of 2D Perlin noise. It reveals the underlying grid of random gradient vectors and demonstrates how dot products and smoothed bilinear interpolation combine to create organic, continuous noise patterns.
+
+### Features
+- **Gradient Grid Overlay**: A visible grid displaying the pseudorandom 2D gradient vectors at each lattice point.
+- **Interactive Probe**: Users can move their cursor over the noise map. A floating panel shows the exact calculation for the hovered point, displaying its position within the grid cell, the vectors from the four corners, the dot products, and the interpolation weights.
+- **Interpolation Toggle**: A control to switch between linear interpolation (creating harsh artifacts) and smoothstep/smootherstep interpolation (producing the organic look characteristic of Perlin noise).
+- **Z-Axis Slicing (Time)**: An automatic animation that moves through the 3rd dimension (Z-axis or Time), showing how the 2D slice smoothly morphs as the 3D gradient space is traversed.
+- **Resolution Control**: A slider to adjust the grid size (frequency) of the noise, showing the difference between low-frequency and high-frequency noise.
+
+### Design Goals
+- **Educational Breakdown**: Break down the seemingly complex Perlin noise algorithm into understandable visual steps: grid, gradients, dot products, and interpolation.
+- **Visual Clarity**: Use a clean, tech-inspired aesthetic (e.g., dark background with bright, contrasting colors like cyan for vectors and a grayscale heatmap for the noise values) to distinguish the mathematical components from the resulting noise.
+- **Real-Time Feedback**: Ensure the noise map and the interactive probe update instantly as the user tweaks parameters or moves their mouse.
+
+### Implementation Plan
+- **HTML Structure**: A main `<canvas>` for rendering the noise map and vectors, alongside a floating UI control panel and an interactive probe overlay.
+- **Styling (CSS)**: Apply a cohesive dark theme with neon accents. Use absolute positioning for the probe and control panel.
+- **JavaScript Core**:
+    - **Perlin Algorithm**: Implement a classic 2D/3D Perlin noise algorithm.
+    - **Rendering**: Use the HTML5 Canvas API. To ensure performance, write the noise values directly to an `ImageData` buffer for the background heatmap. Draw the gradient vectors using `ctx.lineTo` and `ctx.stroke`.
+    - **Interaction**: Listen to `mousemove` events to update the interactive probe's position and readout, calculating the specific dot products and weights for the current pixel on the fly.
