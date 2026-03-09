@@ -2556,3 +2556,29 @@ An interactive visualization of a Boids algorithm, simulating the flocking behav
   - Apply the user-controlled weights to the separation, alignment, and cohesion vectors before updating a boid's acceleration and velocity.
   - Render the boids as simple shapes (e.g., triangles pointing in the direction of velocity) on the canvas.
   - Hook up event listeners to the sliders to update the weight variables used in the simulation loop.
+## Barycentric Coordinate Rasterization [[demo](https://rybla.github.io/interpolnet-2/barycentric-coordinate-rasterization)]
+
+An interactive visualizer demonstrating the barycentric coordinate rasterization process by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients.
+
+### Features
+- **Massive 2D Triangle**: A large triangle drawn on an HTML5 canvas with distinct colors assigned to its three vertices (Red, Green, Blue).
+- **Pixel-by-Pixel Rasterization**: An animation that scans the bounding box of the triangle pixel-by-pixel, visualizing the core of a software rasterizer.
+- **Barycentric Interpolation**: For each pixel inside the triangle, the algorithm computes its barycentric coordinates (alpha, beta, gamma) and smoothly interpolates the vertex colors to produce beautiful gradients.
+- **Dynamic Calculation Readout**: A side or floating panel displaying real-time coordinates, weight values, and the resulting interpolated color for the current pixel being processed.
+- **Smooth Animation Loop**: Employs `requestAnimationFrame` for a responsive, visible step-through of the rasterization process.
+
+### Design Goals
+- **Educational Value**: Demystify the foundational algorithm of 3D graphics rendering (triangle rasterization and interpolation).
+- **Aesthetics**: Utilize a dark, high-contrast theme where the vibrant interpolated neon colors pop against a deep background, consistent with the Interpolnet 2 visual style.
+- **Clear Visualization**: Make the abstract mathematical calculation of barycentric weights (areas of sub-triangles) visible through the smooth color gradients it produces.
+
+### Implementation Plan
+- **HTML Structure**: A responsive container wrapping the main `<canvas>` and a UI overlay for real-time calculation readouts.
+- **CSS Styling**: Apply a dark, modern design with flexbox/grid for mobile-friendly layout and glowing accents for text readouts.
+- **JavaScript Core**:
+    - Define three fixed vertices for the triangle.
+    - Compute the bounding box of the triangle.
+    - Implement a rendering loop that iterates over the pixels within the bounding box over time.
+    - Implement an `isInside` function utilizing barycentric coordinates to determine if a pixel is within the triangle and calculate the weights.
+    - Map the calculated weights to RGB color values and draw the filled pixel.
+    - Update the UI readout dynamically as each pixel is rasterized.
