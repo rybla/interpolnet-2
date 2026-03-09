@@ -2530,3 +2530,29 @@ An interactive visualization that demystifies the generation of 2D Perlin noise.
     - **Perlin Algorithm**: Implement a classic 2D/3D Perlin noise algorithm.
     - **Rendering**: Use the HTML5 Canvas API. To ensure performance, write the noise values directly to an `ImageData` buffer for the background heatmap. Draw the gradient vectors using `ctx.lineTo` and `ctx.stroke`.
     - **Interaction**: Listen to `mousemove` events to update the interactive probe's position and readout, calculating the specific dot products and weights for the current pixel on the fly.
+## Boids Flocking Simulation [[demo](https://rybla.github.io/interpolnet-2/boids-flocking)]
+
+An interactive visualization of a Boids algorithm, simulating the flocking behavior of birds. Users can dynamically tweak the weights of separation, alignment, and cohesion to observe how these simple local rules generate complex, emergent flocking patterns.
+
+### Features
+- **Real-Time Flocking Simulation**: A canvas displaying numerous "boids" (bird-oid objects) that move autonomously.
+- **Interactive Weight Controls**: Sliders to adjust the exact weights of the three core boid behaviors in real-time:
+  - **Separation**: Steer to avoid crowding local flockmates.
+  - **Alignment**: Steer towards the average heading of local flockmates.
+  - **Cohesion**: Steer to move toward the average position of local flockmates.
+- **Visual Feedback**: The simulation reacts instantly to slider changes, allowing users to see the flock transition between chaotic swarms, orderly flocks, and tight clusters.
+- **Mobile-Friendly Layout**: A responsive design with controls that stack neatly on smaller screens while keeping the simulation visible.
+
+### Design Goals
+- **Educational Exploration**: Provide a hands-on way to understand how complex, synchronized group behaviors emerge from simple individual rules without central coordination.
+- **Aesthetics**: Use a clean, dark theme with bright, distinct colors for the boids (e.g., neon blue or green against a dark background) to make the movement paths clear and engaging.
+- **Fluid Performance**: Ensure the simulation runs smoothly by efficiently calculating distances and velocities for all boids.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` for the simulation and a floating or stacked control panel `div` containing range inputs (sliders) for the three weights.
+- **CSS Styling**: A dark color scheme. Sliders styled with passive/active hover and focus animations to indicate interactivity. Flexbox/Grid for responsive placement of the control panel.
+- **JavaScript Core**:
+  - Implement the Boids algorithm. Each boid updates its velocity based on its neighbors within a certain radius.
+  - Apply the user-controlled weights to the separation, alignment, and cohesion vectors before updating a boid's acceleration and velocity.
+  - Render the boids as simple shapes (e.g., triangles pointing in the direction of velocity) on the canvas.
+  - Hook up event listeners to the sliders to update the weight variables used in the simulation loop.

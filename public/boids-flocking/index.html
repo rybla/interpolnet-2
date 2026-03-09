@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Boids Flocking Simulation</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <main class="demo-container">
+      <canvas id="boidsCanvas"></canvas>
+      <div class="control-panel">
+        <h1 class="panel-title">Boids Flocking</h1>
+        <p class="panel-description">Tweak the weights to see how the flocking behavior changes.</p>
+
+        <div class="control-group">
+          <label for="separationSlider">
+            Separation <span id="separationValue" class="value-display">1.5</span>
+          </label>
+          <input type="range" id="separationSlider" min="0" max="5" step="0.1" value="1.5" />
+          <p class="control-hint">Avoid crowding local flockmates</p>
+        </div>
+
+        <div class="control-group">
+          <label for="alignmentSlider">
+            Alignment <span id="alignmentValue" class="value-display">1.0</span>
+          </label>
+          <input type="range" id="alignmentSlider" min="0" max="5" step="0.1" value="1.0" />
+          <p class="control-hint">Steer towards average heading</p>
+        </div>
+
+        <div class="control-group">
+          <label for="cohesionSlider">
+            Cohesion <span id="cohesionValue" class="value-display">1.0</span>
+          </label>
+          <input type="range" id="cohesionSlider" min="0" max="5" step="0.1" value="1.0" />
+          <p class="control-hint">Move toward average position</p>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
