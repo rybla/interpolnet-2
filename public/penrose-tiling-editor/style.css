@@ -1,0 +1,27 @@
+:root {
+  --kite-color: #ff7e67;
+  --dart-color: #00d2d3;
+  --bg-color: #1e272e;
+  --line-color: #ffffff;
+  --vertex-color: #feca57;
+  --vertex-hover-color: #ffffff;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-color);
+}
+
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+.draggable {
+  cursor: pointer;
+}

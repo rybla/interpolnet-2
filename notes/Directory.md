@@ -2389,3 +2389,37 @@ An interactive mathematical visualization tool where users can explore different
     - **Particle System**: Maintain an array of active ink particles (position `(x, y)` and color).
     - **Animation**: On each frame, iterate through particles. Use a numerical method (e.g., Euler's: $x_{new} = x + \Delta x$, $y_{new} = y + f(x,y)\Delta x$, suitably scaled to screen time/pixels) to update their positions. Draw the new segments of their trails.
 - **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`) on the canvas to instantiate new particles at the mapped coordinate space. Listen to input events on the text field to trigger a full re-evaluation and redraw of the background grid.
+## Penrose Tiling Editor [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-editor)]
+
+## Penrose Tiling Editor [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-editor)]
+
+An interactive HTML5 canvas visualization of a gapless Penrose tiling generated via recursive subdivision (deflation) of kites and darts. Users can drag vertices to symmetrically deform the shapes while maintaining mathematically sound 10-fold symmetry.
+
+### Features
+- **Penrose P2 Tiling**: A continuous surface filled with kites and darts without gaps or periodic repetition.
+- **Recursive Subdivision (Deflation)**: The initial configuration (e.g., a "sun" pattern) is subdivided into smaller tiles using the golden ratio rule, generating the intricate fractal-like Penrose tiling structure.
+- **Symmetric Deformation**:
+    - **Interactive Vertices**: Users can click and drag specific points (vertices) on the tiling.
+    - **10-Fold Symmetry**: As one vertex is moved, its corresponding vertices under the 10-fold rotational symmetry group ($D_{10}$) are simultaneously and proportionally displaced.
+    - **Gapless Preservation**: The deformation mathematically recalculates the adjacent edges and shapes to ensure the tiling remains continuous, without overlaps or gaps.
+- **Responsive Canvas**: The canvas scales to fill the viewport and adapts to mobile screens, ensuring the tiling remains centered.
+
+### Design Goals
+- **Mathematical Elegance**: Visualize the relationship between Penrose tilings, the golden ratio, and 10-fold symmetry in an intuitive, physical manner.
+- **Mesmerizing Interactivity**: The synchronized deformation of dozens of tiles creates a kaleidoscopic, satisfying visual effect.
+- **Aesthetics**: Employ a cohesive, distinct color palette for the kites and darts (e.g., bright orange/coral and teal) against a dark background to make the geometric shapes pop.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element with a dark theme background (`#1e272e`), and custom CSS variables for tile colors (`#ff7e67`, `#00d2d3`).
+- **Mathematical Engine (JavaScript)**:
+    - **Tile Definitions**: `Kite` and `Dart` classes defining their vertices relative to an origin.
+    - **Deflation Algorithm**: A recursive function to substitute a kite or dart with smaller kites and darts based on the substitution rules involving the golden ratio $\phi = \frac{1+\sqrt{5}}{2}$.
+- **Rendering Loop**:
+    - Use HTML5 Canvas API within a `requestAnimationFrame` loop.
+    - Draw filled paths for each tile and stroke their edges.
+    - Render interactable vertices as small, glowing circles.
+- **Interaction Logic**:
+    - Pointer events (`pointerdown`, `pointermove`, `pointerup`) to handle dragging.
+    - When a vertex is dragged, calculate the displacement vector.
+    - Identify the symmetry group of the vertex relative to the origin.
+    - Apply the rotated displacement vectors (by $k \times 36^\circ$) to all corresponding symmetric vertices to update the entire tiling's geometry in real time.
