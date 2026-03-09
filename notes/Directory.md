@@ -426,8 +426,6 @@ An interactive regular expression engine that visualizes the conversion of a reg
 - **Regex Parser**:
     - Implement a parser (recursive descent or shunting-yard) to convert the regex string into a structured AST (e.g., `Concat`, `Union`, `Star`, `Char`).
     - Handle operator precedence and grouping.
-- **NFA Compiler**:
-    - Implement Thomson's Construction to convert the AST into an NFA graph structure.
     - NFA Structure: States, Transitions (input char or epsilon).
 - **NFA Simulation**:
     - Implement the NFA matching algorithm:
@@ -2423,3 +2421,40 @@ An interactive HTML5 canvas visualization of a gapless Penrose tiling generated 
     - When a vertex is dragged, calculate the displacement vector.
     - Identify the symmetry group of the vertex relative to the origin.
     - Apply the rotated displacement vectors (by $k \times 36^\circ$) to all corresponding symmetric vertices to update the entire tiling's geometry in real time.
+
+## Raytracer Pixel Stepper [[demo](https://rybla.github.io/interpolnet-2/raytracer-pixel-stepper)]
+
+
+An interactive 2D visualization that demystifies the core algorithm of raytracing by stepping through the calculation of a single pixel's color. The demo explicitly shows the primary ray cast from the camera, the mathematical intersection point on a spherical obstacle, the calculation of the surface normal, and the casting of a shadow ray to check for light source occlusion.
+
+### Features
+- **2D Sandbox View**: A top-down, 2D representation of a 3D scene.
+  - **Camera (Eye)**: The origin point of the ray.
+  - **Image Plane (Pixel)**: The virtual screen the ray passes through.
+  - **Obstacle (Sphere)**: A 2D circle representing a 3D sphere in the scene.
+  - **Light Source**: A point light that illuminates the scene.
+- **Interactive Elements**: Users can click and drag the light source and the obstacle sphere to set up custom scenarios.
+- **Step-by-Step Execution**: A "Step" button controls the pace of the visualization, advancing through the distinct phases of the raytracing algorithm:
+  1.  **Primary Ray**: A ray is cast from the camera, through the pixel, out into the scene.
+  2.  **Intersection**: The mathematical point of intersection (if any) with the obstacle is calculated and highlighted.
+  3.  **Normal Calculation**: The surface normal vector at the intersection point is drawn.
+  4.  **Shadow Ray**: A secondary ray is cast from the intersection point towards the light source.
+  5.  **Shading**: If the shadow ray reaches the light unoccluded, the pixel is shaded based on Lambertian reflectance (the dot product of the normal and the light vector). If occluded (or if the primary ray misses), the pixel is shaded black or background color.
+- **Real-time Log**: A text readout panel that dynamically updates with the current step's mathematical explanation and calculations (e.g., intersection coordinates, normal vector components, shading intensity).
+
+### Design Goals
+- **Educational Breakdown**: Take a complex, continuous process (rendering an entire image) and isolate it down to its fundamental atomic unit (a single ray path) to make it comprehensible.
+- **Visual Causality**: Directly link the geometric relationships (angles, distances) to the final output color of the pixel.
+- **Aesthetics**: A "blueprint" or "tactical screen" visual style. Dark background with glowing, high-contrast vectors (e.g., cyan for primary ray, magenta for normal, yellow for shadow ray).
+
+### Implementation Plan
+- **HTML Layout**: A split-screen or responsive flexbox layout. A large main `<canvas>` element for the 2D sandbox, and a side panel containing the "Step" button and the readout log.
+- **JavaScript Core**:
+  - Implement basic 2D vector math functions (add, subtract, dot product, normalize).
+  - Implement a mathematically sound line-circle intersection algorithm to find the exact hit point.
+  - Create a State Machine (`IDLE`, `SHOOTING_RAY`, `CALCULATING_NORMAL`, `SHOOTING_SHADOW`, `SHADING`) to govern the progression of the animation.
+- **Canvas Rendering**:
+  - Use `requestAnimationFrame` to smoothly draw the expanding rays and vectors during transitions.
+  - Redraw static scene elements (camera, grid, obstacles) on each frame.
+- **Interaction**:
+  - Attach pointer events to the canvas to allow dragging the light and the obstacle, ensuring they update the scene state and reset the step-through process.

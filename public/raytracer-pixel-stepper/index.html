@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Raytracer Pixel Stepper</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <a href="../" class="back-link">← Interpolnet 2</a>
+      <h1>Raytracer Pixel Stepper</h1>
+    </header>
+    <main class="demo-container">
+      <div class="canvas-container">
+        <canvas id="render-canvas"></canvas>
+      </div>
+      <aside class="control-panel">
+        <div class="panel-section">
+          <h2>Controls</h2>
+          <p class="instruction">Drag the light source and sphere to create different scenarios. Click Step to advance the raytracer calculation.</p>
+          <div class="button-group">
+            <button id="step-btn" class="primary-btn">Step</button>
+          </div>
+        </div>
+        <div class="panel-section">
+          <h2>Mathematical Log</h2>
+          <div id="readout-log" class="readout-log">
+            <div class="log-entry system">Ready. Awaiting Primary Ray.</div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <h2>Pixel Result</h2>
+          <div class="pixel-result-container">
+            <div id="final-pixel" class="final-pixel"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>
