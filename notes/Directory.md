@@ -3665,3 +3665,39 @@ A procedural map generator that dynamically combines overlapping octaves of simp
     - **Biome Mapping**: A function that takes `(elevation, moisture)` as input and returns a specific biome color.
     - **River Generation**: An algorithm that randomly drops "springs" on land and follows the gradient downwards, marking cells as rivers until they hit the ocean or get stuck.
     - **Canvas Rendering**: Use `ImageData` to efficiently draw the generated pixels to the canvas.
+- **HTML Structure**: A layout featuring a text input area, a statistics/metrics panel, a character code table, and a large central canvas or SVG area for the tree visualization.
+- **Data Structures (JavaScript)**:
+    - Implement a `MinHeap` or priority queue to efficiently build the Huffman tree.
+    - Implement a `HuffmanNode` class to represent internal nodes and leaves.
+- **Algorithms**:
+    - **Frequency Counter**: Parse the input string to count character occurrences.
+    - **Tree Builder**: The standard Huffman algorithm: create leaf nodes, repeatedly extract the two minimum frequency nodes, and merge them under a new parent node until one root remains.
+    - **Code Generator**: Traverse the tree from root to leaves, assigning '0' for left branches and '1' for right branches, to determine the binary code for each character.
+    - **Entropy Calculation**: Implement the Shannon entropy formula: $H(X) = - \sum p_i \log_2(p_i)$.
+- **Visualization Engine**:
+    - Use HTML5 Canvas or SVG (SVG might be easier for handling interactions and CSS transitions on nodes).
+    - Implement a tree layout algorithm (like Reingold-Tilford) to calculate the $(x, y)$ coordinates for each node to ensure a clean, non-overlapping display.
+    - Animate node movements using CSS transitions or a `requestAnimationFrame` loop.
+## Slope Field Ink Trace [[demo](https://rybla.github.io/interpolnet-2/slope-field-ink-trace)]
+
+An interactive educational tool that visualizes a dynamic slope field (direction field) for a given differential equation. Users can interact with the field by "dropping" virtual ink on the canvas, which then flows along the field lines, tracing out the distinct solution curves (integral curves) corresponding to their chosen initial conditions.
+
+### Features
+- **Dynamic Slope Field:** The canvas renders a grid of short line segments representing the slope $dy/dx$ of a differential equation (e.g., $dy/dx = \sin(x) + \cos(y)$) at various points $(x, y)$. The field is responsive to panning and zooming.
+- **Interactive Ink Drops:** Users click or touch anywhere on the canvas to place a "drop of ink".
+- **Solution Curve Tracing:** Once dropped, the ink particle is integrated in both forward and backward "time" along the slope field using a numerical method (like Runge-Kutta 4th order or Euler's method), leaving a permanent, smooth trail that visualizes the specific solution curve through that initial value.
+- **Multiple Drops:** Users can place multiple drops to see how different initial conditions lead to different solution curves, revealing the overall family of solutions and behavior of the differential equation (e.g., asymptotes, attractors, repellors).
+
+### Design Goals
+- **Educational Intuition:** Make the abstract concept of differential equations and initial value problems concrete and highly interactive. Provide a visceral sense of "flow" along the vector field.
+- **Engaging Aesthetics:** Employ a dark, "blueprint" or "fluid dynamics" aesthetic. The slope field segments are subtle (e.g., dim cyan or grid-like), while the ink traces are bright, glowing, and high-contrast (e.g., neon magenta, yellow, green) to stand out clearly.
+- **Fluid Performance:** Use HTML5 Canvas to ensure smooth rendering of the field and the integration of multiple ink traces simultaneously at 60fps.
+
+### Implementation Plan
+- **HTML Structure:** A full-screen container with a single `<canvas>` element for the rendering. A minimalistic UI overlay might display the current differential equation (though a hardcoded interesting equation is sufficient for the core demo).
+- **CSS Styling:** A dark theme background, resetting margins, and absolute positioning for the canvas to fill the viewport.
+- **JavaScript Core:**
+    - **Mathematics:** Define a function `f(x, y)` representing the differential equation $dy/dx$.
+    - **Rendering Loop:** Use `requestAnimationFrame` to draw the slope field grid (calculating the angle at each grid point and drawing a short line segment) and update the positions of any active "ink drops".
+    - **Integration:** For each active ink drop, use a numerical integration step (e.g., RK4) to calculate its next position based on the slope at its current position. Draw a line segment from the old position to the new position.
+    - **Interaction:** Add pointer event listeners (`pointerdown`, `pointermove` for dragging) to capture user input and spawn new ink drop objects at the cursor's $(x, y)$ coordinates, mapped from screen space to the mathematical coordinate system.
