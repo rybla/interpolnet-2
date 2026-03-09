@@ -2458,3 +2458,30 @@ An interactive 2D visualization that demystifies the core algorithm of raytracin
   - Redraw static scene elements (camera, grid, obstacles) on each frame.
 - **Interaction**:
   - Attach pointer events to the canvas to allow dragging the light and the obstacle, ensuring they update the scene state and reset the step-through process.
+
+## WebGL Gray-Scott Turing Patterns [[demo](https://rybla.github.io/interpolnet-2/webgl-gray-scott-turing-patterns)]
+
+An interactive WebGL simulation of the Gray-Scott reaction-diffusion model where users can directly "paint" chemical food onto the canvas to spawn and grow organic, mesmerizing Turing patterns. The simulation is entirely computed and rendered on the GPU for high-performance visual feedback.
+
+### Features
+- **GPU-Accelerated Simulation**: Utilizes WebGL fragment shaders and a ping-pong framebuffer architecture to calculate the reaction-diffusion equations across millions of pixels simultaneously at 60 FPS.
+- **Interactive "Painting"**: Users can click/tap and drag across the canvas to actively inject chemical food into the simulation. This dynamic interaction seeds new pattern growth exactly where the user strokes.
+- **Organic Turing Patterns**: The continuous simulation mathematically models the reaction between two hypothetical chemicals, naturally forming complex, self-organizing structures such as spots, stripes, and labyrinthine waves.
+- **Responsive WebGL Canvas**: The simulation scales dynamically to perfectly fit any window size or mobile screen, mapping touch and mouse coordinates accurately to the texture space.
+
+### Design Goals
+- **Tactile Exploration**: Transform a complex mathematical model into an intuitive, tactile toy. The user should feel like they are cultivating a digital petri dish.
+- **Mesmerizing Visuals**: Employ a striking and distinct color mapping—for example, a dark, deep violet or black background with vibrant, neon cyan or bright green patterns. The high contrast will make the organic growth visually pop.
+- **Performance First**: Since the simulation requires multiple calculation passes per frame to remain stable and visually interesting, offloading the work entirely to the GPU is critical to ensure a fluid experience on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A straightforward, full-screen `<canvas>` element for the WebGL context, accompanied by a subtle, animated text overlay providing instructions (e.g., "Paint chemical food...").
+- **WebGL Architecture (JavaScript)**:
+    - **Initialization**: Set up a WebGL context, ensuring support for necessary floating-point textures to store the chemical concentrations accurately.
+    - **Ping-Pong Framebuffers**: Create two framebuffer objects (FBOs) with attached textures. The simulation will read from one texture, perform the reaction-diffusion calculations, and write the results to the other texture, swapping their roles each frame.
+    - **Simulation Shader**: A fragment shader that implements the core Gray-Scott math, utilizing uniforms for the grid size, time step, and the user's interactive "brush" position.
+    - **Render Shader**: A separate fragment shader responsible for taking the current concentration data from the active FBO and mapping it to the vibrant color palette for final display on the screen.
+- **Interaction Loop**:
+    - Attach standard pointer events (`pointerdown`, `pointermove`, `pointerup`) to the canvas.
+    - When the pointer is active, pass its normalized coordinates to the simulation shader as uniform variables.
+    - The simulation shader will add a "splat" of chemical concentration at those coordinates, simulating the act of painting food.
