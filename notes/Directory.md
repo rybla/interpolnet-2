@@ -2745,3 +2745,29 @@ An interactive geometric visualization that allows users to place points randoml
     - **Mathematics**: Implement a robust algorithm for Delaunay Triangulation (such as Bowyer-Watson).
     - **Rendering Loop**: Use `requestAnimationFrame` to animate expanding circles and update the mesh as the circles expand.
     - **Interaction**: Handle pointer events to allow users to add new points, generating beautiful visual effects for each.
+
+## 3D UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/uv-map-painter)]
+
+An interactive 3D modeling visualization that demystifies texture mapping by showing a 3D cube unrolled into a flat UV map layout, allowing users to paint on the 2D surface and see the brush strokes wrap around the 3D object in real-time.
+
+### Features
+- **Split-Screen View**: A side-by-side layout presenting the 2D unwrapped UV map and the 3D rendered cube.
+- **Interactive Painting Canvas**: Users can click and drag on the 2D canvas to paint strokes. The canvas is laid out as a cross, representing the unfolded faces of the cube (Top, Bottom, Front, Back, Left, Right).
+- **Real-Time 3D Wrapping**: As the user paints on the 2D canvas, the 3D cube's texture instantly updates, wrapping the drawn strokes across the edges of the cube.
+- **Auto-Rotation**: The 3D cube gently rotates to show all sides, allowing the user to inspect how their 2D painting translates to the 3D surface.
+
+### Design Goals
+- **Educational Clarity**: Provide a concrete, hands-on demonstration of UV mapping, a concept that is fundamental to 3D graphics but often abstract to beginners.
+- **Immediate Feedback**: The instant translation from a 2D brush stroke to a 3D surface mapping creates a satisfying and magical interaction loop.
+- **Aesthetics**: Use a clean, dark theme with distinct, glowing neon colors for the paint and clear grid lines indicating the UV layout.
+
+### Implementation Plan
+- **HTML Structure**: A responsive flexbox container holding a standard HTML5 `<canvas>` for the 2D painting and a `<div>` container for the Three.js 3D rendering.
+- **2D Canvas Logic**:
+  - Set up a square canvas (e.g., 512x512) and draw a permanent grid/outline showing the 6 faces of the unfolded cube.
+  - Implement a simple drawing application using `pointerdown`, `pointermove`, and `pointerup` events to draw lines.
+- **3D Rendering (Three.js)**:
+  - Create a `BoxGeometry`. By default, Three.js maps the entire texture to each face. This must be modified by updating the `uv` attributes of the geometry to map specific rectangular regions of the 2D canvas to specific faces of the cube.
+  - Create a `CanvasTexture` using the 2D painting canvas as the source.
+  - Apply this texture to a `MeshBasicMaterial` (or `MeshStandardMaterial` with lighting).
+- **Synchronization**: In the `requestAnimationFrame` loop, rotate the cube and set `texture.needsUpdate = true` so Three.js knows to re-upload the 2D canvas data to the GPU.
