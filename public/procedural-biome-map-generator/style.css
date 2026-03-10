@@ -1,0 +1,48 @@
+:root {
+  --bg-color: #0b0f19;
+  --text-color: #e0e6ed;
+  --accent-color: #00ffcc;
+  --accent-hover: #00e0b3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+canvas:hover {
+  transform: scale(1.02);
+}
+
+canvas:active {
+  transform: scale(0.98);
+}
