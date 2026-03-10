@@ -2667,3 +2667,31 @@ An interactive map generator that combines overlapping octaves of simplex noise 
   - Create a lookup table or function to determine the biome color based on elevation and moisture thresholds.
 - **River Simulation**: Algorithm to pick random inland points, calculate the steepest downhill gradient, and trace a path until it reaches sea level, marking those pixels as rivers.
 - **Rendering Loop**: Use `ImageData` to manipulate pixels efficiently and draw the final biome colors and rivers onto the canvas context.
+## WebGL Particle Emitter [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-emitter)]
+
+An interactive WebGL-based particle system that visually demonstrates the effects of vector mathematics and simple physics. Users can construct math vectors for wind, gravity, and drag, which are independently applied to a massive amount of particles rendered in real-time.
+
+### Features
+- **GPU-Accelerated Particles**: Thousands of individual particles are updated and rendered directly via WebGL, allowing for a smooth 60fps experience even with high particle counts.
+- **Interactive Physics Vectors**:
+    - **Gravity Vector**: Users can adjust a 2D vector controlling the constant pull on all particles.
+    - **Wind Vector**: A directional force that pushes particles across the canvas.
+    - **Drag Coefficient**: A slider to increase or decrease the simulated air resistance, causing particles to slow down over time relative to their velocity.
+- **Visual Controls**: Interactive UI elements that allow dragging to set vector magnitude and direction.
+- **Real-Time Simulation**: Changes to gravity, wind, and drag immediately affect the simulation without restarting.
+- **Emission Dynamics**: A steady stream of particles is emitted from a central point, fading out as they age.
+
+### Design Goals
+- **Educational and Fun**: Demystify simple physics simulation (Euler integration) by providing an engaging visual sandbox.
+- **Performance**: Use WebGL to push the limits of particle counts in the browser, showing the power of typed arrays and shaders.
+- **Aesthetic Excellence**: Adopt a "neon synthwave" visual style—dark background with bright, glowing cyan, magenta, and yellow particles.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the WebGL rendering. A floating, semi-transparent UI control panel overlay containing the sliders and vector controls.
+- **CSS Styling**: A cohesive dark theme, using responsive flexbox for the controls so they look good on desktop and mobile.
+- **JavaScript Core**:
+    - **WebGL Context**: Initialize WebGL, compile vertex and fragment shaders.
+    - **State Management**: Use `Float32Array` buffers to store particle positions, velocities, colors, and lifetimes to ensure fast memory access and easy passing to WebGL buffers.
+    - **Physics Engine**: In the `requestAnimationFrame` loop, update particle positions based on $v_{new} = v_{old} + (gravity + wind - drag \times v_{old}) \times dt$ and $p_{new} = p_{old} + v_{new} \times dt$.
+    - **Rendering**: Upload the updated buffer data to the GPU and draw as `GL_POINTS`.
+    - **Interaction**: Handle pointer events on custom UI elements to update the physics variables dynamically.
