@@ -2721,3 +2721,27 @@ Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene
   - In the render loop, render the scene twice:
     - First to the left container using the main camera and standard materials (with shadow casting/receiving enabled).
     - Second to the right container using the light's camera. To visualize the depth map, override the scene material temporarily with a `MeshDepthMaterial` during this render pass.
+
+## Delaunay Expanding Circles [[demo](https://rybla.github.io/interpolnet-2/delaunay-expanding-circles)]
+
+An interactive geometric visualization that allows users to place points randomly on a canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
+
+### Features
+- **Interactive Point Placement**: Clicking anywhere on the canvas dynamically adds a new seed point.
+- **Expanding Circles**: Each placed point spawns a circle that continuously expands outwards.
+- **Delaunay Triangulation**: The circles intersect, and as they do, the underlying Delaunay triangle mesh is continuously calculated and rendered.
+- **Dynamic Connection Animation**: The mesh edges connecting the points are drawn.
+
+### Design Goals
+- **Algorithm Visualization**: Visually demonstrate how a Delaunay triangulation connects a set of points in a plane.
+- **Engaging Aesthetics**: Employ a dark theme with vibrant, randomly generated neon colors for the expanding circles and a bright, contrasting color for the mesh to make the math look striking.
+- **Responsiveness**: Ensure the visualization works seamlessly across desktop and mobile sizes, recalculating properly if the window is resized.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the visualization.
+- **CSS Styling**: A dark theme, styling the canvas to fill the viewport completely.
+- **JavaScript Core**:
+    - **State Management**: Track an array of `points` (x, y) and their expanding circle properties.
+    - **Mathematics**: Implement a robust algorithm for Delaunay Triangulation (such as Bowyer-Watson).
+    - **Rendering Loop**: Use `requestAnimationFrame` to animate expanding circles and update the mesh as the circles expand.
+    - **Interaction**: Handle pointer events to allow users to add new points, generating beautiful visual effects for each.
