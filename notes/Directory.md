@@ -2641,3 +2641,29 @@ An interactive tool allowing users to compare various error-diffusion dithering 
   - Add specific matrices for Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke, and Stucki.
   - Apply the selected dithering algorithm to the image data.
   - Handle the slider's `input` event to dynamically composite the original image and the dithered image based on the slider's position, drawing the combined result to the visible canvas.
+## Procedural Biome Map Generator [[demo](https://rybla.github.io/interpolnet-2/procedural-biome-map-generator)]
+
+An interactive map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.
+
+### Features
+- **Dynamic Terrain Generation**: Utilizes 2D Simplex Noise with multiple overlapping octaves to create complex, natural-looking elevation maps.
+- **Moisture Mapping**: A secondary noise layer determines the moisture level across the terrain, influencing the final biome classification.
+- **Biome Classification**: Maps the combined (elevation, moisture) values to distinct biomes (e.g., deep ocean, shallow water, beach, plains, forest, jungle, desert, snow, and mountains).
+- **River Generation**: Simulates water flow by identifying high-elevation points and tracing downward paths to the ocean, carving out dynamic river systems.
+- **Real-Time Rendering**: The generated map is rendered pixel-by-pixel onto an HTML5 Canvas, providing immediate visual feedback of the procedural generation algorithms.
+- **Interactive Exploration**: The map generator operates continuously, allowing users to watch the terrain form or click to instantly generate a completely new random world seed.
+
+### Design Goals
+- **Algorithmic Transparency**: Visually demonstrate how simple mathematical functions (noise) can be layered and combined to produce complex, emergent geographic features.
+- **Aesthetic Consistency**: Use a distinct, unique, and consistent color scheme for the biomes, ensuring the generated maps are beautiful and readable.
+- **Responsiveness**: The canvas should automatically scale to fit the window, ensuring a full-screen, immersive experience on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen layout with a central `<canvas>` element. Apply a dark theme background with typography consistent with the Interpolnet 2 project.
+- **Noise Implementation (JavaScript)**: Embed a lightweight, standalone 2D Simplex Noise algorithm.
+- **Map Generation Logic**:
+  - Implement a `generateElevationMap` function using Fractional Brownian Motion (FBM) with multiple octaves of Simplex Noise.
+  - Implement a `generateMoistureMap` function using a different noise offset.
+  - Create a lookup table or function to determine the biome color based on elevation and moisture thresholds.
+- **River Simulation**: Algorithm to pick random inland points, calculate the steepest downhill gradient, and trace a path until it reaches sea level, marking those pixels as rivers.
+- **Rendering Loop**: Use `ImageData` to manipulate pixels efficiently and draw the final biome colors and rivers onto the canvas context.
