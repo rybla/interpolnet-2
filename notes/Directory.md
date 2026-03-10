@@ -2695,3 +2695,29 @@ An interactive WebGL-based particle system that visually demonstrates the effect
     - **Physics Engine**: In the `requestAnimationFrame` loop, update particle positions based on $v_{new} = v_{old} + (gravity + wind - drag \times v_{old}) \times dt$ and $p_{new} = p_{old} + v_{new} \times dt$.
     - **Rendering**: Upload the updated buffer data to the GPU and draw as `GL_POINTS`.
     - **Interaction**: Handle pointer events on custom UI elements to update the physics variables dynamically.
+## Shadow Mapping Deconstruction [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping-deconstruction)]
+
+Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
+
+### Features
+- **Split-Screen Visualization**: A side-by-side (or top-and-bottom on mobile) layout presenting two distinct views of the same 3D scene.
+- **Camera Perspective**: The primary view shows the scene as seen by the main camera, featuring objects casting and receiving shadows.
+- **Light Source Perspective**: The secondary view shows the scene exactly as seen from the perspective of the shadow-casting light source.
+- **Depth Map Rendering**: The secondary view renders the scene using a depth material, visually representing the shadow map (closer objects are darker/lighter, further objects fade). This reveals how the light "sees" depth.
+- **Dynamic Objects**: A scene consisting of several simple geometric objects (like a rotating torus, a sphere, and a ground plane) to clearly demonstrate shadow casting and receiving.
+
+### Design Goals
+- **Educational Demystification**: Provide a clear, intuitive visual explanation of how shadow mapping algorithms work in 3D graphics by exposing the hidden "light camera".
+- **Visual Correlation**: The split-screen design allows users to instantly connect the shadows seen in the main camera view with the depth information generated in the light's view.
+- **Clean Aesthetic**: Use a minimalist, high-contrast visual style to ensure the geometry and shadows are the clear focus.
+
+### Implementation Plan
+- **HTML Structure**: Set up a responsive flexbox container holding two distinct `div` elements, one for each view.
+- **CSS Styling**: Apply the Interpolnet 2 color scheme. Ensure the two views stack vertically on small screens and sit side-by-side on larger screens.
+- **JavaScript (Three.js)**:
+  - Initialize a single Three.js scene containing the objects (torus, sphere, plane).
+  - Create a `DirectionalLight` or `SpotLight` configured to cast shadows.
+  - Set up two cameras: the main `PerspectiveCamera` and a camera corresponding to the light source's position and orientation (often an `OrthographicCamera` for directional lights).
+  - In the render loop, render the scene twice:
+    - First to the left container using the main camera and standard materials (with shadow casting/receiving enabled).
+    - Second to the right container using the light's camera. To visualize the depth map, override the scene material temporarily with a `MeshDepthMaterial` during this render pass.
