@@ -2617,3 +2617,27 @@ An interactive 3D scalar field where users adjust an isosurface threshold slider
 - **UI & Controls**:
   - HTML/CSS overlay for the threshold slider, wireframe toggle, and grid visibility toggle.
   - Apply the Interpolnet 2 design system guidelines (distinct typography, responsive layout, CSS animations on UI elements).
+
+## Error Diffusion Dithering Visualizer [[demo](https://rybla.github.io/interpolnet-2/error-diffusion-dithering)]
+
+An interactive tool allowing users to compare various error-diffusion dithering algorithms side-by-side by dragging a slider across a high-resolution image to reveal its 1-bit pixelation.
+
+### Features
+- **Algorithm Selection**: Users can choose between multiple error-diffusion algorithms such as Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke, and Stucki.
+- **Interactive Slider**: A draggable slider overlays the image. One side displays the original high-resolution image, and the other displays the 1-bit dithered result, allowing for immediate visual comparison.
+- **High-Resolution Image Loading**: The demo uses a high-resolution built-in image to clearly demonstrate the subtle differences between error-diffusion patterns.
+
+### Design Goals
+- **Educational Comparison**: Provide an intuitive, interactive way to understand how different error-diffusion kernels affect visual perception and quantization artifacts.
+- **Performance**: The dithering calculations should be performed quickly enough to allow seamless switching of algorithms. The interactive slider should update smoothly without lag.
+- **Visual Clarity**: A clean, minimalist interface focusing entirely on the image and the comparison tool, with a dark theme to enhance image contrast.
+
+### Implementation Plan
+- **HTML Structure**: A main container holding the canvas for the image and the interactive slider element. A control panel for selecting the dithering algorithm.
+- **CSS Styling**: A simple, dark theme. CSS absolute positioning will be used to overlay the slider onto the canvas. The canvas rendering will handle the split view.
+- **JavaScript Engine**:
+  - Load the base high-resolution image and extract its pixel data via a canvas `ImageData` object.
+  - Implement a general error-diffusion function that accepts different weight matrices (kernels).
+  - Add specific matrices for Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke, and Stucki.
+  - Apply the selected dithering algorithm to the image data.
+  - Handle the slider's `input` event to dynamically composite the original image and the dithered image based on the slider's position, drawing the combined result to the visible canvas.

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error Diffusion Dithering Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Error Diffusion Dithering</h1>
+      <p>Compare various error-diffusion dithering algorithms by dragging the slider.</p>
+    </header>
+
+    <main>
+      <div class="controls">
+        <label for="algorithm-select">Algorithm:</label>
+        <select id="algorithm-select">
+          <option value="floyd-steinberg">Floyd-Steinberg</option>
+          <option value="atkinson">Atkinson</option>
+          <option value="jarvis-judice-ninke">Jarvis-Judice-Ninke</option>
+          <option value="stucki">Stucki</option>
+        </select>
+
+        <span class="loading-indicator" id="loading-indicator">Processing...</span>
+      </div>
+
+      <div class="visualizer-container" id="visualizer-container">
+        <!-- Canvas will be dynamically sized based on image aspect ratio -->
+        <canvas id="dither-canvas"></canvas>
+        <div class="slider-wrapper">
+          <input type="range" min="0" max="100" value="50" class="comparison-slider" id="comparison-slider">
+          <div class="slider-line" id="slider-line"></div>
+          <div class="slider-handle" id="slider-handle">
+            <div class="slider-arrows"></div>
+          </div>
+        </div>
+        <div class="labels">
+            <span class="label original-label">Original</span>
+            <span class="label dithered-label" id="dithered-label">Floyd-Steinberg</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
