@@ -2641,3 +2641,27 @@ An interactive tool allowing users to compare various error-diffusion dithering 
   - Add specific matrices for Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke, and Stucki.
   - Apply the selected dithering algorithm to the image data.
   - Handle the slider's `input` event to dynamically composite the original image and the dithered image based on the slider's position, drawing the combined result to the visible canvas.
+## Biome Map Generator [[demo](https://rybla.github.io/interpolnet-2/biome-map-generator)]
+
+A procedural map generator that dynamically combines overlapping octaves of simplex noise with a moisture map to generate diverse biomes, coastlines, and river systems.
+
+### Features
+- **Dynamic Terrain Generation**: Uses layered simplex noise to create a highly detailed and organic elevation map.
+- **Moisture Simulation**: Computes a separate moisture map, also using noise, which interacts with the elevation data.
+- **Biome Classification**: Assigns specific biomes (e.g., Desert, Grassland, Forest, Tundra, Snow) based on the intersection of elevation and moisture levels.
+- **Coastline Delineation**: Distinct rendering of coastlines where landmasses meet the ocean (sea level threshold).
+- **River Systems**: A procedural algorithm that spawns rivers at higher elevations and traces their steepest descent down to the sea level.
+
+### Design Goals
+- **Visual Clarity**: Present a distinct and easily recognizable map with clear color-coded biomes.
+- **Real-time Feedback**: The map is generated seamlessly and rendered instantly onto the canvas.
+- **Organic Feel**: The use of multiple octaves of noise ensures that the terrain looks natural, avoiding harsh, pixelated edges.
+
+### Implementation Plan
+- **HTML/CSS**: A clean, responsive container holding a full-screen or large `<canvas>` element for rendering the map, styled with a distinct, unique, and consistent color scheme.
+- **JavaScript Core**:
+    - **Simplex Noise Engine**: Implement a robust 2D Simplex noise function to serve as the foundation for the terrain.
+    - **Map Data Structures**: Create 2D arrays to hold elevation and moisture data for each pixel or cell.
+    - **Biome Mapping**: A function that takes `(elevation, moisture)` as input and returns a specific biome color.
+    - **River Generation**: An algorithm that randomly drops "springs" on land and follows the gradient downwards, marking cells as rivers until they hit the ocean or get stuck.
+    - **Canvas Rendering**: Use `ImageData` to efficiently draw the generated pixels to the canvas.
