@@ -4017,3 +4017,38 @@ An interactive WebGL-based physics sandbox where users construct the mathematics
   - Handle boundary conditions by respawning particles that exit the canvas area.
   - Update the WebGL position buffer with the newly computed positions and issue a draw call.
 - **UI Interactivity**: Attach event listeners to the range inputs to update the global `gravity`, `wind`, and `drag` variables used in the physics engine instantly.
+- **HTML Structure**: A full-screen `<canvas>` element for the WebGL rendering. A floating, semi-transparent UI control panel overlay containing the sliders and vector controls.
+- **CSS Styling**: A cohesive dark theme, using responsive flexbox for the controls so they look good on desktop and mobile.
+- **JavaScript Core**:
+    - **WebGL Context**: Initialize WebGL, compile vertex and fragment shaders.
+    - **State Management**: Use `Float32Array` buffers to store particle positions, velocities, colors, and lifetimes to ensure fast memory access and easy passing to WebGL buffers.
+    - **Physics Engine**: In the `requestAnimationFrame` loop, update particle positions based on $v_{new} = v_{old} + (gravity + wind - drag \times v_{old}) \times dt$ and $p_{new} = p_{old} + v_{new} \times dt$.
+    - **Rendering**: Upload the updated buffer data to the GPU and draw as `GL_POINTS`.
+    - **Interaction**: Handle pointer events on custom UI elements to update the physics variables dynamically.
+## 3D Shadow Mapping Split-Screen View [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping-split-screen)]
+
+An interactive 3D visualization that deconstructs the mechanics of shadow mapping by providing a side-by-side split-screen view. One side shows the final rendered scene from the main camera's perspective, while the other side visualizes the depth buffer as seen from the light source's perspective.
+
+### Features
+- **Split-Screen Viewport**: The browser window is divided into two distinct views:
+    - **Main Camera View**: Displays the scene with full lighting, materials, and cast shadows.
+    - **Light Camera (Depth) View**: Displays the scene precisely from the perspective of the directional light source. Instead of normal colors, objects are rendered using a depth material (grayscale) representing the shadow map.
+- **Interactive Scene Manipulation**: Users can use orbit controls to rotate and zoom the main camera, and separate controls (or UI sliders) to move the position of the light source.
+- **Real-Time Shadow Updates**: As the light source is moved, the depth map on the right side updates instantly, and the resulting shadows cast in the main view recalculate in real time.
+- **Dynamic Objects**: The scene includes a variety of 3D objects (e.g., a rotating cube, a floating torus, a central sphere) resting on a large flat plane to clearly demonstrate shadow casting and receiving.
+
+### Design Goals
+- **Educational Clarity**: Demystify the "black box" of 3D shadow mapping by explicitly showing the intermediate step (the depth texture) that makes it possible.
+- **Visual Causality**: Make it immediately obvious that the dark spots (shadows) in the main view correspond exactly to the areas hidden from the light's depth buffer.
+- **Aesthetic Quality**: Employ a clean, modern aesthetic. The depth view should use a striking grayscale mapping where closer objects are brighter, contrasting with a vibrant color palette in the main scene.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen container holding a single `<canvas>` element for the WebGL rendering, overlaid with a minimal UI panel for instructions or light controls.
+- **Styling (CSS)**: A dark theme for the UI. The split screen will be handled by Three.js rendering logic rather than HTML layout.
+- **JavaScript (Three.js)**:
+    - Set up a single Three.js scene containing the objects, a plane, a main perspective camera, and a directional light with a shadow camera.
+    - Enable shadow maps in the renderer (`renderer.shadowMap.enabled = true`).
+    - **Dual Viewports**: Use `renderer.setViewport` and `renderer.setScissor` to divide the canvas horizontally.
+    - **First Render Pass (Main View)**: Render the scene using the main camera.
+    - **Second Render Pass (Depth View)**: Render the scene again using the light's shadow camera. To visualize the depth map, temporarily swap the materials of all objects to a `MeshDepthMaterial` during this pass.
+    - Implement `OrbitControls` attached to the main camera, and perhaps a subtle automated animation for the objects to make the shadows dynamic.
