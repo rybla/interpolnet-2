@@ -1,4 +1,3 @@
-Design a WebGL particle emitter where users can visually construct the math for wind, gravity, and drag vectors applied to independent points.
 Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
 Let users place points randomly on a canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
 Show a 3D cube unrolled into a flat UV map layout allowing users to paint on the 2D surface and see the brush strokes wrap around the 3D object.

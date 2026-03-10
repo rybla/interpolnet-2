@@ -2667,3 +2667,32 @@ An interactive map generator that combines overlapping octaves of simplex noise 
   - Create a lookup table or function to determine the biome color based on elevation and moisture thresholds.
 - **River Simulation**: Algorithm to pick random inland points, calculate the steepest downhill gradient, and trace a path until it reaches sea level, marking those pixels as rivers.
 - **Rendering Loop**: Use `ImageData` to manipulate pixels efficiently and draw the final biome colors and rivers onto the canvas context.
+## WebGL Particle Vector Physics [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-vector-physics)]
+
+WebGL Particle Vector Physics [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-vector-physics)]
+
+An interactive WebGL-based physics sandbox where users construct the mathematics of motion by tweaking vector components in real time. It simulates thousands of independent particles acting under the influence of global forces.
+
+### Features
+- **GPU-Accelerated Rendering**: Thousands of particles are rendered simultaneously via WebGL to ensure fluid performance.
+- **Visual Vector Controls**: A comprehensive UI overlaid on the canvas allows users to independently adjust the X and Y components of Gravity and Wind, as well as the magnitude of Drag.
+- **Real-Time Physics Simulation**: Every particle updates its velocity and position every frame according to the classic kinematic equations, visually reflecting the current vector math.
+- **Dynamic Particle Lifecycle**: Particles spawn continuously, fly through the vector field, and reset when they drift out of bounds or lose all energy, maintaining a continuous flow.
+- **Distinct Neon Aesthetic**: Particles are rendered as bright neon points against a stark dark background, creating an engaging, energetic visual experience.
+
+### Design Goals
+- **Educational Mathematics**: Make the abstract concepts of vector addition and kinematics (velocity, acceleration, drag) intuitive by letting the user tweak the variables and immediately observe the results.
+- **High Performance**: Utilize WebGL to ensure the simulation handles massive particle counts smoothly across devices.
+- **Intuitive UI**: Provide clear, accessible sliders that map directly to the underlying physical forces.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen `<canvas>` dedicated to WebGL rendering, paired with a semi-transparent, floating HTML control panel for the vector sliders. The CSS uses a dark theme with neon-colored UI accents.
+- **WebGL Context & Shaders**:
+  - Implement a vertex shader that accepts particle positions and maps them to normalized device coordinates.
+  - Implement a simple fragment shader that outputs a solid neon color for each particle.
+- **Physics Engine (JavaScript)**:
+  - Maintain typed arrays (e.g., `Float32Array`) for particle positions and velocities.
+  - Establish a `requestAnimationFrame` loop that updates every particle. The core physics update per particle is: `velocity = (velocity + gravity + wind) * (1 - drag); position += velocity;`.
+  - Handle boundary conditions by respawning particles that exit the canvas area.
+  - Update the WebGL position buffer with the newly computed positions and issue a draw call.
+- **UI Interactivity**: Attach event listeners to the range inputs to update the global `gravity`, `wind`, and `drag` variables used in the physics engine instantly.

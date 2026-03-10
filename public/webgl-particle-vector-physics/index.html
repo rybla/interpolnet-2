@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | WebGL Particle Vector Physics</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <div id="ui-panel">
+      <h1>WebGL Particle Vector Physics</h1>
+      <p>Adjust vector components to construct the math of motion.</p>
+
+      <div class="control-group">
+        <label for="gravity-x">Gravity X</label>
+        <div class="slider-wrapper">
+          <input type="range" id="gravity-x" min="-1" max="1" step="0.01" value="0">
+          <span class="value" id="gravity-x-val">0.00</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="gravity-y">Gravity Y</label>
+        <div class="slider-wrapper">
+          <input type="range" id="gravity-y" min="-1" max="1" step="0.01" value="0.05">
+          <span class="value" id="gravity-y-val">0.05</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="wind-x">Wind X</label>
+        <div class="slider-wrapper">
+          <input type="range" id="wind-x" min="-1" max="1" step="0.01" value="0">
+          <span class="value" id="wind-x-val">0.00</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="wind-y">Wind Y</label>
+        <div class="slider-wrapper">
+          <input type="range" id="wind-y" min="-1" max="1" step="0.01" value="0">
+          <span class="value" id="wind-y-val">0.00</span>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="drag">Drag</label>
+        <div class="slider-wrapper">
+          <input type="range" id="drag" min="0" max="0.1" step="0.001" value="0.01">
+          <span class="value" id="drag-val">0.01</span>
+        </div>
+      </div>
+
+      <button id="reset-btn">Reset Particles</button>
+    </div>
+  </body>
+</html>
