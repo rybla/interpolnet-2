@@ -2771,3 +2771,27 @@ An interactive 3D modeling visualization that demystifies texture mapping by sho
   - Create a `CanvasTexture` using the 2D painting canvas as the source.
   - Apply this texture to a `MeshBasicMaterial` (or `MeshStandardMaterial` with lighting).
 - **Synchronization**: In the `requestAnimationFrame` loop, rotate the cube and set `texture.needsUpdate = true` so Three.js knows to re-upload the 2D canvas data to the GPU.
+
+## Inverse Kinematics Robotic Arm [[demo](https://rybla.github.io/interpolnet-2/inverse-kinematics-robotic-arm)]
+
+An interactive visualization of a multi-jointed robotic arm utilizing inverse kinematics, where users can drag the end effector and the algorithm calculates the joint angles in real time to reach the target.
+
+### Features
+- **Multi-Jointed Arm**: A visual representation of a robotic arm with multiple segments and joints rendered on an HTML5 canvas.
+- **Interactive End Effector**: Users can click and drag the target (end effector) around the canvas.
+- **Inverse Kinematics Algorithm**: The system dynamically calculates the required angles for each joint so that the end of the arm reaches the user-defined target position, utilizing the FABRIK (Forward And Backward Reaching Inverse Kinematics) or CCD (Cyclic Coordinate Descent) algorithm.
+- **Real-Time Rendering**: The arm smoothly updates its position and joint angles in real time as the target is dragged.
+
+### Design Goals
+- **Educational Visualization**: Demonstrate how inverse kinematics algorithms solve the complex problem of determining joint parameters to achieve a desired end-effector position.
+- **Engaging Interaction**: Provide a tactile, responsive experience where the user feels they are directly manipulating the robotic arm's goal.
+- **Aesthetic Excellence**: Use a clean, modern aesthetic with distinct colors for the segments, joints, and target to make the mechanics clear.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element.
+- **Styling**: A dark theme with distinct colors (e.g., glowing cyan for segments, magenta for joints).
+- **JavaScript Core**:
+    - **State Management**: Maintain an array of segments (length, angle) or joints (x, y coordinates).
+    - **Inverse Kinematics Logic**: Implement an iterative solver (like FABRIK) that runs every frame to adjust joint positions towards the target.
+    - **Rendering Loop**: Use `requestAnimationFrame` to draw the arm's segments and joints, and the target point.
+    - **Interaction**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to update the target position based on user input.
