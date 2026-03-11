@@ -2860,3 +2860,23 @@ A visualization that demonstrates how a 3D character's facial expression changes
 - **Renderer**: Implement custom 3D projection rendering to an HTML5 canvas element, without external 3D libraries.
 - **Mesh Data**: Hard-code the vertices and faces for a simple low-polygon base face mesh, and a target smile mesh which contains identically structured topology but with adjusted vertex positions (e.g., mouth corners raised and cheeks shifted).
 - **Logic**: A render loop reading the slider value (t). The final position of each vertex is calculated as: `(1 - t) * baseVertex + t * smileVertex`. The canvas is cleared and the interpolated mesh is projected and drawn every frame.
+
+## Cel Shading Visualizer [[demo](https://rybla.github.io/interpolnet-2/cel-shading-visualizer)]
+
+An interactive 3D visualization that demonstrates how cel shading (toon shading) works by mapping smooth lighting gradients to sharp color bands using an adjustable 1D step texture.
+
+### Features
+- **3D Model Viewer**: A central 3D model (e.g., a torus knot) that displays the lighting.
+- **Interactive 1D Gradient Map**: A visual representation of a 1D texture that users can adjust to change the number of color bands (steps).
+- **Real-Time Shading Updates**: The 3D model instantly reflects the changes made to the 1D gradient map, snapping smooth lighting into discrete tones.
+- **Lighting Controls**: Interactive controls to adjust the light's direction to observe how the cel-shaded bands react.
+
+### Design Goals
+- **Educational Value**: Clearly illustrate the mapping process from continuous diffuse lighting values (N dot L) to discrete color bands.
+- **Visual Feedback**: Make the connection between the 1D texture configuration and the resulting non-photorealistic rendering immediate and intuitive.
+- **Aesthetic**: A stylish, clean aesthetic that highlights the cartoonish nature of cel shading against a dark, contrasting background.
+
+### Implementation Plan
+- **HTML/CSS**: A flex container with a main 3D canvas and a panel for UI controls.
+- **3D Rendering**: Use Three.js to render the scene. Apply `MeshToonMaterial` which supports a gradient map. Use a `DataTexture` to dynamically generate the 1D step texture based on user input.
+- **Interaction**: UI sliders to let users define the number of steps and light position, dynamically rebuilding the `DataTexture` when settings change.
