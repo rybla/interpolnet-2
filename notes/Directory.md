@@ -4052,3 +4052,154 @@ An interactive 3D visualization that deconstructs the mechanics of shadow mappin
     - **First Render Pass (Main View)**: Render the scene using the main camera.
     - **Second Render Pass (Depth View)**: Render the scene again using the light's shadow camera. To visualize the depth map, temporarily swap the materials of all objects to a `MeshDepthMaterial` during this pass.
     - Implement `OrbitControls` attached to the main camera, and perhaps a subtle automated animation for the objects to make the shadows dynamic.
+  - Initialize a single Three.js scene containing the objects (torus, sphere, plane).
+  - Create a `DirectionalLight` or `SpotLight` configured to cast shadows.
+  - Set up two cameras: the main `PerspectiveCamera` and a camera corresponding to the light source's position and orientation (often an `OrthographicCamera` for directional lights).
+  - In the render loop, render the scene twice:
+    - First to the left container using the main camera and standard materials (with shadow casting/receiving enabled).
+    - Second to the right container using the light's camera. To visualize the depth map, override the scene material temporarily with a `MeshDepthMaterial` during this render pass.
+
+## Delaunay Expanding Circles [[demo](https://rybla.github.io/interpolnet-2/delaunay-expanding-circles)]
+
+An interactive geometric visualization that allows users to place points randomly on a canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
+
+### Features
+- **Interactive Point Placement**: Clicking anywhere on the canvas dynamically adds a new seed point.
+- **Expanding Circles**: Each placed point spawns a circle that continuously expands outwards.
+- **Delaunay Triangulation**: The circles intersect, and as they do, the underlying Delaunay triangle mesh is continuously calculated and rendered.
+- **Dynamic Connection Animation**: The mesh edges connecting the points are drawn.
+
+### Design Goals
+- **Algorithm Visualization**: Visually demonstrate how a Delaunay triangulation connects a set of points in a plane.
+- **Engaging Aesthetics**: Employ a dark theme with vibrant, randomly generated neon colors for the expanding circles and a bright, contrasting color for the mesh to make the math look striking.
+- **Responsiveness**: Ensure the visualization works seamlessly across desktop and mobile sizes, recalculating properly if the window is resized.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the visualization.
+- **CSS Styling**: A dark theme, styling the canvas to fill the viewport completely.
+- **JavaScript Core**:
+    - **State Management**: Track an array of `points` (x, y) and their expanding circle properties.
+    - **Mathematics**: Implement a robust algorithm for Delaunay Triangulation (such as Bowyer-Watson).
+    - **Rendering Loop**: Use `requestAnimationFrame` to animate expanding circles and update the mesh as the circles expand.
+    - **Interaction**: Handle pointer events to allow users to add new points, generating beautiful visual effects for each.
+
+## 3D UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/uv-map-painter)]
+
+An interactive 3D modeling visualization that demystifies texture mapping by showing a 3D cube unrolled into a flat UV map layout, allowing users to paint on the 2D surface and see the brush strokes wrap around the 3D object in real-time.
+
+### Features
+- **Split-Screen View**: A side-by-side layout presenting the 2D unwrapped UV map and the 3D rendered cube.
+- **Interactive Painting Canvas**: Users can click and drag on the 2D canvas to paint strokes. The canvas is laid out as a cross, representing the unfolded faces of the cube (Top, Bottom, Front, Back, Left, Right).
+- **Real-Time 3D Wrapping**: As the user paints on the 2D canvas, the 3D cube's texture instantly updates, wrapping the drawn strokes across the edges of the cube.
+- **Auto-Rotation**: The 3D cube gently rotates to show all sides, allowing the user to inspect how their 2D painting translates to the 3D surface.
+
+### Design Goals
+- **Educational Clarity**: Provide a concrete, hands-on demonstration of UV mapping, a concept that is fundamental to 3D graphics but often abstract to beginners.
+- **Immediate Feedback**: The instant translation from a 2D brush stroke to a 3D surface mapping creates a satisfying and magical interaction loop.
+- **Aesthetics**: Use a clean, dark theme with distinct, glowing neon colors for the paint and clear grid lines indicating the UV layout.
+
+### Implementation Plan
+- **HTML Structure**: A responsive flexbox container holding a standard HTML5 `<canvas>` for the 2D painting and a `<div>` container for the Three.js 3D rendering.
+- **2D Canvas Logic**:
+  - Set up a square canvas (e.g., 512x512) and draw a permanent grid/outline showing the 6 faces of the unfolded cube.
+  - Implement a simple drawing application using `pointerdown`, `pointermove`, and `pointerup` events to draw lines.
+- **3D Rendering (Three.js)**:
+  - Create a `BoxGeometry`. By default, Three.js maps the entire texture to each face. This must be modified by updating the `uv` attributes of the geometry to map specific rectangular regions of the 2D canvas to specific faces of the cube.
+  - Create a `CanvasTexture` using the 2D painting canvas as the source.
+  - Apply this texture to a `MeshBasicMaterial` (or `MeshStandardMaterial` with lighting).
+- **Synchronization**: In the `requestAnimationFrame` loop, rotate the cube and set `texture.needsUpdate = true` so Three.js knows to re-upload the 2D canvas data to the GPU.
+
+## Inverse Kinematics Robotic Arm [[demo](https://rybla.github.io/interpolnet-2/inverse-kinematics-robotic-arm)]
+
+An interactive visualization of a multi-jointed robotic arm utilizing inverse kinematics, where users can drag the end effector and the algorithm calculates the joint angles in real time to reach the target.
+
+### Features
+- **Multi-Jointed Arm**: A visual representation of a robotic arm with multiple segments and joints rendered on an HTML5 canvas.
+- **Interactive End Effector**: Users can click and drag the target (end effector) around the canvas.
+- **Inverse Kinematics Algorithm**: The system dynamically calculates the required angles for each joint so that the end of the arm reaches the user-defined target position, utilizing the FABRIK (Forward And Backward Reaching Inverse Kinematics) or CCD (Cyclic Coordinate Descent) algorithm.
+- **Real-Time Rendering**: The arm smoothly updates its position and joint angles in real time as the target is dragged.
+
+### Design Goals
+- **Educational Visualization**: Demonstrate how inverse kinematics algorithms solve the complex problem of determining joint parameters to achieve a desired end-effector position.
+- **Engaging Interaction**: Provide a tactile, responsive experience where the user feels they are directly manipulating the robotic arm's goal.
+- **Aesthetic Excellence**: Use a clean, modern aesthetic with distinct colors for the segments, joints, and target to make the mechanics clear.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element.
+- **Styling**: A dark theme with distinct colors (e.g., glowing cyan for segments, magenta for joints).
+- **JavaScript Core**:
+    - **State Management**: Maintain an array of segments (length, angle) or joints (x, y coordinates).
+    - **Inverse Kinematics Logic**: Implement an iterative solver (like FABRIK) that runs every frame to adjust joint positions towards the target.
+    - **Rendering Loop**: Use `requestAnimationFrame` to draw the arm's segments and joints, and the target point.
+    - **Interaction**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to update the target position based on user input.
+
+## Constructive Solid Geometry Visualizer [[demo](https://rybla.github.io/interpolnet-2/csg-visualizer)]
+
+Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
+
+### Features
+- **3D Primitive Interactions**: Users can select and interact with multiple 3D primitives in a 3D scene.
+- **CSG Operations**: Three primary operations (Union, Subtract, Intersect) can be performed when shapes overlap.
+- **Transparent Rendering**: Primitives are rendered with translucent, glass-like materials so the user can see where the volumes overlap and understand the internal structure of the resulting CSG operation.
+- **Dynamic Mesh Updates**: The shapes dynamically reflect the results of the CSG operations when active.
+
+### Design Goals
+- **Intuitive Exploration**: Make the process of understanding CSG (a complex 3D modeling concept) interactive and intuitive through direct manipulation of primitives.
+- **Visual Clarity**: Enhance understanding by making overlaps visible through material transparency, paired with distinct color-coding for each primitive.
+- **Aesthetic**: Maintain the Interpolnet 2 neon/dark synthwave aesthetic with bright, glowing primitives on a deep background.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas and Three.js (`r128` via CDN) for the 3D environment.
+- **Mathematical Engine (CSG)**: Implement custom Constructive Solid Geometry algorithms in JavaScript to handle the Boolean operations (Union, Intersect, Subtract) on the geometry.
+- **Interaction (JavaScript)**: Utilize Three.js `Raycaster` to handle user pointer events to select and drag primitives across the scene.
+- **Rendering**: Render base primitives with `MeshPhysicalMaterial` for transparency and transmission. Compute updated vertex positions and faces dynamically based on the chosen CSG operation.
+
+## Screen Space Ambient Occlusion [[demo](https://rybla.github.io/interpolnet-2/ssao-demo)]
+
+An interactive 3D visualization using THREE that demystifies how Screen Space Ambient Occlusion (SSAO) works by exposing the hidden test rays. The demo allows users to select a point in a 3D scene (representing a pixel's depth buffer position) and see the hemispherical rays cast outward to determine if that specific corner or surface is shaded.
+
+### Features
+- **3D Scene Environment**: A simple Cornell-box-like environment with intersecting walls and floating geometric shapes to create corners and crevices where ambient occlusion naturally occurs.
+- **Interactive Ray Selection**: Users can click or tap anywhere on the scene surfaces to designate a "target pixel".
+- **Hemispherical Ray Visualization**: From the selected target point, the demo visually spawns a hemisphere of test rays pointing outwards (along the surface normal).
+- **Intersection Feedback**: The test rays are color-coded in real-time. Rays that hit nearby geometry (occluded) are colored distinctly from rays that shoot into open space (unoccluded).
+- **Dynamic Occlusion Readout**: A UI panel updates to show the ratio of occluded vs. unoccluded rays, explicitly demonstrating how the final "darkness" of that pixel's ambient occlusion is calculated.
+
+### Design Goals
+- **Educational Demystification**: Break down the complex, often "black box" post-processing effect of SSAO into a tangible, geometric process.
+- **Visual Causality**: Directly link the presence of nearby geometry (corners, crevices) to the resulting shading by making the test rays visible.
+- **Aesthetics**: Maintain the project's consistent dark/neon aesthetic. The scene geometry will be minimalist, while the test rays will use bright, glowing colors (e.g., cyan for free rays, magenta for occluded rays) to stand out.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scene Setup**: Create a room with some intersecting boxes using standard Three.js meshes and materials.
+- **Interaction (JavaScript)**:
+  - Utilize Three.js Raycaster to handle user pointer events to select a point on the surfaces.
+  - Calculate the surface normal at the clicked point.
+- **Ray Visualization**:
+  - Generate a set of random or semi-random vectors distributed across a hemisphere oriented along the surface normal.
+  - Cast a Three.js Raycaster along each of these vectors for a short distance (the SSAO radius).
+  - Draw lines (using `THREE.Line` or `THREE.ArrowHelper`) to represent these rays, colored based on whether the raycaster detects a hit within the radius.
+
+## 3D Facial Expression Morphing [[demo](https://rybla.github.io/interpolnet-2/3d-facial-expression-morphing)]
+
+An interactive 3D visualization demonstrating how character facial expressions are generated by interpolating vertex positions between a neutral base mesh and a smiling target mesh.
+
+### Features
+- **3D Interactive Scene**: A stylized facial mesh rendered in a 3D environment that can be rotated and zoomed.
+- **Real-time Morphing**: An interactive slider allowing users to interpolate the facial expression seamlessly between a neutral state and a full smile.
+- **Vertex Interpolation**: As the slider moves, the underlying vertices of the mesh smoothly transition between the base and target positions, demonstrating the core mechanic of 3D facial animation.
+- **Wireframe Overlay**: The mesh is rendered with a wireframe overlay so users can clearly see the topology and how individual vertices move during the morph.
+- **Responsive Interface**: A mobile-friendly control panel overlaid on the 3D canvas for adjusting the morph weight.
+
+### Design Goals
+- **Educational Demystification**: Provide a clear, visual intuition for how 3D facial animation and blend shapes work by exposing the underlying vertex interpolation.
+- **Visual Clarity**: Use a clean, tech-inspired aesthetic with high contrast (e.g., dark background with bright, neon accents) to make the mesh and its deformation clear.
+- **Fluid Interactivity**: Ensure the morphing updates instantly as the slider is adjusted, maintaining a smooth 60fps experience.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas and Three.js for the 3D environment.
+- **Geometry Generation**: Use `THREE.BufferGeometry` to dynamically create a simple, stylized face base mesh.
+- **Morph Targets**: Create a morph target representing a "smile" by modifying the mouth vertices of the base geometry and assigning it to `geometry.morphAttributes.position`.
+- **Lighting & Materials**: Set up ambient and directional lighting. Use a material with `wireframe: true` or a combination of solid and wireframe materials to highlight the topology.
+- **Interaction (JavaScript)**: Link an HTML range slider to the mesh's `morphTargetInfluences[0]` property to allow users to interactively control the interpolation weight. Use `OrbitControls` for camera manipulation.
