@@ -2795,3 +2795,24 @@ An interactive visualization of a multi-jointed robotic arm utilizing inverse ki
     - **Inverse Kinematics Logic**: Implement an iterative solver (like FABRIK) that runs every frame to adjust joint positions towards the target.
     - **Rendering Loop**: Use `requestAnimationFrame` to draw the arm's segments and joints, and the target point.
     - **Interaction**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to update the target position based on user input.
+
+## Constructive Solid Geometry Visualizer [[demo](https://rybla.github.io/interpolnet-2/csg-visualizer)]
+
+Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
+
+### Features
+- **3D Primitive Interactions**: Users can select and interact with multiple 3D primitives in a 3D scene.
+- **CSG Operations**: Three primary operations (Union, Subtract, Intersect) can be performed when shapes overlap.
+- **Transparent Rendering**: Primitives are rendered with translucent, glass-like materials so the user can see where the volumes overlap and understand the internal structure of the resulting CSG operation.
+- **Dynamic Mesh Updates**: The shapes dynamically reflect the results of the CSG operations when active.
+
+### Design Goals
+- **Intuitive Exploration**: Make the process of understanding CSG (a complex 3D modeling concept) interactive and intuitive through direct manipulation of primitives.
+- **Visual Clarity**: Enhance understanding by making overlaps visible through material transparency, paired with distinct color-coding for each primitive.
+- **Aesthetic**: Maintain the Interpolnet 2 neon/dark synthwave aesthetic with bright, glowing primitives on a deep background.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas and Three.js (`r128` via CDN) for the 3D environment.
+- **Mathematical Engine (CSG)**: Implement custom Constructive Solid Geometry algorithms in JavaScript to handle the Boolean operations (Union, Intersect, Subtract) on the geometry.
+- **Interaction (JavaScript)**: Utilize Three.js `Raycaster` to handle user pointer events to select and drag primitives across the scene.
+- **Rendering**: Render base primitives with `MeshPhysicalMaterial` for transparency and transmission. Compute updated vertex positions and faces dynamically based on the chosen CSG operation.

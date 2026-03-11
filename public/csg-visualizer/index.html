@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Constructive Solid Geometry Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <div class="panel">
+        <h1>Constructive Solid Geometry</h1>
+        <p>Drag the shapes to intersect them. Select an operation below:</p>
+        <div class="controls">
+          <button id="btn-union" class="btn active">Union</button>
+          <button id="btn-subtract" class="btn">Subtract</button>
+          <button id="btn-intersect" class="btn">Intersect</button>
+          <button id="btn-reset" class="btn">Reset</button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </body>
+</html>
