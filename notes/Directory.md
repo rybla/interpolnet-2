@@ -2880,3 +2880,34 @@ An interactive 3D visualization that demonstrates how cel shading (toon shading)
 - **HTML/CSS**: A flex container with a main 3D canvas and a panel for UI controls.
 - **3D Rendering**: Use Three.js to render the scene. Apply `MeshToonMaterial` which supports a gradient map. Use a `DataTexture` to dynamically generate the 1D step texture based on user input.
 - **Interaction**: UI sliders to let users define the number of steps and light position, dynamically rebuilding the `DataTexture` when settings change.
+
+## Flow Field Particles [[demo](https://rybla.github.io/interpolnet-2/flow-field-particles)]
+
+An interactive, fluid-like visualization where thousands of particles trace the currents of a dynamic, noise-driven vector flow field. The underlying invisible currents are generated using procedural noise and displayed as a grid of rotating vector arrows, while particles continuously flow through the environment creating mesmerizing organic patterns.
+
+### Features
+- **Dynamic Flow Field**: A grid of invisible vectors dictating the "currents", updated dynamically over time utilizing underlying noise.
+- **Particle Swarm**: Thousands of small particles rendered in real-time, flowing smoothly through the vector field.
+- **Vector Overlay**: A togglable (or faintly visible) grid of rotating vector arrows that reveals the underlying noise structure shaping the particles' paths.
+- **Trail Effects**: As particles move, they leave fading trails, creating a sense of continuous flow and accumulating into beautiful organic fluid structures.
+- **Responsive Layout**: Adapts gracefully to both desktop and mobile devices, maintaining fluid dynamics independent of canvas proportions.
+
+### Design Goals
+- **Mesmerizing Flow**: Provide a visually hypnotic experience by mimicking fluid dynamics and organic currents using simple procedural noise.
+- **Clear Causality**: Ensure the relationship between the underlying vector field (noise) and the particle movement is apparent.
+- **Modern Aesthetic**: Use a clean, dark "neon" or "blueprint" theme typical of the Interpolnet 2 project (e.g., deep background with bright glowing particles and subtle vector arrows).
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for rendering the visualization.
+- **Math & Noise Logic (JavaScript)**:
+    - Implement a lightweight procedural noise function (like Perlin or Simplex noise) to generate smooth, continuous random values.
+    - Calculate a vector field grid where the angle of each vector is determined by the noise value at that position.
+- **Particle System**:
+    - Manage an array of thousands of particles, each with a position and velocity.
+    - In the animation loop, each particle looks up the nearest vector in the flow field, applies it as a force to its velocity, and updates its position.
+    - Particles wrap around the screen edges to maintain a continuous, infinite flow.
+- **Rendering Loop**:
+    - Use `requestAnimationFrame` for a smooth 60fps loop.
+    - Draw the background with a low-opacity fill instead of a full clear to create particle trails.
+    - Draw the particles as small points or lines.
+    - Periodically update the noise offset (time) to make the vector field slowly shift and morph, animating the currents.
