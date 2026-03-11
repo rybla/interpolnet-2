@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Constructive Solid Geometry Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="ui-panel">
+      <h1>CSG Visualizer</h1>
+      <p>Select two shapes to perform boolean operations.</p>
+
+      <div class="controls-section">
+        <h3>Add Shape</h3>
+        <button id="add-cube">Cube</button>
+        <button id="add-sphere">Sphere</button>
+        <button id="add-cylinder">Cylinder</button>
+      </div>
+
+      <div class="controls-section">
+        <h3>Operation (Requires 2 Selections)</h3>
+        <button id="op-union">Union (A U B)</button>
+        <button id="op-subtract">Subtract (A - B)</button>
+        <button id="op-intersect">Intersect (A ∩ B)</button>
+      </div>
+
+      <div class="controls-section">
+        <h3>Selection</h3>
+        <button id="clear-selection">Clear Selection</button>
+        <button id="clear-all">Clear All</button>
+      </div>
+    </div>
+    <div id="canvas-container"></div>
+
+    <!-- We will use ES modules to import Three.js, OrbitControls and TransformControls -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

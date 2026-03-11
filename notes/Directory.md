@@ -2795,3 +2795,36 @@ An interactive visualization of a multi-jointed robotic arm utilizing inverse ki
     - **Inverse Kinematics Logic**: Implement an iterative solver (like FABRIK) that runs every frame to adjust joint positions towards the target.
     - **Rendering Loop**: Use `requestAnimationFrame` to draw the arm's segments and joints, and the target point.
     - **Interaction**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to update the target position based on user input.
+
+## Constructive Solid Geometry Visualizer [[demo](https://rybla.github.io/interpolnet-2/csg-visualizer)]
+
+Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
+
+### Features
+- **3D Primitive Generation**: Users can add simple 3D shapes like cubes, spheres, and cylinders into the scene.
+- **Interactive Manipulation**: Added primitives can be selected by clicking them and moved around using an interactive 3D transform control.
+- **Boolean Operations**: The core functionality allows users to perform CSG operations:
+  - **Union**: Combines selected shapes into a single continuous volume.
+  - **Subtract**: Carves the volume of the second shape out of the first shape.
+  - **Intersect**: Leaves only the overlapping volume of the selected shapes.
+- **Visual Clarity**: Source primitives are rendered with semi-transparent materials to allow users to see overlaps and intersections easily. The final CSG result is rendered with a solid, distinct material.
+- **Dynamic Calculation**: Operations are calculated instantly upon user command and the resulting mesh replaces or accompanies the original shapes.
+
+### Design Goals
+- **Educational Hands-On**: Provide a tangible, interactive way to understand how complex CAD models are built from basic boolean operations on primitives.
+- **Visual Feedback**: The use of transparent materials for the "brush" primitives allows users to precisely align shapes before committing to a subtract or intersect operation.
+- **Aesthetics**: A clean, "blueprint" or "maker" style interface. Dark grid background with vibrant, glowing colors for the primitives and a solid, metallic look for the final crafted objects.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen container for the 3D canvas and a floating UI panel containing tools for adding shapes, selecting the active operation, and executing it.
+- **3D Rendering Engine (Three.js)**:
+  - Setup a scene with a perspective camera, lighting (ambient and directional), and a helper grid.
+  - Implement `TransformControls` and `OrbitControls` to allow users to navigate the scene and precisely position their primitives.
+- **CSG Logic (JavaScript)**:
+  - Utilize a reliable CSG library compatible with Three.js (e.g., `three-csg-ts` or a built-in simplified implementation) to perform the boolean math on the meshes.
+  - Implement a selection system using raycasting. Users must select two shapes to perform an operation.
+  - When an operation is executed:
+    1. Convert the Three.js meshes into CSG representations.
+    2. Perform the chosen boolean operation (union, subtract, intersect).
+    3. Convert the resulting CSG object back into a Three.js mesh.
+    4. Render the new mesh and optionally hide/remove the original operands.
