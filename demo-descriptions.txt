@@ -1,4 +1,3 @@
-Generate a grid of rotating vector arrows based on underlying noise and release thousands of particles to trace the resulting fluid-like currents.
 Provide a slider that converts a high-poly 3D model into an increasingly blocky Minecraft-style voxel grid by testing bounding box intersections.
 Layer multiple frequencies of noise over a 1D line to simulate the erratic, jagged price movement of a synthetic stock market chart using fractional Brownian motion.
 Simulate a camera lens by calculating a focal plane and intentionally blurring objects based on their z-depth distance from the circle of confusion.
