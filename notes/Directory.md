@@ -2816,3 +2816,30 @@ Visualize Constructive Solid Geometry by letting users intersect, union, and sub
 - **Mathematical Engine (CSG)**: Implement custom Constructive Solid Geometry algorithms in JavaScript to handle the Boolean operations (Union, Intersect, Subtract) on the geometry.
 - **Interaction (JavaScript)**: Utilize Three.js `Raycaster` to handle user pointer events to select and drag primitives across the scene.
 - **Rendering**: Render base primitives with `MeshPhysicalMaterial` for transparency and transmission. Compute updated vertex positions and faces dynamically based on the chosen CSG operation.
+
+## Screen Space Ambient Occlusion [[demo](https://rybla.github.io/interpolnet-2/ssao-demo)]
+
+An interactive 3D visualization using THREE that demystifies how Screen Space Ambient Occlusion (SSAO) works by exposing the hidden test rays. The demo allows users to select a point in a 3D scene (representing a pixel's depth buffer position) and see the hemispherical rays cast outward to determine if that specific corner or surface is shaded.
+
+### Features
+- **3D Scene Environment**: A simple Cornell-box-like environment with intersecting walls and floating geometric shapes to create corners and crevices where ambient occlusion naturally occurs.
+- **Interactive Ray Selection**: Users can click or tap anywhere on the scene surfaces to designate a "target pixel".
+- **Hemispherical Ray Visualization**: From the selected target point, the demo visually spawns a hemisphere of test rays pointing outwards (along the surface normal).
+- **Intersection Feedback**: The test rays are color-coded in real-time. Rays that hit nearby geometry (occluded) are colored distinctly from rays that shoot into open space (unoccluded).
+- **Dynamic Occlusion Readout**: A UI panel updates to show the ratio of occluded vs. unoccluded rays, explicitly demonstrating how the final "darkness" of that pixel's ambient occlusion is calculated.
+
+### Design Goals
+- **Educational Demystification**: Break down the complex, often "black box" post-processing effect of SSAO into a tangible, geometric process.
+- **Visual Causality**: Directly link the presence of nearby geometry (corners, crevices) to the resulting shading by making the test rays visible.
+- **Aesthetics**: Maintain the project's consistent dark/neon aesthetic. The scene geometry will be minimalist, while the test rays will use bright, glowing colors (e.g., cyan for free rays, magenta for occluded rays) to stand out.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scene Setup**: Create a room with some intersecting boxes using standard Three.js meshes and materials.
+- **Interaction (JavaScript)**:
+  - Utilize Three.js Raycaster to handle user pointer events to select a point on the surfaces.
+  - Calculate the surface normal at the clicked point.
+- **Ray Visualization**:
+  - Generate a set of random or semi-random vectors distributed across a hemisphere oriented along the surface normal.
+  - Cast a Three.js Raycaster along each of these vectors for a short distance (the SSAO radius).
+  - Draw lines (using `THREE.Line` or `THREE.ArrowHelper`) to represent these rays, colored based on whether the raycaster detects a hit within the radius.
