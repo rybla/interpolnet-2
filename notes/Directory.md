@@ -2911,3 +2911,28 @@ An interactive, fluid-like visualization where thousands of particles trace the 
     - Draw the background with a low-opacity fill instead of a full clear to create particle trails.
     - Draw the particles as small points or lines.
     - Periodically update the noise offset (time) to make the vector field slowly shift and morph, animating the currents.
+
+## Voxelizer [[demo](https://rybla.github.io/interpolnet-2/voxelizer)]
+
+An interactive 3D visualization using Three.js that demonstrates the process of voxelization by converting a high-poly 3D model into an increasingly blocky Minecraft-style voxel grid.
+
+### Features
+- **Dynamic Voxelization**: Users can use a slider to adjust the voxel size/resolution in real-time, watching a smooth 3D shape transform into a grid of distinct blocks.
+- **Bounding Box Intersection Visualization**: The underlying algorithm (testing whether each discrete voxel cell intersects the original geometry's bounding box) is visually demonstrated by the appearance and disappearance of voxel cubes.
+- **Interactive 3D View**: A responsive 3D environment where the user can observe the voxelized mesh.
+
+### Design Goals
+- **Educational Value**: Provide a tangible, interactive demonstration of spatial discretization and volumetric representation in computer graphics.
+- **Immediate Feedback**: The voxelization process updates instantly as the user drags the slider, establishing a clear link between the resolution parameter and the visual output.
+- **Aesthetic**: Maintain the consistent neon/dark synthwave aesthetic of the Interpolnet 2 project, using glowing, distinct colors against a dark background.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas, CSS, and Three.js (`r128` via CDN) for the 3D environment.
+- **Scene Setup**: Create a base 3D shape (e.g., a `TorusKnotGeometry` or similar complex shape) and a surrounding grid.
+- **Voxelization Algorithm (JavaScript)**:
+    - Compute the bounding box of the base geometry.
+    - Based on the current slider value (voxel size), divide the bounding volume into a 3D grid.
+    - Iterate through each cell in the grid. Create a temporary `THREE.Box3` for the cell.
+    - Check if this cell's bounding box intersects the bounding box of the original geometry. For a more accurate voxelization, it can check intersection against the geometry's triangles or just approximate with bounding boxes.
+    - Render a voxel (e.g., an `InstancedMesh` for performance) at the center of each intersecting cell.
+- **Interaction**: An HTML range input slider that updates the voxel size parameter and triggers a recalculation and re-render of the voxel grid.
