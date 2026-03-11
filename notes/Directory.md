@@ -2860,3 +2860,28 @@ A visualization that demonstrates how a 3D character's facial expression changes
 - **Renderer**: Implement custom 3D projection rendering to an HTML5 canvas element, without external 3D libraries.
 - **Mesh Data**: Hard-code the vertices and faces for a simple low-polygon base face mesh, and a target smile mesh which contains identically structured topology but with adjusted vertex positions (e.g., mouth corners raised and cheeks shifted).
 - **Logic**: A render loop reading the slider value (t). The final position of each vertex is calculated as: `(1 - t) * baseVertex + t * smileVertex`. The canvas is cleared and the interpolated mesh is projected and drawn every frame.
+
+## Toon Shading Deconstruction [[demo](https://rybla.github.io/interpolnet-2/toon-shading-deconstruction)]
+
+Toon Shading Deconstruction provides an interactive 3D visualization to deconstruct non-photorealistic rendering.
+It shows how smooth lighting gradients are snapped into sharp color bands using a 1D step texture.
+
+### Features
+- A 3D model (e.g., a torus knot or sphere) rendered with a custom toon shader.
+- An interactive 1D step texture (ramp texture) that users can edit in real-time.
+- Visualizing how lighting (dot product of normal and light direction) maps to the 1D texture.
+- Sliders for controlling light position, color, and object rotation.
+
+### Design Goals
+- Clean and modern UI with responsive design.
+- Interactive and intuitive controls.
+- Consistent typography and distinct color scheme.
+
+### Implementation Plan
+1. Setup a Three.js scene with a 3D object and a directional light.
+2. Create a custom ShaderMaterial implementing toon shading logic:
+   - Calculate diffuse lighting: `max(dot(normal, lightDir), 0.0)`.
+   - Use the diffuse lighting value as the U coordinate to sample a 1D texture.
+3. Build a UI to edit the 1D texture (gradient ramp) by specifying color stops or thresholds.
+4. Dynamically generate the 1D texture using a Canvas element and pass it to the shader.
+5. Add controls for light and object properties.
