@@ -2957,3 +2957,7 @@ An interactive visualization that simulates the erratic, jagged price movement o
 - **Noise Generation (JavaScript)**: Implement a custom 1D noise algorithm.
 - **Fractional Brownian Motion**: Create a function that loops through multiple octaves, scaling frequency and amplitude, and summing the noise values to generate the final price point.
 - **Rendering Loop**: Use `requestAnimationFrame` to continuously calculate new values, scroll the historical data, and draw the line graph on the HTML5 canvas.
+
+## Depth of Field Simulator [[demo](https://rybla.github.io/interpolnet-2/depth-of-field-simulator)]
+
+An interactive 3D visualization demonstrating the optical depth of field effect by calculating a focal plane and dynamically blurring objects based on their z-depth distance from the circle of confusion. The simulator aims to provide an intuitive understanding of how camera lenses capture light and focus on subjects.

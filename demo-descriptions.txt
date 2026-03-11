@@ -1,4 +1,3 @@
-Simulate a camera lens by calculating a focal plane and intentionally blurring objects based on their z-depth distance from the circle of confusion.
 Shine a virtual light behind a translucent 3D marble hand to visualize how light rays penetrate, scatter, and exit the surface to create a fleshy glow.
 Render 2D metaballs that smoothly merge into one another like liquid drops by calculating the overlapping thresholds of their inverse-square distance functions.
 Contrast standard ray tracing with path tracing by showing how firing hundreds of randomized stochastic rays per pixel accurately resolves global illumination.
