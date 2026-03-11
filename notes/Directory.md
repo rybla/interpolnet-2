@@ -2936,3 +2936,24 @@ An interactive 3D visualization using Three.js that demonstrates the process of 
     - Check if this cell's bounding box intersects the bounding box of the original geometry. For a more accurate voxelization, it can check intersection against the geometry's triangles or just approximate with bounding boxes.
     - Render a voxel (e.g., an `InstancedMesh` for performance) at the center of each intersecting cell.
 - **Interaction**: An HTML range input slider that updates the voxel size parameter and triggers a recalculation and re-render of the voxel grid.
+
+## Synthetic Stock Chart [[demo](https://rybla.github.io/interpolnet-2/synthetic-stock-chart)]
+
+An interactive visualization that simulates the erratic, jagged price movement of a synthetic stock market chart by layering multiple frequencies of noise over a 1D line using fractional Brownian motion.
+
+### Features
+- **Dynamic Chart Rendering**: A real-time updating chart that draws the synthesized stock prices on a 1D line.
+- **Adjustable Parameters**: Users can control variables such as the number of noise frequencies (octaves), scaling factors, and time steps.
+- **Fractional Brownian Motion**: Uses layered noise to accurately simulate the semi-random walk characteristics commonly found in real financial markets.
+- **Color Coding**: Visual indicators highlight upward or downward trends to mimic traditional trading dashboards.
+
+### Design Goals
+- **Visual Simulation**: Provide a compelling and visually accurate simulation of a synthetic stock market chart.
+- **Interactive Exploration**: Allow users to explore how combining different frequencies of noise can create complex, unpredictable patterns resembling real-world data.
+- **Financial Dashboard Aesthetic**: Use a distinct, consistent color scheme that evokes the feeling of modern trading software, complete with responsive layout for varying screen sizes.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A responsive layout with a main `canvas` element for the chart and a control panel featuring sliders and inputs for adjusting the noise parameters.
+- **Noise Generation (JavaScript)**: Implement a custom 1D noise algorithm.
+- **Fractional Brownian Motion**: Create a function that loops through multiple octaves, scaling frequency and amplitude, and summing the noise values to generate the final price point.
+- **Rendering Loop**: Use `requestAnimationFrame` to continuously calculate new values, scroll the historical data, and draw the line graph on the HTML5 canvas.
