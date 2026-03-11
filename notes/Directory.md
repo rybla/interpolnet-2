@@ -2961,3 +2961,23 @@ An interactive visualization that simulates the erratic, jagged price movement o
 ## Depth of Field Simulator [[demo](https://rybla.github.io/interpolnet-2/depth-of-field-simulator)]
 
 An interactive 3D visualization demonstrating the optical depth of field effect by calculating a focal plane and dynamically blurring objects based on their z-depth distance from the circle of confusion. The simulator aims to provide an intuitive understanding of how camera lenses capture light and focus on subjects.
+
+## Subsurface Scattering Visualizer [[demo](https://rybla.github.io/interpolnet-2/subsurface-scattering-visualizer)]
+
+An interactive 3D visualization that demonstrates subsurface scattering by shining a virtual light behind a translucent 3D marble hand to visualize how light rays penetrate, scatter, and exit the surface to create a fleshy glow.
+
+### Features
+- **Translucent 3D Model**: A central 3D model styled to look like a marble hand that displays the subsurface scattering effect.
+- **Interactive Light Source**: A point light source that users can move around the 3D space, especially behind the object, to observe the scattering of light through the material.
+- **Real-Time Material Updates**: Interactive controls to adjust the material's transmission, thickness, and roughness to observe how these properties affect the subsurface scattering.
+- **Light Controls**: Adjustable sliders to change the intensity and color of the light.
+
+### Design Goals
+- **Educational Value**: Clearly illustrate how light scattering through a medium affects the final appearance, distinguishing it from simple opaque surface reflection.
+- **Visual Feedback**: Instantly show the effect of changing the light position or material properties, providing a clear understanding of the subsurface scattering phenomena.
+- **Aesthetic**: A visually pleasing and modern interface with a consistent color scheme, focusing on the glow of the translucent material against a dark background.
+
+### Implementation Plan
+- **HTML/CSS**: A responsive layout featuring a main 3D canvas and a side panel with UI controls (sliders) for interactivity.
+- **3D Rendering**: Use Three.js to render the 3D scene. Utilize a material that supports physical properties such as transmission and thickness, allowing for the simulation of subsurface scattering. A built-in or procedurally generated geometry will be used to represent the hand.
+- **Interaction**: UI sliders to adjust the light's position (X, Y, Z), material properties (transmission, thickness, roughness), and light intensity, dynamically updating the Three.js scene in real-time.
