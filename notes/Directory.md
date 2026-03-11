@@ -2843,3 +2843,20 @@ An interactive 3D visualization using THREE that demystifies how Screen Space Am
   - Generate a set of random or semi-random vectors distributed across a hemisphere oriented along the surface normal.
   - Cast a Three.js Raycaster along each of these vectors for a short distance (the SSAO radius).
   - Draw lines (using `THREE.Line` or `THREE.ArrowHelper`) to represent these rays, colored based on whether the raycaster detects a hit within the radius.
+
+## 3D Character Facial Expression Interpolation [[demo](https://rybla.github.io/interpolnet-2/3d-character-facial-expression-interpolation)]
+
+A visualization that demonstrates how a 3D character's facial expression changes by interpolating vertex positions between a neutral base mesh and a smiling target mesh.
+
+### Features
+- **Interactive 3D View**: A 3D view of a character's face.
+- **Interpolation Slider**: A slider control that dynamically adjusts the interpolation factor between 0.0 (neutral) and 1.0 (smiling), instantly reflecting changes on the 3D model.
+
+### Design Goals
+- **Educational**: Help users understand how basic facial animation works by interpolating between predefined target shapes (blend shapes/morph targets).
+- **Visual Clarity**: Display the mesh clearly to emphasize the movement of individual vertices as the expression changes.
+
+### Implementation Plan
+- **Renderer**: Implement custom 3D projection rendering to an HTML5 canvas element, without external 3D libraries.
+- **Mesh Data**: Hard-code the vertices and faces for a simple low-polygon base face mesh, and a target smile mesh which contains identically structured topology but with adjusted vertex positions (e.g., mouth corners raised and cheeks shifted).
+- **Logic**: A render loop reading the slider value (t). The final position of each vertex is calculated as: `(1 - t) * baseVertex + t * smileVertex`. The canvas is cleared and the interpolated mesh is projected and drawn every frame.
