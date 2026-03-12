@@ -4363,3 +4363,32 @@ An interactive WebGL visualization on an HTML5 canvas that simulates liquid drop
     - The fragment shader receives the positions and radii of all active metaballs as uniforms.
     - For each pixel, it calculates the sum of the inverse-square distances from the pixel to the center of each metaball.
     - If this sum exceeds a predefined threshold (passed as a uniform from the UI), the pixel is colored as "liquid" (e.g., a solid color or a gradient); otherwise, it is treated as background.
+- **HTML**: Set up a canvas for rendering.
+- **CSS**: Apply styling.
+- **JavaScript**: Implement the metaballs logic and rendering loop.
+
+## Path Tracing vs Ray Tracing [[demo](https://rybla.github.io/interpolnet-2/path-tracing-vs-ray-tracing)]
+
+An interactive 2D visualization that contrasts standard deterministic ray tracing with stochastic path tracing by showing how firing hundreds of randomized rays per pixel accurately resolves global illumination and soft shadows.
+
+### Features
+- **Split-Screen or Toggle View**: Compare traditional Ray Tracing (hard shadows, deterministic rays) side-by-side or interchangeably with Path Tracing (soft shadows, global illumination).
+- **Progressive Accumulation**: Watch in real-time as the path tracing algorithm accumulates random samples to reduce noise and converge on a smoothly lit scene.
+- **Adjustable Parameters**: Interactively change the number of rays per pixel, bounce limits, light source size, and scene geometry.
+- **Visualizing Rays**: Optionally view individual ray bounces in a simplified 2D map to understand how path tracing scatters light.
+
+### Design Goals
+- **Educational Value**: Clearly demystify the difference between Ray Tracing and Path Tracing through interactive visual feedback.
+- **Intuitive Controls**: Simple sliders and toggles allow users to experiment with core rendering concepts like soft shadows and light bounces.
+- **Aesthetic**: A visually engaging setup with a sleek, consistent dark theme that makes light accumulation pop out vibrantly.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A responsive layout with a main `canvas` element and a floating control panel for adjusting rendering parameters.
+- **Rendering Logic (JavaScript)**:
+    - Define a simple 2D scene with light sources, occluders, and reflective/diffuse boundaries.
+    - Implement a deterministic ray tracing function: cast one ray from the eye to the surface, and one shadow ray to the light source.
+    - Implement a stochastic path tracing function: cast random rays that scatter off surfaces, accumulating light with each bounce.
+- **Progressive Rendering Loop**:
+    - Use `requestAnimationFrame` to continuously render new samples for path tracing over time.
+    - Accumulate the results in an off-screen buffer or blend them over previous frames to resolve noise.
+- **Interactivity**: Use HTML controls (sliders, toggles) to update rendering settings and trigger a scene reset to start accumulating a new image.
