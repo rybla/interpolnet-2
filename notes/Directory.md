@@ -2981,3 +2981,31 @@ An interactive 3D visualization that demonstrates subsurface scattering by shini
 - **HTML/CSS**: A responsive layout featuring a main 3D canvas and a side panel with UI controls (sliders) for interactivity.
 - **3D Rendering**: Use Three.js to render the 3D scene. Utilize a material that supports physical properties such as transmission and thickness, allowing for the simulation of subsurface scattering. A built-in or procedurally generated geometry will be used to represent the hand.
 - **Interaction**: UI sliders to adjust the light's position (X, Y, Z), material properties (transmission, thickness, roughness), and light intensity, dynamically updating the Three.js scene in real-time.
+
+## 2D Metaballs Liquid Simulator [[demo](https://rybla.github.io/interpolnet-2/2d-metaballs-liquid-simulator)]
+
+An interactive WebGL visualization on an HTML5 canvas that simulates liquid drops by dynamically rendering 2D metaballs. The metaballs smoothly merge into one another using overlapping thresholds calculated from their inverse-square distance functions.
+
+### Features
+- **Liquid Simulation**: Multiple 2D metaballs move organically around the screen, bouncing off edges and each other, simulating liquid drops.
+- **Smooth Merging**: As metaballs get close to each other, their fields overlap, and they seamlessly merge together, creating a convincing liquid-like effect.
+- **Interactive Controls**: Users can adjust the base threshold, the number of metaballs, and their speed in real-time to see how the simulation responds.
+- **Responsive Canvas**: The visualization scales cleanly to any screen size, maintaining performance and visual fidelity on both desktop and mobile devices.
+
+### Design Goals
+- **Organic Movement**: Ensure the metaballs move and merge in a satisfying, physically plausible manner to accurately mimic liquid behavior.
+- **High Performance**: Utilize WebGL to handle the per-pixel calculations required for evaluating the inverse-square distance fields, allowing for a large number of metaballs to run smoothly at 60fps.
+- **Clear Interaction**: Provide immediate visual feedback when users tweak the simulation parameters, demonstrating the underlying math in a tangible way.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen or prominent `<canvas>` element for the WebGL rendering, alongside a distinct, unique, and cleanly styled control panel for user inputs.
+- **WebGL Setup (JavaScript)**:
+    - Initialize a WebGL context and set up a full-screen quad to act as the drawing surface.
+    - Compile custom vertex and fragment shaders.
+- **Metaball Physics**:
+    - Manage an array of metaball objects in JavaScript, each with a position, velocity, and radius.
+    - Update their positions every frame based on their velocity, handling simple boundary collisions to keep them on-screen.
+- **Shader Logic (GLSL)**:
+    - The fragment shader receives the positions and radii of all active metaballs as uniforms.
+    - For each pixel, it calculates the sum of the inverse-square distances from the pixel to the center of each metaball.
+    - If this sum exceeds a predefined threshold (passed as a uniform from the UI), the pixel is colored as "liquid" (e.g., a solid color or a gradient); otherwise, it is treated as background.
