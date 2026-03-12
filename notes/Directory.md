@@ -3078,3 +3078,30 @@ An interactive 3D visualization using Three.js that demonstrates the illusion of
   - Implement a `VertexNormalsHelper` attached to the mesh to visualize the normals.
   - When the "Enable Effect" toggle is active, assign the generated texture to the material's `bumpMap` property and update the normal visualization to reflect the perturbed normals (this may require a custom shader or manually calculating the perturbed normals for visualization if the helper only shows original geometry normals).
   - Animate the light source in the `requestAnimationFrame` loop.
+
+## Spline Curvature Comparator [[demo](https://rybla.github.io/interpolnet-2/spline-curvature-comparator)]
+
+An interactive 2D visualization that allows users to move control points on a graph to compare the mathematical curvature differences between Catmull-Rom, B-Spline, and Bezier curves.
+
+### Features
+- **Interactive Control Points**: Users can click and drag control points on a 2D canvas to dynamically shape the curves.
+- **Multiple Spline Types**: Simultaneously displays Catmull-Rom, B-Spline, and Bezier curves generated from the same set of control points for direct comparison.
+- **Curvature Combs**: Toggles to display curvature combs (porcupine plots) for each spline type. These combs visually represent the magnitude and direction of the second derivative (curvature) at points along the curve, highlighting inflection points and regions of high curvature.
+- **Dynamic Calculation**: The curves and their curvature are recalculated and rendered in real-time as control points are moved.
+- **Control Panel**: A floating UI panel with toggles to independently show/hide each curve and its corresponding curvature comb.
+
+### Design Goals
+- **Educational Comparison**: Provide a clear, visual understanding of how different mathematical formulations (interpolation vs. approximation, local vs. global control) affect the shape and smoothness of a curve given identical input points.
+- **Visual Clarity**: Use distinct, bright colors for each spline type and its comb against a dark background to make the overlapping curves easily distinguishable.
+- **Fluid Interactivity**: Ensure smooth, lag-free dragging of control points with immediate visual feedback of the changing curvature.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for rendering, with an absolutely positioned, translucent control panel containing the toggles.
+- **Mathematics (JavaScript)**:
+    - Implement basis functions and evaluation logic for Catmull-Rom (interpolating), B-Spline (approximating, $C^2$ continuous), and cubic Bezier curves (approximating, $C^1$ continuous at joints if pieced together, but here we can just treat the points as a single piecewise curve or just a single segment if 4 points). For a generalized $N$-point setup, implement piecewise formulations.
+    - Implement the formulas for the first derivative ($C'(t)$) and second derivative ($C''(t)$) for each curve type to calculate the curvature $\kappa = \frac{|x'y'' - y'x''|}{(x'^2 + y'^2)^{3/2}}$.
+- **Rendering Loop**:
+    - Draw the control polygon (connecting lines between points).
+    - Draw the control points as draggable circles.
+    - Sample the curves at regular parameter intervals ($t$) and draw the paths.
+    - Calculate the normal vector at each sampled point and draw line segments outward, scaled by the calculated curvature $\kappa$, to create the curvature combs.

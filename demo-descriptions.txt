@@ -1,4 +1,3 @@
-Allow users to move control points on a graph to compare the mathematical curvature differences between Catmull-Rom, B-Spline, and Bezier curves.
 Build an interactive 3D color gamut visualization to show the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
 Demonstrate GPU tessellation by moving a virtual camera closer to a low-poly sphere and watching the graphics pipeline dynamically subdivide the geometry.
 Drop two virtual balls simultaneously where one falls straight down and one launches horizontally to prove they hit the ground at the exact same time.
