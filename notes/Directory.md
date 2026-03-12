@@ -2981,3 +2981,22 @@ An interactive 3D visualization that demonstrates subsurface scattering by shini
 - **HTML/CSS**: A responsive layout featuring a main 3D canvas and a side panel with UI controls (sliders) for interactivity.
 - **3D Rendering**: Use Three.js to render the 3D scene. Utilize a material that supports physical properties such as transmission and thickness, allowing for the simulation of subsurface scattering. A built-in or procedurally generated geometry will be used to represent the hand.
 - **Interaction**: UI sliders to adjust the light's position (X, Y, Z), material properties (transmission, thickness, roughness), and light intensity, dynamically updating the Three.js scene in real-time.
+
+## 2D Metaballs Liquid Simulator [[demo](https://rybla.github.io/interpolnet-2/2d-metaballs-liquid-simulator)]
+
+Render 2D metaballs that smoothly merge into one another like liquid drops by calculating the overlapping thresholds of their inverse-square distance functions.
+
+### Features
+- **Metaballs**: 2D metaballs that smoothly merge into one another.
+- **Overlapping Thresholds**: Calculate the overlapping thresholds of their inverse-square distance functions.
+- **Liquid Simulator**: Simulate liquid drops that merge into one another.
+
+### Design Goals
+- **Smooth Merging**: Provide a visually appealing and smooth merging of liquid drops.
+- **Performance**: Ensure the simulation is performant and responsive.
+- **Aesthetic**: A visually pleasing and modern interface with a consistent color scheme.
+
+### Implementation Plan
+- **HTML**: Set up a canvas for rendering.
+- **CSS**: Apply styling.
+- **JavaScript**: Implement the metaballs logic and rendering loop.
