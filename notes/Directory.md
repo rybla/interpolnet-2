@@ -4231,3 +4231,135 @@ It shows how smooth lighting gradients are snapped into sharp color bands using 
 3. Build a UI to edit the 1D texture (gradient ramp) by specifying color stops or thresholds.
 4. Dynamically generate the 1D texture using a Canvas element and pass it to the shader.
 5. Add controls for light and object properties.
+- **HTML/CSS**: A flex container with a main 3D canvas and a panel for UI controls.
+- **3D Rendering**: Use Three.js to render the scene. Apply `MeshToonMaterial` which supports a gradient map. Use a `DataTexture` to dynamically generate the 1D step texture based on user input.
+- **Interaction**: UI sliders to let users define the number of steps and light position, dynamically rebuilding the `DataTexture` when settings change.
+
+## Flow Field Particles [[demo](https://rybla.github.io/interpolnet-2/flow-field-particles)]
+
+An interactive, fluid-like visualization where thousands of particles trace the currents of a dynamic, noise-driven vector flow field. The underlying invisible currents are generated using procedural noise and displayed as a grid of rotating vector arrows, while particles continuously flow through the environment creating mesmerizing organic patterns.
+
+### Features
+- **Dynamic Flow Field**: A grid of invisible vectors dictating the "currents", updated dynamically over time utilizing underlying noise.
+- **Particle Swarm**: Thousands of small particles rendered in real-time, flowing smoothly through the vector field.
+- **Vector Overlay**: A togglable (or faintly visible) grid of rotating vector arrows that reveals the underlying noise structure shaping the particles' paths.
+- **Trail Effects**: As particles move, they leave fading trails, creating a sense of continuous flow and accumulating into beautiful organic fluid structures.
+- **Responsive Layout**: Adapts gracefully to both desktop and mobile devices, maintaining fluid dynamics independent of canvas proportions.
+
+### Design Goals
+- **Mesmerizing Flow**: Provide a visually hypnotic experience by mimicking fluid dynamics and organic currents using simple procedural noise.
+- **Clear Causality**: Ensure the relationship between the underlying vector field (noise) and the particle movement is apparent.
+- **Modern Aesthetic**: Use a clean, dark "neon" or "blueprint" theme typical of the Interpolnet 2 project (e.g., deep background with bright glowing particles and subtle vector arrows).
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for rendering the visualization.
+- **Math & Noise Logic (JavaScript)**:
+    - Implement a lightweight procedural noise function (like Perlin or Simplex noise) to generate smooth, continuous random values.
+    - Calculate a vector field grid where the angle of each vector is determined by the noise value at that position.
+- **Particle System**:
+    - Manage an array of thousands of particles, each with a position and velocity.
+    - In the animation loop, each particle looks up the nearest vector in the flow field, applies it as a force to its velocity, and updates its position.
+    - Particles wrap around the screen edges to maintain a continuous, infinite flow.
+- **Rendering Loop**:
+    - Use `requestAnimationFrame` for a smooth 60fps loop.
+    - Draw the background with a low-opacity fill instead of a full clear to create particle trails.
+    - Draw the particles as small points or lines.
+    - Periodically update the noise offset (time) to make the vector field slowly shift and morph, animating the currents.
+
+## Voxelizer [[demo](https://rybla.github.io/interpolnet-2/voxelizer)]
+
+An interactive 3D visualization using Three.js that demonstrates the process of voxelization by converting a high-poly 3D model into an increasingly blocky Minecraft-style voxel grid.
+
+### Features
+- **Dynamic Voxelization**: Users can use a slider to adjust the voxel size/resolution in real-time, watching a smooth 3D shape transform into a grid of distinct blocks.
+- **Bounding Box Intersection Visualization**: The underlying algorithm (testing whether each discrete voxel cell intersects the original geometry's bounding box) is visually demonstrated by the appearance and disappearance of voxel cubes.
+- **Interactive 3D View**: A responsive 3D environment where the user can observe the voxelized mesh.
+
+### Design Goals
+- **Educational Value**: Provide a tangible, interactive demonstration of spatial discretization and volumetric representation in computer graphics.
+- **Immediate Feedback**: The voxelization process updates instantly as the user drags the slider, establishing a clear link between the resolution parameter and the visual output.
+- **Aesthetic**: Maintain the consistent neon/dark synthwave aesthetic of the Interpolnet 2 project, using glowing, distinct colors against a dark background.
+
+### Implementation Plan
+- **Tech Stack**: HTML5 Canvas, CSS, and Three.js (`r128` via CDN) for the 3D environment.
+- **Scene Setup**: Create a base 3D shape (e.g., a `TorusKnotGeometry` or similar complex shape) and a surrounding grid.
+- **Voxelization Algorithm (JavaScript)**:
+    - Compute the bounding box of the base geometry.
+    - Based on the current slider value (voxel size), divide the bounding volume into a 3D grid.
+    - Iterate through each cell in the grid. Create a temporary `THREE.Box3` for the cell.
+    - Check if this cell's bounding box intersects the bounding box of the original geometry. For a more accurate voxelization, it can check intersection against the geometry's triangles or just approximate with bounding boxes.
+    - Render a voxel (e.g., an `InstancedMesh` for performance) at the center of each intersecting cell.
+- **Interaction**: An HTML range input slider that updates the voxel size parameter and triggers a recalculation and re-render of the voxel grid.
+
+## Synthetic Stock Chart [[demo](https://rybla.github.io/interpolnet-2/synthetic-stock-chart)]
+
+An interactive visualization that simulates the erratic, jagged price movement of a synthetic stock market chart by layering multiple frequencies of noise over a 1D line using fractional Brownian motion.
+
+### Features
+- **Dynamic Chart Rendering**: A real-time updating chart that draws the synthesized stock prices on a 1D line.
+- **Adjustable Parameters**: Users can control variables such as the number of noise frequencies (octaves), scaling factors, and time steps.
+- **Fractional Brownian Motion**: Uses layered noise to accurately simulate the semi-random walk characteristics commonly found in real financial markets.
+- **Color Coding**: Visual indicators highlight upward or downward trends to mimic traditional trading dashboards.
+
+### Design Goals
+- **Visual Simulation**: Provide a compelling and visually accurate simulation of a synthetic stock market chart.
+- **Interactive Exploration**: Allow users to explore how combining different frequencies of noise can create complex, unpredictable patterns resembling real-world data.
+- **Financial Dashboard Aesthetic**: Use a distinct, consistent color scheme that evokes the feeling of modern trading software, complete with responsive layout for varying screen sizes.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A responsive layout with a main `canvas` element for the chart and a control panel featuring sliders and inputs for adjusting the noise parameters.
+- **Noise Generation (JavaScript)**: Implement a custom 1D noise algorithm.
+- **Fractional Brownian Motion**: Create a function that loops through multiple octaves, scaling frequency and amplitude, and summing the noise values to generate the final price point.
+- **Rendering Loop**: Use `requestAnimationFrame` to continuously calculate new values, scroll the historical data, and draw the line graph on the HTML5 canvas.
+
+## Depth of Field Simulator [[demo](https://rybla.github.io/interpolnet-2/depth-of-field-simulator)]
+
+An interactive 3D visualization demonstrating the optical depth of field effect by calculating a focal plane and dynamically blurring objects based on their z-depth distance from the circle of confusion. The simulator aims to provide an intuitive understanding of how camera lenses capture light and focus on subjects.
+
+## Subsurface Scattering Visualizer [[demo](https://rybla.github.io/interpolnet-2/subsurface-scattering-visualizer)]
+
+An interactive 3D visualization that demonstrates subsurface scattering by shining a virtual light behind a translucent 3D marble hand to visualize how light rays penetrate, scatter, and exit the surface to create a fleshy glow.
+
+### Features
+- **Translucent 3D Model**: A central 3D model styled to look like a marble hand that displays the subsurface scattering effect.
+- **Interactive Light Source**: A point light source that users can move around the 3D space, especially behind the object, to observe the scattering of light through the material.
+- **Real-Time Material Updates**: Interactive controls to adjust the material's transmission, thickness, and roughness to observe how these properties affect the subsurface scattering.
+- **Light Controls**: Adjustable sliders to change the intensity and color of the light.
+
+### Design Goals
+- **Educational Value**: Clearly illustrate how light scattering through a medium affects the final appearance, distinguishing it from simple opaque surface reflection.
+- **Visual Feedback**: Instantly show the effect of changing the light position or material properties, providing a clear understanding of the subsurface scattering phenomena.
+- **Aesthetic**: A visually pleasing and modern interface with a consistent color scheme, focusing on the glow of the translucent material against a dark background.
+
+### Implementation Plan
+- **HTML/CSS**: A responsive layout featuring a main 3D canvas and a side panel with UI controls (sliders) for interactivity.
+- **3D Rendering**: Use Three.js to render the 3D scene. Utilize a material that supports physical properties such as transmission and thickness, allowing for the simulation of subsurface scattering. A built-in or procedurally generated geometry will be used to represent the hand.
+- **Interaction**: UI sliders to adjust the light's position (X, Y, Z), material properties (transmission, thickness, roughness), and light intensity, dynamically updating the Three.js scene in real-time.
+
+## 2D Metaballs Liquid Simulator [[demo](https://rybla.github.io/interpolnet-2/2d-metaballs-liquid-simulator)]
+
+An interactive WebGL visualization on an HTML5 canvas that simulates liquid drops by dynamically rendering 2D metaballs. The metaballs smoothly merge into one another using overlapping thresholds calculated from their inverse-square distance functions.
+
+### Features
+- **Liquid Simulation**: Multiple 2D metaballs move organically around the screen, bouncing off edges and each other, simulating liquid drops.
+- **Smooth Merging**: As metaballs get close to each other, their fields overlap, and they seamlessly merge together, creating a convincing liquid-like effect.
+- **Interactive Controls**: Users can adjust the base threshold, the number of metaballs, and their speed in real-time to see how the simulation responds.
+- **Responsive Canvas**: The visualization scales cleanly to any screen size, maintaining performance and visual fidelity on both desktop and mobile devices.
+
+### Design Goals
+- **Organic Movement**: Ensure the metaballs move and merge in a satisfying, physically plausible manner to accurately mimic liquid behavior.
+- **High Performance**: Utilize WebGL to handle the per-pixel calculations required for evaluating the inverse-square distance fields, allowing for a large number of metaballs to run smoothly at 60fps.
+- **Clear Interaction**: Provide immediate visual feedback when users tweak the simulation parameters, demonstrating the underlying math in a tangible way.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen or prominent `<canvas>` element for the WebGL rendering, alongside a distinct, unique, and cleanly styled control panel for user inputs.
+- **WebGL Setup (JavaScript)**:
+    - Initialize a WebGL context and set up a full-screen quad to act as the drawing surface.
+    - Compile custom vertex and fragment shaders.
+- **Metaball Physics**:
+    - Manage an array of metaball objects in JavaScript, each with a position, velocity, and radius.
+    - Update their positions every frame based on their velocity, handling simple boundary collisions to keep them on-screen.
+- **Shader Logic (GLSL)**:
+    - The fragment shader receives the positions and radii of all active metaballs as uniforms.
+    - For each pixel, it calculates the sum of the inverse-square distances from the pixel to the center of each metaball.
+    - If this sum exceeds a predefined threshold (passed as a uniform from the UI), the pixel is colored as "liquid" (e.g., a solid color or a gradient); otherwise, it is treated as background.
