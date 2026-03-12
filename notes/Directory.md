@@ -3131,3 +3131,30 @@ An interactive 3D color gamut visualization that shows the exact boundaries and 
 - **UI & Controls**:
   - HTML/CSS overlay for model selection buttons.
   - Implement `OrbitControls` for camera manipulation.
+
+## GPU Tessellation Simulator [[demo](https://rybla.github.io/interpolnet-2/gpu-tessellation-simulator)]
+
+Demonstrate GPU tessellation by moving a virtual camera closer to a low-poly sphere and watching the graphics pipeline dynamically subdivide the geometry.
+
+### Features
+- **Dynamic Tessellation**: As the virtual camera moves closer to the 3D sphere, the underlying geometry dynamically subdivides to add detail, simulating distance-based tessellation.
+- **Interactive Controls**: Users can manually toggle between automatic (distance-based) tessellation and manual mode, where a slider directly controls the subdivision level.
+- **Wireframe Overlay**: A toggle allows users to view the explicit wireframe geometry over the shaded mesh, clearly showing the number of triangles increasing or decreasing.
+- **Responsive 3D Scene**: The 3D scene responds to user input (mouse/touch dragging) via orbit controls, and automatically adapts to screen size.
+
+### Design Goals
+- **Educational Demystification**: Visually explain the concept of GPU tessellation, where low-polygon meshes are refined into high-detail meshes on the fly to save processing power when objects are far away.
+- **Clear Visual Feedback**: Ensure the transition between subdivision levels is obvious, highlighting the increase in geometric detail as the camera approaches.
+- **Aesthetic**: Maintain the Interpolnet 2 neon/dark synthwave aesthetic with a dark background and glowing, distinct colors for the UI elements and the 3D object's wireframe.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen layout with a central `<canvas>` element for the 3D scene and an absolutely positioned, semi-transparent UI control panel overlay containing the toggles and sliders.
+- **3D Rendering (Three.js)**:
+  - Initialize a Three.js scene, camera, and renderer.
+  - Create a base geometry, specifically an `IcosahedronGeometry` (which naturally subdivides smoothly into a sphere).
+  - Implement dynamic logic in the render loop to calculate the distance between the camera and the object.
+  - Dynamically replace or update the `IcosahedronGeometry` with a new `detail` level parameter based on the calculated distance (or manual slider value).
+  - Ensure proper disposal of old geometry to avoid memory leaks.
+- **Interaction**:
+  - Implement `OrbitControls` to allow the user to explore the 3D space.
+  - Listen for UI events (slider changes, toggle clicks) to switch between manual and automatic tessellation modes and enable/disable the wireframe view.
