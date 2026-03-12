@@ -4392,3 +4392,113 @@ An interactive 2D visualization that contrasts standard deterministic ray tracin
     - Use `requestAnimationFrame` to continuously render new samples for path tracing over time.
     - Accumulate the results in an off-screen buffer or blend them over previous frames to resolve noise.
 - **Interactivity**: Use HTML controls (sliders, toggles) to update rendering settings and trigger a scene reset to start accumulating a new image.
+- **HTML Structure**: A layout featuring the main 2D `<canvas>` element for the visualization and a control panel for switching modes and interacting with the scene.
+- **Styling (CSS)**: Apply the dark, high-contrast Interpolnet 2 theme, ensuring responsive design and clear, distinct buttons.
+- **Rendering Engine (JavaScript)**:
+  - Implement a simple 2D vector math and geometry engine for ray-circle and ray-line intersections.
+  - Create a 2D scene graph containing the camera, a point/area light, and various geometric obstacles.
+  - Implement a `traceRay` function that handles deterministic bouncing and shadow ray casting for the "Ray Tracing" mode.
+  - Implement a `tracePath` function that uses stochastic bouncing (Monte Carlo integration) to accumulate color for the "Path Tracing" mode.
+  - Use `requestAnimationFrame` for a continuous rendering loop, updating the canvas with the accumulated lighting results over time to show the progressive refinement typical of path tracing.
+
+## Skeletal Animation Weight Painting Visualizer [[demo](https://rybla.github.io/interpolnet-2/skeletal-weight-painting)]
+
+An interactive 3D visualization that demonstrates how vertex weight painting controls skin deformation during skeletal animation. By displaying a 3D model with its underlying bone armature visible, users can visually explore the relationship between bones and mesh vertices.
+
+### Features
+- **3D Interactive Model**: A central 3D model (e.g., a simple cylinder or generic character arm) rendered with an underlying skeletal armature.
+- **Bone Interaction**: Users can select individual bones in the armature to highlight their influence on the mesh.
+- **Weight Visualization**: The mesh visually updates to display the weight painting for the selected bone, using a color gradient (e.g., from blue/black for 0 influence to red/white for 1.0 influence) mapped to the vertices.
+- **Animation Controls**: A slider to manually scrub through a simple animation (like bending an arm or a worm-like movement), clearly showing how the weighted vertices deform in real time.
+- **Overlay Options**: Toggles to show/hide the skeletal armature and switch between standard shading and weight visualization mode.
+
+### Design Goals
+- **Educational Clarity**: Demystify the concept of skeletal animation and skinning by making the invisible "weights" explicit and visual.
+- **Immediate Feedback**: Ensure the mesh updates instantly when a new bone is selected or when the animation slider is moved, providing a strong sense of causality.
+- **Aesthetic**: A clean, technical aesthetic that contrasts the underlying structure (bones) with the surface structure (mesh), utilizing a distinct and consistent color scheme.
+
+### Implementation Plan
+- **HTML/CSS**: A responsive layout featuring a main 3D canvas and a side panel with UI controls (sliders for animation, toggles for visualization modes).
+- **3D Rendering (Three.js)**:
+  - Create a `SkinnedMesh` with a custom geometry (like a cylinder divided into segments) and a corresponding `Skeleton`.
+  - Assign `skinIndex` and `skinWeight` attributes to the geometry vertices to bind them to the bones.
+  - Implement a custom shader material or use vertex colors with a standard material to visualize the weights dynamically when a bone is selected.
+- **Interaction**: UI controls to scrub through pre-defined bone rotations, select specific bones, and toggle rendering modes.
+
+## Bump Mapping Visualizer [[demo](https://rybla.github.io/interpolnet-2/bump-mapping-visualizer)]
+
+An interactive 3D visualization using Three.js that demonstrates the illusion of bump mapping. It visually breaks down how a grayscale height map alters a flat surface's normal vectors to fake the appearance of physical bumps and divots under a moving light source.
+
+### Features
+- **3D Flat Surface**: A central 3D flat plane that receives dynamic lighting.
+- **Grayscale Height Map Visualization**: A UI toggle allows users to display the procedural grayscale height map that dictates the bump information.
+- **Normal Vector Visualization**: A critical feature that renders the surface normal vectors as visible lines (e.g., using `VertexNormalsHelper`). Users can toggle this to see the straight, uniform normals of the flat plane suddenly perturb and shift orientation when the bump map is applied.
+- **Dynamic Moving Light**: A point light source orbits or sweeps across the surface, highlighting the fake shadows and highlights created by the altered normals.
+- **Real-Time Toggles**: Users can instantly toggle the bump map effect on and off to compare the flat, un-bumped shading with the detailed bump-mapped shading.
+
+### Design Goals
+- **Educational Demystification**: Make the "trick" of bump mapping obvious by explicitly showing the normal vectors changing direction based on the height map, rather than just showing the final shaded result.
+- **Visual Causality**: Directly link the light's movement to the resulting dynamic highlights and shadows that give the flat plane its fake depth.
+- **Aesthetic**: A clean, technical aesthetic consistent with the Interpolnet 2 project, utilizing a dark background with distinct, high-contrast colors for the normal vectors (e.g., bright neon magenta or cyan) to make them clearly visible against the surface.
+
+### Implementation Plan
+- **HTML/CSS**: A responsive container with a main 3D canvas and a floating control panel for the toggles (Show Bump Map, Show Normals, Enable Effect).
+- **3D Scene (Three.js)**:
+  - Create a high-resolution `PlaneGeometry` to provide enough vertices for the normal vector visualization to look dense and convincing.
+  - Generate a procedural grayscale height map texture (e.g., using Canvas 2D API or perlin noise).
+  - Apply a `MeshStandardMaterial` to the plane.
+  - Create a moving `PointLight` and a subtle `AmbientLight`.
+- **Interaction and Logic**:
+  - Implement a `VertexNormalsHelper` attached to the mesh to visualize the normals.
+  - When the "Enable Effect" toggle is active, assign the generated texture to the material's `bumpMap` property and update the normal visualization to reflect the perturbed normals (this may require a custom shader or manually calculating the perturbed normals for visualization if the helper only shows original geometry normals).
+  - Animate the light source in the `requestAnimationFrame` loop.
+
+## Spline Curvature Comparator [[demo](https://rybla.github.io/interpolnet-2/spline-curvature-comparator)]
+
+An interactive 2D visualization that allows users to move control points on a graph to compare the mathematical curvature differences between Catmull-Rom, B-Spline, and Bezier curves.
+
+### Features
+- **Interactive Control Points**: Users can click and drag control points on a 2D canvas to dynamically shape the curves.
+- **Multiple Spline Types**: Simultaneously displays Catmull-Rom, B-Spline, and Bezier curves generated from the same set of control points for direct comparison.
+- **Curvature Combs**: Toggles to display curvature combs (porcupine plots) for each spline type. These combs visually represent the magnitude and direction of the second derivative (curvature) at points along the curve, highlighting inflection points and regions of high curvature.
+- **Dynamic Calculation**: The curves and their curvature are recalculated and rendered in real-time as control points are moved.
+- **Control Panel**: A floating UI panel with toggles to independently show/hide each curve and its corresponding curvature comb.
+
+### Design Goals
+- **Educational Comparison**: Provide a clear, visual understanding of how different mathematical formulations (interpolation vs. approximation, local vs. global control) affect the shape and smoothness of a curve given identical input points.
+- **Visual Clarity**: Use distinct, bright colors for each spline type and its comb against a dark background to make the overlapping curves easily distinguishable.
+- **Fluid Interactivity**: Ensure smooth, lag-free dragging of control points with immediate visual feedback of the changing curvature.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for rendering, with an absolutely positioned, translucent control panel containing the toggles.
+- **Mathematics (JavaScript)**:
+    - Implement basis functions and evaluation logic for Catmull-Rom (interpolating), B-Spline (approximating, $C^2$ continuous), and cubic Bezier curves (approximating, $C^1$ continuous at joints if pieced together, but here we can just treat the points as a single piecewise curve or just a single segment if 4 points). For a generalized $N$-point setup, implement piecewise formulations.
+    - Implement the formulas for the first derivative ($C'(t)$) and second derivative ($C''(t)$) for each curve type to calculate the curvature $\kappa = \frac{|x'y'' - y'x''|}{(x'^2 + y'^2)^{3/2}}$.
+- **Rendering Loop**:
+    - Draw the control polygon (connecting lines between points).
+    - Draw the control points as draggable circles.
+    - Sample the curves at regular parameter intervals ($t$) and draw the paths.
+    - Calculate the normal vector at each sampled point and draw line segments outward, scaled by the calculated curvature $\kappa$, to create the curvature combs.
+
+## 3D Color Gamut Visualizer [[demo](https://rybla.github.io/interpolnet-2/3d-color-gamut-visualizer)]
+
+An interactive 3D visualization that shows the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
+
+### Features
+- **3D Interactive Model**: A central 3D scene containing thousands of points, each representing a distinct color.
+- **Color Model Switching**: Users can toggle the visualization to interpret the colors in RGB space (forming a cube), HSV space (forming a cylinder or double cone), or CIELAB space (forming an irregular curved volume).
+- **Smooth Transitions**: The points smoothly animate from their position in one color space to their position in another, making the mathematical relationship between the spaces visually apparent.
+- **Information Panel**: Shows the current color space and brief mathematical descriptions of its coordinate system.
+
+### Design Goals
+- **Educational Clarity**: Help users intuitively understand how different color models parameterize the same visible colors differently.
+- **Visual Delight**: Utilize thousands of colorful points moving in 3D space to create a visually engaging and beautiful experience.
+- **Performance**: Use efficient rendering techniques (like `THREE.Points` with custom buffer attributes) to ensure smooth animations even with high point counts.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen container for the Three.js canvas, with a responsive UI overlay for the controls to select the active color space.
+- **Three.js Logic**:
+  - Sample the RGB space evenly to create a base set of colors.
+  - Compute the 3D coordinates for each color in RGB, HSV, and CIELAB spaces.
+  - Store these coordinates in a `THREE.BufferGeometry`.
+  - Use `requestAnimationFrame` to interpolate the vertex positions between the current color space layout and the target color space layout when a user switches modes.
