@@ -3050,3 +3050,31 @@ An interactive 3D visualization that demonstrates how vertex weight painting con
   - Assign `skinIndex` and `skinWeight` attributes to the geometry vertices to bind them to the bones.
   - Implement a custom shader material or use vertex colors with a standard material to visualize the weights dynamically when a bone is selected.
 - **Interaction**: UI controls to scrub through pre-defined bone rotations, select specific bones, and toggle rendering modes.
+
+## Bump Mapping Visualizer [[demo](https://rybla.github.io/interpolnet-2/bump-mapping-visualizer)]
+
+An interactive 3D visualization using Three.js that demonstrates the illusion of bump mapping. It visually breaks down how a grayscale height map alters a flat surface's normal vectors to fake the appearance of physical bumps and divots under a moving light source.
+
+### Features
+- **3D Flat Surface**: A central 3D flat plane that receives dynamic lighting.
+- **Grayscale Height Map Visualization**: A UI toggle allows users to display the procedural grayscale height map that dictates the bump information.
+- **Normal Vector Visualization**: A critical feature that renders the surface normal vectors as visible lines (e.g., using `VertexNormalsHelper`). Users can toggle this to see the straight, uniform normals of the flat plane suddenly perturb and shift orientation when the bump map is applied.
+- **Dynamic Moving Light**: A point light source orbits or sweeps across the surface, highlighting the fake shadows and highlights created by the altered normals.
+- **Real-Time Toggles**: Users can instantly toggle the bump map effect on and off to compare the flat, un-bumped shading with the detailed bump-mapped shading.
+
+### Design Goals
+- **Educational Demystification**: Make the "trick" of bump mapping obvious by explicitly showing the normal vectors changing direction based on the height map, rather than just showing the final shaded result.
+- **Visual Causality**: Directly link the light's movement to the resulting dynamic highlights and shadows that give the flat plane its fake depth.
+- **Aesthetic**: A clean, technical aesthetic consistent with the Interpolnet 2 project, utilizing a dark background with distinct, high-contrast colors for the normal vectors (e.g., bright neon magenta or cyan) to make them clearly visible against the surface.
+
+### Implementation Plan
+- **HTML/CSS**: A responsive container with a main 3D canvas and a floating control panel for the toggles (Show Bump Map, Show Normals, Enable Effect).
+- **3D Scene (Three.js)**:
+  - Create a high-resolution `PlaneGeometry` to provide enough vertices for the normal vector visualization to look dense and convincing.
+  - Generate a procedural grayscale height map texture (e.g., using Canvas 2D API or perlin noise).
+  - Apply a `MeshStandardMaterial` to the plane.
+  - Create a moving `PointLight` and a subtle `AmbientLight`.
+- **Interaction and Logic**:
+  - Implement a `VertexNormalsHelper` attached to the mesh to visualize the normals.
+  - When the "Enable Effect" toggle is active, assign the generated texture to the material's `bumpMap` property and update the normal visualization to reflect the perturbed normals (this may require a custom shader or manually calculating the perturbed normals for visualization if the helper only shows original geometry normals).
+  - Animate the light source in the `requestAnimationFrame` loop.
