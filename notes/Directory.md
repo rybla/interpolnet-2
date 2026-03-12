@@ -3026,3 +3026,27 @@ An interactive 2D visualization that contrasts standard ray tracing with path tr
   - Implement a `traceRay` function that handles deterministic bouncing and shadow ray casting for the "Ray Tracing" mode.
   - Implement a `tracePath` function that uses stochastic bouncing (Monte Carlo integration) to accumulate color for the "Path Tracing" mode.
   - Use `requestAnimationFrame` for a continuous rendering loop, updating the canvas with the accumulated lighting results over time to show the progressive refinement typical of path tracing.
+
+## Skeletal Animation Weight Painting Visualizer [[demo](https://rybla.github.io/interpolnet-2/skeletal-weight-painting)]
+
+An interactive 3D visualization that demonstrates how vertex weight painting controls skin deformation during skeletal animation. By displaying a 3D model with its underlying bone armature visible, users can visually explore the relationship between bones and mesh vertices.
+
+### Features
+- **3D Interactive Model**: A central 3D model (e.g., a simple cylinder or generic character arm) rendered with an underlying skeletal armature.
+- **Bone Interaction**: Users can select individual bones in the armature to highlight their influence on the mesh.
+- **Weight Visualization**: The mesh visually updates to display the weight painting for the selected bone, using a color gradient (e.g., from blue/black for 0 influence to red/white for 1.0 influence) mapped to the vertices.
+- **Animation Controls**: A slider to manually scrub through a simple animation (like bending an arm or a worm-like movement), clearly showing how the weighted vertices deform in real time.
+- **Overlay Options**: Toggles to show/hide the skeletal armature and switch between standard shading and weight visualization mode.
+
+### Design Goals
+- **Educational Clarity**: Demystify the concept of skeletal animation and skinning by making the invisible "weights" explicit and visual.
+- **Immediate Feedback**: Ensure the mesh updates instantly when a new bone is selected or when the animation slider is moved, providing a strong sense of causality.
+- **Aesthetic**: A clean, technical aesthetic that contrasts the underlying structure (bones) with the surface structure (mesh), utilizing a distinct and consistent color scheme.
+
+### Implementation Plan
+- **HTML/CSS**: A responsive layout featuring a main 3D canvas and a side panel with UI controls (sliders for animation, toggles for visualization modes).
+- **3D Rendering (Three.js)**:
+  - Create a `SkinnedMesh` with a custom geometry (like a cylinder divided into segments) and a corresponding `Skeleton`.
+  - Assign `skinIndex` and `skinWeight` attributes to the geometry vertices to bind them to the bones.
+  - Implement a custom shader material or use vertex colors with a standard material to visualize the weights dynamically when a bone is selected.
+- **Interaction**: UI controls to scrub through pre-defined bone rotations, select specific bones, and toggle rendering modes.

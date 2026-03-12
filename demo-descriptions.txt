@@ -1,4 +1,3 @@
-Display a 3D model with its underlying bone armature visible to show how vertex weight painting controls skin deformation during skeletal animation.
 Show how a grayscale height map alters a flat surface's normal vectors to fake the appearance of physical bumps and divots under moving light.
 Allow users to move control points on a graph to compare the mathematical curvature differences between Catmull-Rom, B-Spline, and Bezier curves.
 Build an interactive 3D color gamut visualization to show the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
