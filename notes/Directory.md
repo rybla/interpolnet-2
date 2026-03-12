@@ -3158,3 +3158,34 @@ Demonstrate GPU tessellation by moving a virtual camera closer to a low-poly sph
 - **Interaction**:
   - Implement `OrbitControls` to allow the user to explore the 3D space.
   - Listen for UI events (slider changes, toggle clicks) to switch between manual and automatic tessellation modes and enable/disable the wireframe view.
+
+## Projectile Motion Synchronicity [[demo](https://rybla.github.io/interpolnet-2/projectile-motion-synchronicity)]
+
+An interactive physics simulation that visually proves a counter-intuitive principle of projectile motion: two objects dropped from the same height will hit the ground at the exact same time, even if one is launched horizontally with high velocity.
+
+### Features
+- **Dual Projectile Simulation**: Two virtual balls are suspended above a floor. One is dropped straight down (zero initial horizontal velocity), and the other is launched horizontally.
+- **Adjustable Parameters**: Users can control the initial horizontal velocity of the launched ball and the overall gravity of the simulation using sliders.
+- **Synchronized Release**: A single "Drop" button releases both balls at the exact same millisecond.
+- **Trailing Paths**: As the balls fall, they leave a fading trail that visualizes their distinct trajectories (a straight vertical line vs. a parabola).
+- **Simultaneous Impact Indication**: When the balls hit the ground, a distinct visual and/or subtle animation (like a synchronized flash or splash effect) emphasizes that they landed simultaneously.
+
+### Design Goals
+- **Educational Intuition**: Demystify the independence of horizontal and vertical motion by providing a clear, interactive, and repeatable experiment.
+- **Clear Visual Distinction**: Use highly contrasting colors for the two balls (e.g., neon cyan and bright magenta) so their paths are easily distinguished against a dark background.
+- **Aesthetic**: A clean, "blueprint" or laboratory aesthetic, utilizing a dark theme with glowing elements and clear typography to make it feel like a precise scientific instrument.
+
+### Implementation Plan
+- **HTML/CSS**: A split layout (or stacked on mobile) featuring a control panel (with sliders for velocity and gravity, and a Drop button) and a large, central `<canvas>` element for the simulation.
+- **Physics Engine (JavaScript)**:
+    - Implement a simple Euler integration loop using `requestAnimationFrame`.
+    - Track state for both balls: position (`x`, `y`), velocity (`vx`, `vy`), and constant acceleration (`gravity`).
+    - The horizontal ball has an initial `vx > 0`, while the vertical ball has `vx = 0`. Both start with `vy = 0`.
+- **Rendering Loop**:
+    - Draw the floor and the starting platforms.
+    - Draw the balls at their current positions.
+    - To create trails, either draw lines from historical positions or use a semi-transparent `fillRect` over the canvas before drawing the new frame to let previous frames fade out.
+- **Interaction**:
+    - "Drop" button starts the physics simulation.
+    - "Reset" button returns balls to their starting positions.
+    - Sliders dynamically update the simulation parameters (even mid-flight, though resetting first is usually clearer).
