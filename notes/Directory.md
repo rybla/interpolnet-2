@@ -3000,3 +3000,29 @@ Render 2D metaballs that smoothly merge into one another like liquid drops by ca
 - **HTML**: Set up a canvas for rendering.
 - **CSS**: Apply styling.
 - **JavaScript**: Implement the metaballs logic and rendering loop.
+
+## Path Tracing vs Ray Tracing [[demo](https://rybla.github.io/interpolnet-2/path-tracing-vs-ray-tracing)]
+
+An interactive 2D visualization that contrasts standard ray tracing with path tracing by showing how firing hundreds of randomized stochastic rays per pixel accurately resolves global illumination and soft shadows.
+
+### Features
+- **Split-Screen or Togglable View**: A canvas displaying a simple 2D scene (camera, light source, obstacles). Users can switch between "Ray Tracing" mode and "Path Tracing" mode.
+- **Ray Tracing Mode**: Visualizes the standard deterministic approach: a single primary ray is cast per pixel, and a single shadow ray is cast to the light. Produces hard shadows and no indirect lighting.
+- **Path Tracing Mode**: Visualizes the stochastic approach: hundreds of primary rays are cast, bouncing randomly off surfaces based on material properties (diffuse, specular) and accumulating color over time to produce soft shadows, color bleeding, and global illumination.
+- **Interactive Scene Elements**: Users can drag the light source or obstacles around the scene to see how the lighting dynamically updates in real-time.
+- **Interactive Pixel Selection**: Users can click on any pixel in the scene to visualize the specific rays being cast for that pixel, demystifying the rendering process.
+
+### Design Goals
+- **Educational Clarity**: Visually demonstrate the core difference between deterministic ray tracing and stochastic path tracing. Show why path tracing requires many samples but yields more realistic lighting.
+- **Visual Causality**: Directly link the random paths of bouncing rays to the accumulation of indirect light and soft shadows in the final image.
+- **Aesthetic**: A clean, modern "blueprint" or "tactical screen" visual style, using distinct neon colors against a dark background for the rays and obstacles, maintaining the Interpolnet 2 design system.
+
+### Implementation Plan
+- **HTML Structure**: A layout featuring the main 2D `<canvas>` element for the visualization and a control panel for switching modes and interacting with the scene.
+- **Styling (CSS)**: Apply the dark, high-contrast Interpolnet 2 theme, ensuring responsive design and clear, distinct buttons.
+- **Rendering Engine (JavaScript)**:
+  - Implement a simple 2D vector math and geometry engine for ray-circle and ray-line intersections.
+  - Create a 2D scene graph containing the camera, a point/area light, and various geometric obstacles.
+  - Implement a `traceRay` function that handles deterministic bouncing and shadow ray casting for the "Ray Tracing" mode.
+  - Implement a `tracePath` function that uses stochastic bouncing (Monte Carlo integration) to accumulate color for the "Path Tracing" mode.
+  - Use `requestAnimationFrame` for a continuous rendering loop, updating the canvas with the accumulated lighting results over time to show the progressive refinement typical of path tracing.
