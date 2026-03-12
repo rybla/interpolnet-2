@@ -1,4 +1,3 @@
-Build an interactive 3D color gamut visualization to show the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
 Demonstrate GPU tessellation by moving a virtual camera closer to a low-poly sphere and watching the graphics pipeline dynamically subdivide the geometry.
 Drop two virtual balls simultaneously where one falls straight down and one launches horizontally to prove they hit the ground at the exact same time.
 Hook a virtual mass to a spring and graph its kinetic and potential energy exchange in real-time as it oscillates with adjustable damping friction.

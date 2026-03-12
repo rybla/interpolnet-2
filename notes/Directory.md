@@ -3105,3 +3105,26 @@ An interactive 2D visualization that allows users to move control points on a gr
     - Draw the control points as draggable circles.
     - Sample the curves at regular parameter intervals ($t$) and draw the paths.
     - Calculate the normal vector at each sampled point and draw line segments outward, scaled by the calculated curvature $\kappa$, to create the curvature combs.
+
+## 3D Color Gamut Visualizer [[demo](https://rybla.github.io/interpolnet-2/3d-color-gamut-visualizer)]
+
+An interactive 3D visualization that shows the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
+
+### Features
+- **3D Interactive Model**: A central 3D scene containing thousands of points, each representing a distinct color.
+- **Color Model Switching**: Users can toggle the visualization to interpret the colors in RGB space (forming a cube), HSV space (forming a cylinder or double cone), or CIELAB space (forming an irregular curved volume).
+- **Smooth Transitions**: The points smoothly animate from their position in one color space to their position in another, making the mathematical relationship between the spaces visually apparent.
+- **Information Panel**: Shows the current color space and brief mathematical descriptions of its coordinate system.
+
+### Design Goals
+- **Educational Clarity**: Help users intuitively understand how different color models parameterize the same visible colors differently.
+- **Visual Delight**: Utilize thousands of colorful points moving in 3D space to create a visually engaging and beautiful experience.
+- **Performance**: Use efficient rendering techniques (like `THREE.Points` with custom buffer attributes) to ensure smooth animations even with high point counts.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen container for the Three.js canvas, with a responsive UI overlay for the controls to select the active color space.
+- **Three.js Logic**:
+  - Sample the RGB space evenly to create a base set of colors.
+  - Compute the 3D coordinates for each color in RGB, HSV, and CIELAB spaces.
+  - Store these coordinates in a `THREE.BufferGeometry`.
+  - Use `requestAnimationFrame` to interpolate the vertex positions between the current color space layout and the target color space layout when a user switches modes.
