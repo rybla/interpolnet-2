@@ -3189,3 +3189,27 @@ An interactive physics simulation that visually proves a counter-intuitive princ
     - "Drop" button starts the physics simulation.
     - "Reset" button returns balls to their starting positions.
     - Sliders dynamically update the simulation parameters (even mid-flight, though resetting first is usually clearer).
+
+## Spring Energy Oscillator [[demo](https://rybla.github.io/interpolnet-2/spring-energy-oscillator)]
+
+An interactive physics simulation that allows users to hook a virtual mass to a spring and graph its kinetic and potential energy exchange in real-time as it oscillates. Users can dynamically adjust the mass, spring constant, and damping friction to see how these properties affect the system's behavior and energy conservation.
+
+### Features
+- **Interactive Physics Sandbox**: A main canvas where users can visually see a spring attached to a mass. Users can click and drag the mass to stretch or compress the spring, adding potential energy to the system.
+- **Real-Time Energy Graph**: An adjacent scrolling canvas that plots the system's kinetic energy, potential energy, and total energy over time, providing a clear visual representation of energy exchange and conservation.
+- **Dynamic Controls**: Sliders allow users to adjust the mass of the object, the stiffness of the spring (spring constant), and the amount of friction (damping) in the environment in real-time.
+- **Responsive Layout**: The simulation and graph adapt to different screen sizes, ensuring usability on both desktop and mobile devices.
+
+### Design Goals
+- **Educational Value**: Provide a clear, intuitive way for students and enthusiasts to understand harmonic motion, Hooke's Law, and the conservation of energy.
+- **Visual Clarity**: Distinguish kinetic, potential, and total energy curves on the graph using a consistent and vibrant color scheme that makes the relationship between them obvious.
+- **Engaging Interaction**: Make the act of dragging the mass and watching the resulting oscillation and energy transfer feel satisfying and responsive.
+
+### Implementation Plan
+- **HTML Structure**: Create a main container with a split view: one section for the physics simulation canvas, one for the scrolling energy graph canvas, and a control panel for the sliders.
+- **CSS Styling**: Apply a modern, clean design with a distinct color palette (e.g., deep background, bright colors for the spring and energy lines). Use Flexbox/Grid for a responsive layout.
+- **JavaScript Core**:
+    - **Physics Engine**: Implement a numerical integration loop (e.g., Euler or Verlet integration) using `requestAnimationFrame`. Apply Hooke's Law ($F = -kx$) and a damping force ($F_d = -cv$) to update the mass's acceleration, velocity, and position.
+    - **Simulation Rendering**: Draw the spring (as a zig-zag line that expands/contracts based on position) and the mass on the first canvas.
+    - **Graph Rendering**: Calculate kinetic energy ($K = \frac{1}{2}mv^2$) and potential energy ($U = \frac{1}{2}kx^2$). Plot these values along with the total energy ($E = K + U$) on the second canvas, creating a scrolling effect by shifting historical data points.
+    - **Interaction Handling**: Listen to pointer events to allow manual displacement of the mass, and input events to update the physical constants from the sliders.
