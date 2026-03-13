@@ -3220,3 +3220,29 @@ An interactive physics simulation that visualizes the energy exchange within a s
     - **Simulation Canvas**: Draw the spring as a procedurally generated zig-zag line that expands and compresses based on the mass's position. Draw the mass as a distinct geometric shape.
     - **Graph Canvas**: Maintain an array of recent energy values (KE, PE, TE). In the render loop, calculate the current energies based on the physics state, add them to the array, and draw the lines. The graph will smoothly scroll to the left as new data is added.
 - **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) on the simulation canvas. When the mass is grabbed, temporarily disable the physics integration and directly set the position based on the cursor, setting velocity to zero.
+
+## Lennard-Jones Gas Simulation [[demo](https://rybla.github.io/interpolnet-2/lennard-jones-gas)]
+
+A web-based interactive simulation of a 2D Lennard-Jones gas. Users can control the volume of the container to observe how the particles respond to changes in pressure, eventually undergoing a phase transition into a highly ordered, solid-like state under extreme compression.
+
+### Features
+- **Interactive Particle Simulation**: A 2D simulation of gas particles interacting via the Lennard-Jones potential, running at 60 FPS.
+- **Volume Control**: An interactive slider allows the user to dynamically adjust the width of the container, effectively squeezing the gas.
+- **Thermodynamic Readouts**: Real-time display of calculated macroscopic properties such as Temperature, Pressure, and Volume.
+- **Dynamic Coloring**: Particles are colored dynamically based on their current velocity, providing a visual indication of kinetic energy distribution.
+- **Responsive Layout**: The simulation automatically adjusts to fit different screen sizes, ensuring the canvas and controls are always accessible.
+
+### Design Goals
+- **Educational Physics**: Visually demonstrate the relationship between volume, pressure, and state of matter (gas vs. solid) driven by intermolecular forces.
+- **Engaging Interaction**: Provide a satisfying, tangible way to "squeeze" a gas and watch it crystallize into a solid lattice.
+- **Aesthetic**: A clean, scientific aesthetic. Dark background with vibrant particles (e.g., cool blues for slow particles, hot reds/oranges for fast particles) to clearly illustrate temperature and energy.
+
+### Implementation Plan
+- **HTML Structure**: A `<main>` container with a `<canvas>` element for rendering the simulation and a UI control panel overlay for the volume slider and thermodynamic readouts.
+- **Physics Engine (JavaScript)**:
+    - Implement a numerical integration loop (e.g., Velocity Verlet) using `requestAnimationFrame`.
+    - Calculate pairwise forces using the derivative of the Lennard-Jones potential: $F(r) = 24 \epsilon \left( 2 \left(\frac{\sigma}{r}\right)^{13} - \left(\frac{\sigma}{r}\right)^7 \right)$.
+    - Implement boundary collision logic to keep particles within the dynamically sized container.
+- **Canvas Rendering**: Draw particles as circles and color them using a gradient based on their speed. Draw the dynamic container boundaries.
+- **Interaction Logic**: Handle the volume slider `input` event to adjust the container's width, and handle the reset button to re-initialize particle positions with random velocities.
+- **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
