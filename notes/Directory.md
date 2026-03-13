@@ -3305,3 +3305,30 @@ An interactive, grid-based Navier-Stokes fluid solver running in real-time in th
     - Optimize canvas rendering using `ImageData` for direct pixel manipulation instead of drawing individual rectangles.
 - **Interaction Logic**:
     - Listen to `pointerdown`, `pointermove`, and `pointerup` events to inject velocity vectors and density values into the specific grid cells under the cursor.
+
+## Ising Model Simulator [[demo](https://rybla.github.io/interpolnet-2/ising-model-simulator)]
+
+An interactive web simulation of the 2D Ising model on an HTML5 canvas, allowing users to dynamically control the temperature to observe how binary spins align and undergo a phase transition between ordered and disordered states using the Metropolis algorithm.
+
+### Features
+- **Real-Time Simulation**: A 2D grid of binary spins (+1 or -1) evolving over time using the Metropolis algorithm, running at a smooth framerate.
+- **Temperature Control**: An interactive slider allows the user to dynamically adjust the temperature of the system.
+- **Phase Transition Observation**: Users can observe the sudden shift from a disordered state (high temperature) to an ordered state with large magnetic domains (low temperature) near the Curie temperature.
+- **Responsive Layout**: The simulation automatically adjusts to fit different screen sizes, ensuring the canvas and controls are always accessible.
+- **Visual Feedback**: Distinct colors represent the two spin states, providing clear visual feedback on the system's magnetization.
+
+### Design Goals
+- **Educational Physics**: Visually demonstrate the core concepts of ferromagnetism, statistical mechanics, and phase transitions in a simple, accessible way.
+- **Engaging Interaction**: Provide a satisfying, tangible way to control the temperature and watch the domains form, merge, or dissolve.
+- **Aesthetic**: A clean, scientific aesthetic. Dark background with vibrant colors (e.g., contrasting neon colors like blue and orange) to clearly illustrate the opposing spin states.
+
+### Implementation Plan
+- **HTML Structure**: A `<main>` container with a `<canvas>` element for rendering the simulation and a UI control panel overlay for the temperature slider.
+- **Physics Engine (JavaScript)**:
+    - Implement the Metropolis algorithm on a 2D grid of spins.
+    - Calculate the energy change $\Delta E = 2 \cdot s_i \sum s_j$ when flipping a spin $s_i$.
+    - Flip the spin if $\Delta E \le 0$, or with probability $e^{-\Delta E / T}$ if $\Delta E > 0$.
+    - Perform multiple algorithm steps per animation frame to speed up the visual evolution.
+- **Canvas Rendering**: Draw the grid of spins to the canvas using `ImageData` for fast pixel manipulation, mapping the two spin states to distinct colors.
+- **Interaction Logic**: Handle the temperature slider `input` event to adjust the temperature variable $T$ used in the Metropolis algorithm.
+- **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
