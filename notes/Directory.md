@@ -4502,3 +4502,94 @@ An interactive 3D visualization that shows the exact boundaries and geometric di
   - Compute the 3D coordinates for each color in RGB, HSV, and CIELAB spaces.
   - Store these coordinates in a `THREE.BufferGeometry`.
   - Use `requestAnimationFrame` to interpolate the vertex positions between the current color space layout and the target color space layout when a user switches modes.
+- **Tech Stack**: HTML5 Canvas and Three.js for 3D rendering.
+- **Geometry Generation**:
+  - Distribute thousands of points uniformly in the RGB space (0-1 for R, G, B).
+  - For HSV and CIELAB views, mathematically convert the RGB coordinates to the target color space to determine the new 3D positions of the points.
+- **Animation (Morphing)**: Use `requestAnimationFrame` and `THREE.BufferGeometry` to interpolate the vertex positions of the point cloud between the different color space coordinates over time when the user switches modes.
+- **Rendering**: Use `THREE.Points` with `THREE.PointsMaterial` utilizing vertex colors so each point shines in its true color.
+- **UI & Controls**:
+  - HTML/CSS overlay for model selection buttons.
+  - Implement `OrbitControls` for camera manipulation.
+
+## GPU Tessellation Simulator [[demo](https://rybla.github.io/interpolnet-2/gpu-tessellation-simulator)]
+
+Demonstrate GPU tessellation by moving a virtual camera closer to a low-poly sphere and watching the graphics pipeline dynamically subdivide the geometry.
+
+### Features
+- **Dynamic Tessellation**: As the virtual camera moves closer to the 3D sphere, the underlying geometry dynamically subdivides to add detail, simulating distance-based tessellation.
+- **Interactive Controls**: Users can manually toggle between automatic (distance-based) tessellation and manual mode, where a slider directly controls the subdivision level.
+- **Wireframe Overlay**: A toggle allows users to view the explicit wireframe geometry over the shaded mesh, clearly showing the number of triangles increasing or decreasing.
+- **Responsive 3D Scene**: The 3D scene responds to user input (mouse/touch dragging) via orbit controls, and automatically adapts to screen size.
+
+### Design Goals
+- **Educational Demystification**: Visually explain the concept of GPU tessellation, where low-polygon meshes are refined into high-detail meshes on the fly to save processing power when objects are far away.
+- **Clear Visual Feedback**: Ensure the transition between subdivision levels is obvious, highlighting the increase in geometric detail as the camera approaches.
+- **Aesthetic**: Maintain the Interpolnet 2 neon/dark synthwave aesthetic with a dark background and glowing, distinct colors for the UI elements and the 3D object's wireframe.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen layout with a central `<canvas>` element for the 3D scene and an absolutely positioned, semi-transparent UI control panel overlay containing the toggles and sliders.
+- **3D Rendering (Three.js)**:
+  - Initialize a Three.js scene, camera, and renderer.
+  - Create a base geometry, specifically an `IcosahedronGeometry` (which naturally subdivides smoothly into a sphere).
+  - Implement dynamic logic in the render loop to calculate the distance between the camera and the object.
+  - Dynamically replace or update the `IcosahedronGeometry` with a new `detail` level parameter based on the calculated distance (or manual slider value).
+  - Ensure proper disposal of old geometry to avoid memory leaks.
+- **Interaction**:
+  - Implement `OrbitControls` to allow the user to explore the 3D space.
+  - Listen for UI events (slider changes, toggle clicks) to switch between manual and automatic tessellation modes and enable/disable the wireframe view.
+
+## Projectile Motion Synchronicity [[demo](https://rybla.github.io/interpolnet-2/projectile-motion-synchronicity)]
+
+An interactive physics simulation that visually proves a counter-intuitive principle of projectile motion: two objects dropped from the same height will hit the ground at the exact same time, even if one is launched horizontally with high velocity.
+
+### Features
+- **Dual Projectile Simulation**: Two virtual balls are suspended above a floor. One is dropped straight down (zero initial horizontal velocity), and the other is launched horizontally.
+- **Adjustable Parameters**: Users can control the initial horizontal velocity of the launched ball and the overall gravity of the simulation using sliders.
+- **Synchronized Release**: A single "Drop" button releases both balls at the exact same millisecond.
+- **Trailing Paths**: As the balls fall, they leave a fading trail that visualizes their distinct trajectories (a straight vertical line vs. a parabola).
+- **Simultaneous Impact Indication**: When the balls hit the ground, a distinct visual and/or subtle animation (like a synchronized flash or splash effect) emphasizes that they landed simultaneously.
+
+### Design Goals
+- **Educational Intuition**: Demystify the independence of horizontal and vertical motion by providing a clear, interactive, and repeatable experiment.
+- **Clear Visual Distinction**: Use highly contrasting colors for the two balls (e.g., neon cyan and bright magenta) so their paths are easily distinguished against a dark background.
+- **Aesthetic**: A clean, "blueprint" or laboratory aesthetic, utilizing a dark theme with glowing elements and clear typography to make it feel like a precise scientific instrument.
+
+### Implementation Plan
+- **HTML/CSS**: A split layout (or stacked on mobile) featuring a control panel (with sliders for velocity and gravity, and a Drop button) and a large, central `<canvas>` element for the simulation.
+- **Physics Engine (JavaScript)**:
+    - Implement a simple Euler integration loop using `requestAnimationFrame`.
+    - Track state for both balls: position (`x`, `y`), velocity (`vx`, `vy`), and constant acceleration (`gravity`).
+    - The horizontal ball has an initial `vx > 0`, while the vertical ball has `vx = 0`. Both start with `vy = 0`.
+- **Rendering Loop**:
+    - Draw the floor and the starting platforms.
+    - Draw the balls at their current positions.
+    - To create trails, either draw lines from historical positions or use a semi-transparent `fillRect` over the canvas before drawing the new frame to let previous frames fade out.
+- **Interaction**:
+    - "Drop" button starts the physics simulation.
+    - "Reset" button returns balls to their starting positions.
+    - Sliders dynamically update the simulation parameters (even mid-flight, though resetting first is usually clearer).
+
+## Spring Energy Oscillator [[demo](https://rybla.github.io/interpolnet-2/spring-energy-oscillator)]
+
+An interactive physics simulation that allows users to hook a virtual mass to a spring and graph its kinetic and potential energy exchange in real-time as it oscillates. Users can dynamically adjust the mass, spring constant, and damping friction to see how these properties affect the system's behavior and energy conservation.
+
+### Features
+- **Interactive Physics Sandbox**: A main canvas where users can visually see a spring attached to a mass. Users can click and drag the mass to stretch or compress the spring, adding potential energy to the system.
+- **Real-Time Energy Graph**: An adjacent scrolling canvas that plots the system's kinetic energy, potential energy, and total energy over time, providing a clear visual representation of energy exchange and conservation.
+- **Dynamic Controls**: Sliders allow users to adjust the mass of the object, the stiffness of the spring (spring constant), and the amount of friction (damping) in the environment in real-time.
+- **Responsive Layout**: The simulation and graph adapt to different screen sizes, ensuring usability on both desktop and mobile devices.
+
+### Design Goals
+- **Educational Value**: Provide a clear, intuitive way for students and enthusiasts to understand harmonic motion, Hooke's Law, and the conservation of energy.
+- **Visual Clarity**: Distinguish kinetic, potential, and total energy curves on the graph using a consistent and vibrant color scheme that makes the relationship between them obvious.
+- **Engaging Interaction**: Make the act of dragging the mass and watching the resulting oscillation and energy transfer feel satisfying and responsive.
+
+### Implementation Plan
+- **HTML Structure**: Create a main container with a split view: one section for the physics simulation canvas, one for the scrolling energy graph canvas, and a control panel for the sliders.
+- **CSS Styling**: Apply a modern, clean design with a distinct color palette (e.g., deep background, bright colors for the spring and energy lines). Use Flexbox/Grid for a responsive layout.
+- **JavaScript Core**:
+    - **Physics Engine**: Implement a numerical integration loop (e.g., Euler or Verlet integration) using `requestAnimationFrame`. Apply Hooke's Law ($F = -kx$) and a damping force ($F_d = -cv$) to update the mass's acceleration, velocity, and position.
+    - **Simulation Rendering**: Draw the spring (as a zig-zag line that expands/contracts based on position) and the mass on the first canvas.
+    - **Graph Rendering**: Calculate kinetic energy ($K = \frac{1}{2}mv^2$) and potential energy ($U = \frac{1}{2}kx^2$). Plot these values along with the total energy ($E = K + U$) on the second canvas, creating a scrolling effect by shifting historical data points.
+    - **Interaction Handling**: Listen to pointer events to allow manual displacement of the mass, and input events to update the physical constants from the sliders.
