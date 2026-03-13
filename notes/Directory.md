@@ -3353,3 +3353,25 @@ An OS simulator where colored process blocks queue up and are processed by a CPU
     - A `requestAnimationFrame` loop to drive the simulation, moving time forward and updating the UI.
     - Logic for selecting the next process based on the active scheduling algorithm (RR with a time quantum, or SJF).
     - DOM manipulation to visually move process blocks from the queue to the CPU timeline.
+
+## Virtual Memory Allocator [[demo](https://rybla.github.io/interpolnet-2/virtual-memory-allocator)]
+
+An interactive educational visualization of an operating system's virtual memory allocator. It maps a program's continuous logical address space into fragmented physical RAM frames and disk swap space, illustrating page faults, swapping, and address translation.
+
+### Features
+- **Virtual Address Space**: A visual representation of a continuous block of logical memory pages belonging to a process.
+- **Physical RAM & Disk Swap**: Separate containers representing the limited capacity of physical memory (RAM) and the larger, slower secondary storage (Disk Swap).
+- **Dynamic Allocation**: Users can "allocate" virtual pages. The system attempts to map these to free physical RAM frames.
+- **Page Faults & Swapping**: When RAM is full and a new page is accessed or allocated, a page replacement algorithm (e.g., FIFO or LRU) triggers a page fault. An existing RAM frame is evicted to Disk Swap, and the new page is loaded into RAM.
+- **Visual Mapping**: Dynamic, animated lines connect virtual pages to their current physical locations (RAM or Swap).
+
+### Design Goals
+- **Educational Clarity**: Demystify the concept of virtual memory by making the abstract address translation and swapping mechanisms visible and concrete.
+- **Interactive Metaphor**: Use a distinct "hardware" or "system architecture" visual style, such as a dark theme with glowing "circuit" lines connecting memory blocks.
+- **Responsive Layout**: Arrange the memory spaces horizontally on desktop and vertically on smaller mobile screens.
+
+### Implementation Plan
+- **HTML Structure**: Create a split view: a column for Virtual Memory, a column for Physical RAM, and a column for Disk Swap. Include a control panel with action buttons (Allocate, Access Random Page).
+- **CSS Styling**: Apply a dark, technical theme with distinct colors for the different memory areas (e.g., cyan for Virtual, green for RAM, orange for Swap). Use CSS Flexbox/Grid for layout.
+- **JavaScript State**: Maintain an array of `VirtualPage` objects representing the process, and an array of `PhysicalFrame` objects for RAM and Swap. Each `VirtualPage` tracks its status (Unallocated, In RAM, In Swap) and its physical frame index.
+- **Rendering & Animation**: Use DOM manipulation to update the visual state of memory blocks. Use SVG or an HTML5 Canvas overlay to draw and animate the mapping lines connecting virtual pages to physical frames, updating them dynamically when swaps occur.
