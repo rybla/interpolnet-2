@@ -3246,3 +3246,26 @@ A web-based interactive simulation of a 2D Lennard-Jones gas. Users can control 
 - **Canvas Rendering**: Draw particles as circles and color them using a gradient based on their speed. Draw the dynamic container boundaries.
 - **Interaction Logic**: Handle the volume slider `input` event to adjust the container's width, and handle the reset button to re-initialize particle positions with random velocities.
 - **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
+
+## Water Ripple Interference Simulator [[demo](https://rybla.github.io/interpolnet-2/water-ripple-interference)]
+
+A 2D water ripple simulation where users can place two oscillating point sources to generate distinct constructive and destructive interference patterns.
+
+### Features
+- **Dual Oscillators**: Two interactive point sources that continuously emit circular waves.
+- **Interference Visualization**: A dynamically rendered 2D fluid surface that correctly calculates the addition and cancellation of waves (constructive and destructive interference).
+- **Interactive Dragging**: Users can drag the wave sources around the screen to explore how their positions affect the interference patterns.
+- **Real-Time Rendering**: The simulation calculates wave heights at every pixel to create a realistic, continuous ripple effect.
+
+### Design Goals
+- **Educational Demystification**: Make the abstract physics concept of wave interference tangible and visually clear.
+- **Aesthetic Excellence**: Use a deep, dark oceanic color palette with bright, glowing cyan highlights for the wave crests, matching the overall Interpolnet 2 style.
+- **Smooth Interaction**: Ensure the dragging feels responsive and the ripples update smoothly at 60 FPS.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for the simulation, overlayed with a minimal, dark-themed UI to show the source indicators.
+- **JavaScript Core**:
+    - **Simulation Loop**: Use `requestAnimationFrame` to drive the time component of the wave equations.
+    - **Wave Math**: Calculate the total displacement at any given pixel using a sum of sine waves: $h(x, y) = \sum A \sin(k \cdot d_i - \omega \cdot t)$, where $d_i$ is the distance to source $i$.
+    - **Rendering**: Due to the need to evaluate math per-pixel, directly manipulate an `ImageData` array in a tight loop and `putImageData` back to the canvas context, mapping the resulting height to an RGBA color value.
+    - **Interaction**: Attach pointer events to the canvas to allow moving the sources, checking distance to see which source is grabbed.
