@@ -3275,3 +3275,33 @@ An interactive 2D wave simulation that visualizes the principles of wave interfe
     - Alternatively, for a purely mathematical interference visualization, calculate the height at each pixel directly as the sum of sine waves from the two sources: $h(x,y) = A \sin(k d_1 - \omega t) + A \sin(k d_2 - \omega t)$, where $d_1$ and $d_2$ are distances to the sources. This approach is often cleaner and faster for just showing continuous interference from fixed sources. We will use the direct mathematical approach for crisp patterns.
 - **Rendering Loop**: Use `requestAnimationFrame` to update time `t` and calculate the height of each pixel. Map the height value (e.g., -1 to 1) to a color gradient and draw it using `ctx.putImageData`.
 - **Interaction**: Handle pointer events to allow dragging the sources, and input events on sliders to update frequency and amplitude.
+
+## Grid-Based Fluid Solver [[demo](https://rybla.github.io/interpolnet-2/grid-based-fluid-solver)]
+
+An interactive, grid-based Navier-Stokes fluid solver running in real-time in the browser. Users can drag their mouse across the canvas to paint colored dye, which naturally swirls and forms complex, authentic fluid dynamics like von Kármán vortex streets around obstacles or as a result of varying velocities.
+
+### Features
+- **Real-Time Fluid Simulation**: A grid-based fluid solver that computes the Navier-Stokes equations for incompressible fluid flow (including advection, diffusion, and pressure projection) entirely in JavaScript.
+- **Interactive Painting**: Dragging the mouse across the canvas injects both density (colored dye) and velocity into the fluid field.
+- **Vortex Streets**: The simulation is detailed enough to demonstrate emergent fluid phenomena such as von Kármán vortex streets when fast-moving fluid interacts with slower regions or bounds.
+- **Adjustable Parameters**: A clean, modern control panel overlay allows users to dynamically tweak:
+    - **Viscosity**: How thick the fluid is (e.g., water vs. honey).
+    - **Dye Color**: Change the color of the dye being injected.
+    - **Brush Size**: Adjust the radius of the dye and velocity injection.
+- **Dynamic Fading**: The dye slowly dissipates over time, ensuring the canvas doesn't become permanently saturated and allowing for continuous drawing.
+
+### Design Goals
+- **Educational Simulation**: Provide a visually stunning and accessible demonstration of complex computational fluid dynamics (CFD) running directly in a web environment.
+- **Visceral Interaction**: Ensure the fluid feels responsive and "thick," reacting realistically to the user's input with satisfying swirls and eddies.
+- **Aesthetics**: Employ a dark, modern theme where vibrant neon dyes stand out sharply against a deep background, keeping with the Interpolnet 2 visual style.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen `<canvas>` for rendering the simulation and a semi-transparent floating UI control panel for the sliders and color pickers.
+- **Fluid Solver Engine (JavaScript)**:
+    - Implement a grid-based Eulerian solver utilizing a 1D array to represent the 2D grid for performance.
+    - Implement the core steps of a stable fluid solver: `addSource` (adding dye/velocity), `diffuse` (spreading values over time via a linear solver like Gauss-Seidel), `advect` (moving values along the velocity field), and `project` (enforcing mass conservation by ensuring the velocity field is divergence-free).
+- **Rendering Loop**:
+    - Use `requestAnimationFrame` to continuously step the fluid simulation and render the density values to the canvas.
+    - Optimize canvas rendering using `ImageData` for direct pixel manipulation instead of drawing individual rectangles.
+- **Interaction Logic**:
+    - Listen to `pointerdown`, `pointermove`, and `pointerup` events to inject velocity vectors and density values into the specific grid cells under the cursor.
