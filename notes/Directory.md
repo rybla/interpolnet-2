@@ -3189,3 +3189,34 @@ An interactive physics simulation that visually proves a counter-intuitive princ
     - "Drop" button starts the physics simulation.
     - "Reset" button returns balls to their starting positions.
     - Sliders dynamically update the simulation parameters (even mid-flight, though resetting first is usually clearer).
+
+## Harmonic Oscillator Energy [[demo](https://rybla.github.io/interpolnet-2/harmonic-oscillator-energy)]
+
+An interactive physics simulation that visualizes the energy exchange within a simple harmonic oscillator. Users can hook a virtual mass to a spring and watch as kinetic and potential energy transfer back and forth in real-time.
+
+### Features
+- **Interactive Physics Sandbox**: A central canvas displaying a spring attached to a mass block. Users can click and drag the mass vertically to set its initial displacement and release it to start the oscillation.
+- **Adjustable Parameters**: A control panel with real-time sliders to tweak the physical properties of the system:
+    - **Mass ($m$)**: Adjust the weight of the block, changing its inertia.
+    - **Spring Constant ($k$)**: Adjust the stiffness of the spring, changing the restoring force.
+    - **Damping Friction ($c$)**: Adjust the air resistance or internal friction, causing the oscillation to gradually lose energy and settle.
+- **Real-Time Energy Graph**: A secondary canvas positioned alongside the simulation that plots the continuous energy curves of the system over time. It visually tracks:
+    - **Kinetic Energy (KE)**: $KE = \frac{1}{2}mv^2$ (peaks when the mass passes through the equilibrium point).
+    - **Potential Energy (PE)**: $PE = \frac{1}{2}kx^2$ (peaks when the mass is at its maximum displacement).
+    - **Total Energy (TE)**: $TE = KE + PE$ (remains constant in an undamped system, but slowly decays in a damped system).
+
+### Design Goals
+- **Educational Intuition**: The primary goal is to make the abstract concepts of kinetic and potential energy tangible. By linking a physical simulation directly to a real-time graph, users can visually comprehend how energy is conserved and transferred.
+- **Immediate Feedback**: Changes to the sliders immediately affect both the physical movement of the mass and the shape of the energy graph.
+- **Aesthetic**: Use a clean, scientific "blueprint" aesthetic consistent with the Interpolnet 2 project. Dark background with distinct, high-contrast neon colors (e.g., cyan for Kinetic Energy, magenta for Potential Energy, yellow for Total Energy) to clearly differentiate the data streams.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A responsive layout featuring three main sections: the simulation canvas, the energy graph canvas, and the control panel. Flexbox will be used to ensure it stacks neatly on mobile devices.
+- **Physics Engine (JavaScript)**:
+    - Implement a simple Euler integration or Verlet integration loop within `requestAnimationFrame`.
+    - Apply Hooke's Law ($F_s = -kx$) and a damping force ($F_d = -cv$) to calculate the acceleration of the mass at each frame ($a = \frac{F_s + F_d}{m}$).
+    - Update velocity ($v_{new} = v_{old} + a \cdot dt$) and position ($x_{new} = x_{old} + v_{new} \cdot dt$).
+- **Canvas Rendering**:
+    - **Simulation Canvas**: Draw the spring as a procedurally generated zig-zag line that expands and compresses based on the mass's position. Draw the mass as a distinct geometric shape.
+    - **Graph Canvas**: Maintain an array of recent energy values (KE, PE, TE). In the render loop, calculate the current energies based on the physics state, add them to the array, and draw the lines. The graph will smoothly scroll to the left as new data is added.
+- **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) on the simulation canvas. When the mass is grabbed, temporarily disable the physics integration and directly set the position based on the cursor, setting velocity to zero.
