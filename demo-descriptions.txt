@@ -1,4 +1,3 @@
-Provide an OS simulator where colored process blocks queue up and are processed by a CPU timeline to compare Round Robin versus Shortest Job First scheduling.
 Show virtual memory allocation by visually mapping fragmented logical pages from a program into disparate physical RAM frames and disk swap space.
 Simulate an orbital mechanics sandbox utilizing the Barnes-Hut algorithm where users can fling planets to form stable solar systems or chaotic multi-star ejections.
 Create an interactive Maxwell-Boltzmann distribution graph linked to a particle box to show how velocity curves flatten and stretch as temperature rises.

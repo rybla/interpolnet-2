@@ -3327,3 +3327,29 @@ An interactive web simulation of the 2D Ising model. Users can control the tempe
 - **JavaScript Core**:
     - **Metropolis Algorithm**: At each step, select a random grid cell. Calculate the change in energy ($\Delta E$) if flipped. If $\Delta E < 0$, flip it. If $\Delta E > 0$, flip it with probability $e^{-\Delta E / T}$.
     - **Rendering**: A `requestAnimationFrame` loop that efficiently updates the grid data and repaints the canvas.
+
+## CPU Scheduling Simulator [[demo](https://rybla.github.io/interpolnet-2/cpu-scheduling-simulator)]
+
+An OS simulator where colored process blocks queue up and are processed by a CPU timeline to compare Round Robin versus Shortest Job First scheduling. Users can add processes dynamically and observe how different algorithms affect the wait time and execution order.
+
+### Features
+- **Process Queue**: Visualizes the queue of waiting processes. Each process is a colored block with a randomly assigned burst time.
+- **CPU Timeline**: A scrolling or extending timeline that shows processes being executed by the CPU.
+- **Algorithm Comparison**: A toggle to switch between Round Robin (RR) and Shortest Job First (SJF) algorithms.
+    - **Round Robin**: Processes are given a fixed time quantum. If they do not finish, they are moved to the back of the queue.
+    - **Shortest Job First**: The process with the shortest remaining burst time is selected to run next.
+- **Dynamic Interaction**: Users can click a button to add new random processes to the queue at any time.
+
+### Design Goals
+- **Educational Visualization**: Provide a clear, intuitive way to understand OS scheduling algorithms, making the abstract concepts of queues and time quanta visible.
+- **Responsive Layout**: Ensure the demo is mobile-friendly, with controls adjusting to fit different screen sizes.
+- **Consistent Styling**: Use a distinct, unique, and consistent color scheme (e.g., using a defined palette for process blocks) and typography that matches the Interpolnet 2 project.
+
+### Implementation Plan
+- **HTML Structure**: A `<main>` container with a control panel at the top (buttons, algorithm selector), a `div` for the Process Queue, and a `div` for the CPU Timeline.
+- **Styling (CSS)**: Use flexbox for layout. Use CSS variables for a consistent color theme. Processes will be styled as colored blocks. Add transitions for smooth movement of blocks.
+- **JavaScript Core**:
+    - State management for the queue, timeline, current time, and selected algorithm.
+    - A `requestAnimationFrame` loop to drive the simulation, moving time forward and updating the UI.
+    - Logic for selecting the next process based on the active scheduling algorithm (RR with a time quantum, or SJF).
+    - DOM manipulation to visually move process blocks from the queue to the CPU timeline.
