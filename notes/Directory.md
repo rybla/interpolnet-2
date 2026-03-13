@@ -3375,3 +3375,25 @@ An interactive educational visualization of an operating system's virtual memory
 - **CSS Styling**: Apply a dark, technical theme with distinct colors for the different memory areas (e.g., cyan for Virtual, green for RAM, orange for Swap). Use CSS Flexbox/Grid for layout.
 - **JavaScript State**: Maintain an array of `VirtualPage` objects representing the process, and an array of `PhysicalFrame` objects for RAM and Swap. Each `VirtualPage` tracks its status (Unallocated, In RAM, In Swap) and its physical frame index.
 - **Rendering & Animation**: Use DOM manipulation to update the visual state of memory blocks. Use SVG or an HTML5 Canvas overlay to draw and animate the mapping lines connecting virtual pages to physical frames, updating them dynamically when swaps occur.
+
+## Orbital Mechanics Sandbox [[demo](https://rybla.github.io/interpolnet-2/orbital-mechanics-sandbox)]
+
+An interactive orbital mechanics sandbox that simulates the gravitational interactions between numerous celestial bodies using the Barnes-Hut algorithm.
+
+### Features
+- **Barnes-Hut Simulation**: Efficiently calculates gravity between many bodies, grouping distant bodies to maintain performance.
+- **Interactive Sandbox**: Users can click and drag to fling new planets into the system, dictating their initial position, mass, and velocity.
+- **Stable and Chaotic Systems**: Capable of simulating everything from stable, orbiting solar systems to chaotic, multi-star ejections.
+- **Dynamic Trails**: Planets leave fading trails behind them to visualize their orbital paths over time.
+- **Simulation Controls**: Adjust the speed of the simulation, pause/play, toggle trails, and clear the sandbox.
+
+### Design Goals
+- **Educational Physics**: Provide a visually engaging way to understand the complex dynamics of N-body gravitational systems.
+- **Performance**: Maintain smooth framerates even with hundreds of interacting bodies by leveraging the Barnes-Hut approximation.
+- **Aesthetic**: A consistent, dark, and sleek space-themed color scheme with bright, colorful planets and subtle trails.
+
+### Implementation Plan
+- **QuadTree Data Structure**: Implement a QuadTree to spatially partition the bodies and calculate the center of mass for each node, reducing the time complexity of force calculations.
+- **Physics Engine**: Use a numerical integration method (like semi-implicit Euler) to update positions and velocities based on net gravitational forces.
+- **Rendering**: Use the HTML5 Canvas API to render the planets and their trails efficiently.
+- **UI & Interaction**: Implement a modern, responsive control panel overlay and pointer events on the canvas for flinging new bodies.

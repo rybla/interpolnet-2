@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Orbital Mechanics Sandbox</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="sim-canvas"></canvas>
+    <div id="ui-panel">
+      <h2>Orbital Mechanics</h2>
+      <button id="btn-clear">Clear Sandbox</button>
+      <button id="btn-pause">Pause/Play</button>
+
+      <div class="control-group">
+        <input type="checkbox" id="chk-trails" checked>
+        <label for="chk-trails">Show Trails</label>
+      </div>
+
+      <div class="control-group">
+        <label for="slider-speed">Simulation Speed: <span id="speed-display">1.0</span>x</label>
+        <input type="range" id="slider-speed" min="0.1" max="5.0" step="0.1" value="1.0">
+      </div>
+
+      <div class="control-group">
+        <label for="slider-mass">Fling Mass: <span id="mass-display">50</span></label>
+        <input type="range" id="slider-mass" min="10" max="500" step="10" value="50">
+      </div>
+
+      <div id="status">Bodies: <span id="body-count">0</span></div>
+      <p class="instruction">Drag to fling new bodies</p>
+    </div>
+  </body>
+</html>
