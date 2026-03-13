@@ -3246,3 +3246,32 @@ A web-based interactive simulation of a 2D Lennard-Jones gas. Users can control 
 - **Canvas Rendering**: Draw particles as circles and color them using a gradient based on their speed. Draw the dynamic container boundaries.
 - **Interaction Logic**: Handle the volume slider `input` event to adjust the container's width, and handle the reset button to re-initialize particle positions with random velocities.
 - **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
+
+## 2D Water Ripple Interference [[demo](https://rybla.github.io/interpolnet-2/water-ripple-interference)]
+
+An interactive 2D wave simulation that visualizes the principles of wave interference. Users can place and manipulate two oscillating point sources on a water-like surface to observe how their ripples create distinct constructive and destructive interference patterns.
+
+### Features
+- **Real-Time 2D Wave Simulation**: A high-performance simulation of the 2D wave equation on an HTML5 canvas, calculating and rendering the propagation of ripples across a grid.
+- **Dual Point Sources**: Two independent, continuous wave sources (oscillators) generate circular ripples.
+- **Interactive Source Placement**: Users can click and drag the point sources around the canvas to dynamically alter the interference pattern.
+- **Adjustable Parameters**: A control panel allows users to tweak the properties of the wave sources:
+    - **Frequency**: Controls how fast the sources oscillate (wavelength).
+    - **Amplitude**: Controls the height of the generated waves.
+    - **Separation**: A slider to symmetrically adjust the distance between the two sources relative to the center.
+- **Visual Interference Patterns**: The rendering clearly highlights areas of constructive interference (where waves reinforce, creating higher peaks and deeper troughs) and destructive interference (where waves cancel out, creating calm areas known as nodal lines).
+
+### Design Goals
+- **Educational Intuition**: Provide a clear, visual, and interactive demonstration of wave interference, a fundamental concept in physics, acoustics, and optics (e.g., Young's double-slit experiment).
+- **Aesthetics**: Create a beautiful, mesmerizing visualization. Use a color palette that evokes water or energy (e.g., deep blues/cyan for the background, bright white/cyan for wave peaks, and dark navy for troughs).
+- **Performance**: Ensure smooth 60fps rendering of the simulation, utilizing efficient array operations and `ImageData` for fast canvas drawing.
+- **Responsive Layout**: The simulation canvas should adapt to different screen sizes, with a floating or sidebar control panel.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the simulation and a UI control panel overlay (`div`) containing range inputs for parameters.
+- **Styling (CSS)**: A dark theme to make the wave patterns pop. The UI should have a frosted glass effect or a clean, modern look consistent with the Interpolnet 2 project.
+- **Simulation Engine (JavaScript)**:
+    - Implement a 2D wave equation solver using a height map (grid of values). Typically involves two buffers (current and previous state) to calculate the next state: `next[x][y] = (current[x-1][y] + current[x+1][y] + current[x][y-1] + current[x][y+1]) / 2 - previous[x][y]`, plus damping.
+    - Alternatively, for a purely mathematical interference visualization, calculate the height at each pixel directly as the sum of sine waves from the two sources: $h(x,y) = A \sin(k d_1 - \omega t) + A \sin(k d_2 - \omega t)$, where $d_1$ and $d_2$ are distances to the sources. This approach is often cleaner and faster for just showing continuous interference from fixed sources. We will use the direct mathematical approach for crisp patterns.
+- **Rendering Loop**: Use `requestAnimationFrame` to update time `t` and calculate the height of each pixel. Map the height value (e.g., -1 to 1) to a color gradient and draw it using `ctx.putImageData`.
+- **Interaction**: Handle pointer events to allow dragging the sources, and input events on sliders to update frequency and amplitude.
