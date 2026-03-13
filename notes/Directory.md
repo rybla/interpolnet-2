@@ -4593,3 +4593,61 @@ An interactive physics simulation that allows users to hook a virtual mass to a 
     - **Simulation Rendering**: Draw the spring (as a zig-zag line that expands/contracts based on position) and the mass on the first canvas.
     - **Graph Rendering**: Calculate kinetic energy ($K = \frac{1}{2}mv^2$) and potential energy ($U = \frac{1}{2}kx^2$). Plot these values along with the total energy ($E = K + U$) on the second canvas, creating a scrolling effect by shifting historical data points.
     - **Interaction Handling**: Listen to pointer events to allow manual displacement of the mass, and input events to update the physical constants from the sliders.
+- **HTML/CSS Structure**: A responsive layout featuring three main sections: the simulation canvas, the energy graph canvas, and the control panel. Flexbox will be used to ensure it stacks neatly on mobile devices.
+- **Physics Engine (JavaScript)**:
+    - Implement a simple Euler integration or Verlet integration loop within `requestAnimationFrame`.
+    - Apply Hooke's Law ($F_s = -kx$) and a damping force ($F_d = -cv$) to calculate the acceleration of the mass at each frame ($a = \frac{F_s + F_d}{m}$).
+    - Update velocity ($v_{new} = v_{old} + a \cdot dt$) and position ($x_{new} = x_{old} + v_{new} \cdot dt$).
+- **Canvas Rendering**:
+    - **Simulation Canvas**: Draw the spring as a procedurally generated zig-zag line that expands and compresses based on the mass's position. Draw the mass as a distinct geometric shape.
+    - **Graph Canvas**: Maintain an array of recent energy values (KE, PE, TE). In the render loop, calculate the current energies based on the physics state, add them to the array, and draw the lines. The graph will smoothly scroll to the left as new data is added.
+- **Interaction Logic**: Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) on the simulation canvas. When the mass is grabbed, temporarily disable the physics integration and directly set the position based on the cursor, setting velocity to zero.
+
+## Lennard-Jones Gas Simulation [[demo](https://rybla.github.io/interpolnet-2/lennard-jones-gas)]
+
+A web-based interactive simulation of a 2D Lennard-Jones gas. Users can control the volume of the container to observe how the particles respond to changes in pressure, eventually undergoing a phase transition into a highly ordered, solid-like state under extreme compression.
+
+### Features
+- **Interactive Particle Simulation**: A 2D simulation of gas particles interacting via the Lennard-Jones potential, running at 60 FPS.
+- **Volume Control**: An interactive slider allows the user to dynamically adjust the width of the container, effectively squeezing the gas.
+- **Thermodynamic Readouts**: Real-time display of calculated macroscopic properties such as Temperature, Pressure, and Volume.
+- **Dynamic Coloring**: Particles are colored dynamically based on their current velocity, providing a visual indication of kinetic energy distribution.
+- **Responsive Layout**: The simulation automatically adjusts to fit different screen sizes, ensuring the canvas and controls are always accessible.
+
+### Design Goals
+- **Educational Physics**: Visually demonstrate the relationship between volume, pressure, and state of matter (gas vs. solid) driven by intermolecular forces.
+- **Engaging Interaction**: Provide a satisfying, tangible way to "squeeze" a gas and watch it crystallize into a solid lattice.
+- **Aesthetic**: A clean, scientific aesthetic. Dark background with vibrant particles (e.g., cool blues for slow particles, hot reds/oranges for fast particles) to clearly illustrate temperature and energy.
+
+### Implementation Plan
+- **HTML Structure**: A `<main>` container with a `<canvas>` element for rendering the simulation and a UI control panel overlay for the volume slider and thermodynamic readouts.
+- **Physics Engine (JavaScript)**:
+    - Implement a numerical integration loop (e.g., Velocity Verlet) using `requestAnimationFrame`.
+    - Calculate pairwise forces using the derivative of the Lennard-Jones potential: $F(r) = 24 \epsilon \left( 2 \left(\frac{\sigma}{r}\right)^{13} - \left(\frac{\sigma}{r}\right)^7 \right)$.
+    - Implement boundary collision logic to keep particles within the dynamically sized container.
+- **Canvas Rendering**: Draw particles as circles and color them using a gradient based on their speed. Draw the dynamic container boundaries.
+- **Interaction Logic**: Handle the volume slider `input` event to adjust the container's width, and handle the reset button to re-initialize particle positions with random velocities.
+- **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
+
+## Water Ripple Interference Simulator [[demo](https://rybla.github.io/interpolnet-2/water-ripple-interference)]
+
+A 2D water ripple simulation where users can place two oscillating point sources to generate distinct constructive and destructive interference patterns.
+
+### Features
+- **Dual Oscillators**: Two interactive point sources that continuously emit circular waves.
+- **Interference Visualization**: A dynamically rendered 2D fluid surface that correctly calculates the addition and cancellation of waves (constructive and destructive interference).
+- **Interactive Dragging**: Users can drag the wave sources around the screen to explore how their positions affect the interference patterns.
+- **Real-Time Rendering**: The simulation calculates wave heights at every pixel to create a realistic, continuous ripple effect.
+
+### Design Goals
+- **Educational Demystification**: Make the abstract physics concept of wave interference tangible and visually clear.
+- **Aesthetic Excellence**: Use a deep, dark oceanic color palette with bright, glowing cyan highlights for the wave crests, matching the overall Interpolnet 2 style.
+- **Smooth Interaction**: Ensure the dragging feels responsive and the ripples update smoothly at 60 FPS.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for the simulation, overlayed with a minimal, dark-themed UI to show the source indicators.
+- **JavaScript Core**:
+    - **Simulation Loop**: Use `requestAnimationFrame` to drive the time component of the wave equations.
+    - **Wave Math**: Calculate the total displacement at any given pixel using a sum of sine waves: $h(x, y) = \sum A \sin(k \cdot d_i - \omega \cdot t)$, where $d_i$ is the distance to source $i$.
+    - **Rendering**: Due to the need to evaluate math per-pixel, directly manipulate an `ImageData` array in a tight loop and `putImageData` back to the canvas context, mapping the resulting height to an RGBA color value.
+    - **Interaction**: Attach pointer events to the canvas to allow moving the sources, checking distance to see which source is grabbed.
