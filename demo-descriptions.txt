@@ -1,4 +1,3 @@
-Visualize atomic ferromagnetism with a grid of flipping binary spins that naturally align into domains and exhibit a sudden phase transition at the Curie temperature.
 Provide an OS simulator where colored process blocks queue up and are processed by a CPU timeline to compare Round Robin versus Shortest Job First scheduling.
 Show virtual memory allocation by visually mapping fragmented logical pages from a program into disparate physical RAM frames and disk swap space.
 Simulate an orbital mechanics sandbox utilizing the Barnes-Hut algorithm where users can fling planets to form stable solar systems or chaotic multi-star ejections.

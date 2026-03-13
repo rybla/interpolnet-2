@@ -3305,3 +3305,25 @@ An interactive, grid-based Navier-Stokes fluid solver running in real-time in th
     - Optimize canvas rendering using `ImageData` for direct pixel manipulation instead of drawing individual rectangles.
 - **Interaction Logic**:
     - Listen to `pointerdown`, `pointermove`, and `pointerup` events to inject velocity vectors and density values into the specific grid cells under the cursor.
+
+## Ising Model Simulator [[demo](https://rybla.github.io/interpolnet-2/ising-model-simulator)]
+
+An interactive web simulation of the 2D Ising model. Users can control the temperature to observe how the binary spins align and transition between an ordered ferromagnetic state and a disordered state, simulating magnetic domains.
+
+### Features
+- **Grid Visualization**: The grid displays a lattice of binary spins (up or down).
+- **Interactive Temperature Slider**: A slider allows dynamic control of the system temperature, determining the probability of a spin flip using the Metropolis-Hastings algorithm.
+- **Phase Transition**: Visualizes the clear change in macro-scale alignment when temperature passes the critical threshold (Curie temperature).
+- **Dynamic Updates**: As the simulation runs, patches of similar spins (domains) form and merge or break apart depending on the heat in the system.
+
+### Design Goals
+- **Educational Value**: Provide a real-time, hands-on physics visualization that illustrates phase transitions and statistical mechanics.
+- **Engaging Visuals**: Maintain a clean, modern aesthetic with strong contrast (e.g., distinctly colored spins) matching the Interpolnet 2 design guidelines.
+- **Smooth Simulation**: Execute the Monte Carlo steps in real-time, utilizing JavaScript requestAnimationFrame for high frame rates and canvas API for fast rendering.
+
+### Implementation Plan
+- **HTML Structure**: A central canvas element and an intuitive control panel for parameters like temperature and a start/pause toggle.
+- **CSS Styling**: Responsive flexbox layout that works well on both desktop and mobile screens.
+- **JavaScript Core**:
+    - **Metropolis Algorithm**: At each step, select a random grid cell. Calculate the change in energy ($\Delta E$) if flipped. If $\Delta E < 0$, flip it. If $\Delta E > 0$, flip it with probability $e^{-\Delta E / T}$.
+    - **Rendering**: A `requestAnimationFrame` loop that efficiently updates the grid data and repaints the canvas.
