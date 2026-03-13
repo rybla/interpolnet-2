@@ -4651,3 +4651,67 @@ A 2D water ripple simulation where users can place two oscillating point sources
     - **Wave Math**: Calculate the total displacement at any given pixel using a sum of sine waves: $h(x, y) = \sum A \sin(k \cdot d_i - \omega \cdot t)$, where $d_i$ is the distance to source $i$.
     - **Rendering**: Due to the need to evaluate math per-pixel, directly manipulate an `ImageData` array in a tight loop and `putImageData` back to the canvas context, mapping the resulting height to an RGBA color value.
     - **Interaction**: Attach pointer events to the canvas to allow moving the sources, checking distance to see which source is grabbed.
+- **HTML Structure**: A full-screen `<canvas>` element for the simulation and a UI control panel overlay (`div`) containing range inputs for parameters.
+- **Styling (CSS)**: A dark theme to make the wave patterns pop. The UI should have a frosted glass effect or a clean, modern look consistent with the Interpolnet 2 project.
+- **Simulation Engine (JavaScript)**:
+    - Implement a 2D wave equation solver using a height map (grid of values). Typically involves two buffers (current and previous state) to calculate the next state: `next[x][y] = (current[x-1][y] + current[x+1][y] + current[x][y-1] + current[x][y+1]) / 2 - previous[x][y]`, plus damping.
+    - Alternatively, for a purely mathematical interference visualization, calculate the height at each pixel directly as the sum of sine waves from the two sources: $h(x,y) = A \sin(k d_1 - \omega t) + A \sin(k d_2 - \omega t)$, where $d_1$ and $d_2$ are distances to the sources. This approach is often cleaner and faster for just showing continuous interference from fixed sources. We will use the direct mathematical approach for crisp patterns.
+- **Rendering Loop**: Use `requestAnimationFrame` to update time `t` and calculate the height of each pixel. Map the height value (e.g., -1 to 1) to a color gradient and draw it using `ctx.putImageData`.
+- **Interaction**: Handle pointer events to allow dragging the sources, and input events on sliders to update frequency and amplitude.
+
+## Grid-Based Fluid Solver [[demo](https://rybla.github.io/interpolnet-2/grid-based-fluid-solver)]
+
+An interactive, grid-based Navier-Stokes fluid solver running in real-time in the browser. Users can drag their mouse across the canvas to paint colored dye, which naturally swirls and forms complex, authentic fluid dynamics like von Kármán vortex streets around obstacles or as a result of varying velocities.
+
+### Features
+- **Real-Time Fluid Simulation**: A grid-based fluid solver that computes the Navier-Stokes equations for incompressible fluid flow (including advection, diffusion, and pressure projection) entirely in JavaScript.
+- **Interactive Painting**: Dragging the mouse across the canvas injects both density (colored dye) and velocity into the fluid field.
+- **Vortex Streets**: The simulation is detailed enough to demonstrate emergent fluid phenomena such as von Kármán vortex streets when fast-moving fluid interacts with slower regions or bounds.
+- **Adjustable Parameters**: A clean, modern control panel overlay allows users to dynamically tweak:
+    - **Viscosity**: How thick the fluid is (e.g., water vs. honey).
+    - **Dye Color**: Change the color of the dye being injected.
+    - **Brush Size**: Adjust the radius of the dye and velocity injection.
+- **Dynamic Fading**: The dye slowly dissipates over time, ensuring the canvas doesn't become permanently saturated and allowing for continuous drawing.
+
+### Design Goals
+- **Educational Simulation**: Provide a visually stunning and accessible demonstration of complex computational fluid dynamics (CFD) running directly in a web environment.
+- **Visceral Interaction**: Ensure the fluid feels responsive and "thick," reacting realistically to the user's input with satisfying swirls and eddies.
+- **Aesthetics**: Employ a dark, modern theme where vibrant neon dyes stand out sharply against a deep background, keeping with the Interpolnet 2 visual style.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen `<canvas>` for rendering the simulation and a semi-transparent floating UI control panel for the sliders and color pickers.
+- **Fluid Solver Engine (JavaScript)**:
+    - Implement a grid-based Eulerian solver utilizing a 1D array to represent the 2D grid for performance.
+    - Implement the core steps of a stable fluid solver: `addSource` (adding dye/velocity), `diffuse` (spreading values over time via a linear solver like Gauss-Seidel), `advect` (moving values along the velocity field), and `project` (enforcing mass conservation by ensuring the velocity field is divergence-free).
+- **Rendering Loop**:
+    - Use `requestAnimationFrame` to continuously step the fluid simulation and render the density values to the canvas.
+    - Optimize canvas rendering using `ImageData` for direct pixel manipulation instead of drawing individual rectangles.
+- **Interaction Logic**:
+    - Listen to `pointerdown`, `pointermove`, and `pointerup` events to inject velocity vectors and density values into the specific grid cells under the cursor.
+
+## Ising Model Simulator [[demo](https://rybla.github.io/interpolnet-2/ising-model-simulator)]
+
+An interactive web simulation of the 2D Ising model on an HTML5 canvas, allowing users to dynamically control the temperature to observe how binary spins align and undergo a phase transition between ordered and disordered states using the Metropolis algorithm.
+
+### Features
+- **Real-Time Simulation**: A 2D grid of binary spins (+1 or -1) evolving over time using the Metropolis algorithm, running at a smooth framerate.
+- **Temperature Control**: An interactive slider allows the user to dynamically adjust the temperature of the system.
+- **Phase Transition Observation**: Users can observe the sudden shift from a disordered state (high temperature) to an ordered state with large magnetic domains (low temperature) near the Curie temperature.
+- **Responsive Layout**: The simulation automatically adjusts to fit different screen sizes, ensuring the canvas and controls are always accessible.
+- **Visual Feedback**: Distinct colors represent the two spin states, providing clear visual feedback on the system's magnetization.
+
+### Design Goals
+- **Educational Physics**: Visually demonstrate the core concepts of ferromagnetism, statistical mechanics, and phase transitions in a simple, accessible way.
+- **Engaging Interaction**: Provide a satisfying, tangible way to control the temperature and watch the domains form, merge, or dissolve.
+- **Aesthetic**: A clean, scientific aesthetic. Dark background with vibrant colors (e.g., contrasting neon colors like blue and orange) to clearly illustrate the opposing spin states.
+
+### Implementation Plan
+- **HTML Structure**: A `<main>` container with a `<canvas>` element for rendering the simulation and a UI control panel overlay for the temperature slider.
+- **Physics Engine (JavaScript)**:
+    - Implement the Metropolis algorithm on a 2D grid of spins.
+    - Calculate the energy change $\Delta E = 2 \cdot s_i \sum s_j$ when flipping a spin $s_i$.
+    - Flip the spin if $\Delta E \le 0$, or with probability $e^{-\Delta E / T}$ if $\Delta E > 0$.
+    - Perform multiple algorithm steps per animation frame to speed up the visual evolution.
+- **Canvas Rendering**: Draw the grid of spins to the canvas using `ImageData` for fast pixel manipulation, mapping the two spin states to distinct colors.
+- **Interaction Logic**: Handle the temperature slider `input` event to adjust the temperature variable $T$ used in the Metropolis algorithm.
+- **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
