@@ -2016,3 +2016,27 @@ The Riemann Zeta Function Topography demo visualizes the complex-valued Riemann 
   - Implement `OrbitControls` for user interaction.
   - Add specific 3D markers (spheres or pins) at known non-trivial zero coordinates.
   - Wire up UI controls to update the mathematical domain and re-render the surface dynamically.
+
+## Rule 30 Cellular Automaton [[demo](https://rybla.github.io/interpolnet-2/rule-30-cellular-automaton)]
+
+An interactive one-dimensional cellular automaton explorer focusing on Rule 30 to show how simple binary rules generate chaotic fractal triangles.
+
+### Features
+- **Interactive Canvas**: A rendering of the 1D cellular automaton over time (down the Y axis).
+- **Rule Selection**: An input to change the rule number (0-255), defaulting to 30.
+- **Playback Controls**: Play, Pause, Step, and Reset buttons to control the automaton's evolution.
+- **Dynamic Scrolling**: As the automaton generates more generations than can fit on the canvas, it scrolls upwards.
+
+### Design Goals
+- **Educational**: Visually demonstrate how a simple 1D binary cellular automaton like Rule 30 can create complex, pseudo-random, and chaotic patterns from a single active cell.
+- **Aesthetic**: Use a distinct, unique, and consistent color scheme with passive and active animations to make the demo visually appealing.
+- **Responsive**: Ensure the layout works well on both mobile and desktop screens.
+
+### Implementation Plan
+- **HTML**: A `<canvas>` element for rendering the automaton. A control panel overlay or section for UI inputs (Play, Pause, Step, Reset, Rule Number).
+- **CSS**: A specific color scheme, flexbox for layout, and responsive design for different screen sizes. Animations for buttons.
+- **JavaScript**:
+    - **State**: A 1D array representing the current generation of cells.
+    - **Logic**: Calculate the next generation using the selected rule (e.g., Rule 30) by evaluating the left, center, and right neighbors of each cell.
+    - **Rendering**: Draw the current generation to the canvas. Shift the canvas up (or redraw) when reaching the bottom to simulate scrolling.
+    - **Loop**: `requestAnimationFrame` for continuous playback when "Play" is active.

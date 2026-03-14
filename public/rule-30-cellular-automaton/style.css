@@ -1,0 +1,146 @@
+:root {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --primary-color: #ff00ff;
+  --surface-color: #1e1e1e;
+  --border-color: #333;
+  --btn-hover: #e600e6;
+  --btn-active: #cc00cc;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden; /* Prevent scrolling the whole page */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.header {
+  padding: 1rem;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  color: var(--primary-color);
+}
+
+.header p {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+input[type="number"] {
+  width: 80px;
+  padding: 0.5rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-family: var(--font-family);
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="number"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+}
+
+.buttons {
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s, opacity 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  background-color: var(--btn-hover);
+}
+
+.btn:active:not(:disabled) {
+  background-color: var(--btn-active);
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  background-color: var(--border-color);
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  /* This prevents a slight margin issue on inline elements */
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
