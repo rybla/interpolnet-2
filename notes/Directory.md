@@ -2151,3 +2151,30 @@ An interactive 3D educational tool designed to visualize the cross product of tw
   - In the render loop, continuously calculate `C = A.cross(B)` and update the visual representation of Vector C.
   - Generate and update a `PlaneGeometry` or custom polygon geometry defined by points `(0,0,0)`, `A`, `A+B`, and `B` to visualize the area parallelogram.
   - Update the DOM elements in the UI overlay with the latest vector components and calculated area.
+
+## Galton Board Normal Distribution [[demo](https://rybla.github.io/interpolnet-2/galton-board)]
+
+An interactive 2D physics simulation that visually calculates binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution.
+
+### Features
+- **Dynamic Physics Engine**: Continuously drops physical balls that bounce and collide off a triangular grid of static pegs and gather into bins at the bottom.
+- **Normal Distribution Curve**: As balls accumulate in the bins over time, they naturally form a visual bell curve (Pascal's triangle / binomial coefficients).
+- **Interactive Controls**: Users can pause/resume the flow of balls, adjust the drop rate, and reset the simulation.
+- **Real-Time Statistics**: A heads-up display showing the total number of balls dropped and an overlay on each bin showing its current count.
+- **Aesthetics**: A dark, vibrant theme with distinct colors for pegs, balls, and bins, alongside fluid physics animations.
+
+### Design Goals
+- **Statistical Intuition**: Demonstrate the Central Limit Theorem and binomial distribution visually using physical laws.
+- **Mesmerizing Simulation**: Create an engaging and satisfying animation of balls cascading through the maze.
+- **Responsive Layout**: Ensure the canvas and UI controls scale effectively on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` container with a floating UI control panel overlay for inputs and a statistics display.
+- **Physics System (JavaScript)**:
+  - Implement a simple fixed-timestep 2D physics loop managing particle positions, velocities, and gravity.
+  - Handle circle-circle collisions (balls vs. pegs, and balls vs. balls in the bins) and circle-line collisions (balls vs. bin walls and floor).
+- **Galton Board Generator**:
+  - Dynamically generate a triangular grid array of peg positions.
+  - Generate the vertical bin dividers below the last row of pegs.
+- **Rendering**:
+  - Use the Canvas API (`ctx.arc`, `ctx.fillRect`) to efficiently draw the elements in the render loop.
