@@ -2124,3 +2124,30 @@ An interactive implementation of Conway's Game of Life utilizing WebGL for rende
 - **Interaction Logic**:
   - Map mouse coordinates to the simulation grid.
   - Implement a mechanism to inject pre-defined patterns (Glider, Gosper Gun) into the current simulation texture at the clicked location. This can be done by rendering small quads with the pattern data over the current state.
+
+## Vector Cross Product Visualizer [[demo](https://rybla.github.io/interpolnet-2/vector-cross-product-visualizer)]
+
+An interactive 3D educational tool designed to visualize the cross product of two vectors. It provides a real-time, manipulable 3D coordinate system where users can adjust two input vectors and immediately see how their cross product vector and the resulting parallelogram area respond.
+
+### Features
+- **Interactive 3D Coordinate System**: A full 3D environment allowing users to pan, zoom, and rotate around the origin to view the vectors from any angle.
+- **Draggable Input Vectors**: Users can click and drag the heads of two input vectors, Vector A (e.g., colored blue) and Vector B (e.g., colored red), altering their x, y, and z components dynamically.
+- **Real-Time Cross Product Visualization**: As the input vectors are manipulated, the resulting cross product vector (Vector C) is continuously recomputed and displayed (e.g., colored green), illustrating its orthogonal relationship to both input vectors.
+- **Area Visualization**: A semi-transparent parallelogram defined by Vector A and Vector B is drawn to visually represent the magnitude (area) of the cross product vector.
+- **Dynamic Heads-Up Display**: A floating control panel overlaid on the canvas displays the current components of all vectors, the computed magnitude, and the formula used, updating in real time.
+- **Axis Helpers**: Clear, color-coded axes (X, Y, Z) and grid lines provide spatial context.
+
+### Design Goals
+- **Geometric Intuition**: Transition the abstract mathematical definition of the cross product into a tangible, geometric intuition, emphasizing the right-hand rule and the area of the spanned parallelogram.
+- **Visual Clarity**: Utilize a distinct, unique, and consistent color scheme for each vector to prevent confusion during complex rotations.
+- **Responsiveness**: Ensure the 3D controls and UI overlays function smoothly on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: Provide a full-screen container for the 3D visualization. Create a responsive, floating UI overlay panel with a distinct aesthetic to display numerical values and provide instructions.
+- **JavaScript (Three.js)**:
+  - Setup a Three.js scene, camera, renderer, and lighting.
+  - Create arrow helpers or custom geometry for Vector A, Vector B, and Vector C (Cross Product).
+  - Implement interaction logic using `Raycaster` and a draggable plane to allow users to click and drag the heads of Vector A and Vector B.
+  - In the render loop, continuously calculate `C = A.cross(B)` and update the visual representation of Vector C.
+  - Generate and update a `PlaneGeometry` or custom polygon geometry defined by points `(0,0,0)`, `A`, `A+B`, and `B` to visualize the area parallelogram.
+  - Update the DOM elements in the UI overlay with the latest vector components and calculated area.

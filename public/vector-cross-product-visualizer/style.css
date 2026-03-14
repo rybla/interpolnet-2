@@ -1,0 +1,139 @@
+:root {
+  --bg-color: #1a1a2e;
+  --text-color: #e0e0e0;
+  --panel-bg: rgba(26, 26, 46, 0.85);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --vec-a-color: #3b82f6; /* Blue */
+  --vec-b-color: #ef4444; /* Red */
+  --vec-c-color: #10b981; /* Green */
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  font-family: var(--font-family);
+  color: var(--text-color);
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+#ui-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 320px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 2;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  pointer-events: none; /* Let clicks pass through the panel background where there are no inputs */
+}
+
+#ui-overlay h1 {
+  font-size: 1.25rem;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+#ui-overlay p {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0 0 20px 0;
+  color: #a0a0b0;
+}
+
+.vector-info {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+.vector-info:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.vector-info strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.vector-info span {
+  font-family: var(--font-mono);
+  display: block;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: text-shadow 0.2s ease;
+}
+
+#info-a strong { color: var(--vec-a-color); }
+#info-a span { color: var(--vec-a-color); }
+
+#info-b strong { color: var(--vec-b-color); }
+#info-b span { color: var(--vec-b-color); }
+
+#info-c strong { color: var(--vec-c-color); }
+#info-c span { color: var(--vec-c-color); }
+
+#info-area strong { color: #f59e0b; }
+#info-area span { color: #f59e0b; }
+
+.glowing {
+  text-shadow: 0 0 8px currentColor;
+}
+
+@media (max-width: 768px) {
+  #ui-overlay {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    box-sizing: border-box;
+    padding: 16px;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  #ui-overlay h1 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+
+  #ui-overlay p {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+
+  .vector-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  .vector-info strong {
+    margin-bottom: 0;
+  }
+}
