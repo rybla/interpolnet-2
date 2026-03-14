@@ -2252,3 +2252,33 @@ This demo visualizes the generation of a Voronoi diagram using a sweep-line algo
 - **HTML (`index.html`):** Structure with an HTML5 `<canvas>`, a control panel for buttons (Play/Pause, Reset, Clear Points), and a brief instruction section.
 - **CSS (`style.css`):** Apply a distinct color palette. Ensure the canvas scales correctly and controls are styled with clear interactive feedback (hover/active states). Ensure mobile responsiveness.
 - **JavaScript (`script.js`):** Implement the core logic. Handle mouse/touch events for adding points. Implement an animation loop (`requestAnimationFrame`) to update the sweep-line position and calculate Voronoi edges based on the current points. Handle resizing and re-rendering.
+
+## Minimax Saddle Point [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-point)]
+
+### Description
+An interactive 3D visualization of a multivariable calculus surface where a rolling ball naturally settles into the minimax saddle point due to gravity. The user can interact with the surface to drop the ball from different locations and watch its trajectory as it accelerates down the steepest slopes, demonstrating gradient descent and saddle point dynamics.
+
+### Features
+- **3D Surface**: A visually distinct 3D representation of a multivariable function containing a saddle point (e.g., $f(x,y) = x^2 - y^2$), rendered using Three.js.
+- **Physics Simulation**: A real-time physics simulation of a ball rolling on the surface, affected by gravity, surface normals (gradients), and friction/damping.
+- **Interactive Controls**: Users can drag and drop the ball anywhere on the surface to start a new trajectory. Sliders are provided to adjust physical parameters such as gravity and friction.
+- **Visual Aids**: The ball leaves a trailing path to visualize its trajectory over time, highlighting how it oscillates and settles at the minimax point.
+- **Responsive Layout**: A clean, responsive UI overlay displaying controls and the current coordinates and velocity of the ball.
+
+### Design Goals
+- **Mathematical Intuition**: Provide an intuitive, physical understanding of saddle points, gradients, and optimization in multivariable calculus.
+- **Visual Clarity**: Use a unique and consistent color scheme (e.g., a wireframe or heat-mapped surface) to make the 3D geometry easily understandable.
+- **Performance**: Ensure smooth 60fps rendering and physics calculations.
+
+### Implementation Plan
+- **HTML/CSS**: Set up a full-screen canvas container for the 3D scene and a floating, responsive UI overlay for the controls and statistics.
+- **JavaScript (Three.js & Physics)**:
+  - Initialize a Three.js scene with a camera, lights, and orbit controls for exploring the surface.
+  - Generate the surface geometry using a custom function. Use a wireframe or custom shader material to enhance depth perception.
+  - Implement a physics loop to update the ball's position:
+    - Calculate the gradient (slope) of the surface at the ball's current $(x, y)$ coordinates.
+    - Apply acceleration proportional to the gradient to simulate gravity pulling the ball downhill.
+    - Apply a damping force (friction) proportional to velocity to ensure the ball eventually comes to rest at the saddle point $(0, 0, 0)$.
+    - Update the ball's $(x, y, z)$ position, ensuring $z$ exactly matches the surface height $f(x, y)$.
+  - Implement a trailing line or points using `THREE.Line` or `THREE.Points` to visualize the trajectory.
+  - Add raycasting to allow the user to click on the surface to place the ball at a new starting location.
