@@ -2204,3 +2204,29 @@ An interactive visualization that represents modular arithmetic operations (addi
     - Implement a render loop using `requestAnimationFrame`. If auto-playing, increment $A$ slightly each frame.
     - The drawing function will calculate the position of $N$ points around the circumference of a circle.
     - For each point $x \in [0, N-1]$, calculate the target $y$ based on the operation and draw a line from the coordinate of $x$ to the coordinate of $y$. Use color gradients or distinct stroke styles to make the patterns pop.
+
+## Markov Chain Frog [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog)]
+
+**Description**:
+An interactive visualization of a Markov Chain, where states are represented as lilypads in a pond, and the transitions are weighted probability arrows between them. A frog character jumps between these lilypads over time, effectively traversing the Markov Chain and visually demonstrating state transitions based on defined probabilities.
+
+**Features**:
+- Interactive Canvas: A full-screen pond environment with distinctly colored lilypads (states).
+- Weighted Arrows: Directed arrows indicating possible transitions from one lilypad to another, with text labels showing the probability of each transition.
+- Frog Animation: A visual representation of the current state, smoothly animating (jumping) along the transition arrows to the next state.
+- Controls: A bottom UI panel allows the user to pause/play the animation and adjust the speed of the simulation.
+- Real-time Updates: As the frog jumps, the "active" path is highlighted.
+
+**Design Goals**:
+- Consistent color scheme and typography in line with guidelines.
+- Responsive design ensuring the canvas and controls are mobile-friendly.
+- Passive animations (e.g., slight hovering or rippling of lilypads) and active animations (the jumping frog).
+
+**Implementation Plan**:
+1. Implement the HTML structure containing the canvas and a simple UI overlay.
+2. Style the layout with CSS to ensure full screen, responsive UI, and distinct colors.
+3. Write JavaScript to:
+   - Define a state machine representing the Markov Chain (nodes and edges with probabilities).
+   - Render the lilypads and arrows dynamically on the canvas.
+   - Implement the `requestAnimationFrame` loop for the frog's jumping animation.
+   - Handle play/pause logic and speed control.
