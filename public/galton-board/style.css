@@ -1,0 +1,115 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #111827;
+  color: #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#ui-container {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(31, 41, 55, 0.85);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #374151;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+  min-width: 250px;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  color: #60a5fa;
+  margin-bottom: 4px;
+}
+
+header p {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+button {
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: #2563eb;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slider-group label {
+  font-size: 0.875rem;
+  color: #d1d5db;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: #3b82f6;
+}
+
+.stats {
+  font-size: 0.875rem;
+  color: #d1d5db;
+  border-top: 1px solid #374151;
+  padding-top: 12px;
+}
+
+.stats strong {
+  color: #60a5fa;
+  font-size: 1.125rem;
+}
+
+#simulation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  #ui-container {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: auto;
+    width: auto;
+  }
+}
