@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Vector Cross Product Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <h1>Vector Cross Product Visualizer</h1>
+      <p>Drag the blue and red spheres to adjust vectors <strong>A</strong> and <strong>B</strong>.</p>
+
+      <div class="vector-info" id="info-a">
+        <strong>Vector A (Blue):</strong> <span id="val-a"></span>
+      </div>
+      <div class="vector-info" id="info-b">
+        <strong>Vector B (Red):</strong> <span id="val-b"></span>
+      </div>
+      <div class="vector-info" id="info-c">
+        <strong>A &times; B (Green):</strong> <span id="val-c"></span>
+      </div>
+      <div class="vector-info" id="info-area">
+        <strong>Area (||A &times; B||):</strong> <span id="val-area"></span>
+      </div>
+    </div>
+  </body>
+</html>
