@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Riemann Zeta Function Topography</title>
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Include Three.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" defer></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-panel">
+      <h1>Riemann Zeta Function Topography</h1>
+      <p class="subtitle">Exploring the Critical Line and Non-Trivial Zeros</p>
+
+      <div class="control-group">
+        <label for="y-offset-slider">Imaginary Axis Range (t):</label>
+        <input type="range" id="y-offset-slider" min="0" max="60" step="0.1" value="0">
+        <span id="y-offset-value" class="value-display">0 to 40</span>
+      </div>
+
+      <div class="control-group">
+        <label for="resolution-slider">Surface Resolution:</label>
+        <input type="range" id="resolution-slider" min="50" max="250" step="10" value="150">
+        <span id="resolution-value" class="value-display">150</span>
+      </div>
+
+      <div class="control-group">
+        <button id="reset-camera-btn">Reset View</button>
+      </div>
+
+      <div class="legend">
+        <h3>Legend</h3>
+        <div class="legend-item">
+          <span class="legend-color critical-line-color"></span>
+          <span>Critical Line ($Re(s) = 0.5$)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color zero-color"></span>
+          <span>Non-Trivial Zeros</span>
+        </div>
+        <div class="legend-item gradient-legend">
+          <span>Phase mapping:</span>
+          <div class="gradient-bar"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
