@@ -2178,3 +2178,29 @@ An interactive 2D physics simulation that visually calculates binomial coefficie
   - Generate the vertical bin dividers below the last row of pegs.
 - **Rendering**:
   - Use the Canvas API (`ctx.arc`, `ctx.fillRect`) to efficiently draw the elements in the render loop.
+
+## Modular Arithmetic Clock [[demo](https://rybla.github.io/interpolnet-2/modular-arithmetic-clock)]
+
+An interactive visualization that represents modular arithmetic operations (addition and multiplication) as paths drawn on a physical clock face, allowing users to observe continuous patterns and warpings.
+
+### Features
+- **Clock Face Visualization**: A circular dial divided into $N$ equal points, representing the modulus space (0 to $N-1$).
+- **Operation Selection**: Users can switch between Modulo Addition ($x + A \pmod{N}$) and Modulo Multiplication ($x \times A \pmod{N}$).
+- **Factor Control**: A slider allowing the user to select the factor $A$ to add or multiply by. The changes to $A$ are immediately reflected in the drawn lines.
+- **Continuous Path Drawing**: Lines are drawn from each point $x$ on the dial to the resulting point of the selected operation.
+- **Auto-Play/Animation**: An auto-play mode that slowly increments the factor $A$, animating the continuous warping and creation of new patterns (like cardioids and nephroids in multiplication).
+- **Responsive Controls**: A floating or side control panel that dynamically adapts its layout based on the screen size.
+
+### Design Goals
+- **Mathematical Intuition**: Make the abstract concepts of modular arithmetic concrete and visual. Show how multiplication forms distinct geometric patterns.
+- **Aesthetics**: Follow the Interpolnet 2 style guidelines with a distinct, consistent color scheme, utilizing bold colors on a dark background.
+- **Fluid Animation**: Ensure the lines drawn across the circle smoothly transition and redraw efficiently at 60fps as parameters change.
+
+### Implementation Plan
+- **HTML Structure**: A main `<canvas>` element to render the clock face and lines, and a UI container for the controls (sliders, buttons, and radio inputs).
+- **CSS Styling**: Apply a dark, modern theme. The UI should utilize flexbox/grid to remain responsive and mobile-friendly, with smooth passive animations on hoverable elements.
+- **JavaScript Core**:
+    - Manage the state: Modulus ($N$), Factor ($A$), current Operation, and an `isAutoPlaying` flag.
+    - Implement a render loop using `requestAnimationFrame`. If auto-playing, increment $A$ slightly each frame.
+    - The drawing function will calculate the position of $N$ points around the circumference of a circle.
+    - For each point $x \in [0, N-1]$, calculate the target $y$ based on the operation and draw a line from the coordinate of $x$ to the coordinate of $y$. Use color gradients or distinct stroke styles to make the patterns pop.

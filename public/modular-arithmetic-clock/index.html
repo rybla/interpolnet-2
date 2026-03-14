@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Modular Arithmetic Clock</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+      <div id="ui-panel">
+        <h1>Modular Arithmetic Clock</h1>
+        <p>Explore addition and multiplication wrapping around the dial continuously.</p>
+
+        <div class="control-group">
+          <label for="operation">Operation</label>
+          <select id="operation">
+            <option value="multiply">Multiplication (x * A mod N)</option>
+            <option value="add">Addition (x + A mod N)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="modulus-slider">Modulus (N): <span id="modulus-value">200</span></label>
+          <input type="range" id="modulus-slider" min="10" max="1000" step="1" value="200" />
+        </div>
+
+        <div class="control-group">
+          <label for="factor-slider">Factor (A): <span id="factor-value">2</span></label>
+          <input type="range" id="factor-slider" min="0" max="200" step="0.01" value="2" />
+        </div>
+
+        <div class="control-group button-group">
+          <button id="play-pause-btn">Play</button>
+          <button id="reset-btn">Reset</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
