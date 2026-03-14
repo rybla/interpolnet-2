@@ -2016,3 +2016,23 @@ The Riemann Zeta Function Topography demo visualizes the complex-valued Riemann 
   - Implement `OrbitControls` for user interaction.
   - Add specific 3D markers (spheres or pins) at known non-trivial zero coordinates.
   - Wire up UI controls to update the mathematical domain and re-render the surface dynamically.
+
+## Rule 30 Explorer [[demo](https://rybla.github.io/interpolnet-2/rule-30-explorer)]
+
+The Rule 30 Explorer is an interactive demonstration of a one-dimensional cellular automaton, specifically focusing on Wolfram's Rule 30. It illustrates how simple binary rules applied to a grid can generate complex, chaotic, and fractal-like patterns.
+
+### Features
+- **Real-time Generation**: The automaton is generated and rendered in real-time, allowing users to watch the pattern evolve row by row.
+- **Interactive Controls**: Users can play, pause, and reset the simulation, as well as adjust the generation speed.
+- **Infinite Canvas**: The rendering context supports panning and zooming, so users can explore the intricate fractal triangles that form as the automaton expands.
+- **Visual Feedback**: Active animations highlight UI interactions, while the generated cells provide a mesmerizing, continuous visual output.
+
+### Design Goals
+- **Educational Visualization**: Demystify how complex chaotic systems can arise from incredibly simple deterministic rules.
+- **Aesthetic Experience**: Utilize a high-contrast color palette and smooth rendering to emphasize the beauty of the fractal patterns.
+- **User Engagement**: Provide intuitive controls to let users interact with the generation process dynamically.
+
+### Implementation Plan
+- **HTML**: A responsive layout with a full-screen or prominent `<canvas>` element and a floating control panel.
+- **CSS**: A distinct color scheme applying Interpolnet 2's design guidelines, ensuring the interface is mobile-friendly with responsive media queries.
+- **JavaScript**: Manage the state of the 1D grid. Implement Rule 30 to calculate the next generation based on the current one. Use the Canvas API to efficiently render the evolving cells. Include panning and zooming capabilities by transforming the canvas context based on pointer events.
