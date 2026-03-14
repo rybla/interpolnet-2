@@ -1,21 +1,3 @@
-Provide a visual canvas where users draw circles and arrows to define a finite state machine that automatically generates the switch-case code.
-Step through compiled Java bytecode instructions while highlighting the specific stack memory pushes and pops at the virtual machine level.
-Animate JavaScript variable hoisting by physically lifting declarations to the top of an execution context container before code execution.
-Visualize Rust ownership rules by representing variables as physical tokens that can only be held by one function scope at a time.
-Build a tool that shows how functional pattern matching acts as a visual sieve filtering data structures through specific shape templates.
-Show interactive binary logic gates where toggling 32-bit integer switches immediately reveals the resulting XOR, AND, and bit-shift transformations.
-Contrast standard recursion against tail-call optimization by showing how the latter reuses a single stack frame instead of stacking them endlessly.
-Deconstruct the IEEE 754 floating-point standard visually by allowing users to toggle sign, exponent, and mantissa bits to see the decimal value.
-Illustrate object-oriented dynamic dispatch by showing a virtual method table routing function calls to the correct subclass implementation.
-Create a Lisp macro visualizer that expands concise syntax into deep parenthetical trees before the actual evaluation phase begins.
-Map software dependencies as an interconnected plumbing network where an injector module explicitly routes required service fluids into components.
-Allow users to draw an arbitrary continuous wave and watch it decompose into a mechanical chain of rotating Fourier series epicycles.
-Create a 3D translucent cone intersected by an adjustable plane that visually slices out circles, ellipses, parabolas, and hyperbolas in real-time.
-Visualize a 2D grid where manipulating the values of a 2x2 matrix dynamically shears, rotates, and scales the entire coordinate space.
-Build an interactive Ulam spiral that zooms out indefinitely allowing users to highlight quadratic equations to search for diagonal prime clustering.
-Show how a sine wave is approximated by drawing the sequential addition of Taylor polynomial terms that slowly wrap around the true curve.
-Create an interactive Mandelbrot set where clicking any coordinate instantly maps and animates the corresponding Julia set iteration on a secondary canvas.
-Simulate hyperbolic geometry using the Poincaré disk model where users can draw straight lines that visually curve towards the boundary.
 Represent integer partitions as interactive Ferrers diagrams where users can rotate the grid to visually prove conjugate partition theorems.
 Illustrate the concept of a derivative by letting users slide a secant line's anchor points closer together until it smoothly becomes the tangent line.
 Design a grid transformation tool that highlights the specific eigenvectors that scale but do not rotate during a linear matrix transformation.
