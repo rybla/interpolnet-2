@@ -2069,3 +2069,32 @@ This demo visually links the uniform circular motion of a point on a rotating wh
      - Draw the circle (wheel) on the left side of the canvas, including axes and the rotating point.
      - Draw the sine wave on the right side of the canvas by iterating through `waveData`.
      - Draw a distinct connecting line (e.g., dashed, bright colored) from the current y-coordinate of the point on the circle to the start of the sine wave to clearly illustrate the relationship.
+
+## Cubic Bezier Curve Interpolation [[demo](https://rybla.github.io/interpolnet-2/cubic-bezier-interpolation)]
+
+An interactive visualization revealing the recursive linear interpolations that construct a cubic Bézier curve by dynamically showing the moving scaffolding lines.
+
+### Features
+- **Interactive Control Points**: Users can click and drag the four control points defining the cubic Bézier curve anywhere on the canvas.
+- **Dynamic Scaffolding Animation**: The demo animates the `t` parameter from 0 to 1, showing how the intermediate points ($t$ between the first 4 points, then $t$ between those 3 points, then $t$ between those 2 points) form the scaffolding lines.
+- **Trace the Curve**: The final point traces the path of the cubic Bézier curve, visually proving the relationship between the linear interpolations and the final curve shape.
+- **Playback Controls**: A timeline slider allows users to scrub through the `t` parameter manually, or use a Play/Pause button for automatic animation.
+- **Visual Hierarchy**: Uses distinct colors for the initial lines, first-level scaffolding, second-level scaffolding, and the final curve to clearly illustrate the recursive reduction.
+
+### Design Goals
+- **Mathematical Intuition**: Make the abstract De Casteljau's algorithm concrete and visually understandable.
+- **Clarity and Separation**: Use color coding and varying line thicknesses to differentiate the layers of interpolation.
+- **Responsive and Fluid**: Ensure the interactions and animations remain smooth at 60fps on all devices.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the visualization and a floating UI control panel for the playback slider and buttons.
+- **CSS Styling**: A dark theme to provide high contrast for the brightly colored scaffolding lines and curve.
+- **JavaScript State**:
+  - Manage the positions of the 4 control points `P0, P1, P2, P3`.
+  - Handle pointer events for dragging points.
+  - Track the current interpolation parameter `t` (0 to 1).
+- **JavaScript Rendering**:
+  - Implement a recursive or iterative `lerp` function to compute the intermediate points for a given `t`.
+  - Draw the control polygon (connecting the 4 points).
+  - Draw the subsequent generations of scaffolding lines with different colors.
+  - Draw the final cubic Bézier curve up to the current `t`, or simply draw the full curve faintly in the background while the animated point traces it.
