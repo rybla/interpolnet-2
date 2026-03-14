@@ -2124,3 +2124,31 @@ An interactive implementation of Conway's Game of Life utilizing WebGL for rende
 - **Interaction Logic**:
   - Map mouse coordinates to the simulation grid.
   - Implement a mechanism to inject pre-defined patterns (Glider, Gosper Gun) into the current simulation texture at the clicked location. This can be done by rendering small quads with the pattern data over the current state.
+
+## Vector Cross Product Visualizer [[demo](https://rybla.github.io/interpolnet-2/vector-cross-product-visualizer)]
+
+An interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
+
+### Features
+- **3D Coordinate System**: A central 3D space visualizing X, Y, and Z axes.
+- **Interactive Vectors**: Two input vectors (e.g., Vector A and Vector B) that can be dragged directly within the 3D space to change their direction and magnitude.
+- **Dynamic Cross Product**: A resultant third vector that automatically updates to reflect the cross product of the two input vectors.
+- **Parallelogram Area**: A semi-transparent geometric shape spanning the input vectors, dynamically demonstrating the magnitude of the cross product (area of the parallelogram).
+- **Real-time Metrics Panel**: A UI overlay displaying the exact mathematical values for Vector A, Vector B, their cross product, and the calculated area.
+
+### Design Goals
+- **Geometric Intuition**: Provide a clear visual understanding of the right-hand rule and how the cross product is always orthogonal to its input vectors.
+- **Interactive Learning**: Allow users to physically manipulate the inputs and instantly observe the mathematical consequences.
+- **Aesthetic**: Use distinct, contrasting colors for each vector (e.g., Red and Blue for inputs, Purple for the cross product) against a clean, uncluttered background to maintain focus on the mathematics.
+- **Responsiveness**: Ensure the 3D canvas and UI overlay adapt smoothly to both desktop and mobile screens.
+
+### Implementation Plan
+- **HTML**: Structure the page with a full-screen `<canvas>` for the 3D rendering and a floating `<div>` panel for the metrics overlay.
+- **CSS**: Apply the project's consistent typography and color scheme. Use absolute positioning for the metrics panel to keep it above the 3D scene.
+- **JavaScript (Three.js)**:
+  - Initialize a Three.js scene, camera, renderer, and lights. Add an `AxesHelper`.
+  - Create arrow helpers or custom meshes for the three vectors.
+  - Implement a transparent plane or custom geometry for the parallelogram.
+  - Use `Raycaster` to handle mouse/touch interactions for dragging the heads of Vector A and Vector B.
+  - On interaction, recalculate the cross product using `Vector3.crossVectors()` and the area using the magnitude of the resulting cross product.
+  - Update the geometry of the resultant vector and the parallelogram, and sync the numerical values to the DOM.

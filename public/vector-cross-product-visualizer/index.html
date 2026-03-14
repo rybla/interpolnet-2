@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Vector Cross Product Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="ui-container">
+      <h1>Vector Cross Product</h1>
+      <div class="vector-info" id="vecA-info">
+        <span class="label">Vector A (Red):</span>
+        <span class="value" id="vecA-val">[0.00, 0.00, 0.00]</span>
+      </div>
+      <div class="vector-info" id="vecB-info">
+        <span class="label">Vector B (Blue):</span>
+        <span class="value" id="vecB-val">[0.00, 0.00, 0.00]</span>
+      </div>
+      <div class="vector-info cross-product-info" id="cross-info">
+        <span class="label">A × B (Purple):</span>
+        <span class="value" id="cross-val">[0.00, 0.00, 0.00]</span>
+      </div>
+      <div class="vector-info area-info" id="area-info">
+        <span class="label">Parallelogram Area:</span>
+        <span class="value" id="area-val">0.00</span>
+      </div>
+      <div class="instructions">
+        Drag the red and blue spheres to modify the vectors.
+      </div>
+    </div>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  </body>
+</html>
