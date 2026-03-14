@@ -2040,3 +2040,32 @@ An interactive one-dimensional cellular automaton explorer focusing on Rule 30 t
     - **Logic**: Calculate the next generation using the selected rule (e.g., Rule 30) by evaluating the left, center, and right neighbors of each cell.
     - **Rendering**: Draw the current generation to the canvas. Shift the canvas up (or redraw) when reaching the bottom to simulate scrolling.
     - **Loop**: `requestAnimationFrame` for continuous playback when "Play" is active.
+
+## Sine Wave Generator [[demo](https://rybla.github.io/interpolnet-2/sine-wave-generator)]
+
+This demo visually links the uniform circular motion of a point on a rotating wheel directly to the generation of a simple harmonic sine wave on an adjacent scrolling graph. It provides an intuitive, interactive way to understand the mathematical relationship between circles and sine waves.
+
+### Design Goals
+- Provide a clear, real-time visualization showing how the y-coordinate of a rotating point traces out a sine wave over time.
+- Offer interactive controls (e.g., a rotation speed slider) allowing the user to experiment with the frequency of the wave.
+- Ensure the layout places the wheel and the wave graph side-by-side (or top-and-bottom on mobile) with an explicit horizontal dashed line connecting the rotating point to the leading edge of the wave to emphasize the linkage.
+- Employ a clean, distinct color scheme (e.g., dark slate background with vibrant cyan and magenta accents) to highlight key elements.
+- Use passive animations and subtle glowing effects to make the simulation engaging.
+
+### Implementation Outline
+1. **HTML Structure**:
+   - A main `<canvas>` element for rendering the visualization.
+   - An overlay UI containing a title, brief description, and an `<input type="range">` slider to control the rotation speed (frequency).
+2. **CSS Styling**:
+   - A dark, modern theme (`#111827` background) with sans-serif typography.
+   - Flexbox or Grid layout to ensure the canvas is responsive and fills the available viewport while maintaining a good aspect ratio.
+   - Styling for the range input to match the demo's color scheme.
+3. **JavaScript Logic**:
+   - Use `requestAnimationFrame` for a smooth, continuous render loop.
+   - **State**: Maintain an `angle` for the point on the circle, a `speed` variable controlled by the slider, and an array `waveData` storing historical y-values.
+   - **Update**: Increment the `angle` by `speed` each frame. Calculate the current y-coordinate `y = amplitude * Math.sin(angle)`. Shift the `waveData` array to simulate a scrolling graph, pushing the new `y` to the front.
+   - **Render**:
+     - Clear the canvas.
+     - Draw the circle (wheel) on the left side of the canvas, including axes and the rotating point.
+     - Draw the sine wave on the right side of the canvas by iterating through `waveData`.
+     - Draw a distinct connecting line (e.g., dashed, bright colored) from the current y-coordinate of the point on the circle to the start of the sine wave to clearly illustrate the relationship.

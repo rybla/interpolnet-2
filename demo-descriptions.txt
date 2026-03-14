@@ -1,4 +1,3 @@
-Link the uniform circular motion of a point on a wheel directly to the generation of a simple harmonic sine wave on an adjacent scrolling graph.
 Reveal the recursive linear interpolations that construct a cubic Bézier curve by showing the moving scaffolding lines dynamically.
 Implement Conway’s Game of Life on a massive WebGL canvas allowing users to stamp gliders and gosper guns into existence.
 Use an interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
