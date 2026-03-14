@@ -2230,3 +2230,25 @@ An interactive visualization of a Markov Chain, where states are represented as 
    - Render the lilypads and arrows dynamically on the canvas.
    - Implement the `requestAnimationFrame` loop for the frog's jumping animation.
    - Handle play/pause logic and speed control.
+
+## Sweep-line Voronoi [[demo](https://rybla.github.io/interpolnet-2/sweep-line-voronoi)]
+
+### Description
+This demo visualizes the generation of a Voronoi diagram using a sweep-line algorithm approach. Users can interactively place seed points on a canvas, and a moving horizontal line sweeps across the screen, calculating and rendering the corresponding Voronoi cell boundaries in real-time. This provides an intuitive and visual understanding of how spatial partitioning works.
+
+### Features
+- Interactive canvas to place, drag, or remove seed points.
+- Real-time visualization of the sweep-line moving across the canvas.
+- Dynamic rendering of Voronoi cell boundaries as the sweep-line progresses.
+- Controls to pause, play, reset, and adjust the speed of the sweep-line.
+- Responsive design adapting to different screen sizes.
+
+### Design Goals
+- **Educational:** Clearly illustrate the process of Voronoi diagram generation.
+- **Interactive:** Encourage users to experiment with different point placements.
+- **Aesthetic:** Use a clean, consistent color scheme with distinct visual cues for points, the sweep-line, and cell boundaries. Ensure smooth animations.
+
+### Implementation Plan
+- **HTML (`index.html`):** Structure with an HTML5 `<canvas>`, a control panel for buttons (Play/Pause, Reset, Clear Points), and a brief instruction section.
+- **CSS (`style.css`):** Apply a distinct color palette. Ensure the canvas scales correctly and controls are styled with clear interactive feedback (hover/active states). Ensure mobile responsiveness.
+- **JavaScript (`script.js`):** Implement the core logic. Handle mouse/touch events for adding points. Implement an animation loop (`requestAnimationFrame`) to update the sweep-line position and calculate Voronoi edges based on the current points. Handle resizing and re-rendering.
