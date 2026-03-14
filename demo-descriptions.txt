@@ -1,4 +1,3 @@
-Implement Conway’s Game of Life on a massive WebGL canvas allowing users to stamp gliders and gosper guns into existence.
 Use an interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
 Visually calculate binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution.
 Represent modular arithmetic as a physical clock face where addition and multiplication warp around the dial continuously.

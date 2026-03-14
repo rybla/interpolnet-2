@@ -2098,3 +2098,29 @@ An interactive visualization revealing the recursive linear interpolations that 
   - Draw the control polygon (connecting the 4 points).
   - Draw the subsequent generations of scaffolding lines with different colors.
   - Draw the final cubic Bézier curve up to the current `t`, or simply draw the full curve faintly in the background while the animated point traces it.
+
+## Conway Game of Life [[demo](https://rybla.github.io/interpolnet-2/conway-game-of-life)]
+
+An interactive implementation of Conway's Game of Life utilizing WebGL for rendering and simulation on a massive scale.
+
+### Features
+- **Massive Canvas**: A large-scale simulation grid using WebGL to handle millions of cells efficiently.
+- **Interactive Stamping**: Users can stamp specific patterns, such as Gliders and Gosper Glider Guns, directly onto the canvas by clicking.
+- **Real-time Evolution**: The cellular automaton rules are evaluated using custom shaders to ensure high performance and real-time evolution.
+
+### Design Goals
+- **Performance**: Leverage WebGL to offload the heavy computational lifting of Conway's Game of Life to the GPU, enabling a massive simulation size that would be impossible with traditional CPU-based JavaScript arrays.
+- **Interactivity**: Provide an intuitive and immediate way for users to interact with the complex system by seeding it with known, interesting patterns.
+- **Visual Scale**: Create a visually striking representation of chaotic emergence from simple rules.
+
+### Implementation Plan
+- **Simulation Shaders**:
+  - Implement the Game of Life rules in a fragment shader. It will sample the states of the 8 neighboring cells from a texture representing the current generation.
+  - If a cell is alive and has 2 or 3 live neighbors, it stays alive. If it's dead and has 3 live neighbors, it becomes alive. Otherwise, it dies.
+- **Ping-Pong Rendering**:
+  - Use two framebuffers (textures). In each frame, read from the "current" texture, run the simulation shader, and render the result to the "next" texture. Then, swap the textures.
+- **Display Shader**:
+  - A simple shader to draw the current simulation texture to the screen canvas.
+- **Interaction Logic**:
+  - Map mouse coordinates to the simulation grid.
+  - Implement a mechanism to inject pre-defined patterns (Glider, Gosper Gun) into the current simulation texture at the clicked location. This can be done by rendering small quads with the pattern data over the current state.
