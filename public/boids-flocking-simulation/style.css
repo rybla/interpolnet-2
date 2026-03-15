@@ -1,0 +1,145 @@
+:root {
+  --primary-color: #2c3e50;
+  --bg-color: #ecf0f1;
+  --boid-color: #3498db;
+  --accent-color: #e74c3c;
+  --panel-bg: #ffffff;
+  --text-color: #333333;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+#app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  color: var(--primary-color);
+  margin-bottom: 5px;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  main {
+    flex-direction: row;
+  }
+}
+
+#canvas-container {
+  flex: 1;
+  background-color: var(--panel-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+  min-height: 400px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#controls-panel {
+  flex-basis: 300px;
+  background-color: var(--panel-bg);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#controls-panel h2 {
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--bg-color);
+  padding-bottom: 10px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.control-group label {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+  transition: opacity var(--transition-speed);
+}
+
+.control-group input[type="range"]:hover {
+  opacity: 0.8;
+}
+
+.value-display {
+  align-self: flex-end;
+  font-family: monospace;
+  font-size: 1.1em;
+  background-color: var(--bg-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.description {
+  font-size: 0.85em;
+  color: #666;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color var(--transition-speed), transform 0.1s;
+  margin-top: auto;
+}
+
+button:hover {
+  background-color: #34495e;
+}
+
+button:active {
+  transform: scale(0.98);
+}
