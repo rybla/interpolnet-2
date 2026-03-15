@@ -2328,3 +2328,32 @@ The "Slope Field Ink Drops" demo provides an interactive 2D visualization on an 
 - Ink drops actively trace the solution curve from their initial drop point, leaving a fading trail.
 - The slope field animates slightly over time, causing the vector orientations to sway, simulating a non-autonomous differential equation or simply adding a dynamic feel to the visualization.
 - Designed with unique, consistent coloring, responsive interactions, and mobile-friendly touch/mouse event support.
+
+## Penrose Tiling Editor [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-editor)]
+
+An interactive editor for exploring and manipulating Penrose tilings. The demo allows users to dynamically deform the edges of the fundamental kite and dart tiles, with changes propagating symmetrically across the entire aperiodic pattern.
+
+### Features
+- **Aperiodic Tiling Generation**: Automatically generates a large-scale Penrose P2 (Kite and Dart) tiling.
+- **Symmetric Edge Deformation**: Users can click and drag the edges of any tile. The deformation is applied symmetrically to all corresponding edges in the tiling, ensuring the interlocking pattern remains gapless.
+- **Interactive Control Points**: Visual indicators for the manipulatable control points on the edges of the tiles.
+- **Dynamic Rendering**: The entire tiling is re-rendered in real-time as the user drags the control points.
+- **Pan and Zoom**: Users can pan across the infinite-seeming canvas and zoom in/out to explore the intricate structures of the Penrose tiling.
+
+### Design Goals
+- **Mathematical Intuition**: Provide a tangible, interactive way to understand the complex symmetry and interlocking nature of Penrose tilings.
+- **Visually Engaging**: Use a distinct, vibrant color scheme to differentiate the kites and darts, and smooth animations for interactions.
+- **Performance**: Ensure real-time rendering of the tiling even with a large number of tiles and complex deformed edges.
+- **Responsiveness**: The canvas should fill the screen and adapt to both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML**: A full-screen `<canvas>` element for rendering the tiling, and a minimal UI overlay for controls (like "Reset Pattern").
+- **CSS**: A clean, modern aesthetic with a dark background to make the vibrant colors of the tiles pop. Ensure responsive design.
+- **JavaScript (Tiling Logic)**:
+  - Implement a deflation algorithm to generate the Penrose P2 tiling (subdividing half-kites and half-darts, or "Robinson triangles").
+  - Maintain a global set of control points that define the shape of the "Long Edge" and the "Short Edge" of the tiles.
+- **JavaScript (Rendering & Interaction)**:
+  - Use the HTML5 Canvas API to render the tiles.
+  - Implement logic to draw the deformed edges using quadratic or cubic Bézier curves based on the global control points.
+  - Add event listeners for mouse/touch interactions to allow users to pan the view, zoom, and drag the control points.
+  - When a control point is dragged, update its global coordinates and trigger a re-render of the entire canvas to show the symmetric deformation.

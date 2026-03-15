@@ -6,51 +6,52 @@ import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/slope-field-ink-drops"
+DIRECTORY = "public/penrose-tiling-editor"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-socketserver.TCPServer.allow_reuse_address = True
-
 def run_server():
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
+        print("serving at port", PORT)
         httpd.serve_forever()
 
 server_thread = threading.Thread(target=run_server, daemon=True)
 server_thread.start()
 
-# Give server time to start
-time.sleep(1)
+time.sleep(1) # wait for server to start
 
 with sync_playwright() as p:
     browser = p.chromium.launch()
     page = browser.new_page()
-    page.set_viewport_size({"width": 1280, "height": 720})
-
-    print("Navigating to demo...")
     page.goto(f"http://localhost:{PORT}")
 
-    # Wait for canvas to load and some initial animation
+    # Wait for canvas to load
     page.wait_for_selector("canvas")
-    time.sleep(2)
 
-    print("Simulating interactions...")
-    # Simulate a drag to drop some ink
-    page.mouse.move(300, 300)
+    # Do some zooming
+    page.click("#zoom-out")
+    page.click("#zoom-out")
+
+    # Do some dragging
+    canvas = page.locator("canvas")
+    box = canvas.bounding_box()
+
+    # Drag a little from the center to pan
+    page.mouse.move(box["width"]/2, box["height"]/2)
     page.mouse.down()
-    page.mouse.move(500, 400, steps=10)
-    page.mouse.move(700, 200, steps=10)
+    page.mouse.move(box["width"]/2 + 100, box["height"]/2 + 100)
     page.mouse.up()
 
-    # Wait a bit for the ink to flow
-    time.sleep(1.5)
+    # We don't exactly know where the control points are without complex logic,
+    # but we can save a screenshot to verify the tiling renders.
 
-    print("Taking screenshot...")
+    # Wait a sec for any animations
+    page.wait_for_timeout(500)
+
     os.makedirs("screenshots", exist_ok=True)
-    page.screenshot(path="screenshots/slope-field-ink-drops", type="png")
+    page.screenshot(path="screenshots/penrose-tiling-editor", type="png")
 
-    print("Validation complete.")
     browser.close()
