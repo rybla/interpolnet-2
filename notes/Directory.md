@@ -2310,3 +2310,7 @@ An interactive visualization showing the Fibonacci sequence recursively dividing
   - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
   - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
   - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
+
+## Skewable Galton Board [[demo](https://rybla.github.io/interpolnet-2/skewable-galton-board)]
+
+The **Skewable Galton Board** is an interactive physical simulation demonstrating probability distributions. The demo drops balls through a triangular array of pegs where they bounce randomly, eventually collecting in bins at the bottom. By default, balls have a 50/50 chance of falling left or right at each peg, resulting in a normal distribution (bell curve). A unique feature is the "Skew" slider, allowing users to alter this probability, smoothly shifting the accumulation pattern into a Poisson-like skewed distribution. The design uses clean, contrasting colors with smooth CSS transitions on controls, and runs an optimized 2D physics engine in JavaScript rendered on an HTML5 `<canvas>`.

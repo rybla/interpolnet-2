@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Skewable Galton Board</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Skewable Galton Board</h1>
+        <p>Drop balls to see how changing the left/right bounce probability shifts the distribution curve.</p>
+      </header>
+
+      <main>
+        <canvas id="simulationCanvas"></canvas>
+      </main>
+
+      <aside class="controls">
+        <div class="control-group">
+          <label for="skewSlider">Right Bounce Probability: <span id="probabilityValue">50</span>%</label>
+          <input type="range" id="skewSlider" min="10" max="90" value="50" step="1" />
+        </div>
+
+        <div class="control-group">
+          <button id="spawnBtn">Drop 10 Balls</button>
+          <button id="autoSpawnBtn">Start Auto Drop</button>
+          <button id="resetBtn">Reset Board</button>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>
