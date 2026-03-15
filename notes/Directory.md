@@ -2318,3 +2318,13 @@ This demo features an interactive Galton board where users can dynamically skew 
 ## Huffman Entropy Compressor [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-compressor)]
 
 This demo provides an interactive educational visualization of data compression using a Huffman coding algorithm. Users can input arbitrary text, and the application dynamically constructs and displays a Huffman tree based on the character frequencies in the text. The demo calculates and visualizes the entropy of the text and provides real-time statistics on the original size, compressed size, and compression ratio. It features an HTML5 canvas to render the branching Huffman tree and interactive tables mapping each character to its variable-length binary code, demonstrating how more frequent characters receive shorter codes.
+
+## Slope Field Ink Drops [[demo](https://rybla.github.io/interpolnet-2/slope-field-ink-drops)]
+
+The "Slope Field Ink Drops" demo provides an interactive 2D visualization on an HTML5 canvas where users explore a dynamic slope field representing a differential equation. Users can click and drag to drop virtual ink drops that flow along the slope field, continuously tracing out distinct solution curves over time.
+
+- Features a full-screen HTML5 canvas displaying a dynamic vector field.
+- Users click and drag on the canvas to place colorful ink drops.
+- Ink drops actively trace the solution curve from their initial drop point, leaving a fading trail.
+- The slope field animates slightly over time, causing the vector orientations to sway, simulating a non-autonomous differential equation or simply adding a dynamic feel to the visualization.
+- Designed with unique, consistent coloring, responsive interactions, and mobile-friendly touch/mouse event support.
