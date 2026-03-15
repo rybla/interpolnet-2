@@ -1,57 +1,55 @@
+import os
+import time
 import http.server
 import socketserver
 import threading
-import time
-import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/penrose-tiling-editor"
+DIRECTORY = "public/raytracer-pixel-step"
+SCREENSHOT_PATH = "screenshots/raytracer-pixel-step"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def run_server():
+def start_server():
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print("serving at port", PORT)
+        print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
-server_thread = threading.Thread(target=run_server, daemon=True)
+# Ensure screenshots directory exists
+os.makedirs("screenshots", exist_ok=True)
+
+# Start server in a background thread
+server_thread = threading.Thread(target=start_server, daemon=True)
 server_thread.start()
 
-time.sleep(1) # wait for server to start
+# Wait for server to start
+time.sleep(2)
 
+print("Starting Playwright validation...")
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=True)
     page = browser.new_page()
+    page.set_viewport_size({"width": 1280, "height": 800})
+
+    print(f"Navigating to http://localhost:{PORT}")
     page.goto(f"http://localhost:{PORT}")
 
-    # Wait for canvas to load
-    page.wait_for_selector("canvas")
+    # Wait for the demo to load
+    page.wait_for_selector("#raytracer-canvas")
+    time.sleep(1) # Extra buffer for canvas rendering
 
-    # Do some zooming
-    page.click("#zoom-out")
-    page.click("#zoom-out")
+    print("Clicking next step multiple times to advance simulation...")
+    next_btn = page.locator("#next-step-btn")
+    for _ in range(5):
+        next_btn.click()
+        time.sleep(0.5) # Wait for animation
 
-    # Do some dragging
-    canvas = page.locator("canvas")
-    box = canvas.bounding_box()
+    print("Taking screenshot...")
+    page.screenshot(path=SCREENSHOT_PATH, type="png")
 
-    # Drag a little from the center to pan
-    page.mouse.move(box["width"]/2, box["height"]/2)
-    page.mouse.down()
-    page.mouse.move(box["width"]/2 + 100, box["height"]/2 + 100)
-    page.mouse.up()
-
-    # We don't exactly know where the control points are without complex logic,
-    # but we can save a screenshot to verify the tiling renders.
-
-    # Wait a sec for any animations
-    page.wait_for_timeout(500)
-
-    os.makedirs("screenshots", exist_ok=True)
-    page.screenshot(path="screenshots/penrose-tiling-editor", type="png")
-
+    print("Screenshot saved.")
     browser.close()
