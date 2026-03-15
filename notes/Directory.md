@@ -2387,3 +2387,28 @@ The **Raytracer Pixel Step** demo provides an interactive educational visualizat
   - Use `requestAnimationFrame` for a continuous render loop on the HTML5 Canvas.
   - Add pointer event listeners (mousedown, mousemove, mouseup/touchstart, touchmove, touchend) to enable dragging of the scene objects.
   - Draw the scene dynamically based on the current state, animating vectors and updating the explanation text to guide the user through the raytracing calculation.
+
+## Gray-Scott Turing Patterns [[demo](https://rybla.github.io/interpolnet-2/gray-scott-turing-patterns)]
+
+This demo provides an interactive WebGL simulation of the Gray-Scott model of reaction-diffusion, allowing users to paint "chemical food" onto a digital canvas to watch complex, organic Turing patterns emerge, grow, and split in real time.
+
+### Features
+- **Real-time WebGL Simulation:** Uses WebGL ping-pong framebuffers to simulate the Gray-Scott equations at 60 FPS across a high-resolution grid.
+- **Interactive Painting:** Users can interact with the canvas using mouse or touch to add "chemical food" (substance B) directly into the simulation, triggering new patterns to grow.
+- **Dynamic Parameter Controls:** Sliders to adjust feed rate ($f$), kill rate ($k$), diffusion rates ($D_A$ and $D_B$), and time steps per frame, allowing users to explore different parameter regimes (e.g., spots, stripes, mazes, and moving spots).
+- **Custom Color Mapping:** A shader-based color mapping system that translates the chemical concentrations into vibrant, organic colors.
+- **Responsive Layout:** A mobile-friendly design that adapts the canvas and control panel to various screen sizes.
+
+### Design Goals
+- Provide an intuitive and mesmerizing way to explore reaction-diffusion systems.
+- Ensure high performance by keeping all simulation computations and rendering on the GPU.
+- Create a distinct visual identity with a dark, scientific theme, using glowing colors for the patterns and clear, minimalist typography for the controls.
+
+### Implementation Outline
+1. **HTML/CSS Structure:** Build a full-screen or large responsive canvas with an overlaid or side-by-side control panel (using modern CSS Grid/Flexbox).
+2. **WebGL Context and Shaders:**
+   - **Simulation Shader:** A fragment shader that reads the previous state from a texture, computes the discrete Laplacian, and updates concentrations $A$ and $B$ according to the Gray-Scott equations.
+   - **Render Shader:** A fragment shader that samples the current state texture and maps the concentration of $B$ to a color gradient for display.
+3. **Ping-Pong Framebuffers:** Set up two Framebuffer Objects (FBOs) with attached textures (`gl.UNSIGNED_BYTE` format, converted to normalized float in shaders for wider compatibility, or `gl.FLOAT` if the extension is available; for safety and broad compatibility, we will use a clever mapping with 8-bit channels if needed, though most modern browsers support `OES_texture_float`. Given the memory constraints, we'll try to stick to basic data types where possible, but precision is key for Gray-Scott).
+4. **Interaction Logic:** Track pointer events to pass a uniform (mouse coordinates and click state) to the simulation shader, adding a burst of substance $B$ where the user clicks/drags.
+5. **Animation Loop:** In each frame, run the simulation shader multiple times (for numerical stability and speed), then run the render shader once to output to the canvas.
