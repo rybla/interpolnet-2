@@ -2432,3 +2432,34 @@ An interactive grammar ruleset editor where specific axiomatic string expansions
 - **HTML/CSS**: A responsive split-layout with a control panel on one side and a canvas on the other, utilizing Flexbox/Grid. Include hover, focus, and active state animations.
 - **L-System Logic**: Implement a `parseRules` function to create a key-value mapping of replacement rules and a `generateLSystem` function to recursively expand the axiom based on the rules.
 - **Canvas Drawing**: Implement a `drawTree` function that parses the expanded string into canvas drawing commands. Add `input` and `change` event listeners to instantly trigger `generateLSystem` and `drawTree` upon user edits.
+
+## Perlin Noise Visualizer [[demo](https://rybla.github.io/interpolnet-2/perlin-noise-visualizer)]
+
+### Overview
+The **Perlin Noise Visualizer** provides an interactive and educational look at how 2D Perlin noise is generated. It demonstrates the underlying gradient vectors and shows how bilinear interpolation blends these gradients to produce smooth, continuous noise maps often used in procedural generation.
+
+### Features
+- **Gradient Vector Display:** Visualizes the pseudo-random 2D gradient vectors at grid intersections.
+- **Interpolation Visualization:** Real-time demonstration of how values are smoothly interpolated between grid points.
+- **Interactive Parameters:** Controls to adjust grid resolution (frequency) and animate the noise generation process.
+- **Dynamic Feedback:** Watch the noise map update instantly as parameters are modified or the gradient vectors are randomly regenerated.
+
+### Design Goals
+- **Educational Clarity:** Break down the somewhat complex algorithm of Perlin noise into easily understandable visual components.
+- **Interactivity:** Encourage exploration by allowing users to tinker with the frequency and seed of the noise.
+- **Aesthetic Quality:** Use a clean, modern aesthetic with distinct colors for gradient vectors and the resulting noise map to clearly separate the underlying math from the final visual output.
+- **Responsiveness:** Ensure the interactive canvas and controls adapt seamlessly to various screen sizes.
+
+### Implementation Plan
+- **HTML/CSS:** Structure a responsive page with a main `<canvas>` element for the visualization and a control panel for user inputs. Style with a clear, engaging theme.
+- **JavaScript (Core Logic):**
+  - Implement a basic pseudo-random number generator for consistent gradient generation.
+  - Define a function to create a grid of 2D unit vectors.
+  - Implement the core Perlin noise algorithm: determining the cell containing a point, calculating dot products between distance vectors and gradients, and applying the smoothstep fade function for bilinear interpolation.
+- **JavaScript (Rendering):**
+  - Use the HTML5 Canvas 2D API to render the underlying grid.
+  - Draw the gradient vectors at each grid node.
+  - Render the interpolated noise map, perhaps togglable so users can see just the gradients or the final noise.
+- **JavaScript (Interaction):**
+  - Add event listeners to control inputs to regenerate gradients, change grid size, and toggle visualization layers.
+  - Implement an animation loop to potentially shift the noise map or slowly rotate the gradient vectors for dynamic demonstration.
