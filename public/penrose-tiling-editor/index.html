@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Penrose Tiling Editor</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+      <div id="ui">
+        <h1>Penrose Tiling Editor</h1>
+        <p>Manipulate the edge control points to symmetrically deform the adjacent tiles.</p>
+        <div class="controls">
+          <button id="reset-button">Reset Pattern</button>
+          <div class="zoom-controls">
+            <button id="zoom-out">-</button>
+            <span id="zoom-level">100%</span>
+            <button id="zoom-in">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
