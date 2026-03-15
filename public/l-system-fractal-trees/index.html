@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | L-System Fractal Trees</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="control-panel">
+        <h1>L-System Fractal Trees</h1>
+        <p>Edit the grammar ruleset to instantly render axiomatic string expansions as branching fractal trees.</p>
+
+        <div class="input-group">
+          <label for="axiom">Axiom</label>
+          <input type="text" id="axiom" value="X" />
+        </div>
+
+        <div class="input-group">
+          <label for="rules">Rules (Format: A->B, one per line)</label>
+          <textarea id="rules" rows="4">X->F+[[X]-X]-F[-FX]+X
+F->FF</textarea>
+        </div>
+
+        <div class="input-group">
+          <label for="iterations">Iterations: <span id="iterations-val">5</span></label>
+          <input type="range" id="iterations" min="1" max="7" value="5" />
+        </div>
+
+        <div class="input-group">
+          <label for="angle">Angle (degrees): <span id="angle-val">25</span></label>
+          <input type="range" id="angle" min="1" max="180" value="25" />
+        </div>
+
+        <div class="input-group">
+          <label for="length">Segment Length: <span id="length-val">5</span></label>
+          <input type="range" id="length" min="1" max="50" value="5" />
+        </div>
+
+        <div class="input-group">
+          <label for="start-x">Start X (%): <span id="start-x-val">50</span></label>
+          <input type="range" id="start-x" min="0" max="100" value="50" />
+        </div>
+
+        <div class="input-group">
+          <label for="start-y">Start Y (%): <span id="start-y-val">100</span></label>
+          <input type="range" id="start-y" min="0" max="100" value="100" />
+        </div>
+
+        <div class="presets">
+          <label>Presets:</label>
+          <button id="preset-tree1">Tree 1</button>
+          <button id="preset-tree2">Tree 2</button>
+          <button id="preset-koch">Koch Curve</button>
+          <button id="preset-sierpinski">Sierpinski</button>
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="fractal-canvas"></canvas>
+      </div>
+    </div>
+  </body>
+</html>

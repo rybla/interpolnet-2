@@ -1,4 +1,3 @@
-Provide an interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
 Visualise the generation of 2D Perlin noise by showing the underlying gradient vectors and how bilinear interpolation smooths the resulting map.
 Simulate a Boids algorithm where users can tweak the exact weights of separation, alignment, and cohesion to see how bird flocking changes.
 Show the barycentric coordinate rasterization process by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients.
