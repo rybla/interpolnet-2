@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Boids Flocking Simulation</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app-container">
+      <header>
+        <h1>Boids Flocking Simulation</h1>
+        <p>Adjust the weights of the three core rules to see how the flocking behavior changes.</p>
+      </header>
+
+      <main>
+        <div id="canvas-container">
+          <canvas id="simulation-canvas"></canvas>
+        </div>
+
+        <aside id="controls-panel">
+          <h2>Simulation Controls</h2>
+
+          <div class="control-group">
+            <label for="separation-slider">Separation</label>
+            <input type="range" id="separation-slider" min="0" max="5" step="0.1" value="1.5">
+            <span class="value-display" id="separation-value">1.5</span>
+            <p class="description">Steer to avoid crowding local flockmates.</p>
+          </div>
+
+          <div class="control-group">
+            <label for="alignment-slider">Alignment</label>
+            <input type="range" id="alignment-slider" min="0" max="5" step="0.1" value="1.0">
+            <span class="value-display" id="alignment-value">1.0</span>
+            <p class="description">Steer towards the average heading of local flockmates.</p>
+          </div>
+
+          <div class="control-group">
+            <label for="cohesion-slider">Cohesion</label>
+            <input type="range" id="cohesion-slider" min="0" max="5" step="0.1" value="1.0">
+            <span class="value-display" id="cohesion-value">1.0</span>
+            <p class="description">Steer to move toward the average position of local flockmates.</p>
+          </div>
+
+          <div class="control-group">
+            <label for="speed-slider">Max Speed</label>
+            <input type="range" id="speed-slider" min="1" max="10" step="0.5" value="4.0">
+            <span class="value-display" id="speed-value">4.0</span>
+          </div>
+
+          <button id="reset-button">Reset Simulation</button>
+        </aside>
+      </main>
+    </div>
+  </body>
+</html>

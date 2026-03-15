@@ -2463,3 +2463,7 @@ The **Perlin Noise Visualizer** provides an interactive and educational look at 
 - **JavaScript (Interaction):**
   - Add event listeners to control inputs to regenerate gradients, change grid size, and toggle visualization layers.
   - Implement an animation loop to potentially shift the noise map or slowly rotate the gradient vectors for dynamic demonstration.
+
+## Boids Flocking Simulation [[demo](https://rybla.github.io/interpolnet-2/boids-flocking-simulation)]
+
+The Boids Flocking Simulation demo provides an interactive 2D visualization of emergent flocking behavior. Inspired by Craig Reynolds' original algorithm, the simulation renders a collection of "boids" (bird-oid objects) on an HTML5 canvas. Users can tweak the exact weights of the three core rules—separation, alignment, and cohesion—via dynamic sliders to observe in real-time how the flocking behavior changes, such as moving from a tightly knit school to a chaotic swarm. The demo features a modern, mobile-friendly design with distinct colors to distinguish boids and UI elements, alongside passive animations to highlight interactable controls.
