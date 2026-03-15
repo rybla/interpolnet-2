@@ -1,4 +1,3 @@
-Step through a single pixel's ray calculation showing the physical line bouncing off a sphere and checking light source occlusion.
 Implement a WebGL Gray-Scott model where users can paint chemical food onto the canvas to watch organic Turing patterns grow and split.
 Provide an interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
 Visualise the generation of 2D Perlin noise by showing the underlying gradient vectors and how bilinear interpolation smooths the resulting map.
