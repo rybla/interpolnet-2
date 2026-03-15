@@ -2314,3 +2314,7 @@ An interactive visualization showing the Fibonacci sequence recursively dividing
 ## Skewed Galton Board [[demo](https://rybla.github.io/interpolnet-2/skewed-galton-board)]
 
 This demo features an interactive Galton board where users can dynamically skew the probabilities of falling balls at each peg. By adjusting the probability slider, users can observe the resulting distribution of balls at the bottom shift continuously from a standard Normal distribution (when probability is 0.5) to a skewed Poisson distribution. The implementation utilizes an HTML5 Canvas for high-performance rendering of the falling physics balls and the distribution bins, coupled with smooth CSS animations for the UI controls to provide an engaging and intuitive educational experience.
+
+## Huffman Entropy Compressor [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-compressor)]
+
+This demo provides an interactive educational visualization of data compression using a Huffman coding algorithm. Users can input arbitrary text, and the application dynamically constructs and displays a Huffman tree based on the character frequencies in the text. The demo calculates and visualizes the entropy of the text and provides real-time statistics on the original size, compressed size, and compression ratio. It features an HTML5 canvas to render the branching Huffman tree and interactive tables mapping each character to its variable-length binary code, demonstrating how more frequent characters receive shorter codes.
