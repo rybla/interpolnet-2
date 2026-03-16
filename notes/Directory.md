@@ -2639,3 +2639,25 @@ The Huffman Entropy Coding Compressor demo provides an interactive educational v
   - Traverse the tree to generate the dictionary of binary codes.
   - Render the tree on the canvas, dynamically positioning nodes and drawing connections.
   - Set up input event listeners to recalculate and re-render on every keystroke.
+
+## Dynamic Slope Field Tracer [[demo](https://rybla.github.io/interpolnet-2/dynamic-slope-field-tracer)]
+
+This demo provides an interactive 2D visualization on an HTML5 canvas where users explore a dynamic slope field representing a differential equation. Users can interact by dropping virtual "ink drops" anywhere on the canvas, which then flow along the vector field to continuously trace distinct solution curves.
+
+Features:
+- Dynamic rendering of a slope field for a specific differential equation.
+- Interactive placement of "ink drops" via click or touch.
+- Continuous tracing of solution curves originating from the ink drops, following the vector field over time.
+- Smooth animations for the flowing ink drops.
+- Distinct color scheme for the background, vector lines, and ink trails.
+- Responsive design for varying screen sizes, ensuring the field and interaction area adjust correctly.
+
+Implementation Outline:
+- `index.html`: Contains the full-screen canvas element for the slope field and a simple overlay container for an informational title.
+- `style.css`: Defines a distinct dark/neon theme, ensuring the canvas fills the viewport and UI elements are styled responsively with subtle entrance animations.
+- `script.js`:
+    - Handles canvas resizing to match the window dimensions.
+    - Defines a differential equation function $dy/dx = f(x, y)$.
+    - Implements a rendering loop that draws the static vector field (short line segments representing the slope at grid points).
+    - Manages an array of active "ink drops", updating their positions based on the local slope (using a numerical integration step) and drawing their continuous trails.
+    - Attaches event listeners for `mousedown`/`touchstart` to spawn new ink drops at the pointer location.

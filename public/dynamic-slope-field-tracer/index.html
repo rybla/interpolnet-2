@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Dynamic Slope Field Tracer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="slope-field-canvas"></canvas>
+    <div id="ui-overlay">
+      <div class="panel">
+        <h1>Dynamic Slope Field Tracer</h1>
+        <p>Click or touch anywhere on the canvas to drop virtual ink drops. Watch as they flow along the vector field, tracing the distinct solution curves of the differential equation <code>dy/dx = sin(x) + cos(y)</code>.</p>
+        <div class="controls">
+          <button id="clear-btn">Clear Ink Drops</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
