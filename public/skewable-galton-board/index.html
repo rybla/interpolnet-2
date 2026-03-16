@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Skewable Galton Board</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="controls-overlay">
+      <h1>Skewable Galton Board</h1>
+      <p>Adjust the probability of a ball bouncing right versus left to skew the distribution.</p>
+
+      <div class="slider-container">
+        <label for="probability-slider">Probability of Bouncing Right</label>
+        <div class="slider-wrapper">
+          <input type="range" id="probability-slider" min="0.05" max="0.95" step="0.01" value="0.5">
+          <span id="probability-value">0.50</span>
+        </div>
+      </div>
+    </div>
+    <canvas id="simulation-canvas"></canvas>
+  </body>
+</html>

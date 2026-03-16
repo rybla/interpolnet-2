@@ -2588,3 +2588,30 @@ An interactive visualization showing the Fibonacci sequence recursively dividing
   - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
   - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
   - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
+
+## Skewable Galton Board [[demo](https://rybla.github.io/interpolnet-2/skewable-galton-board)]
+
+An interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
+
+### Features
+- **Dynamic Physics Engine**: Continuously drops physical balls that bounce and collide off a triangular grid of static pegs and gather into bins at the bottom.
+- **Skewable Probabilities**: A slider allows the user to dynamically adjust the probability of a ball bouncing left versus right at each peg.
+- **Real-Time Distribution**: As balls accumulate in the bins over time, they form a distribution that shifts from a standard Normal distribution (when probability is 0.5) to a skewed Poisson distribution (when probability is skewed).
+- **Interactive Controls**: Users can adjust the skew probability via a slider in real-time.
+
+### Design Goals
+- **Statistical Intuition**: Demonstrate the effect of skewed probabilities on the resulting distribution visually using physical laws.
+- **Mesmerizing Simulation**: Create an engaging and satisfying animation of balls cascading through the maze.
+- **Responsive Layout**: Ensure the canvas and UI controls scale effectively on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` container with a floating UI control panel overlay for inputs.
+- **Physics System (JavaScript)**:
+  - Implement a simple fixed-timestep 2D physics loop managing particle positions, velocities, and gravity.
+  - Handle circle-circle collisions (balls vs. pegs, and balls vs. balls in the bins) and circle-line collisions (balls vs. bin walls and floor).
+  - Update velocity upon peg collision based on the skew probability.
+- **Galton Board Generator**:
+  - Dynamically generate a triangular grid array of peg positions.
+  - Generate the vertical bin dividers below the last row of pegs.
+- **Rendering**:
+  - Use the Canvas API to efficiently draw the elements in the render loop.
