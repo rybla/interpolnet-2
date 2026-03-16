@@ -2613,3 +2613,29 @@ An interactive Galton board where users can skew the peg probabilities to watch 
 - **Rendering**:
   - Use HTML5 Canvas API (`requestAnimationFrame`) to draw the pegs, animating balls, and the accumulating stacks in the bins.
   - Draw a dynamic theoretical curve over the bins based on the current probability parameter.
+
+## Huffman Entropy Coding Compressor [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-coding-compressor)]
+
+The Huffman Entropy Coding Compressor demo provides an interactive educational visualization of data compression. It dynamically generates a Huffman tree based on input text character frequencies, calculates Shannon entropy, and displays real-time compression statistics and variable-length binary codes.
+
+### Features
+- Real-time frequency analysis of user input text.
+- Dynamic generation and visualization of a Huffman tree on an HTML5 canvas.
+- Display of Shannon entropy, compression ratio, and space savings.
+- Output of the original text encoded using the generated variable-length binary codes.
+
+### Design Goals
+- Use a distinct, unique, and consistent color scheme (e.g., deep purples and bright accents for tree nodes).
+- Incorporate smooth passive and active animations when the input changes to demonstrate real-time updates.
+- Ensure the layout is responsive and mobile-friendly, effectively managing the input, visualization, and output areas.
+
+### Implementation Plan
+- **HTML:** Create a semantic layout with a text area for input, a canvas element for the tree visualization, and a results section for statistics and the encoded output.
+- **CSS:** Apply responsive grid or flexbox styling, define the specific color palette, and add CSS transitions for interactive elements.
+- **JavaScript:**
+  - Calculate character frequencies.
+  - Build the Huffman tree structure using a priority queue approach.
+  - Calculate Shannon entropy based on probabilities.
+  - Traverse the tree to generate the dictionary of binary codes.
+  - Render the tree on the canvas, dynamically positioning nodes and drawing connections.
+  - Set up input event listeners to recalculate and re-render on every keystroke.
