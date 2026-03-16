@@ -1,12 +1,11 @@
 import http.server
 import socketserver
 import threading
-from playwright.sync_api import sync_playwright
 import time
-import os
+from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/raytracer-single-pixel-calculation"
+DIRECTORY = "public/turing-patterns-gray-scott"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -24,24 +23,33 @@ server_thread.start()
 time.sleep(1)
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
+    browser = p.chromium.launch(headless=True)
     page = browser.new_page()
     page.goto(f"http://localhost:{PORT}")
 
-    # Wait for the demo to load
-    page.wait_for_selector("#raytracer-canvas")
+    # Wait for canvas to be present
+    page.wait_for_selector("canvas#glcanvas")
 
-    # Interact: Click 5 times to advance the state machine to RESULT
-    for _ in range(5):
-        page.locator("#raytracer-canvas").dispatch_event("click")
-        time.sleep(1.2) # Wait for each 1-second animation to finish
+    # Wait for initial pattern to grow
+    time.sleep(2)
 
-    # Create screenshots directory if it doesn't exist
-    os.makedirs("screenshots", exist_ok=True)
+    # Interact: Paint across the canvas
+    canvas = page.locator("canvas#glcanvas")
+    box = canvas.bounding_box()
+    if box:
+        x, y, w, h = box["x"], box["y"], box["width"], box["height"]
+        page.mouse.move(x + w / 4, y + h / 4)
+        page.mouse.down()
+        # Move in a circle-like path
+        page.mouse.move(x + w * 3 / 4, y + h / 4, steps=10)
+        page.mouse.move(x + w * 3 / 4, y + h * 3 / 4, steps=10)
+        page.mouse.move(x + w / 4, y + h * 3 / 4, steps=10)
+        page.mouse.up()
 
-    # Take screenshot
-    page.screenshot(path="screenshots/raytracer-single-pixel-calculation", type="png")
+    # Wait for new patterns to grow
+    time.sleep(3)
+
+    # Take screenshot, explicitly saving as PNG
+    page.screenshot(path="screenshots/turing-patterns-gray-scott", type="png")
 
     browser.close()
-
-print("Validation script completed successfully.")

@@ -2712,3 +2712,18 @@ This demo provides an interactive educational visualization of the fundamental p
     - State 5 (Shadow Ray): Animate a secondary ray from the intersection point towards the light source to check for occlusion.
     - State 6 (Result): Color the pixel on the image plane based on whether the shadow ray reached the light or was blocked.
 - **Rendering Loop:** Use `requestAnimationFrame` to drive smooth interpolation for the moving rays and fading annotations, using distinct colors for primary rays, normal vectors, and shadow rays.
+
+## Turing Patterns (Gray-Scott) [[demo](https://rybla.github.io/interpolnet-2/turing-patterns-gray-scott)]
+
+This demo implements a WebGL simulation of the Gray-Scott reaction-diffusion model, allowing users to paint chemical food onto a canvas to watch organic Turing patterns grow and split.
+
+### Features
+- Real-time simulation of the Gray-Scott model using WebGL for high-performance parallel computation.
+- Users can interactively "paint" chemical food (variable `V`) by clicking or dragging on the canvas, sparking new pattern growth.
+- The rendering uses a distinct, consistent color scheme mapping the chemical concentration to vibrant, distinct hues, providing a continuous passive animation.
+- Responsive, mobile-friendly design where the canvas scales dynamically with the window size.
+
+### Implementation Details
+- The simulation requires high-precision calculations for the reaction-diffusion equations, as the frame-to-frame continuous delta updates are very small. It requests the `OES_texture_float` WebGL extension and uses `gl.FLOAT` textures, as 8-bit `gl.UNSIGNED_BYTE` textures lack the necessary precision and would truncate small continuous deltas to zero.
+- It utilizes ping-pong framebuffers: the output of one frame's computation (the updated chemical concentrations) becomes the input texture for the next frame.
+- The WebGL setup includes two main shader programs: a simulation shader that calculates the next state of the chemical concentrations using the Gray-Scott equations and a rendering shader that maps the concentrations to the visual color scheme.
