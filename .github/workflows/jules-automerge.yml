@@ -7,8 +7,6 @@ name: Auto-Merge Jules PRs
 on:
   pull_request:
     types: [opened, synchronize]
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 permissions:
   pull-requests: write
   contents: write
@@ -28,8 +26,3 @@ jobs:
           git fetch origin ${{ github.event.pull_request.base.ref }}
           git rebase origin/${{ github.event.pull_request.base.ref }}
           git push --force-with-lease origin ${{ github.event.pull_request.head.ref }}
-      - run: |
-          gh pr merge --auto --squash "$PR_URL"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
