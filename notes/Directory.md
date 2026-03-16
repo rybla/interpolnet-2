@@ -2545,3 +2545,14 @@ At the center of this visualization is a virtual frog, which acts as the current
 * **Interactive Exploration:** A control panel allows users to manipulate the simulation speed, letting them observe the system dynamically.
 * **Responsive Layout:** The canvas is designed to automatically adapt to different screen sizes, ensuring a seamless experience on both desktop and mobile devices.
 * **Consistent Aesthetics:** The color palette and typography strictly follow the project's consistent design guidelines, creating a cohesive look and feel within the Interpolnet ecosystem.
+
+## Sweep-line Voronoi [[demo](https://rybla.github.io/interpolnet-2/sweep-line-voronoi-demo)]
+
+This demo provides an interactive visualization of Fortune's sweep-line algorithm (in a discrete rendering context) for generating Voronoi diagrams.
+
+Users can interact with the main `<canvas>` element by clicking to place new "seed" points. As seeds are placed, a horizontal "sweep-line" continuously moves down the screen.
+The algorithm calculates the boundary curve formed by the intersections of distance functions extending from each active seed above the sweep-line.
+As the sweep-line moves, the breakpoints (intersections) of these curves trace out the edges of the Voronoi cells.
+
+An off-screen canvas is used to continuously accumulate and draw these traced edges. The final render loop composites the off-screen edges, the active seeds, the sweep-line itself, and the dynamic boundary curves onto the main canvas, providing a real-time, animated view of the Voronoi cell formation process.
+The demo features a consistent and modern color scheme, ensuring clear visibility of all mathematical components. The layout is fully responsive, keeping the canvas centered and appropriately scaled for mobile devices.
