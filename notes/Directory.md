@@ -2661,3 +2661,26 @@ Implementation Outline:
     - Implements a rendering loop that draws the static vector field (short line segments representing the slope at grid points).
     - Manages an array of active "ink drops", updating their positions based on the local slope (using a numerical integration step) and drawing their continuous trails.
     - Attaches event listeners for `mousedown`/`touchstart` to spawn new ink drops at the pointer location.
+
+## Penrose Tiling Visualizer [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-visualizer)]
+
+The **Penrose Tiling Visualizer** provides an interactive visualization of a Penrose tiling on an HTML5 canvas. The demo utilizes the deflation algorithm to generate the aperiodic tiling, conceptually breaking the infinite pattern down into fundamental "Robinson triangles" (half-kites and half-darts).
+
+A core interactive feature of this demo is the ability for users to dynamically deform the straight edges of the base tiles. The straight edges are replaced with cubic Bézier curves, and the user can drag control points on a central "base" kite/dart pair. Any deformations made to these base edges are instantly and symmetrically propagated across the entire aperiodic pattern, showcasing how complex, curved, non-periodic tessellations can be constructed from simple fundamental rules.
+
+### Features
+- Generates an aperiodic Penrose tiling (P3) using the deflation algorithm on Robinson triangles.
+- Renders the tiles using cubic Bézier curves instead of straight line segments.
+- Interactive control points on a base kite and dart allow users to manipulate the shape of the edges.
+- Edge deformations correctly tessellate and propagate symmetrically across the entire infinite-like pattern in real-time.
+- Distinct and aesthetically pleasing color scheme for kites, darts, and UI controls.
+- Smooth animations for interactivity and mobile-friendly responsive canvas design.
+
+### Implementation Outline
+- `index.html`: Contains the full-screen canvas element for the visualization and an informational overlay detailing instructions for the user.
+- `style.css`: Defines the unique color scheme using CSS variables, ensures the canvas fills the viewport, and styles the overlay with subtle entrance animations.
+- `script.js`:
+    - Implements data structures representing acute (half-kite) and obtuse (half-dart) Robinson triangles.
+    - Implements the recursive deflation algorithm (`subdivide`) to generate a set of triangles covering the screen.
+    - Contains a rendering loop (`draw`) that translates the logical straight-edge triangles into curved tessellating shapes by evaluating cubic Bézier curves based on a global set of user-defined control point offsets.
+    - Attaches event listeners for `mousedown`/`touchstart`/`mousemove`/`touchmove`/`mouseup`/`touchend` to allow dragging of the base control points, triggering a re-render.
