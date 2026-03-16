@@ -2588,3 +2588,28 @@ An interactive visualization showing the Fibonacci sequence recursively dividing
   - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
   - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
   - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
+
+## Skewable Galton Board [[demo](https://rybla.github.io/interpolnet-2/skewable-galton-board)]
+
+An interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
+
+### Features
+- **Physics Simulation**: A real-time physics simulation of balls falling through a grid of pegs and accumulating in bins.
+- **Interactive Skewing**: A slider control that allows the user to dynamically adjust the probability of a ball bouncing left versus right at each peg.
+- **Dynamic Distribution Visualization**: As balls accumulate in the bins, a theoretical distribution curve (shifting from Normal to Poisson depending on the skew) is overlaid to compare with the experimental results.
+- **Continuous Flow**: Balls continuously drop from the top to show the distribution forming over time.
+
+### Design Goals
+- **Educational Intuition**: Provide a visual, interactive way to understand how the normal distribution arises from independent random events (Central Limit Theorem) and how altering the probability of those events leads to a skewed (Poisson-like) distribution.
+- **Visual Clarity**: Use distinct, contrasting colors for the balls, pegs, and the overlay curve to ensure the simulation and the resulting data are easy to distinguish.
+- **Responsive Layout**: Ensure the canvas and controls are usable on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` for the simulation and a UI overlay for the probability skew slider. Style with the Interpolnet 2 dark theme.
+- **JavaScript Core Logic**:
+  - Implement a simple 2D physics engine for falling balls, handling gravity and collisions with a static triangular grid of pegs.
+  - Implement the skew logic: when a ball hits a peg, use the slider's value (0.0 to 1.0) to determine the probability of bouncing right.
+  - Manage a set of bins at the bottom to catch and stack the balls.
+- **Rendering**:
+  - Use HTML5 Canvas API (`requestAnimationFrame`) to draw the pegs, animating balls, and the accumulating stacks in the bins.
+  - Draw a dynamic theoretical curve over the bins based on the current probability parameter.
