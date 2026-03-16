@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #111;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+#slope-field-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
