@@ -1,4 +1,3 @@
-Create an interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
 Build an entropy calculator that visually compresses a string of text using a dynamically generated Huffman coding tree based on character frequency.
 Plot a dynamic slope field where users can drop virtual ink drops to trace the distinct solution curves of a given differential equation.
 Provide an interlocking tile editor where manipulating the edge of one geometric shape symmetrically deforms its adjacent neighbors to create Penrose tilings.
