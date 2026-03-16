@@ -2560,3 +2560,31 @@ The demo features a consistent and modern color scheme, ensuring clear visibilit
 ## Minimax Saddle Settler [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-settler)]
 
 This demo features an interactive 3D visualization using Three.js where users can explore a multivariable calculus surface that has a minimax saddle point. Users can drag a ball onto the surface, and watch it naturally settle into the minimax saddle point by simulating simultaneous gradient descent (along the minimizing axis) and gradient ascent (along the maximizing axis) dynamics, rather than uniform gravity, accompanied by a dynamic trailing path.
+
+## Fibonacci Spiral Animation [[demo](https://rybla.github.io/interpolnet-2/fibonacci-spiral-animation)]
+
+### Description
+An interactive visualization showing the Fibonacci sequence recursively dividing a golden rectangle into smaller squares that perfectly trace the path of a logarithmic spiral. The user can watch the progressive generation of the squares and the connecting spiral arcs, demonstrating the geometric relationship between the Fibonacci numbers and the golden ratio.
+
+### Features
+- **Progressive Animation**: Slowly draws the Fibonacci squares one by one, scaling the view or zooming out as larger squares are added to keep the entire structure visible.
+- **Golden Spiral**: Simultaneously draws smooth quarter-circle arcs within each square to form a continuous golden spiral.
+- **Interactive Controls**: Users can pause/play the animation, adjust the animation speed, and manually step forward or backward through the sequence.
+- **Information Display**: Displays the current Fibonacci number and the total number of squares currently drawn.
+- **Responsive Canvas**: The canvas auto-resizes to fit the screen, maintaining the correct aspect ratio for the golden rectangle.
+
+### Design Goals
+- **Mathematical Clarity**: Clearly illustrate the construction of the golden spiral using Fibonacci squares.
+- **Visual Elegance**: Use smooth animations, distinct colors for the squares' borders, and a prominent, contrasting color for the spiral path to make the mathematical structure visually appealing.
+- **Responsiveness**: Ensure the controls and canvas look good on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: Set up a full-screen canvas with a floating, responsive UI overlay for controls and statistics.
+- **JavaScript Core Logic**:
+  - Maintain state for the current step in the Fibonacci sequence (e.g., $F_n = F_{n-1} + F_{n-2}$).
+  - Track the current drawing coordinate, orientation, and scale.
+  - Implement a `requestAnimationFrame` loop to handle the progressive drawing and zooming.
+- **Rendering**:
+  - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
+  - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
+  - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
