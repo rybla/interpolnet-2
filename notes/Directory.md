@@ -2684,3 +2684,31 @@ A core interactive feature of this demo is the ability for users to dynamically 
     - Implements the recursive deflation algorithm (`subdivide`) to generate a set of triangles covering the screen.
     - Contains a rendering loop (`draw`) that translates the logical straight-edge triangles into curved tessellating shapes by evaluating cubic Bézier curves based on a global set of user-defined control point offsets.
     - Attaches event listeners for `mousedown`/`touchstart`/`mousemove`/`touchmove`/`mouseup`/`touchend` to allow dragging of the base control points, triggering a re-render.
+
+## Raytracer Single Pixel Calculation [[demo](https://rybla.github.io/interpolnet-2/raytracer-single-pixel-calculation)]
+
+### [Raytracer Single Pixel Calculation](/raytracer-single-pixel-calculation/)
+
+This demo provides an interactive educational visualization of the fundamental process inside a raytracer for calculating a single pixel's color. It breaks down the continuous rendering process into discrete, step-by-step visual calculations, allowing users to physically see each stage of the algorithm as it happens.
+
+**Features:**
+- Step-by-step visualization: Traces a primary ray from the camera, calculates intersection with a 2D sphere, finds the surface normal, and casts shadow rays for light occlusion.
+- Distinct color scheme: Utilizes a unique palette with clear, vibrant colors to distinguish different elements (camera, ray, sphere, normal, light).
+- Interactive progression: Users can click to advance the animation through each logical step of the raytracing pipeline.
+- Educational annotations: Real-time text overlays explain the current mathematical operation being performed (e.g., "Calculating primary ray direction", "Checking sphere intersection", "Computing normal", "Testing shadow ray").
+
+**Design Goals:**
+- To demystify the core algorithm of raytracing by slowing it down and visualizing it in two dimensions.
+- To use clear, distinct visual cues (colors, animations, and typography) to separate the physical elements of the scene from the abstract mathematical vectors.
+- To ensure the demo is responsive and accessible on mobile devices, providing a seamless educational experience across screen sizes.
+
+**Implementation Plan:**
+- **HTML/CSS:** Set up a full-screen, responsive HTML5 canvas. Apply a custom CSS variable-based color scheme and clear typography for UI elements.
+- **JavaScript State Machine:** Implement a state machine to handle the progression of the raytracer:
+    - State 1 (Init): Show camera, image plane, sphere, and light source.
+    - State 2 (Primary Ray): Animate a ray shooting from the camera through a specific pixel on the image plane towards the scene.
+    - State 3 (Intersection): Calculate and highlight the exact intersection point on the sphere surface.
+    - State 4 (Normal Calculation): Visualize the calculation of the surface normal vector at the intersection point.
+    - State 5 (Shadow Ray): Animate a secondary ray from the intersection point towards the light source to check for occlusion.
+    - State 6 (Result): Color the pixel on the image plane based on whether the shadow ray reached the light or was blocked.
+- **Rendering Loop:** Use `requestAnimationFrame` to drive smooth interpolation for the moving rays and fading annotations, using distinct colors for primary rays, normal vectors, and shadow rays.
