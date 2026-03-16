@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #0b1a2a; /* Deep pond color */
+  font-family: sans-serif;
+}
+
+#pond-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}

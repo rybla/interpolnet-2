@@ -4734,3 +4734,24 @@ The Rule 30 Explorer is an interactive demonstration of a one-dimensional cellul
 - **HTML**: A responsive layout with a full-screen or prominent `<canvas>` element and a floating control panel.
 - **CSS**: A distinct color scheme applying Interpolnet 2's design guidelines, ensuring the interface is mobile-friendly with responsive media queries.
 - **JavaScript**: Manage the state of the 1D grid. Implement Rule 30 to calculate the next generation based on the current one. Use the Canvas API to efficiently render the evolving cells. Include panning and zooming capabilities by transforming the canvas context based on pointer events.
+## Markov Chain Lilypad Frog [[demo](https://rybla.github.io/interpolnet-2/markov-chain-lilypad-frog)]
+
+An interactive visualization of a Markov chain, where states are represented as lilypads in a pond, and the transitions are weighted probability arrows between them. A frog character jumps between these lilypads over time, effectively traversing the Markov Chain and visually demonstrating state transitions based on defined probabilities.
+
+### Features
+- **Interactive Canvas**: A full-screen pond environment with distinctly colored lilypads representing different states.
+- **Weighted Arrows**: Directed arrows indicating possible transitions from one lilypad to another, with text labels showing the probability of each transition.
+- **Frog Animation**: A visual representation of the current state, smoothly animating (jumping) along the transition arrows to the next state.
+- **Real-time Updates**: As the frog jumps, it dynamically navigates the probability-weighted graph.
+
+### Design Goals
+- **Educational Intuition**: Provide a concrete, visual metaphor for the abstract concept of a Markov chain and probabilistic state transitions.
+- **Engaging Visuals**: Utilize a cohesive "pond" aesthetic with distinct colors for different states to make the mathematical concept approachable and fun to watch.
+- **Responsive Layout**: Ensure the canvas scales gracefully to fit both desktop and mobile screens.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element to render the pond, lilypads, arrows, and the frog.
+- **CSS Styling**: A simple stylesheet to ensure the canvas takes up the entire viewport without scrolling.
+- **JavaScript State Machine**: Define a data structure to represent the Markov chain: an array of states (lilypads with coordinates and colors) and an adjacency matrix or list representing transition probabilities.
+- **Rendering Logic**: Use the Canvas API to draw the lilypads (circles), the transition arrows (with calculating correct angles and arrowheads), and the probability labels.
+- **Animation Loop**: Use `requestAnimationFrame` to drive a continuous loop. The frog will pause at a lilypad, probabilistically select the next state based on the outgoing weights, and then smoothly animate its `(x, y)` coordinates along the vector to the destination lilypad before repeating the process.
