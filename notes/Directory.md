@@ -2533,3 +2533,15 @@ The demo features a responsive, mobile-friendly interface showcasing an interact
 When an operation is triggered or continuously scrubbed via a slider, the mathematical action is animated directly on the clock face. For addition, an animated arc or arrow originates from an initial value and smoothly sweeps around the perimeter by the specified step amount, physically wrapping past zero if the value exceeds `n`. Multiplication is visualized by drawing rhythmic, continuous path traces or rapid successive addition steps that multiply the base value, forming intricate geometric star patterns and cycles when wrapping around the dial repeatedly.
 
 The color scheme employs deep space backgrounds with glowing neon cyan, magenta, and bright yellow accents to give the mathematical lines high contrast and visual flair. Continuous, passive animations (such as a slowly rotating background grid or pulsing active nodes) ensure the interface feels alive, while state transitions respond smoothly using `requestAnimationFrame` for high-performance rendering. The layout is fully responsive, vertically stacking the controls underneath the canvas on smaller screens and dynamically scaling the clock radius to maximize available screen real estate.
+## Markov Chain Frog Jump [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog-jump)]
+
+The **Markov Chain Frog Jump** demo provides an interactive visualization of a Markov chain. The state space is represented visually as a network of distinct lilypads distributed across a serene pond setting. The possible state transitions are depicted as directed arrows connecting these lilypads. The thickness or labeling of these arrows corresponds directly to the transition probabilities between states.
+
+At the center of this visualization is a virtual frog, which acts as the current state indicator. The frog jumps from its current lilypad to a new one, simulating a single step in the Markov chain process. The choice of the next lilypad is determined stochastically, weighted by the outgoing transition probabilities of the current state. This continuous jumping animation provides an intuitive and engaging way to observe the long-term behavior and state distribution of the Markov chain.
+
+**Design Goals and Features:**
+* **Visual Clarity:** Clear distinction between states (lilypads) and transitions (arrows).
+* **Intuitive Mechanics:** The frog metaphor immediately conveys the idea of moving from one discrete state to another based on probabilities.
+* **Interactive Exploration:** A control panel allows users to manipulate the simulation speed, letting them observe the system dynamically.
+* **Responsive Layout:** The canvas is designed to automatically adapt to different screen sizes, ensuring a seamless experience on both desktop and mobile devices.
+* **Consistent Aesthetics:** The color palette and typography strictly follow the project's consistent design guidelines, creating a cohesive look and feel within the Interpolnet ecosystem.
