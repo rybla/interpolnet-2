@@ -2556,3 +2556,7 @@ As the sweep-line moves, the breakpoints (intersections) of these curves trace o
 
 An off-screen canvas is used to continuously accumulate and draw these traced edges. The final render loop composites the off-screen edges, the active seeds, the sweep-line itself, and the dynamic boundary curves onto the main canvas, providing a real-time, animated view of the Voronoi cell formation process.
 The demo features a consistent and modern color scheme, ensuring clear visibility of all mathematical components. The layout is fully responsive, keeping the canvas centered and appropriately scaled for mobile devices.
+
+## Minimax Saddle Settler [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-settler)]
+
+This demo features an interactive 3D visualization using Three.js where users can explore a multivariable calculus surface that has a minimax saddle point. Users can drag a ball onto the surface, and watch it naturally settle into the minimax saddle point by simulating simultaneous gradient descent (along the minimizing axis) and gradient ascent (along the maximizing axis) dynamics, rather than uniform gravity, accompanied by a dynamic trailing path.
