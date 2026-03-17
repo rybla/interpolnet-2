@@ -2854,3 +2854,30 @@ Compare various error-diffusion and ordered dithering algorithms by dragging a s
   - Procedurally generate a high-resolution grayscale/color image on an off-screen canvas.
   - Implement the dithering algorithms to process the generated image data.
   - Add event listeners for the slider to dynamically draw the original image and the dithered version on the main canvas, updating the split view in real-time.
+
+## Procedural Map Generator [[demo](https://rybla.github.io/interpolnet-2/procedural-map-generator)]
+
+Build a map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.
+
+### Features
+- **Dynamic Terrain Generation**: Generates terrain in real-time using simplex noise combined with Fractional Brownian Motion (fBm) to create overlapping octaves for detailed elevation.
+- **Moisture Mapping**: Uses an independent noise map to determine moisture levels.
+- **Biome Classification**: Maps the intersection of elevation and moisture values to a variety of biomes (e.g., Desert, Grassland, Forest, Tundra, Snow).
+- **Water Features**: Distinct coloring for shallow and deep water to create coastlines, as well as distinct logic to form rivers.
+- **Interactive Regeneration**: Clicking the canvas regenerates a new map with a different random seed instantly.
+
+### Design Goals
+- **Organic Aesthetics**: The primary goal is to produce natural-looking maps with varied biomes and realistic transitions (coastlines and varying elevations).
+- **Performance**: Use an efficient, compact implementation of 2D Simplex Noise and fast rendering via `CanvasRenderingContext2D.putImageData()`.
+- **Responsive Layout**: Provide a mobile-friendly view where the map correctly scales to fit the screen without stretching, and provides smooth passive/active animations upon interaction.
+- **Distinct Colors**: Implement a specific, rich color palette to clearly differentiate biomes, using the established Interpolnet 2 typography and spacing guidelines.
+
+### Implementation Plan
+- **HTML Structure**: A clean layout containing the canvas element and an overlay or sidebar with the map legend.
+- **CSS Styling**: A dark theme UI that contrasts with the vibrant map colors, ensuring mobile responsiveness.
+- **JavaScript Engine**:
+  - `SimplexNoise`: Implement a minimal Simplex Noise generator based on standard fast implementations.
+  - `fBm`: A function that sums multiple scaled noise layers (`octaves`) by modifying `frequency` (lacunarity) and `amplitude` (persistence).
+  - `Map Generation`: Two distinct fBm passes (one for elevation, one for moisture).
+  - `Biome Mapping`: A function mapping `(elevation, moisture)` pairs to an RGBA color.
+  - `Rendering`: Calculate pixel colors for a grid and write them to an `ImageData` array for single-pass rendering to the canvas.
