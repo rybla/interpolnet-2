@@ -1,11 +1,12 @@
-import threading
 import http.server
 import socketserver
+import threading
 import time
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/l-system-fractal-trees-generator"
+DIRECTORY = "public/perlin-noise-visualizer-2"
+SCREENSHOT_PATH = "screenshots/perlin-noise-visualizer-2.png"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -13,26 +14,41 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def start_server():
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
 server_thread = threading.Thread(target=start_server, daemon=True)
 server_thread.start()
 
-# Give server time to start
+# Give the server a moment to start
 time.sleep(1)
 
-with sync_playwright() as p:
-    browser = p.chromium.launch()
-    page = browser.new_page()
-    page.goto(f"http://localhost:{PORT}")
+def run_validation():
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
 
-    # Wait for the page to load
-    page.wait_for_selector('#canvas')
+        # Open browser window to view demo
+        page.goto(f"http://localhost:{PORT}")
 
-    # Do some interaction
-    page.select_option('#preset-select', 'weed')
-    time.sleep(0.5) # Wait for render
+        # Wait for demo to load
+        page.wait_for_selector("#perlin-canvas")
 
-    page.screenshot(path="screenshots/l-system-fractal-trees-generator.png", type="png")
+        # Interact with the demo
+        canvas = page.locator("#perlin-canvas")
 
-    browser.close()
+        # Step 1: Click to show vectors
+        canvas.dispatch_event('click')
+        time.sleep(1) # wait for render
+
+        # Step 2: Click to show noise
+        canvas.dispatch_event('click')
+        time.sleep(1) # wait for render
+
+        # Take a screenshot
+        page.screenshot(path=SCREENSHOT_PATH, type="png")
+        print(f"Screenshot saved to {SCREENSHOT_PATH}")
+
+        browser.close()
+
+run_validation()
