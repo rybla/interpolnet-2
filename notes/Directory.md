@@ -2796,3 +2796,33 @@ This demo provides an interactive visualization of the barycentric coordinate ra
 - **JavaScript (Math):** Implement functions to calculate the bounding box of the triangle, compute barycentric coordinates (alpha, beta, gamma) for a given point, and check if a point lies within the triangle.
 - **JavaScript (Rendering):** Use `requestAnimationFrame` for a main loop that incrementally checks pixels within the bounding box. If a pixel is inside the triangle, color it using barycentric interpolation of the vertex colors.
 - **JavaScript (Interaction):** Add pointer event listeners to allow dragging of vertices (triggering a reset of the rasterization) and canvas clicks to advance the animation.
+
+## Marching Cubes Isosurface [[demo](https://rybla.github.io/interpolnet-2/marching-cubes)]
+
+An interactive 3D visualization that demonstrates the Marching Cubes algorithm. Users can dynamically adjust the isosurface threshold of a continuously animated 3D scalar field, watching in real-time as the algorithm generates a cohesive, fluid-like polygonal mesh that represents the boundary of the threshold.
+
+### Features
+- **Real-time 3D Rendering**: High-performance WebGL rendering of a 3D scalar field and the resulting polygonal mesh using Three.js.
+- **Dynamic Scalar Field**: The underlying scalar field is continuously animated, creating organic, blob-like structures that merge and separate over time.
+- **Interactive Threshold Slider**: Users can control the `threshold` value of the isosurface via a slider. Adjusting the slider instantly re-evaluates the marching cubes algorithm, shrinking or expanding the visible mesh.
+- **Camera Controls**: Users can drag to rotate the camera and view the evolving 3D structure from any angle.
+- **Visual Clarity**: Uses a distinct, glowing material for the mesh against a dark background, making the geometric topology easy to observe.
+
+### Design Goals
+- **Algorithm Demystification**: Provide an intuitive, visual representation of how the marching cubes algorithm extracts a 2D surface from 3D volumetric data.
+- **Mesmerizing Fluidity**: Create an engaging "lava lamp" effect through smooth animations and organic shapes.
+- **Responsive Interaction**: Ensure the mesh updates instantly as the user drags the threshold slider, emphasizing the direct connection between the mathematical parameter and the physical geometry.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scalar Field Generation**: Create a function $f(x, y, z, t)$ that evaluates the density at any point in the 3D grid. This function will combine multiple moving, overlapping density spheres whose positions update based on time ($t$).
+- **Marching Cubes Implementation**:
+  - Define a 3D grid (e.g., $40 \times 40 \times 40$).
+  - In each frame, evaluate the scalar field function at every grid point.
+  - Implement (or utilize an optimized version of) the marching cubes algorithm:
+    1. For each cube in the grid, determine an 8-bit index based on which of its 8 vertices are below the current isosurface threshold.
+    2. Use this index to look up the corresponding edge intersections from a pre-calculated edge table.
+    3. Calculate the exact intersection points on the edges using linear interpolation.
+    4. Generate triangles connecting these intersection points.
+  - Update the Three.js `BufferGeometry` with the newly generated vertices and normals.
+- **User Interface**: A simple HTML range slider overlaid on the canvas, linked to the threshold parameter.
