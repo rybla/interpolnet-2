@@ -2774,3 +2774,25 @@ An interactive, educational visualization of how 2D Perlin noise is generated, b
 ## Boids Flocking Simulation [[demo](https://rybla.github.io/interpolnet-2/boids-flocking)]
 
 This demo provides an interactive 2D visualization of emergent flocking behavior based on Craig Reynolds' Boids algorithm. The simulation is rendered on an HTML5 canvas and allows users to explore the dynamics of separation, alignment, and cohesion. Users can dynamically adjust the weights of these three core rules via intuitive sliders, observing in real-time how the changes affect the flocking patterns of the boids. The demo features a distinctive color scheme, smooth passive animations, and a responsive, mobile-friendly design with a control panel for the sliders.
+
+## Barycentric Triangle Fill [[demo](https://rybla.github.io/interpolnet-2/barycentric-triangle-fill)]
+
+This demo provides an interactive visualization of the barycentric coordinate rasterization process by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients.
+
+### Features
+- **Pixel-by-Pixel Rasterization:** Visually fills a massive 2D triangle step-by-step to demonstrate the rendering process.
+- **Barycentric Interpolation:** Calculates the barycentric coordinates of each pixel to interpolate colors from the three primary vertices (Red, Green, Blue).
+- **Interactive Vertices:** Users can drag the three vertices of the triangle to dynamically change its shape, size, and the resulting color gradients.
+- **Step-by-Step Animation:** Users can click on the canvas to step through the rasterization process.
+
+### Design Goals
+- **Educational:** Break down the fundamental concept of triangle rasterization and barycentric coordinates in an intuitive and visual way.
+- **Interactive Exploration:** Let users manipulate the geometry to see real-time updates of the rasterization constraints and color interpolation.
+- **Aesthetics:** Clean, responsive design with distinctive vertex colors blending smoothly inside the triangle against a dark or clearly contrasting background.
+
+### Implementation Plan
+- **HTML/CSS:** Structure a responsive page with a main `<canvas>` for rendering and a text overlay for instructions. Style with a clear, readable theme and distinct colors.
+- **JavaScript (State):** Keep track of the three vertices (position and color), the current rasterization coordinate (x, y bounds), and animation state.
+- **JavaScript (Math):** Implement functions to calculate the bounding box of the triangle, compute barycentric coordinates (alpha, beta, gamma) for a given point, and check if a point lies within the triangle.
+- **JavaScript (Rendering):** Use `requestAnimationFrame` for a main loop that incrementally checks pixels within the bounding box. If a pixel is inside the triangle, color it using barycentric interpolation of the vertex colors.
+- **JavaScript (Interaction):** Add pointer event listeners to allow dragging of vertices (triggering a reset of the rasterization) and canvas clicks to advance the animation.
