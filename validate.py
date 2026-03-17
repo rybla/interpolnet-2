@@ -1,54 +1,55 @@
+import threading
 import http.server
 import socketserver
-import threading
+import os
 import time
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/perlin-noise-visualizer-2"
-SCREENSHOT_PATH = "screenshots/perlin-noise-visualizer-2.png"
+DIRECTORY = "public/barycentric-triangle-fill"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
 def start_server():
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
+        print("serving at port", PORT)
         httpd.serve_forever()
 
-server_thread = threading.Thread(target=start_server, daemon=True)
-server_thread.start()
-
-# Give the server a moment to start
-time.sleep(1)
-
 def run_validation():
+    # Start the server in a background thread
+    server_thread = threading.Thread(target=start_server, daemon=True)
+    server_thread.start()
+
+    # Give the server a moment to start
+    time.sleep(1)
+
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
 
-        # Open browser window to view demo
+        # Open the demo
         page.goto(f"http://localhost:{PORT}")
 
         # Wait for demo to load
-        page.wait_for_selector("#perlin-canvas")
+        page.wait_for_selector('canvas')
 
-        # Interact with the demo
-        canvas = page.locator("#perlin-canvas")
+        # Interact with the demo (click to start rasterization)
+        page.locator('canvas').click(position={"x": 10, "y": 10})
 
-        # Step 1: Click to show vectors
-        canvas.dispatch_event('click')
-        time.sleep(1) # wait for render
+        # Give it some time to rasterize a bit
+        time.sleep(2)
 
-        # Step 2: Click to show noise
-        canvas.dispatch_event('click')
-        time.sleep(1) # wait for render
+        # Ensure the screenshots directory exists
+        os.makedirs("screenshots", exist_ok=True)
 
         # Take a screenshot
-        page.screenshot(path=SCREENSHOT_PATH, type="png")
-        print(f"Screenshot saved to {SCREENSHOT_PATH}")
+        page.screenshot(path="screenshots/barycentric-triangle-fill", type="png")
+        print("Screenshot saved to screenshots/barycentric-triangle-fill")
 
         browser.close()
 
-run_validation()
+if __name__ == "__main__":
+    run_validation()
