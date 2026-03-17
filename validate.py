@@ -1,53 +1,55 @@
-import threading
 import http.server
 import socketserver
-import os
+import threading
 import time
+import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/barycentric-triangle-fill"
+DIRECTORY = "public/dithering-algorithm-comparison"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def start_server():
+def run_server():
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print("serving at port", PORT)
+        print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
 def run_validation():
-    # Start the server in a background thread
-    server_thread = threading.Thread(target=start_server, daemon=True)
+    # Start server in background
+    server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
 
-    # Give the server a moment to start
+    # Wait for server to start
     time.sleep(1)
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
+    os.makedirs("screenshots", exist_ok=True)
 
-        # Open the demo
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
         page.goto(f"http://localhost:{PORT}")
 
-        # Wait for demo to load
-        page.wait_for_selector('canvas')
+        # Wait for canvas to render
+        page.wait_for_selector("#dither-canvas")
+        time.sleep(1) # wait for initial render
 
-        # Interact with the demo (click to start rasterization)
-        page.locator('canvas').click(position={"x": 10, "y": 10})
+        # Change algorithm to Floyd-Steinberg
+        page.click("label[for='alg-floyd']")
+        time.sleep(1) # Wait for processing
 
-        # Give it some time to rasterize a bit
-        time.sleep(2)
+        # Move the slider
+        slider = page.locator("#split-slider")
+        slider.fill("75")
+        slider.dispatch_event("input")
+        time.sleep(1)
 
-        # Ensure the screenshots directory exists
-        os.makedirs("screenshots", exist_ok=True)
-
-        # Take a screenshot
-        page.screenshot(path="screenshots/barycentric-triangle-fill", type="png")
-        print("Screenshot saved to screenshots/barycentric-triangle-fill")
+        # Take screenshot
+        page.screenshot(path="screenshots/dithering-algorithm-comparison", type="png", full_page=True)
+        print("Screenshot saved to screenshots/dithering-algorithm-comparison")
 
         browser.close()
 

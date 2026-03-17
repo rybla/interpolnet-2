@@ -2826,3 +2826,31 @@ An interactive 3D visualization that demonstrates the Marching Cubes algorithm. 
     4. Generate triangles connecting these intersection points.
   - Update the Three.js `BufferGeometry` with the newly generated vertices and normals.
 - **User Interface**: A simple HTML range slider overlaid on the canvas, linked to the threshold parameter.
+
+## Dithering Algorithm Comparison [[demo](https://rybla.github.io/interpolnet-2/dithering-algorithm-comparison)]
+
+Compare various error-diffusion and ordered dithering algorithms by dragging a slider across a high-resolution image to reveal its 1-bit pixelation.
+
+### Features
+- **Algorithm Selection**: A control panel to select between different dithering algorithms:
+  - Threshold
+  - Random
+  - Ordered (Bayer Matrix)
+  - Floyd-Steinberg
+  - Atkinson
+- **Interactive Split Slider**: An overlay slider on the main image. Dragging it reveals the original image on one side and the dithered version on the other side, allowing precise visual comparison of the details.
+- **Procedural Image Generation**: A visually appealing, high-resolution procedural image is generated on an off-screen canvas to serve as the subject for dithering, containing smooth gradients and shapes to test the algorithms effectively.
+- **Real-time Processing**: Dithering algorithms are processed efficiently to ensure the split view updates quickly when switching algorithms.
+
+### Design Goals
+- **Visual Comparison**: Provide a clear, intuitive way to understand the differences between various dithering techniques and their visual artifacts.
+- **Smooth Interaction**: Ensure the split slider feels fluid and responsive.
+- **Clean Aesthetic**: A distinct dark theme with neon accents, ensuring mobile-friendliness and smooth hover/active animations.
+
+### Implementation Plan
+- **HTML**: Structure the UI with a control panel containing radio buttons for the dithering algorithms and a main container with a `<canvas>` element and an `<input type="range">` overlay slider.
+- **CSS**: Create a responsive layout using flexbox/grid for the main container and control panel. Add a dark theme with neon accents. Style the slider thumb to be a vertical line spanning the height of the canvas.
+- **JavaScript**:
+  - Procedurally generate a high-resolution grayscale/color image on an off-screen canvas.
+  - Implement the dithering algorithms to process the generated image data.
+  - Add event listeners for the slider to dynamically draw the original image and the dithered version on the main canvas, updating the split view in real-time.

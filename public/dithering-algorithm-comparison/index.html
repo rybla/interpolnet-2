@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Dithering Algorithm Comparison</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="header">
+        <h1>Dithering Algorithm Comparison</h1>
+        <p>Compare various error-diffusion and ordered dithering algorithms by dragging the slider across the image.</p>
+      </header>
+
+      <main class="main-content">
+        <aside class="control-panel">
+          <h2>Algorithms</h2>
+          <form id="algorithm-form">
+            <div class="radio-group">
+              <input type="radio" id="alg-threshold" name="algorithm" value="threshold" checked />
+              <label for="alg-threshold">Threshold</label>
+            </div>
+            <div class="radio-group">
+              <input type="radio" id="alg-random" name="algorithm" value="random" />
+              <label for="alg-random">Random</label>
+            </div>
+            <div class="radio-group">
+              <input type="radio" id="alg-bayer" name="algorithm" value="bayer" />
+              <label for="alg-bayer">Bayer Matrix (Ordered)</label>
+            </div>
+            <div class="radio-group">
+              <input type="radio" id="alg-floyd" name="algorithm" value="floyd" />
+              <label for="alg-floyd">Floyd-Steinberg</label>
+            </div>
+            <div class="radio-group">
+              <input type="radio" id="alg-atkinson" name="algorithm" value="atkinson" />
+              <label for="alg-atkinson">Atkinson</label>
+            </div>
+          </form>
+          <div class="description-box" id="alg-description">
+            <p>Threshold dithering simply rounds each pixel to the nearest black or white value. It generally produces harsh results with strong banding.</p>
+          </div>
+        </aside>
+
+        <section class="canvas-container">
+          <canvas id="dither-canvas" width="800" height="600"></canvas>
+          <input type="range" id="split-slider" min="0" max="100" value="50" aria-label="Split view slider" />
+          <div class="labels">
+            <span class="label left">Original</span>
+            <span class="label right">Dithered</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
