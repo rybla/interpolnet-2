@@ -2770,3 +2770,7 @@ An interactive, educational visualization of how 2D Perlin noise is generated, b
   - Create a 2D grid of random unit vectors.
   - Implement the core Perlin noise algorithm functions: dot product, fade function (smoothstep), and bilinear interpolation (lerp).
   - Implement a `requestAnimationFrame` render loop that draws the grid, the vectors, and the interpolated noise pixel by pixel, based on the current animation state controlled by click events.
+
+## Boids Flocking Simulation [[demo](https://rybla.github.io/interpolnet-2/boids-flocking)]
+
+This demo provides an interactive 2D visualization of emergent flocking behavior based on Craig Reynolds' Boids algorithm. The simulation is rendered on an HTML5 canvas and allows users to explore the dynamics of separation, alignment, and cohesion. Users can dynamically adjust the weights of these three core rules via intuitive sliders, observing in real-time how the changes affect the flocking patterns of the boids. The demo features a distinctive color scheme, smooth passive animations, and a responsive, mobile-friendly design with a control panel for the sliders.
