@@ -1,11 +1,11 @@
+import threading
 import http.server
 import socketserver
-import threading
 import time
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/turing-patterns-gray-scott"
+DIRECTORY = "public/l-system-fractal-trees-generator"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -13,43 +13,26 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def start_server():
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
 server_thread = threading.Thread(target=start_server, daemon=True)
 server_thread.start()
 
-# Give the server a moment to start
+# Give server time to start
 time.sleep(1)
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True)
+    browser = p.chromium.launch()
     page = browser.new_page()
     page.goto(f"http://localhost:{PORT}")
 
-    # Wait for canvas to be present
-    page.wait_for_selector("canvas#glcanvas")
+    # Wait for the page to load
+    page.wait_for_selector('#canvas')
 
-    # Wait for initial pattern to grow
-    time.sleep(2)
+    # Do some interaction
+    page.select_option('#preset-select', 'weed')
+    time.sleep(0.5) # Wait for render
 
-    # Interact: Paint across the canvas
-    canvas = page.locator("canvas#glcanvas")
-    box = canvas.bounding_box()
-    if box:
-        x, y, w, h = box["x"], box["y"], box["width"], box["height"]
-        page.mouse.move(x + w / 4, y + h / 4)
-        page.mouse.down()
-        # Move in a circle-like path
-        page.mouse.move(x + w * 3 / 4, y + h / 4, steps=10)
-        page.mouse.move(x + w * 3 / 4, y + h * 3 / 4, steps=10)
-        page.mouse.move(x + w / 4, y + h * 3 / 4, steps=10)
-        page.mouse.up()
-
-    # Wait for new patterns to grow
-    time.sleep(3)
-
-    # Take screenshot, explicitly saving as PNG
-    page.screenshot(path="screenshots/turing-patterns-gray-scott", type="png")
+    page.screenshot(path="screenshots/l-system-fractal-trees-generator.png", type="png")
 
     browser.close()
