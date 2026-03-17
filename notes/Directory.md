@@ -2727,3 +2727,26 @@ This demo implements a WebGL simulation of the Gray-Scott reaction-diffusion mod
 - The simulation requires high-precision calculations for the reaction-diffusion equations, as the frame-to-frame continuous delta updates are very small. It requests the `OES_texture_float` WebGL extension and uses `gl.FLOAT` textures, as 8-bit `gl.UNSIGNED_BYTE` textures lack the necessary precision and would truncate small continuous deltas to zero.
 - It utilizes ping-pong framebuffers: the output of one frame's computation (the updated chemical concentrations) becomes the input texture for the next frame.
 - The WebGL setup includes two main shader programs: a simulation shader that calculates the next state of the chemical concentrations using the Gray-Scott equations and a rendering shader that maps the concentrations to the visual color scheme.
+
+## L-System Fractal Trees Editor [[demo](https://rybla.github.io/interpolnet-2/l-system-fractal-trees-editor)]
+
+An interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
+
+### Features
+- **Interactive Grammar Editor**: Text inputs to edit the Axiom and define specific string replacement rules (e.g., `F -> FF+[+F-F-F]-[-F+F+F]`).
+- **Real-Time Rendering**: As rules or the axiom are modified, the fractal tree updates instantly on the canvas.
+- **Adjustable Parameters**: Sliders to control the branch length, rotation angle, and the number of iterations for the L-system expansion.
+- **Preset Patterns**: A quick-selection dropdown to load classic L-system fractals like the Koch Curve, Sierpinski Triangle, Dragon Curve, or natural-looking plant structures.
+
+### Design Goals
+- **Educational Tool**: Help users visualize the concept of recursive string replacement and how simple rules can generate infinite complexity.
+- **Immediate Feedback**: Fast canvas rendering ensuring the user feels a direct connection between editing the grammar and the resulting fractal shape.
+- **Distinct Aesthetic**: Clean typography and a dark-themed interface with vibrant, glowing colors for the drawn lines, making the fractal stand out beautifully.
+
+### Implementation Plan
+- **HTML**: A responsive split-screen layout. The left side (or top on mobile) holds the configuration panel (inputs for Axiom, Rules, Iterations, Length, Angle). The right side (or bottom) features a full-size HTML5 Canvas for drawing.
+- **CSS**: Adopt Interpolnet 2's dark theme, using custom properties for a cohesive color palette. Ensure interactive elements like sliders and text areas have clear focus and hover states with passive animations.
+- **JavaScript**:
+  - Implement a recursive parser to expand the axiom string based on the defined rules for the set number of iterations.
+  - Interpret the expanded string into drawing commands for the canvas (e.g., 'F' means draw forward, '+' means turn right, '[' means save current state to a stack, ']' means restore state).
+  - Use `requestAnimationFrame` for smooth rendering, and ensure event listeners on all inputs instantly trigger a re-calculation and re-draw.

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | L-System Fractal Trees Editor</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="editor-panel">
+        <h1>L-System Fractal Trees Editor</h1>
+
+        <div class="control-group">
+          <label for="preset">Preset:</label>
+          <select id="preset">
+            <option value="custom">Custom</option>
+            <option value="fractal-plant" selected>Fractal Plant</option>
+            <option value="koch-curve">Koch Curve</option>
+            <option value="sierpinski-triangle">Sierpinski Triangle</option>
+            <option value="dragon-curve">Dragon Curve</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="axiom">Axiom:</label>
+          <input type="text" id="axiom" value="X">
+        </div>
+
+        <div class="control-group">
+          <label for="rules">Rules (e.g., X=F+[[X]-X]-F[-FX]+X):</label>
+          <textarea id="rules" rows="4">X=F+[[X]-X]-F[-FX]+X
+F=FF</textarea>
+        </div>
+
+        <div class="control-group">
+          <label for="iterations">Iterations: <span id="iterations-val">5</span></label>
+          <input type="range" id="iterations" min="1" max="8" value="5">
+        </div>
+
+        <div class="control-group">
+          <label for="angle">Angle (degrees): <span id="angle-val">25</span></label>
+          <input type="range" id="angle" min="1" max="180" value="25">
+        </div>
+
+        <div class="control-group">
+          <label for="length">Branch Length: <span id="length-val">5</span></label>
+          <input type="range" id="length" min="1" max="50" value="5">
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="tree-canvas"></canvas>
+      </div>
+    </div>
+  </body>
+</html>
