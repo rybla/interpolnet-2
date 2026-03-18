@@ -3028,3 +3028,27 @@ Visualize Constructive Solid Geometry by letting users intersect, union, and sub
   - Create initial 3D primitives (e.g., BoxGeometry, SphereGeometry) and convert them into `Brush` objects utilizing `three-bvh-csg`.
   - Implement an interaction layer mapping pointer events (via raycasting or basic drag logic) to update the position of the brushes.
   - Instantiate an `Evaluator` and dynamically perform the selected boolean operation (`ADDITION`, `SUBTRACTION`, `DIFFERENCE`, `INTERSECTION`) whenever a brush moves or the operation setting is changed, rendering the resulting complex mesh clearly to the user.
+
+## Screen Space Ambient Occlusion [[demo](https://rybla.github.io/interpolnet-2/ssao-visualizer)]
+
+An interactive educational visualization of Screen Space Ambient Occlusion (SSAO). It demonstrates how SSAO approximates global illumination by casting hemispherical test rays from a pixel's depth buffer to determine corner shading and local occlusion.
+
+### Features
+- **3D Interactive Scene**: A simple scene composed of blocks and walls where occlusion naturally occurs (e.g. corners and crevices). The user can rotate the camera to view the scene from different angles.
+- **Hemispherical Ray Casting**: Clicking anywhere on the scene casts a batch of test rays in a hemisphere oriented along the surface normal at the clicked point.
+- **Visual Feedback**: The cast rays are drawn as physical lines. Rays that are unblocked (meaning they hit the sky/background) are colored in a bright neon color (e.g. green or cyan), while rays that are blocked by nearby geometry are colored in a contrasting color (e.g. red or orange).
+- **Real-time Evaluation**: A small text overlay displays the calculated ambient occlusion factor for the clicked point, representing the ratio of unblocked rays to total rays.
+
+### Design Goals
+- **Algorithm Demystification**: Visually break down the SSAO technique so users can understand how local geometry blocks ambient light and creates shading in crevices.
+- **Interactive Exploration**: Allow the user to actively sample different points in the scene (flat surfaces vs. tight corners) to immediately see how the occlusion factor changes based on surrounding geometry.
+- **Distinct Aesthetics**: Employ a clean, consistent color scheme with high contrast to easily differentiate blocked vs unblocked rays, avoiding standard dark-theme clichés while maintaining the Interpolnet 2 style.
+- **Mobile Friendly**: Ensure that the 3D scene and text overlay are responsive and work well on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen container for the Three.js canvas and a minimal UI overlay for displaying the occlusion result. Use CSS variables for a consistent, unique color palette.
+- **3D Scene Setup (Three.js)**: Create a basic scene with intersecting geometries (e.g. a floor plane and some scattered boxes or a room corner) to create interesting occlusion areas.
+- **Interaction Logic**: Implement a raycaster to detect clicks on the scene geometry. Upon a click, determine the intersection point and the surface normal.
+- **Raycasting Visualization**: Generate a set of random sample vectors within a hemisphere oriented along the surface normal. Use Three.js `Raycaster` for each sample vector to check for intersections with the scene geometry within a specific radius.
+- **Rendering Rays**: Draw the sample rays using `THREE.Line` or `THREE.ArrowHelper`. Color them based on whether they hit geometry (blocked) or not (unblocked).
+- **Occlusion Calculation**: Calculate the occlusion factor based on the number of blocked rays and update the UI overlay.
