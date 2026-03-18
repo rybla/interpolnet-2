@@ -1,55 +1,51 @@
-import threading
 import http.server
 import socketserver
-import os
+import threading
 import time
 from playwright.sync_api import sync_playwright
+import os
 
 PORT = 8000
-DIRECTORY = "public/ssao-visualizer"
+DIRECTORY = "public/morph-target-facial-expression-interpolator"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def start_server():
-    socketserver.TCPServer.allow_reuse_address = True
+socketserver.TCPServer.allow_reuse_address = True
+
+def run_server():
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
-def main():
-    if not os.path.exists("screenshots"):
-        os.makedirs("screenshots")
-
-    server_thread = threading.Thread(target=start_server, daemon=True)
+def validate_demo():
+    server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
 
-    # Wait for the server to start
+    # Give server time to start
     time.sleep(2)
 
+    # Ensure screenshots dir exists
+    os.makedirs("screenshots", exist_ok=True)
+
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto(f"http://localhost:{PORT}")
 
-        # Wait for the scene to load
-        time.sleep(2)
+        # Wait for the page/demo to load
+        page.wait_for_selector("#canvas-container canvas")
 
-        # Interact with the demo: click on the canvas
-        # Click near the center where the geometry is
-        page.mouse.click(400, 300)
-        time.sleep(1)
+        # Let the animation run to see the morph target
+        time.sleep(3)
 
-        # Click somewhere else
-        page.mouse.click(300, 200)
-        time.sleep(1)
-
-        # Save screenshot
-        page.screenshot(path="screenshots/ssao-visualizer", type="png")
-        print("Screenshot saved to screenshots/ssao-visualizer")
+        # Take a screenshot exactly at the requested path
+        screenshot_path = "screenshots/morph-target-facial-expression-interpolator"
+        page.screenshot(path=screenshot_path, type="png")
+        print(f"Screenshot saved to {screenshot_path}")
 
         browser.close()
 
 if __name__ == "__main__":
-    main()
+    validate_demo()

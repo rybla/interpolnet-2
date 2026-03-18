@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Morph Target Facial Expression Interpolator</title>
+    <link rel="stylesheet" href="./style.css" />
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+      }
+    </script>
+    <script type="module" src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-container">
+      <h1>Morph Target Interpolator</h1>
+      <p>Vertex positions are continuously interpolated between a neutral base mesh and a smiling target mesh.</p>
+    </div>
+  </body>
+</html>
