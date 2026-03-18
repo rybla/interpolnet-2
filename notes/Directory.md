@@ -4780,3 +4780,25 @@ The "Slope Field Ink Drops Tracer" demo provides an interactive 2D visualization
   - Draw the background slope field as a grid of short, colored line segments whose angle is determined by the differential equation.
   - Draw the ink drops and their fading trails based on the stored coordinate history.
   - Update drop positions in the loop by stepping them along the calculated slope at their current location.
+## Delaunay Triangulation Visualizer [[demo](https://rybla.github.io/interpolnet-2/delaunay-triangulation)]
+
+Let users place points randomly on a canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
+
+### Features
+- **Interactive Point Placement:** Users can click or tap anywhere on the canvas to place a new point.
+- **Dynamic Triangulation:** As each point is placed, the Delaunay triangulation is incrementally recalculated.
+- **Expanding Circumcircles Animation:** When a new triangle is formed, an animation shows a circle expanding from its circumcenter until its radius matches the mathematical circumcircle of the triangle, at which point it locks into place.
+- **Visual Feedback:** Passive animations highlight elements like the circumcircles or lines to indicate active states.
+
+### Design Goals
+- **Educational and Aesthetic:** Combine mathematical principles with a visually pleasing, minimalist dark theme.
+- **Smooth Animations:** Ensure expanding circles animate smoothly using `requestAnimationFrame`.
+- **Responsive Layout:** The canvas should automatically resize to fill the window, making it mobile-friendly.
+
+### Implementation Plan
+- **HTML/CSS:** Full-screen canvas setup with a dark background and unique color palette.
+- **JavaScript Engine:**
+  - `Data Structures`: Objects for Points, Edges, Triangles, and animated Circumcircles.
+  - `Algorithm`: Implement an incremental algorithm (like Bowyer-Watson) to update the triangulation when a point is added.
+  - `Animation Loop`: Animate the radius of expanding circles. When a point is added, new triangles are formed, and their corresponding circumcircles start expanding from radius 0 up to their target radius.
+  - `Interaction`: Click/touch listeners on the canvas to add points.
