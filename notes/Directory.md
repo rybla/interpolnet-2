@@ -2929,3 +2929,22 @@ Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene
   - Render the scene normally for the camera view.
   - For the light view, apply a `MeshDepthMaterial` (or a custom depth visualization shader) to all objects, overriding their standard materials temporarily, and render the scene from the light's camera perspective.
 - **Interaction:** Attach pointer event listeners to allow dragging, which calculates a new polar coordinate position for the directional light, smoothly updating its position vector in the animation loop.
+
+## Delaunay Triangulation Visualizer [[demo](https://rybla.github.io/interpolnet-2/delaunay-triangulation-visualizer)]
+
+The Delaunay Triangulation Visualizer is an interactive demo that beautifully illustrates the geometric properties of a Delaunay mesh. Users can tap or click anywhere on an HTML5 canvas to place arbitrary points, from which expanding circles begin to grow outward in real-time.
+
+### Features
+- Real-time animation of expanding circumcircles originating from user-defined points.
+- Continuous calculation and rendering of valid Delaunay triangles as expanding circles intersect and lock together according to the empty circumcircle property.
+- Smooth fading effects to highlight the newest connections while maintaining visual clarity.
+- Interactive point placement via pointer events, enabling users to actively influence the emerging mesh.
+
+### Design Goal
+To provide a satisfying and visually intuitive understanding of Delaunay triangulation, demonstrating how optimal, non-overlapping triangles naturally emerge from a set of discrete points through the continuous expansion and intersection of their circumcircles.
+
+### Implementation Plan
+- **State Management:** Maintain an array of user-placed points, active expanding circles, and established valid triangles.
+- **Rendering:** Utilize an HTML5 `<canvas>` and `requestAnimationFrame` for a continuous render loop, drawing the expanding circles, the points, and the final triangulation lines with a cohesive color palette.
+- **Logic:** Each animation frame, increment the radius of all active circles. Continuously check for intersections among triplets of circles to identify valid Delaunay triangles, ensuring no other points lie within the circumcircle of the formed triangle.
+- **Interaction:** Add pointer event listeners (click/touch) to the canvas to push new coordinate data into the state array, triggering the birth of a new expanding circle.
