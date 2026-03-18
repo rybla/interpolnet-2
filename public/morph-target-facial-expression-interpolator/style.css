@@ -1,0 +1,89 @@
+:root {
+  --bg-color: #1a1a2e;
+  --text-color: #e2e2e2;
+  --accent-color: #e94560;
+  --panel-bg: rgba(22, 33, 62, 0.85);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+#ui-container {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--panel-bg);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--accent-color);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  width: 90%;
+  max-width: 400px;
+  animation: slideUp 0.8s ease-out;
+}
+
+#ui-container h1 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#ui-container p {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (max-width: 600px) {
+  #ui-container {
+    width: 95%;
+    padding: 15px;
+    bottom: 10px;
+  }
+  #ui-container h1 {
+    font-size: 1rem;
+  }
+  #ui-container p {
+    font-size: 0.8rem;
+  }
+}
