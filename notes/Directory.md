@@ -2948,3 +2948,44 @@ To provide a satisfying and visually intuitive understanding of Delaunay triangu
 - **Rendering:** Utilize an HTML5 `<canvas>` and `requestAnimationFrame` for a continuous render loop, drawing the expanding circles, the points, and the final triangulation lines with a cohesive color palette.
 - **Logic:** Each animation frame, increment the radius of all active circles. Continuously check for intersections among triplets of circles to identify valid Delaunay triangles, ensuring no other points lie within the circumcircle of the formed triangle.
 - **Interaction:** Add pointer event listeners (click/touch) to the canvas to push new coordinate data into the state array, triggering the birth of a new expanding circle.
+
+## 3D UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/3d-uv-map-painter)]
+
+An interactive 3D and 2D visualization that allows users to paint on a flattened UV map of a 3D cube and see the brush strokes immediately wrap around the 3D object in real-time.
+
+### Features
+- **Split-Screen Interface**: Two synchronized views:
+  - **3D View**: A rotatable, interactable 3D cube.
+  - **2D UV Map View**: A flat, unrolled representation of the cube's faces (typically a cross or T-shape layout).
+- **Interactive Painting**:
+  - Users can click and drag on the 2D UV map to paint with a customizable brush.
+  - The brush strokes drawn on the 2D canvas are instantly applied as a texture to the 3D cube.
+- **Brush Controls**:
+  - **Color Picker**: Choose the color of the brush.
+  - **Brush Size**: Adjust the thickness of the brush strokes.
+- **3D Interaction**:
+  - Users can rotate the 3D cube using mouse or touch drag to inspect all sides.
+- **Visual Feedback**:
+  - The 2D UV map clearly delineates the different faces of the cube (Front, Back, Top, Bottom, Left, Right) with subtle borders or labels.
+
+### Design Goals
+- **Educational Intuition**: Demystify the concept of UV mapping by providing a direct, hands-on demonstration of how a 2D image is wrapped around a 3D geometry.
+- **Immediate Feedback**: Ensure high-performance synchronization between the 2D painting canvas and the 3D texture update.
+- **Aesthetics**: Use a clean, dark theme with distinct, vibrant colors for the brush and UI elements, adhering to the Interpolnet 2 design guidelines.
+- **Responsive Layout**: The split-screen design should adapt seamlessly to different screen sizes, stacking vertically on mobile devices.
+
+### Implementation Plan
+- **HTML Structure**: A responsive flexbox/grid layout with a control panel area, a 2D painting canvas, and a 3D rendering container.
+- **CSS Styling**: Apply the consistent Interpolnet dark theme, using CSS variables for colors and typography. Ensure mobile-friendly layout and interactive UI element states (hover, active).
+- **2D Painting (Canvas API)**:
+  - Create an HTML5 `<canvas>` for the UV map.
+  - Implement drawing logic: listen for pointer events (`pointerdown`, `pointermove`, `pointerup`) to draw lines or circles on the canvas context.
+  - Draw outlines or a subtle grid to indicate the layout of the cube faces on the UV map (e.g., a cross shape).
+- **3D Rendering (Three.js)**:
+  - Initialize a Three.js scene, camera, and renderer.
+  - Create a `BoxGeometry`. The default UV mapping of Three.js `BoxGeometry` wraps the entire texture onto each face. To map a single texture across all faces like an unwrapped box, custom UV coordinates must be defined for the geometry, or a specific layout (like a cross) must be handled. For simplicity, we can use a texture layout where each face occupies a specific sub-region of the texture.
+  - Create a `CanvasTexture` using the 2D painting canvas as the source.
+  - Create a `MeshStandardMaterial` or `MeshBasicMaterial` using this `CanvasTexture`.
+  - Add `OrbitControls` to allow the user to rotate the cube.
+- **Synchronization**:
+  - Set `texture.needsUpdate = true` in the render loop or whenever the 2D canvas is modified by drawing, so the 3D material updates immediately.

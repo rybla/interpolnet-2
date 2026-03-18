@@ -2,64 +2,63 @@ import http.server
 import socketserver
 import threading
 import time
-import os
 from playwright.sync_api import sync_playwright
+import os
 
 PORT = 8000
-DIRECTORY = "public/webgl-vector-particle-emitter"
+DIRECTORY = "public/3d-uv-map-painter"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def start_server():
-    socketserver.TCPServer.allow_reuse_address = True
+# Avoid "Address already in use" errors
+socketserver.TCPServer.allow_reuse_address = True
+
+def run_server():
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
-def run_validation():
-    # Start server in daemon thread
-    server_thread = threading.Thread(target=start_server, daemon=True)
+if __name__ == "__main__":
+    # Start server in background
+    server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
 
-    # Wait for server to start
+    # Wait a bit for server to start
     time.sleep(1)
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch()
         page = browser.new_page()
-
-        # Navigate to demo
         page.goto(f"http://localhost:{PORT}")
 
-        # Wait for canvas to be present
-        canvas = page.locator("#overlayCanvas")
-        canvas.wait_for()
+        # Wait for canvas to be ready
+        page.wait_for_selector("#uv-canvas")
+        page.wait_for_selector("#webgl-container canvas")
 
-        # Simulate dragging the gravity vector
-        # Origin is at (400, 300). Gravity starts at (400, 400).
-        # We will drag it to (500, 450)
+        # Let threejs initialize
+        time.sleep(1)
 
-        # Trigger mousedown at current gravity head (400, 400)
-        canvas.dispatch_event("mousedown", {"clientX": 400, "clientY": 400})
+        # Paint on the canvas
+        canvas = page.locator("#uv-canvas")
+        box = canvas.bounding_box()
 
-        # Trigger mousemove to new position (500, 450)
-        canvas.dispatch_event("mousemove", {"clientX": 500, "clientY": 450})
+        # Draw a line from top-left to bottom-right
+        page.mouse.move(box["x"] + 10, box["y"] + 10)
+        page.mouse.down()
+        page.mouse.move(box["x"] + box["width"] - 10, box["y"] + box["height"] - 10, steps=20)
+        page.mouse.up()
 
-        # Trigger mouseup
-        page.evaluate("window.dispatchEvent(new MouseEvent('mouseup'))")
+        # Wait for the texture to sync to the 3D cube
+        time.sleep(0.5)
 
-        # Let particles simulate for a few seconds
-        time.sleep(3)
-
-        # Take screenshot
+        # Create screenshots directory if it doesn't exist
         os.makedirs("screenshots", exist_ok=True)
-        page.screenshot(path="screenshots/webgl-vector-particle-emitter", type="png")
 
-        print("Screenshot saved to screenshots/webgl-vector-particle-emitter")
+        # Save screenshot
+        page.screenshot(path="screenshots/3d-uv-map-painter", type="png")
 
         browser.close()
 
-if __name__ == "__main__":
-    run_validation()
+    print("Validation complete. Screenshot saved.")
