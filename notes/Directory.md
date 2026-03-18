@@ -2948,3 +2948,31 @@ To provide a satisfying and visually intuitive understanding of Delaunay triangu
 - **Rendering:** Utilize an HTML5 `<canvas>` and `requestAnimationFrame` for a continuous render loop, drawing the expanding circles, the points, and the final triangulation lines with a cohesive color palette.
 - **Logic:** Each animation frame, increment the radius of all active circles. Continuously check for intersections among triplets of circles to identify valid Delaunay triangles, ensuring no other points lie within the circumcircle of the formed triangle.
 - **Interaction:** Add pointer event listeners (click/touch) to the canvas to push new coordinate data into the state array, triggering the birth of a new expanding circle.
+
+## 3D UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/3d-uv-map-painter)]
+
+An interactive visualization demonstrating how a 2D texture wraps around a 3D object. The demo provides a split-screen view showing a 3D cube and its corresponding unrolled 2D UV map, allowing users to paint directly on the flat surface and observe the changes in real time on the 3D model.
+
+### Features
+- **Split-Screen Interface:** Side-by-side view with a 2D painting canvas and a 3D rendered cube.
+- **Real-Time Texture Mapping:** Brush strokes painted on the 2D canvas are immediately applied as a dynamic texture onto the 3D cube.
+- **UV Map Guide:** The 2D canvas displays a faint outline showing exactly how the six faces of the cube correspond to the flat 2D layout.
+- **Interactive 3D View:** The 3D cube continuously rotates to show all faces, or can be interacted with to view specific angles.
+
+### Design Goals
+- **Educational Intuition:** Help users understand the concept of UV mapping by bridging the gap between flat textures and 3D surfaces in a concrete, interactive way.
+- **Visual Feedback:** Provide immediate visual connection between drawing actions and 3D texturing.
+- **Consistent Aesthetic:** Use a distinct color scheme (e.g., deep charcoal background with bright neon brush strokes) consistent with Interpolnet 2's style.
+
+### Implementation Plan
+- **HTML/CSS:** Create a responsive flexbox/grid layout ensuring the 2D canvas and 3D view are equally sized and properly scaled on both desktop and mobile.
+- **2D Canvas Logic:**
+  - Initialize a standard HTML5 `<canvas>` for drawing.
+  - Implement a simple brush drawing logic tracking mouse/touch events.
+  - Draw a persistent underlying grid/guide representing the unrolled cube faces.
+- **3D Rendering (Three.js):**
+  - Set up a Three.js scene, camera, and basic lighting.
+  - Create a cube using standard 3D geometry.
+  - Apply the 2D canvas as a `CanvasTexture` to the cube's material.
+  - Re-map the default UV coordinates of the cube's geometry to match the unrolled cross-layout drawn on the 2D canvas.
+  - Add an animation loop to rotate the cube and flag the texture for updates (`needsUpdate = true`) whenever the user paints.
