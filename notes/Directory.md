@@ -3002,3 +3002,29 @@ A multi-jointed robotic arm utilizing inverse kinematics where users drag the en
 - **JavaScript (Rendering & Interaction)**:
   - Use the HTML5 Canvas API to render the segments (as lines or thick paths) and joints (as circles).
   - Add event listeners for mouse/touch interactions to update the target position and trigger the IK solver and rendering loop.
+
+## Constructive Solid Geometry Visualizer [[demo](https://rybla.github.io/interpolnet-2/csg-visualizer)]
+
+Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
+
+### Features
+- **3D Interactive Canvas**: A 3D environment rendered with Three.js showing transparent geometric primitives.
+- **CSG Operations**: Users can perform boolean operations (union, intersection, subtraction) on 3D primitives.
+- **Dynamic Manipulation**: Users can select, move, and combine shapes to create complex carved-out objects in real-time.
+- **Operation Selection**: A clean, accessible control panel allowing users to toggle which CSG operation to perform between the selected primitives.
+- **Real-Time Rendering**: The resulting complex geometry updates immediately after an operation or translation is applied.
+
+### Design Goals
+- **Educational Intuition**: Provide a direct, visual, hands-on way to understand how boolean operations can construct intricate 3D models from simple base shapes.
+- **Aesthetic Consistency**: Employ a distinct, visually pleasing dark theme with neon-accented, semi-transparent materials that let users see the internal structures of the CSG operations.
+- **Responsiveness**: Ensure the application and control panel scale smoothly and maintain usability on both mobile and desktop screens.
+- **Interactive Feedback**: Passive hover animations on the UI and clear visual distinction of the resulting carved-out mesh against the base primitives.
+
+### Implementation Plan
+- **HTML**: Include a full-screen container for the 3D canvas alongside a floating control panel for selecting the CSG operation (Union, Intersection, Subtraction). Import necessary libraries (`three`, `three-mesh-bvh`, `three-bvh-csg`) via an importmap.
+- **CSS**: Apply a cohesive dark theme, managing layout using Flexbox/Grid to keep the UI overlaid and responsive. Add CSS transitions for interactive button states.
+- **JavaScript (Three.js & CSG)**:
+  - Setup a Three.js scene, camera, lights, and WebGLRenderer.
+  - Create initial 3D primitives (e.g., BoxGeometry, SphereGeometry) and convert them into `Brush` objects utilizing `three-bvh-csg`.
+  - Implement an interaction layer mapping pointer events (via raycasting or basic drag logic) to update the position of the brushes.
+  - Instantiate an `Evaluator` and dynamically perform the selected boolean operation (`ADDITION`, `SUBTRACTION`, `DIFFERENCE`, `INTERSECTION`) whenever a brush moves or the operation setting is changed, rendering the resulting complex mesh clearly to the user.
