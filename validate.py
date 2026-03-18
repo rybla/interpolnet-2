@@ -1,12 +1,12 @@
+import os
+import threading
 import http.server
 import socketserver
-import threading
 import time
-import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/webgl-vector-particle-emitter"
+DIRECTORY = "public/inverse-kinematics-robotic-arm"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -18,48 +18,44 @@ def start_server():
         print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
-def run_validation():
-    # Start server in daemon thread
-    server_thread = threading.Thread(target=start_server, daemon=True)
-    server_thread.start()
+# Start the server in a daemon thread
+server_thread = threading.Thread(target=start_server, daemon=True)
+server_thread.start()
 
-    # Wait for server to start
-    time.sleep(1)
+# Give the server a moment to start
+time.sleep(1)
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
+# Run Playwright validation
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
+    page = browser.new_page()
+    page.goto(f"http://localhost:{PORT}")
 
-        # Navigate to demo
-        page.goto(f"http://localhost:{PORT}")
+    # Wait for canvas to be present
+    page.wait_for_selector("canvas")
 
-        # Wait for canvas to be present
-        canvas = page.locator("#overlayCanvas")
-        canvas.wait_for()
+    # Give it a moment to render
+    page.wait_for_timeout(1000)
 
-        # Simulate dragging the gravity vector
-        # Origin is at (400, 300). Gravity starts at (400, 400).
-        # We will drag it to (500, 450)
+    # Interact with the canvas (drag)
+    canvas = page.locator("canvas")
+    box = canvas.bounding_box()
 
-        # Trigger mousedown at current gravity head (400, 400)
-        canvas.dispatch_event("mousedown", {"clientX": 400, "clientY": 400})
+    # Move target
+    page.mouse.move(box["x"] + box["width"] / 2 + 100, box["y"] + box["height"] / 2)
+    page.mouse.down()
+    page.mouse.move(box["x"] + box["width"] / 2 + 100, box["y"] + box["height"] / 2 - 100, steps=10)
+    page.mouse.up()
 
-        # Trigger mousemove to new position (500, 450)
-        canvas.dispatch_event("mousemove", {"clientX": 500, "clientY": 450})
+    # Give it a moment to render the new state
+    page.wait_for_timeout(1000)
 
-        # Trigger mouseup
-        page.evaluate("window.dispatchEvent(new MouseEvent('mouseup'))")
+    # Ensure screenshots directory exists
+    os.makedirs("screenshots", exist_ok=True)
 
-        # Let particles simulate for a few seconds
-        time.sleep(3)
+    # Take screenshot
+    page.screenshot(path="screenshots/inverse-kinematics-robotic-arm", type="png")
 
-        # Take screenshot
-        os.makedirs("screenshots", exist_ok=True)
-        page.screenshot(path="screenshots/webgl-vector-particle-emitter", type="png")
+    browser.close()
 
-        print("Screenshot saved to screenshots/webgl-vector-particle-emitter")
-
-        browser.close()
-
-if __name__ == "__main__":
-    run_validation()
+print("Validation complete. Screenshot saved.")
