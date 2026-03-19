@@ -1,0 +1,3 @@
+Your demo description is the following:
+
+Allow users to place random seed points on a canvas while a sweep-line algorithm calculates and renders the intersecting Voronoi cell boundaries.
