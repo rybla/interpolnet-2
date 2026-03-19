@@ -3174,3 +3174,26 @@ An interactive visualization showing the Fibonacci sequence recursively dividing
   - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
   - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
   - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
+
+## Interactive Galton Board [[demo](https://rybla.github.io/interpolnet-2/interactive-galton-board)]
+
+An interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
+
+### Features
+- **Dynamic Physics Simulation**: Continuously drops physical balls that bounce and collide off a triangular grid of static pegs, eventually gathering into bins at the bottom.
+- **Interactive Skewing**: Users can interact with the canvas to dynamically skew the probability of balls falling to the left or right at each peg.
+- **Real-Time Distribution Visualization**: As the balls accumulate in the bins, they form a distribution that visually shifts from a normal bell curve to a skewed Poisson-like distribution depending on the user's interaction.
+- **Continuous Flow**: Balls continuously drop from the top, providing a mesmerizing and ongoing visualization of the statistical process.
+
+### Design Goals
+- **Statistical Intuition**: Demonstrate the Central Limit Theorem and visually show how altering the probability of independent random events leads to a skewed distribution.
+- **Visceral Feedback**: Provide an engaging and satisfying animation of balls cascading through the maze, reacting dynamically to the user's probability skewing.
+- **Aesthetic Consistency**: Use a dark, vibrant theme with distinct colors for pegs, balls, and bins, ensuring fluid physics animations that fit the Interpolnet 2 design guidelines.
+- **Responsive Layout**: Ensure the canvas and simulation scale effectively on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` container. Styling with a dark theme and consistent typography, focusing on responsiveness and smooth animations.
+- **Physics System (JavaScript)**: Implement a custom, performant 2D physics loop managing ball positions, velocities, and gravity, along with circle-circle collisions against the peg grid.
+- **Galton Board Generator**: Dynamically generate a triangular grid array of peg positions and vertical bin dividers at the bottom.
+- **Probability Logic**: Implement logic where a user interaction modifies the probability of a ball bouncing right vs. left, applying this probability when resolving collisions with pegs.
+- **Rendering**: Use the Canvas API (`ctx.arc`, `ctx.fillRect`) to efficiently draw the elements in the `requestAnimationFrame` render loop.
