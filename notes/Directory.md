@@ -3125,3 +3125,26 @@ An interactive visualization of Fortune's sweep-line algorithm for generating Vo
   - Detect breakpoints (intersections of parabolas) along the beach line.
   - Use an offscreen canvas to permanently trace the paths of these breakpoints over time, forming the Voronoi edges.
   - Animate the sweep-line using `requestAnimationFrame`, updating the beach line and edge traces every frame.
+
+## Minimax Saddle Settler 3D [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-settler-3d)]
+
+### Description
+This demo renders an interactive 3D multivariable calculus surface where a rolling ball naturally settles into the minimax saddle point using simultaneous gradient descent and ascent dynamics, leaving a dynamic trailing path. It visually illustrates the unique properties of saddle points, where the gradient goes to zero but the point is neither a local maximum nor a local minimum. By dragging and dropping the ball onto different parts of the surface, users can explore how the opposing forces guide the ball to the center.
+
+### Features
+- **3D Interactive Surface**: Displays a mathematical saddle surface using Three.js, with distinct colors to highlight curvature.
+- **Dynamic Physics Simulation**: Simulates a ball rolling on the surface. Instead of true gravity, it employs a custom force model where the ball descends along one primary axis and ascends along the orthogonal axis.
+- **Trailing Path Visualization**: The ball leaves a visible, fading trail as it moves, making its trajectory and the gradient dynamics clearly visible over time.
+- **Drag and Drop Interaction**: Users can grab the ball using pointer events and drag it to any valid point on the surface to observe new trajectories.
+
+### Design Goals
+- **Educational Value**: Visually clarify how gradient descent/ascent operates on surfaces with varying curvature, especially saddle points.
+- **Engaging Aesthetics**: Employ a vibrant, consistent color palette that avoids generic dark themes, following the Interpolnet 2 guidelines.
+- **Responsiveness**: Ensure the 3D scene scales appropriately and interactions feel natural on both desktop and mobile devices.
+
+### Implementation Plan
+- **HTML/CSS**: Set up a full-screen container for the Three.js canvas. Apply a CSS variable-based color scheme. Ensure the canvas expands to fill the container without layout collapse.
+- **Three.js Scene Setup**: Initialize a basic 3D scene with an orthogonal or perspective camera, lights, and an animation loop. Handle window resize events.
+- **Geometry Generation**: Create a custom buffer geometry to represent the multivariable saddle function mathematically. Apply a visually distinct material.
+- **Interaction Logic**: Implement a raycaster to detect pointer events. Map screen coordinates to the surface geometry to allow the user to drag the ball.
+- **Physics and Path Logic**: In the `requestAnimationFrame` loop, calculate the gradient of the surface at the ball's current coordinates. Apply simultaneous descent/ascent logic, update the ball's position, and constraint it to the surface geometry. Update the trailing path using an instanced mesh or line segments.
