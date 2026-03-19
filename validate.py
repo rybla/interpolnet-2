@@ -1,50 +1,54 @@
 import http.server
 import socketserver
 import threading
-import os
 import time
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/fibonacci-golden-spiral-visualizer"
+DIRECTORY = "public/interactive-galton-board"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-socketserver.TCPServer.allow_reuse_address = True
-httpd = socketserver.TCPServer(("", PORT), Handler)
+def run_server():
+    socketserver.TCPServer.allow_reuse_address = True
+    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        print(f"Serving at port {PORT}")
+        httpd.serve_forever()
 
-thread = threading.Thread(target=httpd.serve_forever)
-thread.daemon = True
-thread.start()
+def run_validation():
+    server_thread = threading.Thread(target=run_server, daemon=True)
+    server_thread.start()
 
-time.sleep(1)
-
-with sync_playwright() as p:
-    browser = p.chromium.launch()
-    page = browser.new_page()
-    page.set_viewport_size({"width": 1280, "height": 720})
-
-    print("Navigating to page...")
-    page.goto(f"http://localhost:{PORT}/")
-
-    time.sleep(2) # wait for initial draw
-
-    # Click canvas multiple times to advance animation
-    print("Clicking to advance spiral...")
-    for _ in range(5):
-        page.mouse.click(640, 360)
-        time.sleep(1.5) # Wait for animation to finish
-
+    # Wait for the server to start
     time.sleep(2)
 
-    os.makedirs("screenshots", exist_ok=True)
-    screenshot_path = "screenshots/fibonacci-golden-spiral-visualizer.png"
-    page.screenshot(path=screenshot_path)
-    print(f"Screenshot saved to {screenshot_path}")
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.set_viewport_size({"width": 1280, "height": 720})
 
-    browser.close()
+        page.goto(f"http://localhost:{PORT}")
 
-httpd.shutdown()
-httpd.server_close()
+        # Wait for demo to load and run for a bit
+        time.sleep(3)
+
+        # Skew the probability by clicking on the right side of the canvas
+        canvas = page.locator("#canvas")
+        box = canvas.bounding_box()
+
+        # Click towards the right side to skew to the right
+        page.mouse.click(box["x"] + box["width"] * 0.8, box["y"] + box["height"] * 0.5)
+
+        # Wait for balls to fall and accumulate to show the skewed distribution
+        time.sleep(15)
+
+        # Take a screenshot
+        page.screenshot(path="/app/screenshots/interactive-galton-board.png")
+        print("Screenshot saved to /app/screenshots/interactive-galton-board.png")
+
+        browser.close()
+
+if __name__ == "__main__":
+    run_validation()

@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #111827;
+  color: #f3f4f6;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+#ui {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(31, 41, 55, 0.8);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #374151;
+  backdrop-filter: blur(4px);
+  pointer-events: none; /* Let clicks pass through to the canvas */
+  z-index: 10;
+}
+
+h1 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #60a5fa;
+}
+
+p {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+#prob-display {
+  font-weight: bold;
+  color: #10b981;
+}
