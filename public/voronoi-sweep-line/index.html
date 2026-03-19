@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Voronoi Sweep-Line Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        <h1>Voronoi Sweep-Line Visualizer</h1>
+        <p>Click anywhere to place a seed point. The sweep-line moving down will compute the Voronoi cells.</p>
+        <div id="controls">
+           <button id="clearBtn">Clear</button>
+           <button id="resetLineBtn">Restart Sweep</button>
+        </div>
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+  </body>
+</html>

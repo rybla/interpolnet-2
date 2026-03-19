@@ -3101,3 +3101,27 @@ A visual simulation of a Markov chain represented as a network of lilypads. A fr
   - **Rendering**: HTML5 Canvas to draw lilypads, curved transition arrows (using quadratic curves to handle bi-directional edges without overlapping), and the frog.
   - **Animation Logic**: `requestAnimationFrame` loop to animate the frog's parabolic jump along the selected arrow, along with passive bobbing of the lilypads.
   - **Interactive Logic**: Update the transition probabilities via sliders, normalizing outgoing probabilities so they always sum to 1.0 per state.
+## Voronoi Sweep-Line Visualizer [[demo](https://rybla.github.io/interpolnet-2/voronoi-sweep-line)]
+
+An interactive visualization of Fortune's sweep-line algorithm for generating Voronoi diagrams. Users can place random seed points on a canvas while a horizontal sweep-line moves across, calculating and rendering the beach line and the intersecting Voronoi cell boundaries in real-time.
+
+### Features
+- **Interactive Seed Placement**: Users can click on the canvas to add new seed points dynamically.
+- **Real-Time Sweep-Line**: A horizontal sweep-line moves down the screen, simulating the progression of Fortune's algorithm.
+- **Dynamic Beach Line**: The "beach line" (a sequence of parabolic arcs) is rendered in real-time, showing the set of points equidistant from the sweep-line and the nearest seed point above it.
+- **Voronoi Edge Tracing**: As the breakpoints between parabolic arcs move, they trace out the edges of the Voronoi cells, which are permanently drawn onto the canvas.
+- **Playback Controls**: Users can pause, resume, and adjust the speed of the sweep-line, or clear the canvas to start over.
+
+### Design Goals
+- **Educational Visualization**: Make the abstract mathematical process of Fortune's algorithm concrete and visually understandable.
+- **Aesthetic Quality**: Use a distinct, consistent color scheme with glowing neon accents (e.g., bright cyan for the sweep-line, magenta for the beach line, and yellow for the Voronoi edges) against a dark background.
+- **Responsiveness**: Ensure the canvas and UI controls adapt seamlessly to different screen sizes, working perfectly on both mobile and desktop devices.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` for the visualization and a floating UI control panel for the interactive buttons and sliders.
+- **JavaScript Engine**:
+  - Maintain an array of seed points.
+  - Implement a pixel-based approximation of the beach line: for each x-coordinate, calculate the maximum y-value among all parabolas defined by the seed points and the current sweep-line.
+  - Detect breakpoints (intersections of parabolas) along the beach line.
+  - Use an offscreen canvas to permanently trace the paths of these breakpoints over time, forming the Voronoi edges.
+  - Animate the sweep-line using `requestAnimationFrame`, updating the beach line and edge traces every frame.
