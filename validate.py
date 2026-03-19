@@ -2,54 +2,46 @@ import http.server
 import socketserver
 import threading
 import time
+import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/minimax-saddle-settler-3d"
+DIRECTORY = "public/fibonacci-spiral"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def start_server():
+def run_server():
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
 def run_validation():
-    # Start the server in a daemon thread
-    server_thread = threading.Thread(target=start_server, daemon=True)
+    # Start server in background thread
+    server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
-
-    # Wait for the server to start
-    time.sleep(2)
+    time.sleep(1) # Wait for server to start
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-        page.goto(f"http://localhost:{PORT}")
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page(viewport={'width': 800, 'height': 600})
+        page.goto(f"http://localhost:{PORT}/")
 
-        # Wait for canvas to be created
-        page.wait_for_selector('canvas')
-
-        # Let the animation run for a bit
-        time.sleep(2)
-
-        # Simulate interaction
-        page.mouse.move(400, 300)
-        page.mouse.down()
-        page.mouse.move(500, 400, steps=10)
-        page.mouse.up()
-
-        # Let the animation settle
-        time.sleep(1)
+        # Wait for the canvas to load
+        page.wait_for_selector("canvas")
 
         # Take a screenshot
-        screenshot_path = "screenshots/minimax-saddle-settler-3d.png"
-        page.screenshot(path=screenshot_path, type="png")
-        print(f"Screenshot saved to {screenshot_path}")
+        time.sleep(1) # Let some initial drawing happen
 
+        # Click 4 times to generate some squares
+        for _ in range(4):
+            page.click("canvas")
+            time.sleep(0.5)
+
+        os.makedirs("screenshots", exist_ok=True)
+        page.screenshot(path="screenshots/fibonacci-spiral.png")
+        print("Screenshot saved to screenshots/fibonacci-spiral.png")
         browser.close()
 
 if __name__ == "__main__":
