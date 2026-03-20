@@ -1,12 +1,11 @@
 import http.server
 import socketserver
 import threading
-from playwright.sync_api import sync_playwright
 import time
-import os
+from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/huffman-tree-visualizer"
+DIRECTORY = "public/slope-field-tracer"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -14,34 +13,46 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def start_server():
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
-        httpd.serve_forever()
+    httpd = socketserver.TCPServer(("", PORT), Handler)
+    httpd.serve_forever()
 
 def run_validation():
-    # Ensure screenshots directory exists
-    os.makedirs("screenshots", exist_ok=True)
-
+    # Start the HTTP server in a background thread
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
-    time.sleep(1) # Wait for server to start
+    # Wait for the server to start
+    time.sleep(2)
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
+
+        # Open the demo
         page.goto(f"http://localhost:{PORT}")
 
-        # Interact with the demo
-        page.fill("#text-input", "hello huffman tree world")
+        # Wait for canvas to be present
+        canvas = page.locator("#slope-canvas")
+        canvas.wait_for()
 
-        # Give some time for rendering
-        time.sleep(1)
+        # Interact: drop a few ink points
+        box = canvas.bounding_box()
+        if box:
+            x, y = box["x"], box["y"]
+            w, h = box["width"], box["height"]
 
-        # Take screenshot
-        screenshot_path = os.path.abspath("screenshots/huffman-tree-visualizer.png")
-        page.screenshot(path=screenshot_path)
-        print(f"Screenshot saved to {screenshot_path}")
+            # Click at some varied positions
+            page.mouse.click(x + w * 0.2, y + h * 0.5)
+            page.mouse.click(x + w * 0.4, y + h * 0.4)
+            page.mouse.click(x + w * 0.5, y + h * 0.6)
+            page.mouse.click(x + w * 0.6, y + h * 0.2)
+            page.mouse.click(x + w * 0.8, y + h * 0.8)
+
+            # Wait for the animation to trace out curves
+            time.sleep(3)
+
+        # Take a screenshot
+        page.screenshot(path="screenshots/slope-field-tracer.png")
 
         browser.close()
 
