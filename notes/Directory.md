@@ -3226,3 +3226,26 @@ An entropy calculator that visually compresses a string of text using a dynamica
 - **JavaScript (Rendering)**:
   - Implement a recursive function to draw the Huffman tree on the canvas. Calculate node positions to avoid overlap, drawing lines for edges and circles for nodes. Include text labels for characters, frequencies, and edge values (0/1).
   - Dynamically generate the HTML for the code table based on the generated dictionary.
+
+## Slope Field Tracer [[demo](https://rybla.github.io/interpolnet-2/slope-field-tracer)]
+
+This demo visualizes a dynamic slope field and allows users to explore the solutions of a differential equation. By clicking or tapping on the canvas, users drop virtual "ink drops" which flow along the slope field, tracing out the distinct solution curves to the differential equation.
+
+**Features:**
+- A background grid of small line segments visualizing the slope field for a specific differential equation.
+- Interactive canvas where user clicks generate new ink drops.
+- Ink drops that continuously animate, extending their path by calculating the next position based on the slope at their current location using numerical integration.
+- The path gradually fades or leaves a smooth curve on the canvas, demonstrating the solution trajectory.
+
+**Design Goals:**
+- Keep the design clean with a math-inspired aesthetic (e.g., subtle grid lines, crisp curves).
+- Use distinct colors: one for the background slope field (e.g., a muted color), and vibrant colors for the ink drop paths to make them pop.
+- Provide smooth and continuous animations for the paths being traced out.
+- Ensure responsiveness across screen sizes, keeping the field centered and scaled properly.
+
+**Implementation Plan:**
+- **HTML/CSS:** Set up a full-width/height `<canvas>` element for rendering, with CSS variables for the color scheme.
+- **JavaScript Setup:** Initialize the canvas context, handle window resizing, and set up a basic animation loop with `requestAnimationFrame`.
+- **Slope Field Rendering:** Define a differential equation (e.g., $dy/dx = \sin(x) \cdot \cos(y)$). Draw small line segments across a grid, calculating their angle using the differential equation.
+- **Interaction:** Add `pointerdown` event listeners to add a new "drop" object to an array of active drops at the specified coordinate.
+- **Animation Logic:** In the animation loop, iterate through active drops. For each drop, calculate the slope at its current position, update its position by a small step (`dx`, `dy`), and draw a line segment connecting its previous position to its new position. Use a method like Euler's method or RK4 for the numerical integration.
