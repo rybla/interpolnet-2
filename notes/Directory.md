@@ -3306,3 +3306,27 @@ Step through a single pixel's ray calculation showing the physical line bouncing
   - Use `requestAnimationFrame` for a continuous render loop on the HTML5 Canvas.
   - Add pointer event listeners (mousedown, mousemove, mouseup/touchstart, touchmove, touchend) to enable dragging of the scene objects.
   - Draw the scene dynamically based on the current state, animating vectors and updating the explanation text to guide the user through the raytracing calculation. Advances are triggered by clicks.
+
+## WebGL Gray-Scott Model [[demo](https://rybla.github.io/interpolnet-2/webgl-gray-scott)]
+
+An interactive WebGL simulation of the Gray-Scott model of reaction-diffusion. Users can paint chemical food onto a canvas to watch complex, organic Turing patterns emerge, grow, and split in real time.
+
+### Features
+- **Real-time WebGL Simulation:** Uses WebGL framebuffers to simulate the Gray-Scott equations efficiently at 60 FPS across the canvas.
+- **Interactive Painting:** Users can interact with the canvas using mouse or touch to add "chemical food" (substance B) directly into the simulation, triggering new patterns to grow.
+- **Organic Color Mapping:** A shader-based color mapping system that translates the chemical concentrations into a distinct, unique, and consistent color scheme.
+- **Responsive Layout:** A mobile-friendly design that adapts the full-screen canvas to various screen sizes.
+
+### Design Goals
+- **Mesmerizing Visualization:** Provide an intuitive and engaging way to explore reaction-diffusion systems and Turing patterns.
+- **High Performance:** Keep simulation computations and rendering on the GPU to ensure fluid animations.
+- **Consistent Aesthetics:** Utilize a specific, coherent color palette aligned with the Interpolnet 2 design language, utilizing glowing colors for the patterns and clear typography.
+
+### Implementation Plan
+- **HTML/CSS Structure:** Build a responsive full-screen `<canvas>` for WebGL rendering. Style the canvas and any necessary containers to be mobile-friendly and fill the screen. Apply the distinct typography and color scheme.
+- **WebGL Context and Initialization:** Set up the WebGL context, required buffers, and textures to handle the simulation grid and rendering operations.
+- **Shaders:**
+   - **Simulation Shader:** A fragment shader that reads the previous state, computes the discrete Laplacian, and updates concentrations according to the Gray-Scott equations.
+   - **Render Shader:** A fragment shader that samples the current state texture and maps the concentration to the designated color scheme.
+- **Interaction Logic:** Track pointer events (mouse/touch) to pass coordinates as uniforms to the simulation shader, allowing the user to add chemical bursts.
+- **Animation Loop:** Implement a `requestAnimationFrame` loop that steps the simulation multiple times per frame for stability and speed before rendering the final output to the canvas.
