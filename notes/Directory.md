@@ -3277,3 +3277,32 @@ An interactive editor for exploring and manipulating Penrose tilings. The demo a
   - Implement logic to draw the deformed edges using quadratic or cubic Bézier curves based on the global control points.
   - Add event listeners for mouse/touch interactions to allow users to pan the view, zoom, and deform the edges.
   - When a control point is moved, update its global coordinates and trigger a re-render of the entire canvas to show the symmetric deformation.
+
+## Single Pixel Raytracer [[demo](https://rybla.github.io/interpolnet-2/single-pixel-raytracer)]
+
+Step through a single pixel's ray calculation showing the physical line bouncing off a sphere and checking light source occlusion.
+
+### Features
+- **Step-by-Step Visualization**: A sequential control panel that allows users to click through each stage of a raycast (Camera Origin, Ray Emit, Intersection, Surface Normal Calculation, Shadow Ray Emit, Shadow Hit/Miss, Shading Calculation).
+- **Interactive 2D Scene**: A top-down 2D canvas representing the 3D raytracing logic, where users can drag the light source, target sphere, and occluder sphere around the scene to dynamically alter the resulting raycast logic.
+- **Dynamic Geometric Drawing**: Real-time rendering of mathematical components such as the camera vector, the pixel plane, intersection points, normal vectors, and shadow rays.
+- **State Machine Animation**: Passive animations that highlight active components depending on the current step in the raytracing process.
+
+### Design Goals
+- **Clarity and Simplicity**: Use a consistent and vibrant color scheme to differentiate objects (camera, target sphere, occluder sphere, light) and ray vectors.
+- **Educational Impact**: Demystify the "black box" of raytracing by visually breaking down a single ray calculation, clearly showing how lighting and shadows are computed through geometry.
+- **Responsiveness**: Ensure the scene layout and controls adapt gracefully to mobile and desktop screens.
+
+### Implementation Plan
+- **HTML**: Create a responsive layout featuring a main `<canvas>` for the 2D scene and a dedicated control panel `<div>` with a descriptive text area.
+- **CSS**: Apply a distinct, clean styling with clear contrast. Implement flexbox for an adaptable layout and use CSS transitions for smooth interactive feedback on buttons.
+- **JavaScript (State Logic)**:
+  - Implement a state machine (enum or sequence) to manage the current step in the raytracing process.
+  - Define data structures for vectors, spheres (position, radius, color), the camera (position), and the light source.
+- **JavaScript (Math & Raytracing)**:
+  - Implement 2D vector mathematics (addition, subtraction, normalization, dot product).
+  - Implement a line-sphere intersection algorithm to mathematically detect where rays hit the 2D circles.
+- **JavaScript (Rendering & Interaction)**:
+  - Use `requestAnimationFrame` for a continuous render loop on the HTML5 Canvas.
+  - Add pointer event listeners (mousedown, mousemove, mouseup/touchstart, touchmove, touchend) to enable dragging of the scene objects.
+  - Draw the scene dynamically based on the current state, animating vectors and updating the explanation text to guide the user through the raytracing calculation. Advances are triggered by clicks.
