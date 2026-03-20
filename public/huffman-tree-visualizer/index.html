@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Huffman Entropy Compressor</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Huffman Entropy Compressor</h1>
+        <p>Visually compress text using a dynamically generated Huffman coding tree based on character frequency.</p>
+      </header>
+
+      <main>
+        <div class="panel input-panel">
+          <h2>Input Text</h2>
+          <textarea id="text-input" rows="5" placeholder="Type something here to compress..."></textarea>
+        </div>
+
+        <div class="panel stats-panel">
+          <h2>Compression Statistics</h2>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Shannon Entropy</span>
+              <span class="stat-value" id="entropy-value">0.00</span>
+              <span class="stat-unit">bits/char</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Original Size</span>
+              <span class="stat-value" id="original-size-value">0</span>
+              <span class="stat-unit">bits (8-bit ASCII)</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Compressed Size</span>
+              <span class="stat-value" id="compressed-size-value">0</span>
+              <span class="stat-unit">bits</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Compression Ratio</span>
+              <span class="stat-value" id="compression-ratio-value">0.00</span>
+              <span class="stat-unit">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel visualization-panel">
+          <h2>Huffman Tree Visualization</h2>
+          <div class="canvas-container">
+            <canvas id="tree-canvas" width="800" height="400"></canvas>
+          </div>
+        </div>
+
+        <div class="panel code-table-panel">
+          <h2>Variable-Length Binary Codes</h2>
+          <div class="table-container">
+            <table id="code-table">
+              <thead>
+                <tr>
+                  <th>Character</th>
+                  <th>Frequency</th>
+                  <th>Binary Code</th>
+                </tr>
+              </thead>
+              <tbody id="code-table-body">
+                <!-- Rows will be populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
