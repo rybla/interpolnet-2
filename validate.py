@@ -1,52 +1,47 @@
 import http.server
 import socketserver
 import threading
-import time
 from playwright.sync_api import sync_playwright
+import time
+import os
 
 PORT = 8000
-DIRECTORY = "public/interactive-galton-board"
+DIRECTORY = "public/huffman-tree-visualizer"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def run_server():
+def start_server():
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print(f"Serving at port {PORT}")
         httpd.serve_forever()
 
 def run_validation():
-    server_thread = threading.Thread(target=run_server, daemon=True)
+    # Ensure screenshots directory exists
+    os.makedirs("screenshots", exist_ok=True)
+
+    server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
-    # Wait for the server to start
-    time.sleep(2)
+    time.sleep(1) # Wait for server to start
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.set_viewport_size({"width": 1280, "height": 720})
-
         page.goto(f"http://localhost:{PORT}")
 
-        # Wait for demo to load and run for a bit
-        time.sleep(3)
+        # Interact with the demo
+        page.fill("#text-input", "hello huffman tree world")
 
-        # Skew the probability by clicking on the right side of the canvas
-        canvas = page.locator("#canvas")
-        box = canvas.bounding_box()
+        # Give some time for rendering
+        time.sleep(1)
 
-        # Click towards the right side to skew to the right
-        page.mouse.click(box["x"] + box["width"] * 0.8, box["y"] + box["height"] * 0.5)
-
-        # Wait for balls to fall and accumulate to show the skewed distribution
-        time.sleep(15)
-
-        # Take a screenshot
-        page.screenshot(path="/app/screenshots/interactive-galton-board.png")
-        print("Screenshot saved to /app/screenshots/interactive-galton-board.png")
+        # Take screenshot
+        screenshot_path = os.path.abspath("screenshots/huffman-tree-visualizer.png")
+        page.screenshot(path=screenshot_path)
+        print(f"Screenshot saved to {screenshot_path}")
 
         browser.close()
 
