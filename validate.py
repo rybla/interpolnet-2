@@ -1,64 +1,77 @@
+import os
+import threading
 import http.server
 import socketserver
-import threading
-import time
-import os
 from playwright.sync_api import sync_playwright
 
-PORT = 8000
-DIRECTORY = "public/webgl-gray-scott"
-SCREENSHOT_DIR = "screenshots"
-SCREENSHOT_PATH = os.path.join(SCREENSHOT_DIR, "webgl-gray-scott.png")
-
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
-
 def run_validation():
-    if not os.path.exists(SCREENSHOT_DIR):
-        os.makedirs(SCREENSHOT_DIR)
+    # Setup HTTP server in background thread
+    PORT = 8000
+    DIRECTORY = "public/l-system-fractal-trees-editor"
+
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=DIRECTORY, **kwargs)
 
     socketserver.TCPServer.allow_reuse_address = True
     httpd = socketserver.TCPServer(("", PORT), Handler)
 
-    server_thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.daemon = True
     server_thread.start()
-
-    print(f"Serving at port {PORT}")
-    time.sleep(1) # wait for server to start
 
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch()
             page = browser.new_page()
+
+            # Navigate to the local server
             page.goto(f"http://localhost:{PORT}")
 
-            # wait for WebGL context to be ready
-            page.wait_for_selector("canvas#glcanvas")
-            time.sleep(1)
+            # Wait for canvas to be drawn
+            page.wait_for_selector('canvas')
+            page.wait_for_timeout(500)
 
-            # interact with canvas to draw something
-            canvas = page.locator("canvas#glcanvas")
-            box = canvas.bounding_box()
-            x = box["x"] + box["width"] / 2
-            y = box["y"] + box["height"] / 2
+            # Interact to change a value (test dragon curve)
+            page.fill('#axiom', 'FX')
+            page.fill('.rule-key', 'X')
+            page.fill('.rule-value', 'X+YF+')
 
-            # click and drag a bit to spawn some substance B
-            page.mouse.move(x, y)
-            page.mouse.down()
-            page.mouse.move(x + 20, y + 20, steps=5)
-            page.mouse.up()
+            page.click('#add-rule-btn')
+            page.wait_for_timeout(100) # give UI a moment
 
-            # wait for some simulation steps to happen and pattern to grow
-            time.sleep(3)
+            # second rule
+            rules = page.query_selector_all('.rule-row')
+            new_rule = rules[1]
+            key_inputs = new_rule.query_selector_all('.rule-key')
+            val_inputs = new_rule.query_selector_all('.rule-value')
 
-            # take a screenshot
-            page.screenshot(path=SCREENSHOT_PATH)
-            print(f"Screenshot saved to {SCREENSHOT_PATH}")
+            key_inputs[0].fill('Y')
+            val_inputs[0].fill('-FX-Y')
+
+            # Change angle
+            page.fill('#angle', '90')
+            page.evaluate('document.getElementById("angle").dispatchEvent(new Event("input"))')
+
+            # Change iterations
+            page.fill('#iterations', '6')
+            page.evaluate('document.getElementById("iterations").dispatchEvent(new Event("input"))')
+
+            # Wait for drawing
+            page.wait_for_timeout(1000)
+
+            # Ensure screenshots directory exists
+            os.makedirs("/app/screenshots", exist_ok=True)
+
+            # Take screenshot
+            screenshot_path = "/app/screenshots/l-system-fractal-trees-editor.png"
+            page.screenshot(path=screenshot_path)
+
             browser.close()
+            print(f"Validation successful, screenshot saved to {screenshot_path}")
+
     finally:
         httpd.shutdown()
-        httpd.server_close()
 
 if __name__ == "__main__":
     run_validation()
