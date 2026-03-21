@@ -3351,3 +3351,25 @@ An interactive grammar ruleset editor where axiomatic string expansions are inst
 - **HTML/CSS**: A responsive split-layout with a control panel on one side and a canvas on the other, utilizing Flexbox/Grid. Include hover, focus, and active state animations.
 - **L-System Logic**: Implement a `parseRules` function to create a key-value mapping of replacement rules and a `generateLSystem` function to recursively expand the axiom based on the rules.
 - **Canvas Drawing**: Implement a `drawTree` function that parses the expanded string into canvas drawing commands. It uses a two-pass turtle-graphics algorithm to calculate the bounding box, then draws the fractal correctly scaled and centered, ignoring non-drawing variables (X, Y) and processing drawing variables (F, G, +, -, [, ]). Add `input` and `change` event listeners to instantly trigger `generateLSystem` and `drawTree` upon user edits.
+
+## 2D Perlin Noise Generation Visualizer [[demo](https://rybla.github.io/interpolnet-2/2d-perlin-noise-generation-visualizer)]
+
+This demo visualizes the generation of 2D Perlin noise by showing the underlying gradient vectors and how bilinear interpolation smooths the resulting map. It displays a grid where each node has a random 2D gradient vector. The space between the grid nodes is filled with a grayscale visualization of the noise values, calculated using the dot products of distance vectors and the grid's gradient vectors, smoothed by bilinear interpolation.
+
+**Features:**
+- Real-time generation and visualization of 2D Perlin noise on an HTML5 canvas.
+- Visualization of the random underlying gradient vectors at each grid node as animated arrows.
+- Dynamic rendering of the interpolated noise values as pixel intensities.
+- A smooth animation loop that continuously shifts the vectors or positions to show the fluid nature of the noise over time.
+
+**Design Goals:**
+- To clearly illustrate the underlying mechanics of Perlin noise generation.
+- To use a unique, distinct, and consistent color scheme (e.g., using a distinct hue for the gradient vectors to contrast with the grayscale noise) and typography.
+- To ensure responsive design and mobile-friendliness, scaling the canvas appropriately based on window size.
+
+**Implementation Plan:**
+- Use a single `<canvas>` element for rendering.
+- Implement the core logic for Perlin noise in pure JavaScript without external libraries.
+- Compute the grid of gradient vectors and animate them slightly to create an evolving noise pattern.
+- Render the interpolated noise values per-pixel (using `ImageData` for performance) and overlay the gradient vectors on top using canvas drawing commands.
+- Apply a responsive CSS layout using flexbox/grid and consistent typography.
