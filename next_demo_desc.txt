@@ -1,3 +1,3 @@
 Your demo description is the following:
 
-Allow users to place random seed points on a canvas while a sweep-line algorithm calculates and renders the intersecting Voronoi cell boundaries.
+Simulate a Boids algorithm where users can tweak the exact weights of separation, alignment, and cohesion to see how bird flocking changes.

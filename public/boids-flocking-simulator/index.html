@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Boids Flocking Simulator</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="controls">
+        <h1>Boids Flocking Simulator</h1>
+
+        <div class="slider-group">
+          <label for="separation">Separation</label>
+          <input type="range" id="separation" min="0" max="2" step="0.1" value="1">
+        </div>
+
+        <div class="slider-group">
+          <label for="alignment">Alignment</label>
+          <input type="range" id="alignment" min="0" max="2" step="0.1" value="1">
+        </div>
+
+        <div class="slider-group">
+          <label for="cohesion">Cohesion</label>
+          <input type="range" id="cohesion" min="0" max="2" step="0.1" value="1">
+        </div>
+
+        <div class="slider-group">
+          <label for="speed">Speed</label>
+          <input type="range" id="speed" min="1" max="10" step="0.5" value="4">
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="boidsCanvas"></canvas>
+      </div>
+    </div>
+  </body>
+</html>
