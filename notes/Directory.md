@@ -3373,3 +3373,30 @@ This demo visualizes the generation of 2D Perlin noise by showing the underlying
 - Compute the grid of gradient vectors and animate them slightly to create an evolving noise pattern.
 - Render the interpolated noise values per-pixel (using `ImageData` for performance) and overlay the gradient vectors on top using canvas drawing commands.
 - Apply a responsive CSS layout using flexbox/grid and consistent typography.
+
+## Boids Flocking Simulator [[demo](https://rybla.github.io/interpolnet-2/boids-flocking-simulator)]
+
+An interactive 2D simulation of emergent flocking behavior based on Craig Reynolds' Boids algorithm. The simulation renders a collection of "boids" (bird-oid objects) on an HTML5 canvas. Users can tweak the exact weights of the three core rules—separation, alignment, and cohesion—via dynamic sliders to observe in real-time how the flocking behavior changes, such as moving from a tightly knit school to a chaotic swarm.
+
+### Features
+- **Flocking Physics**: Real-time simulation of boids with tunable parameters for separation, alignment, cohesion, and speed.
+- **Interactive Controls**: A control panel with sliders allowing users to dynamically adjust the weights of the flocking rules.
+- **Visual Clarity**: Boids are rendered as distinct shapes (e.g., triangles) indicating their direction of movement.
+- **Responsive Canvas**: A full-screen or responsive `<canvas>` element that automatically resizes to fit the viewport, ensuring mobile-friendliness.
+
+### Design Goals
+- **Educational Intuition**: Provide a hands-on way to understand how complex, emergent group behaviors arise from simple, localized rules.
+- **Visually Engaging**: Use a distinct, unique, and consistent color scheme for the boids and the background, making the simulation pleasant to watch.
+- **Responsive Layout**: The controls and simulation should adapt seamlessly to different screen sizes, providing a great experience on mobile and desktop.
+- **Fluid Animation**: Ensure the simulation runs at a smooth 60 FPS using `requestAnimationFrame`.
+
+### Implementation Plan
+- **HTML**: Create a semantic layout with a `<canvas>` element for the simulation and a control panel for the sliders.
+- **CSS**: Apply a dark, modern theme with distinct accent colors for the UI elements, ensuring clear typography and responsive design using Flexbox.
+- **JavaScript (Boids Logic)**:
+  - Implement a `Boid` class managing position, velocity, and acceleration.
+  - Implement the three core rules: Separation (avoiding crowding), Alignment (steering towards average heading of neighbors), and Cohesion (steering towards average position of neighbors).
+- **JavaScript (Rendering & Interaction)**:
+  - Use the HTML5 Canvas API to draw the boids as oriented triangles.
+  - Implement a `requestAnimationFrame` loop to continuously update and render the boids.
+  - Add event listeners to the sliders to dynamically update the weights used in the boid logic.
