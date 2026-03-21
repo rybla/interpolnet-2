@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Barycentric Coordinate Rasterization</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app-container">
+      <div id="ui-panel">
+        <h1>Barycentric Coordinate Rasterization</h1>
+        <p>This demo visualizes the process of filling a 2D triangle pixel-by-pixel using barycentric coordinates. Drag the colored vertices to reshape the triangle and see the rasterization restart!</p>
+        <div id="legend">
+          <div class="legend-item"><span class="color-box red"></span> Vertex A</div>
+          <div class="legend-item"><span class="color-box green"></span> Vertex B</div>
+          <div class="legend-item"><span class="color-box blue"></span> Vertex C</div>
+        </div>
+      </div>
+      <div id="canvas-container">
+        <canvas id="render-canvas"></canvas>
+      </div>
+    </div>
+  </body>
+</html>

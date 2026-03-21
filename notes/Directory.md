@@ -3400,3 +3400,29 @@ An interactive 2D simulation of emergent flocking behavior based on Craig Reynol
   - Use the HTML5 Canvas API to draw the boids as oriented triangles.
   - Implement a `requestAnimationFrame` loop to continuously update and render the boids.
   - Add event listeners to the sliders to dynamically update the weights used in the boid logic.
+
+## Barycentric Coordinate Rasterization [[demo](https://rybla.github.io/interpolnet-2/barycentric-rasterization)]
+
+An interactive visualization showing the barycentric coordinate rasterization process. It demonstrates how a massive 2D triangle is filled pixel-by-pixel, calculating color gradients by interpolating vertex colors based on barycentric coordinates.
+
+### Features
+- **Pixel-by-Pixel Rasterization**: Animates the process of iterating over the bounding box of a triangle and checking if each pixel lies within it.
+- **Barycentric Color Interpolation**: Colors each pixel dynamically by calculating its barycentric coordinates and interpolating between the primary colors of the three vertices.
+- **Interactive Vertices**: Users can drag the three vertices of the triangle to change its shape, instantly restarting the rasterization process.
+- **Responsive Canvas**: The visualization scales appropriately across different screen sizes and devices.
+
+### Design Goals
+- **Educational Visualization**: Provide a clear, step-by-step visual intuition for how 3D graphics are rasterized onto 2D screens.
+- **Consistent Aesthetics**: Utilize a distinct, unique, and consistent color scheme for the UI and the triangle vertices (e.g., vibrant red, green, and blue for the corners).
+- **Responsive Layout**: Ensure the controls and rendering adapt seamlessly to both mobile and desktop screens.
+
+### Implementation Plan
+- **HTML**: Create a container for the `<canvas>` element and an overlaid instruction text.
+- **CSS**: Apply a distinct color scheme and typography, using Flexbox to structure the layout responsively.
+- **JavaScript (Core Logic)**:
+  - Implement a `Triangle` class or data structure with three draggable vertices.
+  - Compute the bounding box of the triangle to limit the rasterization area.
+  - Implement a function to compute barycentric coordinates for any given pixel `(x, y)`.
+- **JavaScript (Rendering & Interaction)**:
+  - Use `requestAnimationFrame` to animate the rasterization process pixel-by-pixel or block-by-block, drawing to an `ImageData` buffer for performance to avoid garbage collection pressure.
+  - Add pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to allow users to drag the triangle vertices.
