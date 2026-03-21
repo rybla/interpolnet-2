@@ -3426,3 +3426,26 @@ An interactive visualization showing the barycentric coordinate rasterization pr
 - **JavaScript (Rendering & Interaction)**:
   - Use `requestAnimationFrame` to animate the rasterization process pixel-by-pixel or block-by-block, drawing to an `ImageData` buffer for performance to avoid garbage collection pressure.
   - Add pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to allow users to drag the triangle vertices.
+
+## Marching Cubes Isosurface Visualizer [[demo](https://rybla.github.io/interpolnet-2/marching-cubes-isosurface)]
+
+An interactive 3D visualization demonstrating the Marching Cubes algorithm. Users can dynamically adjust the isosurface threshold of a continuously animated 3D scalar field, watching in real-time as the algorithm generates a cohesive, fluid-like polygonal mesh that represents the boundary of the threshold.
+
+### Features
+- **Real-time 3D Rendering**: High-performance WebGL rendering of a 3D scalar field and the resulting polygonal mesh using Three.js.
+- **Dynamic Scalar Field**: The underlying scalar field is continuously animated, creating organic, blob-like structures that merge and separate over time.
+- **Interactive Threshold Slider**: Users can control the \`threshold\` value of the isosurface via a slider. Adjusting the slider instantly re-evaluates the marching cubes algorithm, shrinking or expanding the visible mesh.
+- **Visual Clarity**: Uses a distinct, glowing material for the mesh against a dark background, making the geometric topology easy to observe.
+
+### Design Goals
+- **Algorithm Demystification**: Provide an intuitive, visual representation of how the marching cubes algorithm extracts a 2D surface from 3D volumetric data.
+- **Mesmerizing Fluidity**: Create an engaging "lava lamp" effect through smooth animations and organic shapes.
+- **Responsive Interaction**: Ensure the mesh updates instantly as the user drags the threshold slider, emphasizing the direct connection between the mathematical parameter and the physical geometry.
+
+### Implementation Plan
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scalar Field Generation**: Create a function that evaluates the density at any point in the 3D grid. This function will combine multiple moving, overlapping density spheres whose positions update based on time ($t$).
+- **Marching Cubes Implementation**:
+  - Define a 3D grid and use the marching cubes algorithm to evaluate it.
+  - Update the Three.js mesh with the newly generated vertices and normals.
+- **User Interface**: A simple HTML range slider overlaid on the canvas, linked to the threshold parameter.

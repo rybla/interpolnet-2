@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Marching Cubes Isosurface Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./script.js" defer></script>
+  </head>
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <h1>Marching Cubes Isosurface Visualizer</h1>
+      <div class="control-group">
+        <label for="threshold-slider">Isosurface Threshold: <span id="threshold-value">50%</span></label>
+        <input type="range" id="threshold-slider" min="1" max="99" value="50" />
+      </div>
+    </div>
+  </body>
+</html>
