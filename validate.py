@@ -2,10 +2,11 @@ import http.server
 import socketserver
 import threading
 import time
+import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-DIRECTORY = "public/marching-cubes-isosurface"
+DIRECTORY = "public/error-diffusion-dithering"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -13,41 +14,47 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def run_validation():
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
-        server_thread = threading.Thread(target=httpd.serve_forever)
-        server_thread.daemon = True
-        server_thread.start()
+    httpd = socketserver.TCPServer(("", PORT), Handler)
+    thread = threading.Thread(target=httpd.serve_forever)
+    thread.daemon = True
+    thread.start()
 
-        with sync_playwright() as p:
-            browser = p.chromium.launch()
-            page = browser.new_page()
+    time.sleep(1) # wait for server to spin up
 
-            # Print console logs and errors for debugging
-            page.on("console", lambda msg: print(f"Browser console: {msg.text}"))
-            page.on("pageerror", lambda err: print(f"Browser error: {err}"))
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(viewport={"width": 1200, "height": 800})
+        page.goto(f"http://localhost:{PORT}")
 
-            page.goto(f"http://localhost:{PORT}")
+        # Wait for everything to load (especially the image and the initial dither to complete)
+        page.wait_for_timeout(2000)
 
-            # Wait for canvas to be created
-            page.wait_for_selector("canvas", timeout=5000)
+        # Interact with the algorithm select
+        page.select_option("#algorithm-select", "atkinson")
 
-            # Give it some time to render
-            time.sleep(2)
+        # Give it a moment to apply the dithering
+        page.wait_for_timeout(1000)
 
-            # Interact with slider
-            slider = page.locator("#threshold-slider")
-            slider.fill("75")
+        # Interact with the slider
+        canvas_wrapper = page.locator("#canvas-wrapper")
+        box = canvas_wrapper.bounding_box()
 
-            # Give it some time to render after interaction
-            time.sleep(1)
+        # Drag slider slightly to the left
+        page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+        page.mouse.down()
+        page.mouse.move(box["x"] + box["width"] / 4, box["y"] + box["height"] / 2)
+        page.mouse.up()
 
-            # Take screenshot
-            page.screenshot(path="screenshots/marching-cubes-isosurface.png")
-            print("Screenshot saved to screenshots/marching-cubes-isosurface.png")
+        # Wait for transition to complete
+        page.wait_for_timeout(500)
 
-            browser.close()
+        # Create screenshots dir if it doesn't exist
+        os.makedirs("screenshots", exist_ok=True)
 
+        # Take a screenshot
+        page.screenshot(path="screenshots/error-diffusion-dithering.png")
+
+        browser.close()
         httpd.shutdown()
 
 if __name__ == "__main__":

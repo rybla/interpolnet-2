@@ -3449,3 +3449,30 @@ An interactive 3D visualization demonstrating the Marching Cubes algorithm. User
   - Define a 3D grid and use the marching cubes algorithm to evaluate it.
   - Update the Three.js mesh with the newly generated vertices and normals.
 - **User Interface**: A simple HTML range slider overlaid on the canvas, linked to the threshold parameter.
+
+## Error Diffusion Dithering Comparison [[demo](https://rybla.github.io/interpolnet-2/error-diffusion-dithering)]
+
+An interactive visualization comparing various error-diffusion dithering algorithms applied to a high-resolution image. Users can drag a vertical slider across the image to reveal a 1-bit pixelation effect on one side, while keeping the original high-resolution image on the other. A control panel allows users to select which error-diffusion algorithm (e.g., Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke) is applied to the dithered portion.
+
+### Features
+- **Interactive Split-Screen**: A draggable vertical divider allowing users to smoothly pan across the image, comparing the original high-resolution version with the 1-bit dithered version.
+- **Algorithm Selection**: A control panel to select between different error-diffusion dithering algorithms, dynamically updating the dithered output in real-time.
+- **High-Resolution Processing**: The dithering algorithms process a high-resolution image using canvas pixel manipulation, correctly handling pixel data and error propagation.
+- **Responsive Layout**: The canvas and controls adjust seamlessly to different screen sizes and orientations.
+
+### Design Goals
+- **Algorithm Comparison**: Provide a clear, visual way to understand and compare the subtle differences and visual artifacts of various dithering algorithms.
+- **Engaging Interaction**: Make the comparison intuitive through a draggable split-screen reveal effect.
+- **Consistent Aesthetics**: Utilize a distinct, unique, and consistent color scheme for the UI controls and typography, ensuring they stand out against the image while remaining unobtrusive.
+- **Mobile Friendliness**: Ensure touch events work smoothly for the draggable divider and algorithm selection on mobile devices.
+
+### Implementation Plan
+- **HTML**: Structure the page with a main container holding the canvas and an overlaid control panel for algorithm selection.
+- **CSS**: Apply a distinct color scheme and typography to the UI. Use absolute positioning for the draggable divider and control panel over the canvas. Ensure responsive layout using Flexbox/Grid for the controls.
+- **JavaScript (Core Logic)**:
+  - Load a high-resolution image onto a hidden off-screen canvas to extract pixel data.
+  - Implement functions for different dithering algorithms (Floyd-Steinberg, Atkinson, etc.) that process the image data and propagate quantization errors to neighboring pixels.
+- **JavaScript (Rendering & Interaction)**:
+  - Use the main `<canvas>` to draw the original image and then overlay the dithered version using `drawImage` with a clipping region based on the slider position.
+  - Add `pointerdown`, `pointermove`, and `pointerup` event listeners to the canvas/divider to update the clipping region dynamically.
+  - Update the dithered image data whenever a new algorithm is selected from the control panel.
