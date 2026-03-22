@@ -3488,3 +3488,33 @@ It features a full-screen canvas that renders the map pixel-by-pixel based on th
 - Local minima calculation based on elevation is used to dynamically generate a series of simple rivers that flow into the ocean.
 - The map is re-generated periodically or interactively to animate it dynamically, or using CSS animations on the canvas to simulate interactive elements.
 - The implementation strictly uses a mobile-friendly responsive layout and a distinct consistent color palette that echoes vintage topographical maps and satellite data.
+
+## WebGL Particle Physics Emitter [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-physics-emitter)]
+
+An interactive 2D particle emitter powered by WebGL where users can visually construct and tweak the math for wind, gravity, and drag vectors applied to independent points. Thousands of particles are simulated and rendered in real-time, allowing users to intuitively understand how different physical forces interact to influence particle trajectories.
+
+### Features
+- **Real-time Particle Simulation**: High-performance rendering of tens of thousands of particles using WebGL, ensuring smooth 60 FPS animation.
+- **Interactive Force Vectors**: Visual controls to manipulate wind (horizontal/vertical force), gravity (downward/upward force), and drag (velocity dampening) vectors.
+- **Continuous Emission**: A steady stream of particles is emitted from a central point, with a defined lifespan and randomized initial velocities.
+- **Dynamic Visuals**: Particles change color or opacity based on their speed and lifespan, creating a mesmerizing and readable flow of movement.
+
+### Design Goals
+- **Educational Physics Math**: Provide a direct, visual correlation between mathematical vectors (gravity, wind, drag) and the physical behavior of simulated particles.
+- **Distinct Aesthetics**: Use a dark, vibrant, and consistent color scheme (e.g., neon blues and pinks against a deep charcoal background) to make the particles pop.
+- **Responsive Layout**: Ensure the canvas and vector control panel adapt seamlessly to desktop and mobile layouts, stacking vertically on smaller screens.
+- **Intuitive UI Feedback**: Employ active and passive animations on the control sliders to indicate interaction and real-time state changes.
+
+### Implementation Plan
+- **HTML**: Structure the page with a main `<canvas>` for WebGL rendering and a sidebar/overlay control panel containing range sliders for the physics parameters.
+- **CSS**: Apply a cohesive dark theme, using Flexbox/Grid for a responsive layout. Style the sliders and typography to match the project's unique design guidelines.
+- **JavaScript (WebGL & Shaders)**:
+  - Initialize a WebGL context and compile vertex and fragment shaders.
+  - Render particles using `gl.POINTS`. The vertex shader will handle scaling and positioning, while the fragment shader handles coloring and shape (e.g., making them circular).
+- **JavaScript (Physics Simulation)**:
+  - Maintain a buffer of particle data (position, velocity, age, lifespan).
+  - Implement a `requestAnimationFrame` loop that calculates position updates based on the current wind, gravity, and drag values.
+  - Upload the updated particle positions to the GPU via WebGL buffers every frame.
+- **JavaScript (Interaction)**:
+  - Add event listeners to the UI sliders to update global variables for wind (x, y), gravity (y), and drag coefficient.
+  - Update the displayed numerical values of the vectors dynamically as the user interacts with the controls.
