@@ -3476,3 +3476,15 @@ An interactive visualization comparing various error-diffusion dithering algorit
   - Use the main `<canvas>` to draw the original image and then overlay the dithered version using `drawImage` with a clipping region based on the slider position.
   - Add `pointerdown`, `pointermove`, and `pointerup` event listeners to the canvas/divider to update the clipping region dynamically.
   - Update the dithered image data whenever a new algorithm is selected from the control panel.
+
+## Procedural Biome Map Generator [[demo](https://rybla.github.io/interpolnet-2/procedural-biome-map-generator)]
+
+This demo is a map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.
+
+It features a full-screen canvas that renders the map pixel-by-pixel based on the noise map calculations. It uses two separate multi-octave noise layers—one for elevation, and one for moisture—combining them to figure out what type of biome should be present at each pixel.
+
+- Elevation layer determines Ocean, Beach, Coastlines, Mountains, etc.
+- Moisture layer further differentiates land into Deserts, Forests, Jungles, Snow, etc.
+- Local minima calculation based on elevation is used to dynamically generate a series of simple rivers that flow into the ocean.
+- The map is re-generated periodically or interactively to animate it dynamically, or using CSS animations on the canvas to simulate interactive elements.
+- The implementation strictly uses a mobile-friendly responsive layout and a distinct consistent color palette that echoes vintage topographical maps and satellite data.

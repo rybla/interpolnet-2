@@ -6,7 +6,6 @@ import time
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
-# Serve from root so ../index.css works
 DIRECTORY = "/app/public"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -26,33 +25,18 @@ def run_validation():
     # Wait for server to start
     time.sleep(1)
 
-    os.makedirs("/app/screenshots", exist_ok=True)
-    os.makedirs("/app/verification/video", exist_ok=True)
-
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(
-            record_video_dir="/app/verification/video",
-            viewport={"width": 1280, "height": 720}
-        )
+        context = browser.new_context()
         page = context.new_page()
 
+        # Capture console logs
+        page.on("console", lambda msg: print(f"Browser console: {msg.text}"))
+        page.on("pageerror", lambda err: print(f"Browser error: {err}"))
+
         try:
-            # Navigate to the demo
             page.goto(f"http://localhost:{PORT}/procedural-biome-map-generator/")
-
-            # Wait for canvas to be generated
             page.wait_for_timeout(2000)
-
-            # Take a screenshot as required by the demo validation instructions
-            page.screenshot(path="/app/screenshots/procedural-biome-map-generator.png")
-
-            # Click regenerate to show interaction
-            page.get_by_role("button", name="Regenerate World").click()
-
-            # Wait for second generation
-            page.wait_for_timeout(2000)
-
         finally:
             context.close()
             browser.close()

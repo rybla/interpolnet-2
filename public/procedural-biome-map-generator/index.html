@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Procedural Biome Map Generator</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <main class="app-container">
+      <header class="app-header">
+        <h1>Procedural Biome Map Generator</h1>
+        <p>Combining overlapping octaves of simplex noise for elevation and moisture to generate biomes, coastlines, and rivers.</p>
+        <div class="controls">
+          <button id="generate-btn" class="action-button">Regenerate World</button>
+        </div>
+      </header>
+      <div class="canvas-container">
+        <canvas id="map-canvas"></canvas>
+      </div>
+      <div class="legend" id="biome-legend">
+        <!-- Legend items injected by JS -->
+      </div>
+    </main>
+  </body>
+</html>
