@@ -1,13 +1,12 @@
 import http.server
 import socketserver
 import threading
-import os
-import time
 from playwright.sync_api import sync_playwright
+import time
+import os
 
 PORT = 8000
-# Serve from root so ../index.css works
-DIRECTORY = "/app/public"
+DIRECTORY = "public"
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -15,47 +14,47 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def start_server():
     socketserver.TCPServer.allow_reuse_address = True
-    httpd = socketserver.TCPServer(("", PORT), Handler)
-    httpd.serve_forever()
+    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        print(f"Serving at port {PORT}")
+        httpd.serve_forever()
 
 def run_validation():
-    # Start server in background thread
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
-    # Wait for server to start
-    time.sleep(1)
-
-    os.makedirs("/app/screenshots", exist_ok=True)
-    os.makedirs("/app/verification/video", exist_ok=True)
+    time.sleep(1) # wait for server to start
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context(
-            record_video_dir="/app/verification/video",
-            viewport={"width": 1280, "height": 720}
-        )
-        page = context.new_page()
+        page = browser.new_page()
+        page.goto(f"http://localhost:{PORT}/webgl-particle-physics-emitter/")
 
-        try:
-            # Navigate to the demo
-            page.goto(f"http://localhost:{PORT}/procedural-biome-map-generator/")
+        page.wait_for_selector("#ui-canvas")
 
-            # Wait for canvas to be generated
-            page.wait_for_timeout(2000)
+        # Interact with the vector arrows by clicking and dragging
+        ui_canvas = page.locator("#ui-canvas")
+        box = ui_canvas.bounding_box()
 
-            # Take a screenshot as required by the demo validation instructions
-            page.screenshot(path="/app/screenshots/procedural-biome-map-generator.png")
+        # Click center + wind vector offset (100, 0)
+        start_x = box["x"] + box["width"] / 2 + 100
+        start_y = box["y"] + box["height"] / 2
 
-            # Click regenerate to show interaction
-            page.get_by_role("button", name="Regenerate World").click()
+        page.mouse.move(start_x, start_y)
+        page.mouse.down()
 
-            # Wait for second generation
-            page.wait_for_timeout(2000)
+        # Drag right
+        page.mouse.move(start_x + 100, start_y)
+        page.mouse.up()
 
-        finally:
-            context.close()
-            browser.close()
+        # Wait a bit for simulation to run
+        time.sleep(2)
+
+        os.makedirs("screenshots", exist_ok=True)
+        screenshot_path = os.path.abspath("screenshots/webgl-particle-physics-emitter.png")
+        page.screenshot(path=screenshot_path)
+        print(f"Screenshot saved to {screenshot_path}")
+
+        browser.close()
 
 if __name__ == "__main__":
     run_validation()

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | WebGL Particle Physics Emitter</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="webgl-canvas"></canvas>
+    <canvas id="ui-canvas"></canvas>
+
+    <div id="controls">
+      <h1>Particle Physics Emitter</h1>
+      <p>Drag the arrow heads to construct vector forces for gravity, wind, and drag.</p>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="color-box gravity"></div>
+          <span>Gravity</span>
+        </div>
+        <div class="legend-item">
+          <div class="color-box wind"></div>
+          <span>Wind</span>
+        </div>
+        <div class="legend-item">
+          <div class="color-box drag"></div>
+          <span>Drag</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -3488,3 +3488,22 @@ It features a full-screen canvas that renders the map pixel-by-pixel based on th
 - Local minima calculation based on elevation is used to dynamically generate a series of simple rivers that flow into the ocean.
 - The map is re-generated periodically or interactively to animate it dynamically, or using CSS animations on the canvas to simulate interactive elements.
 - The implementation strictly uses a mobile-friendly responsive layout and a distinct consistent color palette that echoes vintage topographical maps and satellite data.
+
+## WebGL Particle Physics Emitter [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-physics-emitter)]
+
+The WebGL Particle Physics Emitter demo provides an interactive 2D visualization using WebGL where users can visually construct and manipulate vectors representing wind, gravity, and drag applied to thousands of independent points emitted from a source.
+
+### Features
+- **Vector Control:** Users can drag the endpoints of visual vector arrows on the canvas to configure global physical forces (gravity, wind, drag) interactively.
+- **Particle System:** Thousands of independent particles are continuously emitted from a central point.
+- **WebGL Rendering:** Efficient rendering of particles using `gl.POINTS` with customized point sprites via fragment shaders.
+- **Physics Simulation:** Each particle's velocity and position are updated every frame by applying the sum of the configured vector forces (Euler integration).
+
+### Implementation
+- `Vector Data Structure`: JavaScript objects that hold `x` and `y` components for each user-configurable force, and a method to render themselves as arrows onto an overlay 2D canvas context.
+- `WebGL Buffers`: Two separate VBOs for particle data (positions and life/velocity) updated dynamically using `gl.bufferSubData()`.
+- `Shaders`:
+  - `Vertex Shader`: Calculates the screen position and point size based on particle age.
+  - `Fragment Shader`: Renders a soft, glowing point sprite.
+- `Simulation Loop`: A `requestAnimationFrame` loop that calculates the total acceleration vector from the user-configured gravity, wind, and drag vectors, updates all active particles' positions, and handles particle emission and recycling.
+- `Interaction`: Pointer event listeners on a 2D overlay canvas handle hit detection for the interactive vector arrow heads, allowing drag-and-drop modification of the underlying physical forces.
