@@ -3518,3 +3518,32 @@ An interactive 2D particle emitter powered by WebGL where users can visually con
 - **JavaScript (Interaction)**:
   - Add event listeners to the UI sliders to update global variables for wind (x, y), gravity (y), and drag coefficient.
   - Update the displayed numerical values of the vectors dynamically as the user interacts with the controls.
+
+## Shadow Mapping Deconstructed [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping)]
+
+Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
+
+### Features
+- **Split-Screen Visualization:** Two side-by-side (or vertically stacked on mobile) views rendering the exact same scene simultaneously: one from the main camera's perspective showing fully rendered shadows, and one from the light source's perspective showing the depth map.
+- **Interactive Light Positioning:** Users can click and drag on the screen to rotate the light source around the central objects, dynamically updating the shadow map in real-time.
+- **Real-time Depth Rendering:** The second view utilizes a depth material to visually demonstrate how a shadow map encodes distance from the light.
+- **Dynamic Shadows:** Moving the light immediately alters the shadows cast by various objects (like toruses and spheres) onto the floor and each other, which perfectly correlates with the depth buffer view.
+- **Responsive Layout:** Automatically adjusts from side-by-side on wide screens to a vertical stack on mobile devices.
+
+### Design Goals
+- **Educational Clarity:** Visually demystify how shadow mapping works by letting the user see exactly what the light "sees."
+- **Seamless Interactivity:** Provide a fluid experience where dragging instantly updates both rendering contexts without lag.
+- **Distinct Aesthetic:** Use the Interpolnet dark theme with a clean, high-contrast palette to make shadows and the depth map easy to distinguish.
+
+### Implementation Plan
+- **HTML/CSS Layout:** A flexible container displaying two rendering views. Each view will feature an overlay indicating its perspective (Camera View vs. Light Depth Buffer).
+- **Three.js Scene Setup:** Initialize a single 3D scene containing a floor plane and a few floating geometric shapes (e.g., torus, cube, sphere).
+- **Light & Cameras:**
+  - Create a main perspective camera.
+  - Create a directional light with shadow mapping enabled.
+  - Create a camera representing the light source's perspective.
+- **Split-Screen Rendering Loop:**
+  - Use two WebGLRenderers (or a single renderer with `setViewport` and `setScissor`).
+  - Render the scene normally for the camera view.
+  - For the light view, apply a `MeshDepthMaterial` (or a custom depth visualization shader) to all objects, overriding their standard materials temporarily, and render the scene from the light's camera perspective.
+- **Interaction:** Attach pointer event listeners to allow dragging, which calculates a new polar coordinate position for the directional light, smoothly updating its position vector in the animation loop.
