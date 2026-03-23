@@ -1,0 +1,118 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0b0f19;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#demo-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#render-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#control-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(15, 20, 35, 0.85);
+  border: 1px solid #00ffcc;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#control-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 204, 0.4);
+}
+
+.title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #00ffcc;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: #a0b0d0;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+#intensity-value {
+  color: #ff00ff;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ff00ff;
+  cursor: pointer;
+  margin-top: -8px;
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+  transition: transform 0.1s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: #2a3b5c;
+  border-radius: 2px;
+}
+
+@media (max-width: 600px) {
+  #control-panel {
+    top: auto;
+    bottom: 20px;
+    left: 5%;
+    width: 90%;
+  }
+}

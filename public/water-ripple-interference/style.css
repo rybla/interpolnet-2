@@ -1,61 +1,149 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: #0b0f19;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #fff;
+:root {
+  --bg-color: #0b0f19;
+  --panel-bg: rgba(18, 25, 43, 0.85);
+  --text-main: #e0e6ed;
+  --text-muted: #8a9cb0;
+  --accent: #00d2d3;
+  --accent-hover: #00ffff;
+  --border: #2c3e50;
+  --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-#simulation {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+#simulation-canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  touch-action: none; /* Prevent scrolling when dragging */
-  cursor: grab;
+  display: block;
+  z-index: 1;
 }
 
-#simulation:active {
-  cursor: grabbing;
-}
-
-#ui {
+#control-panel {
   position: absolute;
   top: 20px;
-  left: 20px;
-  background-color: rgba(11, 15, 25, 0.8);
-  padding: 15px 25px;
+  right: 20px;
+  width: 300px;
+  background-color: var(--panel-bg);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  border: 1px solid #00ffcc;
-  pointer-events: none; /* Let clicks pass through to canvas if needed, though usually UI might need interactions. For just text, none is fine. */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  max-width: 300px;
+  padding: 20px;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-#ui h2 {
-  margin: 0 0 10px 0;
+h2 {
   font-size: 1.2rem;
-  color: #00ffcc;
+  margin-bottom: 10px;
+  color: var(--text-main);
   text-transform: uppercase;
   letter-spacing: 1px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
 }
 
-#ui p {
-  margin: 0;
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
   font-size: 0.9rem;
-  color: #ccc;
-  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: grab;
+  margin-top: -6px;
+  box-shadow: 0 0 10px rgba(0, 210, 211, 0.5);
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+input[type=range]:hover::-webkit-slider-thumb {
+  background: var(--accent-hover);
+  transform: scale(1.1);
+}
+
+input[type=range]:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(0.9);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+span {
+  font-size: 0.85rem;
+  color: var(--accent);
+  text-align: right;
+  font-family: monospace;
+}
+
+.instructions {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-style: italic;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
 }
 
 @media (max-width: 600px) {
-  #ui {
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    max-width: none;
+  #control-panel {
+    top: auto;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 90%;
+    max-width: 350px;
   }
 }

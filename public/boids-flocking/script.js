@@ -1,4 +1,52 @@
-class Vector2D {
+const canvas = document.getElementById('boidsCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height;
+
+// Simulation parameters
+const params = {
+  separationWeight: 1.5,
+  alignmentWeight: 1.0,
+  cohesionWeight: 1.0,
+  maxSpeed: 4,
+  maxForce: 0.1,
+  visualRange: 75,
+  separationRange: 25,
+  numBoids: 150
+};
+
+// UI Elements
+const sepSlider = document.getElementById('separationSlider');
+const alignSlider = document.getElementById('alignmentSlider');
+const cohSlider = document.getElementById('cohesionSlider');
+
+const sepVal = document.getElementById('separationValue');
+const alignVal = document.getElementById('alignmentValue');
+const cohVal = document.getElementById('cohesionValue');
+
+function updateParams() {
+  params.separationWeight = parseFloat(sepSlider.value);
+  params.alignmentWeight = parseFloat(alignSlider.value);
+  params.cohesionWeight = parseFloat(cohSlider.value);
+
+  sepVal.textContent = params.separationWeight.toFixed(1);
+  alignVal.textContent = params.alignmentWeight.toFixed(1);
+  cohVal.textContent = params.cohesionWeight.toFixed(1);
+}
+
+sepSlider.addEventListener('input', updateParams);
+alignSlider.addEventListener('input', updateParams);
+cohSlider.addEventListener('input', updateParams);
+
+function resizeCanvas() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Vector {
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -28,28 +76,30 @@ class Vector2D {
     return this;
   }
 
-  magSq() {
-    return this.x * this.x + this.y * this.y;
-  }
-
   mag() {
-    return Math.sqrt(this.magSq());
+    return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
   normalize() {
-    let m = this.mag();
-    if (m !== 0 && m !== 1) {
+    const m = this.mag();
+    if (m !== 0) {
       this.div(m);
     }
     return this;
   }
 
   limit(max) {
-    if (this.magSq() > max * max) {
+    if (this.mag() > max) {
       this.normalize();
       this.mult(max);
     }
     return this;
+  }
+
+  dist(v) {
+    const dx = this.x - v.x;
+    const dy = this.y - v.y;
+    return Math.sqrt(dx * dx + dy * dy);
   }
 
   heading() {
@@ -57,234 +107,139 @@ class Vector2D {
   }
 
   static sub(v1, v2) {
-    return new Vector2D(v1.x - v2.x, v1.y - v2.y);
-  }
-
-  static dist(v1, v2) {
-    let dx = v1.x - v2.x;
-    let dy = v1.y - v2.y;
-    return Math.sqrt(dx * dx + dy * dy);
+    return new Vector(v1.x - v2.x, v1.y - v2.y);
   }
 }
 
 class Boid {
   constructor(x, y) {
-    this.position = new Vector2D(x, y);
-    // Give random initial velocity
-    let angle = Math.random() * Math.PI * 2;
-    this.velocity = new Vector2D(Math.cos(angle), Math.sin(angle));
-    this.acceleration = new Vector2D(0, 0);
-    this.r = 4.0;
-    this.maxSpeed = 3;
-    this.maxForce = 0.05;
+    this.position = new Vector(x, y);
+    const angle = Math.random() * Math.PI * 2;
+    this.velocity = new Vector(Math.cos(angle), Math.sin(angle));
+    this.velocity.mult(Math.random() * 2 + 2);
+    this.acceleration = new Vector(0, 0);
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(params.maxSpeed);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0); // Reset acceleration
+
+    // Screen wrap
+    if (this.position.x > width + 10) this.position.x = -10;
+    else if (this.position.x < -10) this.position.x = width + 10;
+    if (this.position.y > height + 10) this.position.y = -10;
+    else if (this.position.y < -10) this.position.y = height + 10;
   }
 
   applyForce(force) {
     this.acceleration.add(force);
   }
 
-  flock(boids, sepWeight, aliWeight, cohWeight) {
-    let sep = this.separate(boids);
-    let ali = this.align(boids);
-    let coh = this.cohere(boids);
+  flock(boids) {
+    let sep = new Vector(0, 0);
+    let ali = new Vector(0, 0);
+    let coh = new Vector(0, 0);
+    let sepCount = 0;
+    let aliCohCount = 0;
 
-    sep.mult(sepWeight);
-    ali.mult(aliWeight);
-    coh.mult(cohWeight);
+    for (let i = 0; i < boids.length; i++) {
+      const other = boids[i];
+      if (other !== this) {
+        const d = this.position.dist(other.position);
+
+        if (d > 0 && d < params.visualRange) {
+          ali.add(other.velocity);
+          coh.add(other.position);
+          aliCohCount++;
+
+          if (d < params.separationRange) {
+            let diff = Vector.sub(this.position, other.position);
+            diff.normalize();
+            diff.div(d); // Weight by distance
+            sep.add(diff);
+            sepCount++;
+          }
+        }
+      }
+    }
+
+    if (sepCount > 0) {
+      sep.div(sepCount);
+    }
+    if (sep.mag() > 0) {
+      sep.normalize();
+      sep.mult(params.maxSpeed);
+      sep.sub(this.velocity);
+      sep.limit(params.maxForce);
+    }
+
+    if (aliCohCount > 0) {
+      ali.div(aliCohCount);
+      ali.normalize();
+      ali.mult(params.maxSpeed);
+      ali.sub(this.velocity);
+      ali.limit(params.maxForce);
+
+      coh.div(aliCohCount);
+      coh = this.seek(coh);
+    }
+
+    sep.mult(params.separationWeight);
+    ali.mult(params.alignmentWeight);
+    coh.mult(params.cohesionWeight);
 
     this.applyForce(sep);
     this.applyForce(ali);
     this.applyForce(coh);
   }
 
-  update() {
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(this.maxSpeed);
-    this.position.add(this.velocity);
-    this.acceleration.mult(0); // Reset acceleration each frame
-  }
-
-  // Wraparound boundaries
-  borders(width, height) {
-    if (this.position.x < -this.r) this.position.x = width + this.r;
-    if (this.position.y < -this.r) this.position.y = height + this.r;
-    if (this.position.x > width + this.r) this.position.x = -this.r;
-    if (this.position.y > height + this.r) this.position.y = -this.r;
-  }
-
-  // Separation: Steer to avoid crowding local flockmates
-  separate(boids) {
-    let desiredSeparation = 25.0;
-    let steer = new Vector2D(0, 0);
-    let count = 0;
-
-    for (let i = 0; i < boids.length; i++) {
-      let other = boids[i];
-      let d = Vector2D.dist(this.position, other.position);
-      if ((d > 0) && (d < desiredSeparation)) {
-        let diff = Vector2D.sub(this.position, other.position);
-        diff.normalize();
-        diff.div(d); // Weight by distance
-        steer.add(diff);
-        count++;
-      }
-    }
-
-    if (count > 0) {
-      steer.div(count);
-    }
-
-    if (steer.mag() > 0) {
-      steer.normalize();
-      steer.mult(this.maxSpeed);
-      steer.sub(this.velocity);
-      steer.limit(this.maxForce);
-    }
-    return steer;
-  }
-
-  // Alignment: Steer towards the average heading of local flockmates
-  align(boids) {
-    let neighborDist = 50.0;
-    let sum = new Vector2D(0, 0);
-    let count = 0;
-
-    for (let i = 0; i < boids.length; i++) {
-      let other = boids[i];
-      let d = Vector2D.dist(this.position, other.position);
-      if ((d > 0) && (d < neighborDist)) {
-        sum.add(other.velocity);
-        count++;
-      }
-    }
-
-    if (count > 0) {
-      sum.div(count);
-      sum.normalize();
-      sum.mult(this.maxSpeed);
-      let steer = Vector2D.sub(sum, this.velocity);
-      steer.limit(this.maxForce);
-      return steer;
-    } else {
-      return new Vector2D(0, 0);
-    }
-  }
-
-  // Cohesion: Steer to move toward the average position of local flockmates
-  cohere(boids) {
-    let neighborDist = 50.0;
-    let sum = new Vector2D(0, 0);
-    let count = 0;
-
-    for (let i = 0; i < boids.length; i++) {
-      let other = boids[i];
-      let d = Vector2D.dist(this.position, other.position);
-      if ((d > 0) && (d < neighborDist)) {
-        sum.add(other.position);
-        count++;
-      }
-    }
-
-    if (count > 0) {
-      sum.div(count);
-      return this.seek(sum);
-    } else {
-      return new Vector2D(0, 0);
-    }
-  }
-
-  // Helper to seek a target
   seek(target) {
-    let desired = Vector2D.sub(target, this.position);
+    const desired = Vector.sub(target, this.position);
     desired.normalize();
-    desired.mult(this.maxSpeed);
-    let steer = Vector2D.sub(desired, this.velocity);
-    steer.limit(this.maxForce);
+    desired.mult(params.maxSpeed);
+    const steer = Vector.sub(desired, this.velocity);
+    steer.limit(params.maxForce);
     return steer;
+  }
+
+  draw(ctx) {
+    const angle = this.velocity.heading();
+
+    ctx.save();
+    ctx.translate(this.position.x, this.position.y);
+    ctx.rotate(angle);
+
+    ctx.beginPath();
+    ctx.moveTo(8, 0);
+    ctx.lineTo(-6, -5);
+    ctx.lineTo(-4, 0);
+    ctx.lineTo(-6, 5);
+    ctx.closePath();
+
+    ctx.fillStyle = '#00ffcc';
+    ctx.fill();
+
+    ctx.restore();
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("boidsCanvas");
-  const ctx = canvas.getContext("2d");
+const boids = [];
+for (let i = 0; i < params.numBoids; i++) {
+  boids.push(new Boid(Math.random() * width, Math.random() * height));
+}
 
-  const container = canvas.parentElement;
+function animate() {
+  ctx.clearRect(0, 0, width, height);
 
-  // Weights elements
-  const sepSlider = document.getElementById("separationWeight");
-  const sepValue = document.getElementById("separationValue");
-
-  const aliSlider = document.getElementById("alignmentWeight");
-  const aliValue = document.getElementById("alignmentValue");
-
-  const cohSlider = document.getElementById("cohesionWeight");
-  const cohValue = document.getElementById("cohesionValue");
-
-  let boids = [];
-  const numBoids = 150;
-
-  // Theme color from CSS variable
-  let boidColor = getComputedStyle(document.body).getPropertyValue('--boid-color').trim() || '#38bdf8';
-
-  function resizeCanvas() {
-    canvas.width = container.clientWidth;
-    canvas.height = container.clientHeight;
+  for (let boid of boids) {
+    boid.flock(boids);
+    boid.update();
+    boid.draw(ctx);
   }
 
-  window.addEventListener("resize", resizeCanvas);
-  resizeCanvas();
+  requestAnimationFrame(animate);
+}
 
-  // Initialize flock
-  for (let i = 0; i < numBoids; i++) {
-    boids.push(new Boid(Math.random() * canvas.width, Math.random() * canvas.height));
-  }
-
-  // Update slider values
-  sepSlider.addEventListener("input", (e) => {
-    sepValue.textContent = e.target.value;
-  });
-  aliSlider.addEventListener("input", (e) => {
-    aliValue.textContent = e.target.value;
-  });
-  cohSlider.addEventListener("input", (e) => {
-    cohValue.textContent = e.target.value;
-  });
-
-  function drawBoid(boid) {
-    let theta = boid.velocity.heading() + Math.PI / 2;
-
-    ctx.save();
-    ctx.translate(boid.position.x, boid.position.y);
-    ctx.rotate(theta);
-    ctx.beginPath();
-    ctx.moveTo(0, -boid.r * 2);
-    ctx.lineTo(-boid.r, boid.r * 2);
-    ctx.lineTo(boid.r, boid.r * 2);
-    ctx.closePath();
-    ctx.fillStyle = boidColor;
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Parse current weights
-    let sepW = parseFloat(sepSlider.value);
-    let aliW = parseFloat(aliSlider.value);
-    let cohW = parseFloat(cohSlider.value);
-
-    for (let i = 0; i < boids.length; i++) {
-      let boid = boids[i];
-      boid.flock(boids, sepW, aliW, cohW);
-      boid.update();
-      boid.borders(canvas.width, canvas.height);
-      drawBoid(boid);
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  // Start loop
-  animate();
-});
+animate();

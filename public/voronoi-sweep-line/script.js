@@ -1,239 +1,318 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const clearBtn = document.getElementById('clearBtn');
-const resetLineBtn = document.getElementById('resetLineBtn');
+// DOM Elements
+const bgCanvas = document.getElementById("background-canvas");
+const fgCanvas = document.getElementById("foreground-canvas");
+const bgCtx = bgCanvas.getContext("2d");
+const fgCtx = fgCanvas.getContext("2d");
 
-let width, height;
-let points = [];
-let sweepLineY = 0;
-let speed = 2; // sweep line speed
-let animationFrameId = null;
+// State
+let width = window.innerWidth;
+let height = window.innerHeight;
+let seeds = [];
+let sweepY = 0;
+let previousBeachLine = new Array(Math.ceil(width)).fill(-Infinity);
+let animationFrameId;
 
-// Offscreen canvas for tracing voronoi edges
-const edgeCanvas = document.createElement('canvas');
-const edgeCtx = edgeCanvas.getContext('2d');
+// Constants
+const SWEEP_SPEED = 2; // Pixels per frame
+const INITIAL_POINTS = 3;
 
-let prevBeachLine = []; // keep track of beach line to trace breakpoints
-
+// Initialization
 function init() {
-  resize();
-  window.addEventListener('resize', resize);
+  resizeCanvases();
+  window.addEventListener("resize", onResize);
+  fgCanvas.addEventListener("pointerdown", onPointerDown);
 
-  canvas.addEventListener('click', addPoint);
-  clearBtn.addEventListener('click', clearAll);
-  resetLineBtn.addEventListener('click', restartSweep);
-
-  // Start with some random points
-  for(let i=0; i<5; i++) {
-    points.push({
-      x: Math.random() * width * 0.8 + width * 0.1,
-      y: Math.random() * height * 0.8 + height * 0.1,
-      id: i,
-      color: `hsl(${Math.random() * 360}, 80%, 60%)`
-    });
+  reset();
+  for (let i = 0; i < INITIAL_POINTS; i++) {
+    addRandomSeed();
   }
 
-  restartSweep();
+  startLoop();
 }
 
-function resize() {
+// Utility Functions
+function randomColor() {
+  const hue = Math.floor(Math.random() * 360);
+  const saturation = 70 + Math.random() * 30;
+  const lightness = 40 + Math.random() * 20;
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+function resizeCanvases() {
   width = window.innerWidth;
   height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
 
-  // Maintain edge canvas size across resize
-  const tempEdge = document.createElement('canvas');
-  tempEdge.width = edgeCanvas.width;
-  tempEdge.height = edgeCanvas.height;
-  tempEdge.getContext('2d').drawImage(edgeCanvas, 0, 0);
+  bgCanvas.width = width;
+  bgCanvas.height = height;
+  fgCanvas.width = width;
+  fgCanvas.height = height;
 
-  edgeCanvas.width = width;
-  edgeCanvas.height = height;
-  edgeCtx.drawImage(tempEdge, 0, 0);
+  previousBeachLine = new Array(Math.ceil(width)).fill(-Infinity);
+
+  // Re-draw background on resize
+  bgCtx.fillStyle = "#0f172a";
+  bgCtx.fillRect(0, 0, width, height);
 }
 
-function addPoint(e) {
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+// Event Handlers
+function onResize() {
+  // Save current seeds, reset canvases and re-simulate to current sweepY
+  const currentSeeds = [...seeds];
+  const currentSweepY = sweepY;
 
-  points.push({
-    x, y,
-    id: points.length,
-    color: `hsl(${Math.random() * 360}, 80%, 60%)`
-  });
+  resizeCanvases();
+  seeds = currentSeeds;
 
-  // Reset sweep to allow recalculating
-  restartSweep();
-}
+  // Fast forward simulation
+  const targetSweepY = currentSweepY;
+  sweepY = 0;
 
-function clearAll() {
-  points = [];
-  edgeCtx.clearRect(0, 0, edgeCanvas.width, edgeCanvas.height);
-  restartSweep();
-}
-
-function restartSweep() {
-  sweepLineY = 0;
-  prevBeachLine = [];
-  edgeCtx.clearRect(0, 0, edgeCanvas.width, edgeCanvas.height);
-
+  // Pause animation temporarily
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
   }
 
-  // Start animation loop
-  loop();
-}
-
-function getParabolaY(x, focusX, focusY, directrixY) {
-  // y = ( (x - focusX)^2 + focusY^2 - directrixY^2 ) / (2 * (focusY - directrixY))
-  if (Math.abs(focusY - directrixY) < 0.1) {
-    // very close to sweep line, almost vertical line
-    return focusY; // approximate
-  }
-  const numerator = Math.pow(x - focusX, 2) + Math.pow(focusY, 2) - Math.pow(directrixY, 2);
-  const denominator = 2 * (focusY - directrixY);
-  return numerator / denominator;
-}
-
-function loop() {
-  if (points.length === 0) {
-    ctx.clearRect(0, 0, width, height);
-    animationFrameId = requestAnimationFrame(loop);
-    return;
+  // Fast forward simulation loop
+  while (sweepY < targetSweepY) {
+    updateLogic();
   }
 
-  // Update sweep line
-  sweepLineY += speed;
+  startLoop();
+}
 
-  ctx.clearRect(0, 0, width, height);
+function onPointerDown(e) {
+  const rect = fgCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
 
-  // Draw the edge canvas containing traced voronoi edges
-  ctx.drawImage(edgeCanvas, 0, 0);
+  addSeed(x, y);
+}
 
-  // Draw points
-  points.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
-    ctx.fillStyle = p.color;
-    ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.stroke();
+// Logic Functions
+function addRandomSeed() {
+  const padding = 50;
+  const x = padding + Math.random() * (width - 2 * padding);
+  // Only add points below the current sweep line to avoid visual glitches
+  const minY = Math.max(padding, sweepY + padding);
+
+  if (minY < height - padding) {
+    const y = minY + Math.random() * (height - padding - minY);
+    addSeed(x, y);
+  } else {
+    // If we're at the bottom, just wrap around or add near the top
+     const y = padding + Math.random() * (height / 2);
+     // If we add a point above the sweep line, we need to restart the sweep
+     if (y < sweepY) {
+         addSeed(x, y);
+         restartSweep();
+     } else {
+         addSeed(x, y);
+     }
+  }
+}
+
+function addSeed(x, y) {
+  seeds.push({
+    x: x,
+    y: y,
+    color: randomColor(),
+    id: seeds.length,
   });
 
-  // Draw sweep line
-  ctx.beginPath();
-  ctx.moveTo(0, sweepLineY);
-  ctx.lineTo(width, sweepLineY);
-  ctx.strokeStyle = '#00e5ff';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  if (sweepLineY > 0) {
-    // calculate beachline
-    const activePoints = points.filter(p => p.y < sweepLineY);
-    let beachLine = []; // array of { x, y, focusId }
-
-    // Pixel-by-pixel approximation of the lower envelope of parabolas
-    // We only need an approximation to trace the breakpoints
-    // For efficiency, maybe step by 2 or 3 pixels
-    const step = 2;
-    for (let x = 0; x < width; x += step) {
-      let maxY = -Infinity;
-      let focusId = -1;
-
-      for (const p of activePoints) {
-        let y = getParabolaY(x, p.x, p.y, sweepLineY);
-        // We want the HIGHEST parabola (closest to sweep line visually, since y grows downwards)
-        if (y > maxY) {
-          maxY = y;
-          focusId = p.id;
-        }
-      }
-
-      if (focusId !== -1) {
-        beachLine.push({ x, y: maxY, focusId });
-      }
-    }
-
-    // Draw beach line
-    if (beachLine.length > 0) {
-      ctx.beginPath();
-      ctx.moveTo(beachLine[0].x, beachLine[0].y);
-      for (let i = 1; i < beachLine.length; i++) {
-        ctx.lineTo(beachLine[i].x, beachLine[i].y);
-      }
-      ctx.strokeStyle = '#ff00ff';
-      ctx.lineWidth = 3;
-      ctx.stroke();
-
-      // Trace breakpoints
-      if (prevBeachLine.length > 0) {
-        let currentSegments = [];
-        let curFocus = beachLine[0].focusId;
-
-        for (let i = 1; i < beachLine.length; i++) {
-          if (beachLine[i].focusId !== curFocus) {
-            // Breakpoint found at x = beachLine[i].x
-            currentSegments.push({ x: beachLine[i].x, y: beachLine[i].y, left: curFocus, right: beachLine[i].focusId });
-            curFocus = beachLine[i].focusId;
-          }
-        }
-
-        // Match with previous breakpoints to draw lines
-        // A simple approach: for each breakpoint in current segments, find the closest one in prevBeachLine with same left/right (or just closest x)
-        edgeCtx.beginPath();
-        edgeCtx.strokeStyle = '#ffff00';
-        edgeCtx.lineWidth = 2;
-
-        currentSegments.forEach(currBP => {
-           let closestDist = Infinity;
-           let bestPrevBP = null;
-
-           prevBeachLine.forEach(prevBP => {
-              if ((prevBP.left === currBP.left && prevBP.right === currBP.right) ||
-                  (prevBP.left === currBP.right && prevBP.right === currBP.left)) {
-                  let d = Math.abs(prevBP.x - currBP.x);
-                  if (d < closestDist && d < 20) { // prevent jumping
-                     closestDist = d;
-                     bestPrevBP = prevBP;
-                  }
-              }
-           });
-
-           if (bestPrevBP) {
-              edgeCtx.moveTo(bestPrevBP.x, bestPrevBP.y);
-              edgeCtx.lineTo(currBP.x, currBP.y);
-           }
-        });
-        edgeCtx.stroke();
-
-        prevBeachLine = currentSegments;
-      } else {
-        // First frame with beach line, just collect breakpoints
-        let currentSegments = [];
-        let curFocus = beachLine[0].focusId;
-        for (let i = 1; i < beachLine.length; i++) {
-          if (beachLine[i].focusId !== curFocus) {
-            currentSegments.push({ x: beachLine[i].x, y: beachLine[i].y, left: curFocus, right: beachLine[i].focusId });
-            curFocus = beachLine[i].focusId;
-          }
-        }
-        prevBeachLine = currentSegments;
-      }
-    }
-  }
-
-  // continue animation until sweep line is far off screen
-  if (sweepLineY < height + 500) {
-    animationFrameId = requestAnimationFrame(loop);
-  } else {
-    // Reached bottom, just wait for next click
-    animationFrameId = null;
+  // If the user clicks above the sweep line, it breaks the causal logic of the sweep line algorithm.
+  // In a true Fortune's algorithm visualizer, we either disallow it, or restart the sweep.
+  if (y < sweepY) {
+     restartSweep();
   }
 }
 
-// Call init when dom is ready
-document.addEventListener('DOMContentLoaded', init);
+function restartSweep() {
+    sweepY = 0;
+    previousBeachLine.fill(-Infinity);
+    bgCtx.fillStyle = "#0f172a";
+    bgCtx.fillRect(0, 0, width, height);
+}
+
+function reset() {
+  seeds = [];
+  restartSweep();
+}
+
+// Mathematics for Parabolas
+// Distance from point (px, py) to focus (fx, fy) equals distance to directrix (y = d)
+// sqrt((px - fx)^2 + (py - fy)^2) = d - py   (if directrix is above focus, directrix moves down)
+// Actually, Fortune's algorithm sweep line moves *down*.
+// Let directrix be y = L. Let focus be (xf, yf).
+// The parabola is the set of points (x, y) such that:
+// (x - xf)^2 + (y - yf)^2 = (y - L)^2
+// (x - xf)^2 + y^2 - 2y*yf + yf^2 = y^2 - 2y*L + L^2
+// (x - xf)^2 + yf^2 - L^2 = 2y(yf - L)
+// y = ((x - xf)^2 + yf^2 - L^2) / (2 * (yf - L))
+function calculateParabolaY(x, focusX, focusY, directrixY) {
+  // Prevent division by zero if focus is exactly on the directrix
+  const dy = focusY - directrixY;
+  if (Math.abs(dy) < 0.001) {
+    // If the point is on the sweep line, its "parabola" is a vertical ray at x = focusX
+    // For x === focusX, y is directrixY. For any other x, y is -Infinity.
+    return Math.abs(x - focusX) < 0.5 ? directrixY : -Infinity;
+  }
+
+  // y = ( (x - fx)^2 + fy^2 - L^2 ) / (2 * (fy - L))
+  return (Math.pow(x - focusX, 2) + focusY * focusY - directrixY * directrixY) / (2 * dy);
+}
+
+// Core Loop
+function updateLogic() {
+  if (sweepY > height + 200) {
+      // Loop the animation when sweep line is well past the bottom
+      // But only if we have seeds
+      if (seeds.length > 0) {
+          restartSweep();
+          return;
+      }
+  }
+
+  sweepY += SWEEP_SPEED;
+
+  // Find active seeds (those above the sweep line)
+  const activeSeeds = seeds.filter((seed) => seed.y < sweepY);
+
+  if (activeSeeds.length === 0) return;
+
+  // Calculate the current beach line for every pixel column
+  const currentBeachLine = new Float32Array(Math.ceil(width));
+  const currentBeachLineOwner = new Int32Array(Math.ceil(width));
+  currentBeachLine.fill(-Infinity);
+  currentBeachLineOwner.fill(-1);
+
+  for (let x = 0; x < width; x++) {
+    let maxY = -Infinity;
+    let ownerId = -1;
+
+    for (let i = 0; i < activeSeeds.length; i++) {
+      const seed = activeSeeds[i];
+      const py = calculateParabolaY(x, seed.x, seed.y, sweepY);
+
+      // We want the HIGHEST y-value (closest to sweep line, since sweep line is moving down)
+      // Actually, mathematically, the beach line is the sequence of parabolic arcs
+      // forming the lower envelope (or upper envelope depending on coordinate system).
+      // Since Y increases downwards, and sweep line Y > seed Y:
+      // The distance to directrix is `sweepY - y`.
+      // We want points (x,y) equidistant to focus and directrix.
+      // The region above the beach line is closer to some seed than to the directrix.
+      // The beach line itself is the boundary where distance to nearest seed == distance to directrix.
+      // Parabola equation gives us `y`. We want the highest `y` value for each `x`
+      // (highest numerical value, meaning furthest down the screen, closest to sweep line).
+      if (py > maxY && py <= sweepY) {
+        maxY = py;
+        ownerId = seed.id;
+      }
+    }
+
+    currentBeachLine[x] = maxY;
+    currentBeachLineOwner[x] = ownerId;
+  }
+
+  // Draw to background canvas (Voronoi Regions)
+  for (let x = 0; x < width; x++) {
+    const ownerId = currentBeachLineOwner[x];
+    if (ownerId !== -1) {
+      const seed = seeds.find((s) => s.id === ownerId);
+      if (seed) {
+        const prevY = previousBeachLine[x];
+        const currY = currentBeachLine[x];
+
+        // We only paint if the beach line moved down (or stayed same)
+        // and we have a valid previous Y.
+        if (prevY !== -Infinity && currY > prevY) {
+            bgCtx.fillStyle = seed.color;
+            bgCtx.fillRect(x, prevY - 1, 1, currY - prevY + 2); // Slight overlap to prevent sub-pixel gaps
+        }
+      }
+    }
+    previousBeachLine[x] = currentBeachLine[x];
+  }
+}
+
+function render() {
+  // Clear foreground
+  fgCtx.clearRect(0, 0, width, height);
+
+  // Draw Sweep Line
+  fgCtx.beginPath();
+  fgCtx.moveTo(0, sweepY);
+  fgCtx.lineTo(width, sweepY);
+  fgCtx.strokeStyle = "#38bdf8";
+  fgCtx.lineWidth = 2;
+  fgCtx.stroke();
+
+  // Draw Sweep Line Glow
+  fgCtx.shadowColor = "#38bdf8";
+  fgCtx.shadowBlur = 10;
+  fgCtx.stroke();
+  fgCtx.shadowBlur = 0; // Reset
+
+  // Find active seeds for drawing beach line
+  const activeSeeds = seeds.filter((seed) => seed.y < sweepY);
+
+  if (activeSeeds.length > 0) {
+    // Draw Beach Line Curve
+    fgCtx.beginPath();
+
+    // Recalculate beach line for drawing (can optimize by reusing data from logic step, but this is fine)
+    let firstPoint = true;
+    for (let x = 0; x < width; x += 2) { // Step by 2 for performance in rendering
+        let maxY = -Infinity;
+        for (let i = 0; i < activeSeeds.length; i++) {
+            const seed = activeSeeds[i];
+            const py = calculateParabolaY(x, seed.x, seed.y, sweepY);
+            if (py > maxY && py <= sweepY) {
+                maxY = py;
+            }
+        }
+
+        if (maxY !== -Infinity) {
+            if (firstPoint) {
+                fgCtx.moveTo(x, maxY);
+                firstPoint = false;
+            } else {
+                fgCtx.lineTo(x, maxY);
+            }
+        }
+    }
+
+    fgCtx.strokeStyle = "#fef08a"; // Yellow beach line
+    fgCtx.lineWidth = 2;
+    fgCtx.stroke();
+  }
+
+  // Draw Seeds
+  for (let i = 0; i < seeds.length; i++) {
+    const seed = seeds[i];
+
+    // Inner dot
+    fgCtx.beginPath();
+    fgCtx.arc(seed.x, seed.y, 4, 0, Math.PI * 2);
+    fgCtx.fillStyle = "#ffffff";
+    fgCtx.fill();
+
+    // Outer ring matching cell color
+    fgCtx.beginPath();
+    fgCtx.arc(seed.x, seed.y, 8, 0, Math.PI * 2);
+    fgCtx.strokeStyle = seed.color;
+    fgCtx.lineWidth = 2;
+    fgCtx.stroke();
+  }
+}
+
+function startLoop() {
+  function loop() {
+    updateLogic();
+    render();
+    animationFrameId = requestAnimationFrame(loop);
+  }
+  animationFrameId = requestAnimationFrame(loop);
+}
+
+// Start
+init();

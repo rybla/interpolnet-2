@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Spline Curvature Comparator</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+      <div id="controls">
+        <h2>Spline Curvature Comparator</h2>
+
+        <div class="control-group bezier-group">
+          <h3>Bezier</h3>
+          <label>
+            <input type="checkbox" id="toggle-bezier-curve" checked />
+            Show Curve
+          </label>
+          <label>
+            <input type="checkbox" id="toggle-bezier-comb" />
+            Show Curvature Comb
+          </label>
+        </div>
+
+        <div class="control-group bspline-group">
+          <h3>B-Spline</h3>
+          <label>
+            <input type="checkbox" id="toggle-bspline-curve" checked />
+            Show Curve
+          </label>
+          <label>
+            <input type="checkbox" id="toggle-bspline-comb" />
+            Show Curvature Comb
+          </label>
+        </div>
+
+        <div class="control-group catmull-group">
+          <h3>Catmull-Rom</h3>
+          <label>
+            <input type="checkbox" id="toggle-catmull-curve" checked />
+            Show Curve
+          </label>
+          <label>
+            <input type="checkbox" id="toggle-catmull-comb" />
+            Show Curvature Comb
+          </label>
+        </div>
+
+        <div class="control-group">
+          <h3>Global Controls</h3>
+          <label>
+            <input type="checkbox" id="toggle-polygon" checked />
+            Show Control Polygon
+          </label>
+          <div class="slider-group">
+             <label for="comb-scale">Comb Scale:</label>
+             <input type="range" id="comb-scale" min="10" max="1000" value="200" />
+          </div>
+          <button id="add-point">Add Point</button>
+          <button id="remove-point">Remove Point</button>
+          <button id="reset-points">Reset Points</button>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

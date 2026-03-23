@@ -1,253 +1,251 @@
-// HTML Elements
-const canvasOriginal = document.getElementById('canvas-original');
-const canvasDithered = document.getElementById('canvas-dithered');
-const ctxOriginal = canvasOriginal.getContext('2d', { willReadFrequently: true });
-const ctxDithered = canvasDithered.getContext('2d', { willReadFrequently: true });
-const algorithmSelect = document.getElementById('algorithm-select');
-const splitSlider = document.getElementById('split-slider');
-const canvasWrapper = document.getElementById('canvas-wrapper');
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('dither-canvas');
+    const ctx = canvas.getContext('2d');
+    const slider = document.getElementById('comparison-slider');
+    const sliderLine = document.getElementById('slider-line');
+    const sliderHandle = document.getElementById('slider-handle');
+    const algorithmSelect = document.getElementById('algorithm-select');
+    const ditheredLabel = document.getElementById('dithered-label');
+    const loadingIndicator = document.getElementById('loading-indicator');
 
-// Application State
-let image = new Image();
-let originalImageData = null;
-let currentSliderRatio = 0.5; // 0 to 1
-let isDragging = false;
-let canvasWidth = 0;
-let canvasHeight = 0;
-let displayWidth = 0;
-let displayHeight = 0;
+    let originalImageData = null;
+    let ditheredImageData = null;
+    let imageWidth = 800;
+    let imageHeight = 600;
 
-// Dithering Matrices (Error Diffusion Weights)
-// [dx, dy, weight]
-const matrices = {
-  'floyd-steinberg': {
-    divisor: 16,
-    weights: [
-      [1, 0, 7],
-      [-1, 1, 3],
-      [0, 1, 5],
-      [1, 1, 1]
-    ]
-  },
-  'atkinson': {
-    divisor: 8,
-    weights: [
-      [1, 0, 1],
-      [2, 0, 1],
-      [-1, 1, 1],
-      [0, 1, 1],
-      [1, 1, 1],
-      [0, 2, 1]
-    ]
-  },
-  'jarvis-judice-ninke': {
-    divisor: 48,
-    weights: [
-      [1, 0, 7],
-      [2, 0, 5],
-      [-2, 1, 3],
-      [-1, 1, 5],
-      [0, 1, 7],
-      [1, 1, 5],
-      [2, 1, 3],
-      [-2, 2, 1],
-      [-1, 2, 3],
-      [0, 2, 5],
-      [1, 2, 3],
-      [2, 2, 1]
-    ]
-  }
-};
+    // Dithering matrices
+    const DITHERING_ALGORITHMS = {
+        'floyd-steinberg': [
+            { x: 1, y: 0, weight: 7 / 16 },
+            { x: -1, y: 1, weight: 3 / 16 },
+            { x: 0, y: 1, weight: 5 / 16 },
+            { x: 1, y: 1, weight: 1 / 16 }
+        ],
+        'atkinson': [
+            { x: 1, y: 0, weight: 1 / 8 },
+            { x: 2, y: 0, weight: 1 / 8 },
+            { x: -1, y: 1, weight: 1 / 8 },
+            { x: 0, y: 1, weight: 1 / 8 },
+            { x: 1, y: 1, weight: 1 / 8 },
+            { x: 0, y: 2, weight: 1 / 8 }
+        ],
+        'jarvis-judice-ninke': [
+            { x: 1, y: 0, weight: 7 / 48 },
+            { x: 2, y: 0, weight: 5 / 48 },
+            { x: -2, y: 1, weight: 3 / 48 },
+            { x: -1, y: 1, weight: 5 / 48 },
+            { x: 0, y: 1, weight: 7 / 48 },
+            { x: 1, y: 1, weight: 5 / 48 },
+            { x: 2, y: 1, weight: 3 / 48 },
+            { x: -2, y: 2, weight: 1 / 48 },
+            { x: -1, y: 2, weight: 3 / 48 },
+            { x: 0, y: 2, weight: 5 / 48 },
+            { x: 1, y: 2, weight: 3 / 48 },
+            { x: 2, y: 2, weight: 1 / 48 }
+        ],
+        'stucki': [
+            { x: 1, y: 0, weight: 8 / 42 },
+            { x: 2, y: 0, weight: 4 / 42 },
+            { x: -2, y: 1, weight: 2 / 42 },
+            { x: -1, y: 1, weight: 4 / 42 },
+            { x: 0, y: 1, weight: 8 / 42 },
+            { x: 1, y: 1, weight: 4 / 42 },
+            { x: 2, y: 1, weight: 2 / 42 },
+            { x: -2, y: 2, weight: 1 / 42 },
+            { x: -1, y: 2, weight: 2 / 42 },
+            { x: 0, y: 2, weight: 4 / 42 },
+            { x: 1, y: 2, weight: 2 / 42 },
+            { x: 2, y: 2, weight: 1 / 42 }
+        ]
+    };
 
-function init() {
-  image.crossOrigin = 'Anonymous';
-  image.src = 'image.jpg';
-  image.onload = () => {
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    setupInteractions();
-    applyDithering();
-  };
+    function generateTestImage(width, height) {
+        const offscreenCanvas = document.createElement('canvas');
+        offscreenCanvas.width = width;
+        offscreenCanvas.height = height;
+        const offCtx = offscreenCanvas.getContext('2d');
 
-  algorithmSelect.addEventListener('change', () => {
-    applyDithering();
-  });
-}
+        const gradient = offCtx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#ffffff');
+        gradient.addColorStop(0.5, '#888888');
+        gradient.addColorStop(1, '#000000');
+        offCtx.fillStyle = gradient;
+        offCtx.fillRect(0, 0, width, height);
 
-init();
+        offCtx.fillStyle = '#cccccc';
+        offCtx.beginPath();
+        offCtx.arc(width * 0.25, height * 0.25, Math.min(width, height) * 0.15, 0, Math.PI * 2);
+        offCtx.fill();
 
-function resizeCanvas() {
-  const wrapperRect = canvasWrapper.getBoundingClientRect();
-  const wrapperWidth = wrapperRect.width;
-  const wrapperHeight = wrapperRect.height;
+        offCtx.fillStyle = '#333333';
+        offCtx.beginPath();
+        offCtx.arc(width * 0.75, height * 0.75, Math.min(width, height) * 0.15, 0, Math.PI * 2);
+        offCtx.fill();
 
-  const imgRatio = image.width / image.height;
-  const wrapperRatio = wrapperWidth / wrapperHeight;
+        const radialGrad = offCtx.createRadialGradient(
+            width * 0.75, height * 0.25, 0,
+            width * 0.75, height * 0.25, Math.min(width, height) * 0.2
+        );
+        radialGrad.addColorStop(0, '#ffffff');
+        radialGrad.addColorStop(1, '#000000');
+        offCtx.fillStyle = radialGrad;
+        offCtx.beginPath();
+        offCtx.arc(width * 0.75, height * 0.25, Math.min(width, height) * 0.2, 0, Math.PI * 2);
+        offCtx.fill();
 
-  if (wrapperRatio > imgRatio) {
-    // Image is taller than wrapper, constrain by height
-    displayHeight = wrapperHeight;
-    displayWidth = displayHeight * imgRatio;
-  } else {
-    // Image is wider than wrapper, constrain by width
-    displayWidth = wrapperWidth;
-    displayHeight = displayWidth / imgRatio;
-  }
+        offCtx.fillStyle = '#000000';
+        offCtx.font = `bold ${Math.floor(height * 0.1)}px sans-serif`;
+        offCtx.textAlign = 'center';
+        offCtx.textBaseline = 'middle';
+        offCtx.fillText('Error Diffusion', width / 2, height / 2);
 
-  // Set internal resolution (high res for dithering algorithm quality)
-  // We'll limit internal resolution to prevent massive lag on huge screens
-  const maxRes = 1000;
-  let scale = 1;
-  if (image.width > maxRes || image.height > maxRes) {
-      scale = Math.min(maxRes / image.width, maxRes / image.height);
-  }
-
-  canvasWidth = Math.floor(image.width * scale);
-  canvasHeight = Math.floor(image.height * scale);
-
-  canvasOriginal.width = canvasWidth;
-  canvasOriginal.height = canvasHeight;
-  canvasDithered.width = canvasWidth;
-  canvasDithered.height = canvasHeight;
-
-  // Set CSS display sizes
-  canvasOriginal.style.width = `${displayWidth}px`;
-  canvasOriginal.style.height = `${displayHeight}px`;
-  canvasDithered.style.width = `${displayWidth}px`;
-  canvasDithered.style.height = `${displayHeight}px`;
-
-  // Draw original image once
-  ctxOriginal.drawImage(image, 0, 0, canvasWidth, canvasHeight);
-  originalImageData = ctxOriginal.getImageData(0, 0, canvasWidth, canvasHeight);
-
-  // Initial draw of dithered version
-  if (algorithmSelect.value) {
-    applyDithering();
-  }
-
-  updateSliderPosition();
-}
-
-function setupInteractions() {
-  const pointerDownHandler = (e) => {
-    isDragging = true;
-    updateSliderFromEvent(e);
-  };
-
-  const pointerMoveHandler = (e) => {
-    if (!isDragging) return;
-    updateSliderFromEvent(e);
-  };
-
-  const pointerUpHandler = () => {
-    isDragging = false;
-  };
-
-  canvasWrapper.addEventListener('pointerdown', pointerDownHandler);
-  window.addEventListener('pointermove', pointerMoveHandler);
-  window.addEventListener('pointerup', pointerUpHandler);
-}
-
-function updateSliderFromEvent(e) {
-  const rect = canvasWrapper.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-
-  // Calculate offset relative to the drawn canvas area
-  // The canvas is centered in the wrapper
-  const leftEdge = (rect.width - displayWidth) / 2;
-  const rightEdge = leftEdge + displayWidth;
-
-  // Clamp within the displayed image bounds
-  let relativeX = x - leftEdge;
-  if (relativeX < 0) relativeX = 0;
-  if (relativeX > displayWidth) relativeX = displayWidth;
-
-  currentSliderRatio = relativeX / displayWidth;
-  updateSliderPosition();
-}
-
-function updateSliderPosition() {
-  if (displayWidth === 0) return;
-
-  const rect = canvasWrapper.getBoundingClientRect();
-  const leftEdge = (rect.width - displayWidth) / 2;
-  const pixelPos = leftEdge + currentSliderRatio * displayWidth;
-
-  splitSlider.style.left = `${pixelPos}px`;
-  splitSlider.style.height = `${displayHeight}px`;
-
-  // Apply clip-path to reveal dithered image based on slider position
-  // The dithered canvas is positioned absolutely at center
-  // Left is dithered, right is original
-  // So we clip the right side of the dithered image
-  const rightClipPercent = 100 - (currentSliderRatio * 100);
-  canvasDithered.style.clipPath = `inset(0 ${rightClipPercent}% 0 0)`;
-}
-
-function applyDithering() {
-  if (!originalImageData) return;
-
-  const alg = algorithmSelect.value;
-  const matrix = matrices[alg];
-  if (!matrix) return;
-
-  // Create a copy of the pixel data to work on
-  const imgData = new ImageData(
-    new Uint8ClampedArray(originalImageData.data),
-    originalImageData.width,
-    originalImageData.height
-  );
-
-  const data = imgData.data;
-  const w = canvasWidth;
-  const h = canvasHeight;
-
-  // Convert to grayscale first for easier 1-bit dithering
-  const luma = new Float32Array(w * h);
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    // standard luminance weights
-    luma[i / 4] = r * 0.299 + g * 0.587 + b * 0.114;
-  }
-
-  // Error diffusion
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      const idx = y * w + x;
-      const oldPixel = luma[idx];
-      const newPixel = oldPixel < 128 ? 0 : 255;
-      luma[idx] = newPixel;
-
-      const quantError = oldPixel - newPixel;
-
-      // Distribute error
-      for (let i = 0; i < matrix.weights.length; i++) {
-        const dx = matrix.weights[i][0];
-        const dy = matrix.weights[i][1];
-        const weight = matrix.weights[i][2];
-        const divisor = matrix.divisor;
-
-        const nx = x + dx;
-        const ny = y + dy;
-
-        if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
-          const nIdx = ny * w + nx;
-          luma[nIdx] = luma[nIdx] + quantError * (weight / divisor);
+        // Make grayscale
+        const imgData = offCtx.getImageData(0, 0, width, height);
+        for (let i = 0; i < imgData.data.length; i += 4) {
+            const r = imgData.data[i];
+            const g = imgData.data[i+1];
+            const b = imgData.data[i+2];
+            // Luminosity formula
+            const gray = 0.21 * r + 0.72 * g + 0.07 * b;
+            imgData.data[i] = imgData.data[i+1] = imgData.data[i+2] = gray;
         }
-      }
+
+        return imgData;
     }
-  }
 
-  // Write back to RGBA
-  for (let i = 0; i < data.length; i += 4) {
-    const val = luma[i / 4];
-    data[i] = val;
-    data[i + 1] = val;
-    data[i + 2] = val;
-    data[i + 3] = 255; // Fully opaque
-  }
+    function processAlgorithm(algorithmName) {
+        return new Promise((resolve) => {
+            // Need a slight delay to allow UI to update to loading state
+            setTimeout(() => {
+                const matrix = DITHERING_ALGORITHMS[algorithmName];
+                if (!matrix) return resolve(originalImageData);
 
-  ctxDithered.putImageData(imgData, 0, 0);
-}
+                const sourceData = originalImageData;
+                const width = sourceData.width;
+                const height = sourceData.height;
+
+                // Copy source data into a Float32Array for accumulation
+                const floatData = new Float32Array(width * height);
+                for (let i = 0; i < width * height; i++) {
+                    floatData[i] = sourceData.data[i * 4];
+                }
+
+                // Create a new ImageData to hold the result
+                const outData = new ImageData(
+                    new Uint8ClampedArray(sourceData.data),
+                    width,
+                    height
+                );
+
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        const index = y * width + x;
+                        const oldPixel = floatData[index];
+
+                        // Quantize to 1-bit (0 or 255)
+                        const newPixel = oldPixel < 128 ? 0 : 255;
+
+                        // Write the final pixel to the output buffer
+                        const outIndex = index * 4;
+                        outData.data[outIndex] = newPixel;
+                        outData.data[outIndex+1] = newPixel;
+                        outData.data[outIndex+2] = newPixel;
+                        outData.data[outIndex+3] = 255;
+
+                        // Calculate the quantization error
+                        const quantError = oldPixel - newPixel;
+
+                        // Diffuse the error
+                        for (let i = 0; i < matrix.length; i++) {
+                            const nx = x + matrix[i].x;
+                            const ny = y + matrix[i].y;
+
+                            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                                const nIndex = ny * width + nx;
+                                floatData[nIndex] += quantError * matrix[i].weight;
+                            }
+                        }
+                    }
+                }
+
+                resolve(outData);
+            }, 10);
+        });
+    }
+
+    function renderComparison() {
+        if (!originalImageData || !ditheredImageData) return;
+
+        const sliderValue = slider.value / 100;
+        const cutoffX = Math.floor(imageWidth * sliderValue);
+
+        // Create a composite ImageData
+        const compositeData = new ImageData(imageWidth, imageHeight);
+
+        for (let y = 0; y < imageHeight; y++) {
+            for (let x = 0; x < imageWidth; x++) {
+                const index = (y * imageWidth + x) * 4;
+
+                // Original image on left, dithered on right
+                if (x < cutoffX) {
+                    compositeData.data[index] = originalImageData.data[index];
+                    compositeData.data[index+1] = originalImageData.data[index+1];
+                    compositeData.data[index+2] = originalImageData.data[index+2];
+                    compositeData.data[index+3] = originalImageData.data[index+3];
+                } else {
+                    compositeData.data[index] = ditheredImageData.data[index];
+                    compositeData.data[index+1] = ditheredImageData.data[index+1];
+                    compositeData.data[index+2] = ditheredImageData.data[index+2];
+                    compositeData.data[index+3] = ditheredImageData.data[index+3];
+                }
+            }
+        }
+
+        ctx.putImageData(compositeData, 0, 0);
+
+        // Update UI elements
+        const sliderPercent = slider.value + '%';
+        sliderLine.style.left = sliderPercent;
+        sliderHandle.style.left = sliderPercent;
+    }
+
+    async function handleAlgorithmChange() {
+        loadingIndicator.classList.add('active');
+        algorithmSelect.disabled = true;
+        slider.disabled = true;
+
+        const selectedAlgorithm = algorithmSelect.value;
+        const selectedOption = algorithmSelect.options[algorithmSelect.selectedIndex].text;
+
+        ditheredLabel.textContent = selectedOption;
+
+        ditheredImageData = await processAlgorithm(selectedAlgorithm);
+
+        renderComparison();
+
+        loadingIndicator.classList.remove('active');
+        algorithmSelect.disabled = false;
+        slider.disabled = false;
+    }
+
+    function setupEventListeners() {
+        algorithmSelect.addEventListener('change', handleAlgorithmChange);
+        slider.addEventListener('input', renderComparison);
+    }
+
+    async function init() {
+        // Set up the canvas dimensions
+        canvas.width = imageWidth;
+        canvas.height = imageHeight;
+
+        // Generate and store original image data
+        originalImageData = generateTestImage(imageWidth, imageHeight);
+
+        setupEventListeners();
+
+        // Process default dithered image
+        await handleAlgorithmChange();
+    }
+
+    init();
+});

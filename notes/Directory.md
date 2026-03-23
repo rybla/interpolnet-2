@@ -426,8 +426,6 @@ An interactive regular expression engine that visualizes the conversion of a reg
 - **Regex Parser**:
     - Implement a parser (recursive descent or shunting-yard) to convert the regex string into a structured AST (e.g., `Concat`, `Union`, `Star`, `Char`).
     - Handle operator precedence and grouping.
-- **NFA Compiler**:
-    - Implement Thomson's Construction to convert the AST into an NFA graph structure.
     - NFA Structure: States, Transitions (input char or epsilon).
 - **NFA Simulation**:
     - Implement the NFA matching algorithm:
@@ -1990,505 +1988,172 @@ An interactive complex plane where multiplying two complex numbers visually demo
   - Handle pointer events (`pointerdown`, `pointermove`, `pointerup`) to allow dragging the endpoints of vectors $z_1$ and $z_2$.
   - Provide helper functions to map between logical mathematical coordinates and canvas screen coordinates (accounting for inverted Y-axis).
 
-## Riemann Zeta Function Topography [[demo](https://rybla.github.io/interpolnet-2/riemann-zeta-topography)]
+## Riemann Zeta 3D Visualizer [[demo](https://rybla.github.io/interpolnet-2/riemann-zeta-3d)]
 
-The Riemann Zeta Function Topography demo visualizes the complex-valued Riemann Zeta function mapped onto a 3D landscape to explore the topography of the critical line where non-trivial zeros reside.
-
-### Features
-- **3D Interactive Landscape**: A continuous 3D surface representing the magnitude of the Riemann Zeta function on the complex plane. Users can rotate, zoom, and pan around the surface to explore peaks and valleys.
-- **The Critical Line ($Re(s) = 0.5$)**: A visually distinct path highlighting the critical line where all non-trivial zeros are conjectured to exist according to the Riemann Hypothesis.
-- **Zero Indicators**: Distinct markers placed exactly at the locations of the first few non-trivial zeros (e.g., $s = 0.5 + 14.13i, 0.5 + 21.02i$).
-- **Color Mapping**: The height (magnitude) and phase (argument) of the zeta function are mapped to vivid colors, showing the intricate topography of the function's poles and zeros.
-- **Controls**: An interactive UI panel with a slider to adjust the range of the imaginary axis ($Im(s)$), allowing exploration of zeros higher up the critical line, and a toggle to switch between magnitude and phase coloring.
-
-### Design Goals
-- **Mathematical Topography**: Help users intuitively grasp the complex behavior of the Riemann Zeta function by turning it into an interactive terrain.
-- **Educational Impact**: Highlight the critical line and clearly demonstrate the location of non-trivial zeros in an engaging, visual way.
-- **Responsive 3D Graphics**: Use Three.js to render a performant, smooth, and interactive 3D surface that works seamlessly on both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML Layout**: A full-screen container for the 3D canvas and an absolutely positioned UI panel for controls.
-- **CSS**: Adopt Interpolnet 2's dark theme, with a floating glassmorphic control panel and consistent typography.
-- **JavaScript**:
-  - Implement a mathematical approximation of the Riemann Zeta function for the complex plane (e.g., using Dirichlet eta function or similar methods for regions near the critical strip).
-  - Use Three.js to create a `ParametricGeometry` or dynamically updated `PlaneGeometry` where the z-coordinate (height) corresponds to the magnitude $|\zeta(s)|$.
-  - Implement custom shaders (`ShaderMaterial`) to color the surface based on magnitude and phase, ensuring visual clarity.
-  - Implement `OrbitControls` for user interaction.
-  - Add specific 3D markers (spheres or pins) at known non-trivial zero coordinates.
-  - Wire up UI controls to update the mathematical domain and re-render the surface dynamically.
-
-## Rule 30 Cellular Automaton [[demo](https://rybla.github.io/interpolnet-2/rule-30-cellular-automaton)]
-
-An interactive one-dimensional cellular automaton explorer focusing on Rule 30 to show how simple binary rules generate chaotic fractal triangles.
+An interactive 3D visualization that maps the complex-valued Riemann Zeta function onto a 3D landscape. This tool allows users to explore the topography of the function, particularly focusing on the "critical line" where non-trivial zeros reside.
 
 ### Features
-- **Interactive Canvas**: A rendering of the 1D cellular automaton over time (down the Y axis).
-- **Rule Selection**: An input to change the rule number (0-255), defaulting to 30.
-- **Playback Controls**: Play, Pause, Step, and Reset buttons to control the automaton's evolution.
-- **Dynamic Scrolling**: As the automaton generates more generations than can fit on the canvas, it scrolls upwards.
+- **3D Landscape Visualization**: The complex plane is represented as a 2D surface (Real part $\sigma$ on one axis, Imaginary part $t$ on another axis). The height ($Z$-axis) represents the magnitude $|\zeta(\sigma + it)|$ or the real/imaginary parts.
+- **Critical Line Highlighting**: The critical line ($\sigma = \frac{1}{2}$) is distinctly marked, allowing users to visually track the valleys where the function approaches zero.
+- **Interactive Exploration**: Users can rotate, pan, and zoom the 3D landscape using mouse or touch controls.
+- **Hover Information**: Hovering over the landscape with the cursor displays a readout of the current complex coordinate $s = \sigma + it$ and the computed value of $\zeta(s)$.
+- **Dynamic Calculation**: The $\zeta(s)$ values are calculated dynamically using an approximation formula (like the Dirichlet eta function for $\sigma > 0$) directly in JavaScript.
+- **Color Mapping**: The surface is colored based on the phase (argument) or magnitude of $\zeta(s)$, creating a striking, rainbow-colored landscape where colors indicate the direction of the complex value.
 
 ### Design Goals
-- **Educational**: Visually demonstrate how a simple 1D binary cellular automaton like Rule 30 can create complex, pseudo-random, and chaotic patterns from a single active cell.
-- **Aesthetic**: Use a distinct, unique, and consistent color scheme with passive and active animations to make the demo visually appealing.
-- **Responsive**: Ensure the layout works well on both mobile and desktop screens.
+- **Mathematical Intuition**: Provide a visceral, spatial understanding of one of the most famous unsolved problems in mathematics (the Riemann Hypothesis).
+- **Aesthetic Quality**: Create a beautiful, mesmerizing visualization that looks like an alien landscape, combining math and art.
+- **Performance**: Use WebGL (via Three.js) and optimized math functions to ensure the large number of vertices in the landscape can be rendered and interacted with smoothly.
 
 ### Implementation Plan
-- **HTML**: A `<canvas>` element for rendering the automaton. A control panel overlay or section for UI inputs (Play, Pause, Step, Reset, Rule Number).
-- **CSS**: A specific color scheme, flexbox for layout, and responsive design for different screen sizes. Animations for buttons.
-- **JavaScript**:
-    - **State**: A 1D array representing the current generation of cells.
-    - **Logic**: Calculate the next generation using the selected rule (e.g., Rule 30) by evaluating the left, center, and right neighbors of each cell.
-    - **Rendering**: Draw the current generation to the canvas. Shift the canvas up (or redraw) when reaching the bottom to simulate scrolling.
-    - **Loop**: `requestAnimationFrame` for continuous playback when "Play" is active.
+- **Tech Stack**: Three.js for 3D rendering.
+- **Mathematical Engine**:
+    - Implement a complex number class or utilize a lightweight library for complex arithmetic (addition, multiplication, exponentiation).
+    - Implement an approximation of the Riemann Zeta function. The Dirichlet $\eta$ function ($\eta(s) = (1 - 2^{1-s})\zeta(s)$) is a good choice for the critical strip $0 < \sigma < 1$.
+- **Scene Setup**:
+    - Create a `PlaneGeometry` with a high number of segments to represent the complex plane grid.
+    - Instead of relying on complex custom shaders (which might fail in headless testing environments), calculate the $Z$-position (height) for each vertex on the CPU based on the magnitude $|\zeta(\sigma + it)|$.
+    - Map the $\sigma$ and $t$ ranges appropriately (e.g., $\sigma$ from $-2$ to $2$, $t$ from $0$ to $40$).
+    - Update the vertex positions dynamically or statically upon initialization.
+- **Rendering & Materials**:
+    - Use vertex colors to color the landscape based on the phase of the zeta value (using `HSL` where hue is the phase).
+    - Add a distinct line geometry to clearly mark the critical line $\sigma = 0.5$.
+- **Interaction**:
+    - Add `OrbitControls` for camera movement.
+    - Implement a `Raycaster` to intersect the plane and calculate the corresponding $s$ coordinate to display in the UI readout.
+## Rule 30 Explorer [[demo](https://rybla.github.io/interpolnet-2/rule-30-explorer)]
 
-## Sine Wave Generator [[demo](https://rybla.github.io/interpolnet-2/sine-wave-generator)]
-
-This demo visually links the uniform circular motion of a point on a rotating wheel directly to the generation of a simple harmonic sine wave on an adjacent scrolling graph. It provides an intuitive, interactive way to understand the mathematical relationship between circles and sine waves.
-
-### Design Goals
-- Provide a clear, real-time visualization showing how the y-coordinate of a rotating point traces out a sine wave over time.
-- Offer interactive controls (e.g., a rotation speed slider) allowing the user to experiment with the frequency of the wave.
-- Ensure the layout places the wheel and the wave graph side-by-side (or top-and-bottom on mobile) with an explicit horizontal dashed line connecting the rotating point to the leading edge of the wave to emphasize the linkage.
-- Employ a clean, distinct color scheme (e.g., dark slate background with vibrant cyan and magenta accents) to highlight key elements.
-- Use passive animations and subtle glowing effects to make the simulation engaging.
-
-### Implementation Outline
-1. **HTML Structure**:
-   - A main `<canvas>` element for rendering the visualization.
-   - An overlay UI containing a title, brief description, and an `<input type="range">` slider to control the rotation speed (frequency).
-2. **CSS Styling**:
-   - A dark, modern theme (`#111827` background) with sans-serif typography.
-   - Flexbox or Grid layout to ensure the canvas is responsive and fills the available viewport while maintaining a good aspect ratio.
-   - Styling for the range input to match the demo's color scheme.
-3. **JavaScript Logic**:
-   - Use `requestAnimationFrame` for a smooth, continuous render loop.
-   - **State**: Maintain an `angle` for the point on the circle, a `speed` variable controlled by the slider, and an array `waveData` storing historical y-values.
-   - **Update**: Increment the `angle` by `speed` each frame. Calculate the current y-coordinate `y = amplitude * Math.sin(angle)`. Shift the `waveData` array to simulate a scrolling graph, pushing the new `y` to the front.
-   - **Render**:
-     - Clear the canvas.
-     - Draw the circle (wheel) on the left side of the canvas, including axes and the rotating point.
-     - Draw the sine wave on the right side of the canvas by iterating through `waveData`.
-     - Draw a distinct connecting line (e.g., dashed, bright colored) from the current y-coordinate of the point on the circle to the start of the sine wave to clearly illustrate the relationship.
-
-## Cubic Bezier Curve Interpolation [[demo](https://rybla.github.io/interpolnet-2/cubic-bezier-interpolation)]
-
-An interactive visualization revealing the recursive linear interpolations that construct a cubic Bézier curve by dynamically showing the moving scaffolding lines.
+An interactive one-dimensional cellular automaton explorer that focuses on Rule 30. It demonstrates how a remarkably simple set of binary rules applied to a single starting cell can generate complex, chaotic, and seemingly random fractal patterns (like the Sierpiński triangle-like structures).
 
 ### Features
-- **Interactive Control Points**: Users can click and drag the four control points defining the cubic Bézier curve anywhere on the canvas.
-- **Dynamic Scaffolding Animation**: The demo animates the `t` parameter from 0 to 1, showing how the intermediate points ($t$ between the first 4 points, then $t$ between those 3 points, then $t$ between those 2 points) form the scaffolding lines.
-- **Trace the Curve**: The final point traces the path of the cubic Bézier curve, visually proving the relationship between the linear interpolations and the final curve shape.
-- **Playback Controls**: A timeline slider allows users to scrub through the `t` parameter manually, or use a Play/Pause button for automatic animation.
-- **Visual Hierarchy**: Uses distinct colors for the initial lines, first-level scaffolding, second-level scaffolding, and the final curve to clearly illustrate the recursive reduction.
+- **Real-Time Generation**: Watch the cellular automaton grow row by row as the rule is applied iteratively.
+- **Rule Visualization**: A visual key showing the 8 possible states for a cell and its neighbors (e.g., 111, 110, 101) and the resulting outcome for the next generation based on Rule 30.
+- **Interactive Controls**:
+    - **Play/Pause**: Control the generation process.
+    - **Speed Slider**: Adjust how fast new rows are generated.
+    - **Step**: Manually advance the simulation by one generation.
+    - **Reset**: Clear the canvas and start over with a single active cell in the center.
+- **Infinite Canvas**: The automaton is drawn on a canvas that smoothly scrolls upwards as new rows are added at the bottom, creating a continuous flow of chaotic patterns.
 
 ### Design Goals
-- **Mathematical Intuition**: Make the abstract De Casteljau's algorithm concrete and visually understandable.
-- **Clarity and Separation**: Use color coding and varying line thicknesses to differentiate the layers of interpolation.
-- **Responsive and Fluid**: Ensure the interactions and animations remain smooth at 60fps on all devices.
+- **Educational Clarity**: Make the connection between the simple local rule (Rule 30) and the complex global pattern obvious.
+- **Aesthetics**: A striking dark theme with a distinct, consistent color scheme. High contrast (e.g., bright neon cyan for active cells against a deep navy or black background) to emphasize the fractal triangles.
+- **Mesmerizing Flow**: The continuous generation should feel satisfying and slightly hypnotic.
 
 ### Implementation Plan
-- **HTML Structure**: A full-screen `<canvas>` element for the visualization and a floating UI control panel for the playback slider and buttons.
-- **CSS Styling**: A dark theme to provide high contrast for the brightly colored scaffolding lines and curve.
-- **JavaScript State**:
-  - Manage the positions of the 4 control points `P0, P1, P2, P3`.
-  - Handle pointer events for dragging points.
-  - Track the current interpolation parameter `t` (0 to 1).
-- **JavaScript Rendering**:
-  - Implement a recursive or iterative `lerp` function to compute the intermediate points for a given `t`.
-  - Draw the control polygon (connecting the 4 points).
-  - Draw the subsequent generations of scaffolding lines with different colors.
-  - Draw the final cubic Bézier curve up to the current `t`, or simply draw the full curve faintly in the background while the animated point traces it.
+- **HTML**: A split layout (desktop) or stacked layout (mobile) featuring a control panel (with the rule key and buttons) and a large, central `<canvas>` element for rendering.
+- **CSS**: Apply a cohesive dark theme. Use flexbox/grid for responsive layout. Add subtle hover states to controls.
+- **JavaScript (Canvas API)**:
+    - Maintain a 1D array representing the current state (row).
+    - Implement the Rule 30 logic: `next_state = (left ^ (center | right))`.
+    - Use `requestAnimationFrame` for a smooth rendering loop.
+    - Draw the cells as small rectangles on the canvas. When the canvas fills up, visually scroll the image data up by one cell height and draw the new row at the bottom.
 
-## Conway Game of Life [[demo](https://rybla.github.io/interpolnet-2/conway-game-of-life)]
+## Circular Motion Sine Wave [[demo](https://rybla.github.io/interpolnet-2/circular-motion-sine-wave)]
 
-An interactive implementation of Conway's Game of Life utilizing WebGL for rendering and simulation on a massive scale.
+An interactive physics and math visualization that directly links the uniform circular motion of a point on a rotating wheel to the generation of a simple harmonic sine wave on an adjacent, continuously scrolling graph.
 
 ### Features
-- **Massive Canvas**: A large-scale simulation grid using WebGL to handle millions of cells efficiently.
-- **Interactive Stamping**: Users can stamp specific patterns, such as Gliders and Gosper Glider Guns, directly onto the canvas by clicking.
-- **Real-time Evolution**: The cellular automaton rules are evaluated using custom shaders to ensure high performance and real-time evolution.
+- **Rotating Wheel**: A visually distinct circle on the left representing uniform circular motion. A point on the circumference rotates at a constant speed.
+- **Scrolling Graph**: An adjacent canvas on the right that continuously plots the vertical displacement (y-value) of the rotating point over time, creating a perfect sine wave.
+- **Connecting Line**: A dynamic, glowing horizontal line connecting the point on the wheel directly to the leading edge of the sine wave, visually demonstrating that the wave's height is exactly the point's height.
+- **Interactive Controls**: Users can adjust the speed of rotation (frequency) and the radius of the wheel (amplitude) using sliders. The graph updates in real-time.
+- **Trace Toggle**: An option to show the underlying angle tracing inside the circle.
 
 ### Design Goals
-- **Performance**: Leverage WebGL to offload the heavy computational lifting of Conway's Game of Life to the GPU, enabling a massive simulation size that would be impossible with traditional CPU-based JavaScript arrays.
-- **Interactivity**: Provide an intuitive and immediate way for users to interact with the complex system by seeding it with known, interesting patterns.
-- **Visual Scale**: Create a visually striking representation of chaotic emergence from simple rules.
+- **Educational Intuition**: Make the connection between circular motion and trigonometry (sine waves) visceral and obvious through direct physical linkage.
+- **Aesthetics**: A dark, sci-fi/blueprint aesthetic with high-contrast neon colors (e.g., cyan for the circle, magenta for the wave, yellow for the connecting line).
+- **Responsive Layout**: On desktop, the wheel and graph sit side-by-side. On mobile, they resize to maintain the visual connection.
 
 ### Implementation Plan
-- **Simulation Shaders**:
-  - Implement the Game of Life rules in a fragment shader. It will sample the states of the 8 neighboring cells from a texture representing the current generation.
-  - If a cell is alive and has 2 or 3 live neighbors, it stays alive. If it's dead and has 3 live neighbors, it becomes alive. Otherwise, it dies.
-- **Ping-Pong Rendering**:
-  - Use two framebuffers (textures). In each frame, read from the "current" texture, run the simulation shader, and render the result to the "next" texture. Then, swap the textures.
-- **Display Shader**:
-  - A simple shader to draw the current simulation texture to the screen canvas.
-- **Interaction Logic**:
-  - Map mouse coordinates to the simulation grid.
-  - Implement a mechanism to inject pre-defined patterns (Glider, Gosper Gun) into the current simulation texture at the clicked location. This can be done by rendering small quads with the pattern data over the current state.
+- **HTML Structure**: A responsive container holding a single `<canvas>` element and a control panel for sliders. We will use a single canvas to easily draw the connecting line across the two visual areas.
+- **CSS Styling**: A dark theme background, custom-styled range inputs for the controls, and responsive flexbox/grid layout.
+- **JavaScript (Canvas API)**:
+    - **State Management**: Track current angle, angular velocity, and radius.
+    - **Rendering Loop**: Use `requestAnimationFrame` to update the angle, clear the canvas, and redraw.
+    - **Drawing the Wheel**: Draw a circle on the left side. Calculate the point coordinates `(x, y) = (cx + R * cos(theta), cy + R * sin(theta))`.
+    - **Drawing the Wave**: Maintain an array or buffer of past y-values. Shift them to the right to create a scrolling effect, and draw the line connecting these historical points.
+    - **Connecting Link**: Draw a dashed line from the point on the circle to the start of the wave graph.
 
-## Vector Cross Product Visualizer [[demo](https://rybla.github.io/interpolnet-2/vector-cross-product-visualizer)]
+## Cubic Bezier Curve Interpolation Visualizer [[demo](https://rybla.github.io/interpolnet-2/cubic-bezier-interpolation-visualizer)]
 
-An interactive 3D educational tool designed to visualize the cross product of two vectors. It provides a real-time, manipulable 3D coordinate system where users can adjust two input vectors and immediately see how their cross product vector and the resulting parallelogram area respond.
+An interactive visualizer that reveals the recursive linear interpolations underlying a cubic Bézier curve. It dynamically shows the moving scaffolding lines that construct the curve point by point as the parameter $t$ varies from 0 to 1.
 
 ### Features
-- **Interactive 3D Coordinate System**: A full 3D environment allowing users to pan, zoom, and rotate around the origin to view the vectors from any angle.
-- **Draggable Input Vectors**: Users can click and drag the heads of two input vectors, Vector A (e.g., colored blue) and Vector B (e.g., colored red), altering their x, y, and z components dynamically.
-- **Real-Time Cross Product Visualization**: As the input vectors are manipulated, the resulting cross product vector (Vector C) is continuously recomputed and displayed (e.g., colored green), illustrating its orthogonal relationship to both input vectors.
-- **Area Visualization**: A semi-transparent parallelogram defined by Vector A and Vector B is drawn to visually represent the magnitude (area) of the cross product vector.
-- **Dynamic Heads-Up Display**: A floating control panel overlaid on the canvas displays the current components of all vectors, the computed magnitude, and the formula used, updating in real time.
-- **Axis Helpers**: Clear, color-coded axes (X, Y, Z) and grid lines provide spatial context.
+- **Draggable Control Points**: Users can interactively drag four control points ($P_0, P_1, P_2, P_3$) on the canvas to reshape the cubic Bézier curve.
+- **Dynamic Scaffolding Construction**: Real-time rendering of the three levels of linear interpolation:
+  - Level 1: Three lines connecting the four control points.
+  - Level 2: Two moving line segments interpolating along the Level 1 lines.
+  - Level 3: One moving line segment interpolating along the Level 2 lines.
+  - Final Point: A single moving point tracing the actual cubic curve.
+- **Interactive Time Control**: A slider to manually adjust the interpolation parameter $t \in [0, 1]$, along with a Play/Pause button for automatic animation.
+- **Trail Visualization**: A fading or solid trail indicating the fully drawn path of the Bézier curve.
 
 ### Design Goals
-- **Geometric Intuition**: Transition the abstract mathematical definition of the cross product into a tangible, geometric intuition, emphasizing the right-hand rule and the area of the spanned parallelogram.
-- **Visual Clarity**: Utilize a distinct, unique, and consistent color scheme for each vector to prevent confusion during complex rotations.
-- **Responsiveness**: Ensure the 3D controls and UI overlays function smoothly on both desktop and mobile devices.
+- **Intuitive Deconstruction**: Demystify Bézier curves by breaking them down into simple, intuitive linear interpolations, emphasizing De Casteljau's algorithm.
+- **Vibrant Aesthetics**: Employ a dark, blueprint-style theme with distinct, glowing neon colors for each level of interpolation to make the recursive structure clear at a glance.
+- **Responsive Interactions**: Provide smooth, immediate feedback as points are dragged, ensuring it feels like a physical, mechanical linkage. Mobile-friendly touch support.
 
 ### Implementation Plan
-- **HTML/CSS**: Provide a full-screen container for the 3D visualization. Create a responsive, floating UI overlay panel with a distinct aesthetic to display numerical values and provide instructions.
+- **HTML Structure**: A full-screen `<canvas>` with an absolutely positioned UI panel overlay for the controls (slider and buttons).
+- **CSS**: Dark theme styling. Distinct accent colors defined for the UI components and canvas drawing. Responsive Flexbox layout for the control panel.
+- **JavaScript (Canvas API)**:
+  - Track states for four control points $(x, y)$ and the interpolation parameter $t$.
+  - Implement a rendering loop using `requestAnimationFrame`.
+  - Draw the recursive linear interpolations explicitly:
+    - Draw control points and base lines.
+    - Calculate and draw $L_1$ points (interpolation between $P_i$ and $P_{i+1}$).
+    - Calculate and draw $L_2$ points (interpolation between $L_1$ points).
+    - Calculate and draw the final point (interpolation between $L_2$ points).
+  - Trace the entire cubic Bézier curve path statically in the background to show the final shape.
+  - Implement mouse/touch event listeners (`pointerdown`, `pointermove`, `pointerup`) to support dragging control points.
+## Conway's Game of Life WebGL [[demo](https://rybla.github.io/interpolnet-2/conways-game-of-life-webgl)]
+
+A massive, interactive web-based implementation of Conway's Game of Life utilizing WebGL for high-performance rendering and simulation of millions of cells.
+
+### Features
+- **Massive Canvas**: An infinitely panning and zooming canvas running a dense Game of Life simulation, supporting 1024x1024 grid cells.
+- **Interactive Stamping Tools**: Users can place single cells, or use pre-configured stamps to instantly spawn complex structures like Gliders and Gosper Glider Guns into the simulation.
+- **Simulation Controls**: Play, Pause, and Step functionalities to observe the chaotic evolution of the cellular automaton at different speeds.
+- **Pan and Zoom Navigation**: Intuitive mouse and touch controls to explore the massive grid.
+- **High-Performance WebGL**: Uses ping-pong framebuffers and fragment shaders to calculate the next generation of cells entirely on the GPU, allowing for massive scale and fluid framerates.
+- **Clear Canvas**: A tool to instantly wipe the board clean and start fresh.
+
+### Design Goals
+- **Raw Performance**: Demonstrate the power of WebGL for parallel processing by offloading the entire Game of Life rule evaluation to the GPU.
+- **Interactive Sandbox**: Provide users with the tools to easily create and observe complex, emergent behaviors without painstakingly drawing them cell by cell.
+- **Hacker Aesthetic**: A distinct visual style utilizing a stark black background with glowing, bright neon green cells, evoking classic retro-computing or cyberpunk themes.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` element for the WebGL rendering, overlaid with a floating, responsive control panel for tools and simulation controls.
+- **CSS Styling**: A dark theme with distinct neon green accents, glowing hover effects, and a modern, slightly brutalist UI layout.
+- **JavaScript (WebGL)**:
+    - **Initialization**: Set up a WebGL context with floating-point or unsigned byte textures.
+    - **Ping-Pong Textures**: Create two textures (Current State and Next State) and alternatingly bind them as input and output framebuffers.
+    - **Simulation Shader**: A fragment shader that reads the 8 neighboring pixels from the Current State texture and applies Conway's rules (survive with 2 or 3 neighbors, birth with 3) to output the Next State.
+    - **Display Shader**: A fragment shader that maps the current texture to the screen, applying panning and zooming transformations based on user input.
+    - **Tool Logic**: Implement `texSubImage2D` to allow writing specific pixel patterns (stamps) directly into the Current State texture based on mouse clicks and the selected tool.
+    - **Game Loop**: A `requestAnimationFrame` loop that runs the simulation shader (when playing) and then runs the display shader to render the result.
+## Cross Product Visualizer [[demo](https://rybla.github.io/interpolnet-2/cross-product-visualizer)]
+
+An interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
+
+### Features
+- **3D Coordinate System**: A central 3D space with X, Y, and Z axes.
+- **Interactive Vectors**: Users can click and drag two initial vectors ($u$ and $v$) around the 3D space to change their direction and magnitude.
+- **Real-time Cross Product Visualization**: A third vector ($u \times v$) is automatically calculated and displayed in real-time, pointing in the orthogonal direction according to the right-hand rule.
+- **Parallelogram Area**: A semi-transparent parallelogram is drawn between the two initial vectors, and its area is dynamically calculated. The length of the cross product vector perfectly corresponds to this area.
+- **Dynamic Readouts**: A UI panel showing the current components of the vectors and the calculated cross product, as well as the area.
+
+### Design Goals
+- **Intuitive Understanding**: Make the abstract concept of a cross product geometric and intuitive by physically linking the area of the parallelogram to the magnitude of the resulting orthogonal vector.
+- **Engaging Aesthetics**: Use a dark, blueprint or neon aesthetic (e.g., dark background with bright cyan, magenta, and yellow vectors) to make the math look striking.
+- **Responsive Interactions**: Ensure the visualizer works seamlessly on both desktop and mobile devices, utilizing touch events for dragging points.
+
+### Implementation Plan
+- **HTML Structure**: A full-screen `<canvas>` with an absolutely positioned UI panel overlay for the controls and readouts.
+- **CSS Styling**: A dark theme background, custom-styled UI overlay, and responsive flexbox/grid layout.
 - **JavaScript (Three.js)**:
-  - Setup a Three.js scene, camera, renderer, and lighting.
-  - Create arrow helpers or custom geometry for Vector A, Vector B, and Vector C (Cross Product).
-  - Implement interaction logic using `Raycaster` and a draggable plane to allow users to click and drag the heads of Vector A and Vector B.
-  - In the render loop, continuously calculate `C = A.cross(B)` and update the visual representation of Vector C.
-  - Generate and update a `PlaneGeometry` or custom polygon geometry defined by points `(0,0,0)`, `A`, `A+B`, and `B` to visualize the area parallelogram.
-  - Update the DOM elements in the UI overlay with the latest vector components and calculated area.
-
-## Galton Board Normal Distribution [[demo](https://rybla.github.io/interpolnet-2/galton-board)]
-
-An interactive 2D physics simulation that visually calculates binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution.
-
-### Features
-- **Dynamic Physics Engine**: Continuously drops physical balls that bounce and collide off a triangular grid of static pegs and gather into bins at the bottom.
-- **Normal Distribution Curve**: As balls accumulate in the bins over time, they naturally form a visual bell curve (Pascal's triangle / binomial coefficients).
-- **Interactive Controls**: Users can pause/resume the flow of balls, adjust the drop rate, and reset the simulation.
-- **Real-Time Statistics**: A heads-up display showing the total number of balls dropped and an overlay on each bin showing its current count.
-- **Aesthetics**: A dark, vibrant theme with distinct colors for pegs, balls, and bins, alongside fluid physics animations.
-
-### Design Goals
-- **Statistical Intuition**: Demonstrate the Central Limit Theorem and binomial distribution visually using physical laws.
-- **Mesmerizing Simulation**: Create an engaging and satisfying animation of balls cascading through the maze.
-- **Responsive Layout**: Ensure the canvas and UI controls scale effectively on both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML/CSS**: A full-screen `<canvas>` container with a floating UI control panel overlay for inputs and a statistics display.
-- **Physics System (JavaScript)**:
-  - Implement a simple fixed-timestep 2D physics loop managing particle positions, velocities, and gravity.
-  - Handle circle-circle collisions (balls vs. pegs, and balls vs. balls in the bins) and circle-line collisions (balls vs. bin walls and floor).
-- **Galton Board Generator**:
-  - Dynamically generate a triangular grid array of peg positions.
-  - Generate the vertical bin dividers below the last row of pegs.
-- **Rendering**:
-  - Use the Canvas API (`ctx.arc`, `ctx.fillRect`) to efficiently draw the elements in the render loop.
-
-## Modular Arithmetic Clock [[demo](https://rybla.github.io/interpolnet-2/modular-arithmetic-clock)]
-
-An interactive visualization that represents modular arithmetic operations (addition and multiplication) as paths drawn on a physical clock face, allowing users to observe continuous patterns and warpings.
-
-### Features
-- **Clock Face Visualization**: A circular dial divided into $N$ equal points, representing the modulus space (0 to $N-1$).
-- **Operation Selection**: Users can switch between Modulo Addition ($x + A \pmod{N}$) and Modulo Multiplication ($x \times A \pmod{N}$).
-- **Factor Control**: A slider allowing the user to select the factor $A$ to add or multiply by. The changes to $A$ are immediately reflected in the drawn lines.
-- **Continuous Path Drawing**: Lines are drawn from each point $x$ on the dial to the resulting point of the selected operation.
-- **Auto-Play/Animation**: An auto-play mode that slowly increments the factor $A$, animating the continuous warping and creation of new patterns (like cardioids and nephroids in multiplication).
-- **Responsive Controls**: A floating or side control panel that dynamically adapts its layout based on the screen size.
-
-### Design Goals
-- **Mathematical Intuition**: Make the abstract concepts of modular arithmetic concrete and visual. Show how multiplication forms distinct geometric patterns.
-- **Aesthetics**: Follow the Interpolnet 2 style guidelines with a distinct, consistent color scheme, utilizing bold colors on a dark background.
-- **Fluid Animation**: Ensure the lines drawn across the circle smoothly transition and redraw efficiently at 60fps as parameters change.
-
-### Implementation Plan
-- **HTML Structure**: A main `<canvas>` element to render the clock face and lines, and a UI container for the controls (sliders, buttons, and radio inputs).
-- **CSS Styling**: Apply a dark, modern theme. The UI should utilize flexbox/grid to remain responsive and mobile-friendly, with smooth passive animations on hoverable elements.
-- **JavaScript Core**:
-    - Manage the state: Modulus ($N$), Factor ($A$), current Operation, and an `isAutoPlaying` flag.
-    - Implement a render loop using `requestAnimationFrame`. If auto-playing, increment $A$ slightly each frame.
-    - The drawing function will calculate the position of $N$ points around the circumference of a circle.
-    - For each point $x \in [0, N-1]$, calculate the target $y$ based on the operation and draw a line from the coordinate of $x$ to the coordinate of $y$. Use color gradients or distinct stroke styles to make the patterns pop.
-
-## Markov Chain Frog [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog)]
-
-**Description**:
-An interactive visualization of a Markov Chain, where states are represented as lilypads in a pond, and the transitions are weighted probability arrows between them. A frog character jumps between these lilypads over time, effectively traversing the Markov Chain and visually demonstrating state transitions based on defined probabilities.
-
-**Features**:
-- Interactive Canvas: A full-screen pond environment with distinctly colored lilypads (states).
-- Weighted Arrows: Directed arrows indicating possible transitions from one lilypad to another, with text labels showing the probability of each transition.
-- Frog Animation: A visual representation of the current state, smoothly animating (jumping) along the transition arrows to the next state.
-- Controls: A bottom UI panel allows the user to pause/play the animation and adjust the speed of the simulation.
-- Real-time Updates: As the frog jumps, the "active" path is highlighted.
-
-**Design Goals**:
-- Consistent color scheme and typography in line with guidelines.
-- Responsive design ensuring the canvas and controls are mobile-friendly.
-- Passive animations (e.g., slight hovering or rippling of lilypads) and active animations (the jumping frog).
-
-**Implementation Plan**:
-1. Implement the HTML structure containing the canvas and a simple UI overlay.
-2. Style the layout with CSS to ensure full screen, responsive UI, and distinct colors.
-3. Write JavaScript to:
-   - Define a state machine representing the Markov Chain (nodes and edges with probabilities).
-   - Render the lilypads and arrows dynamically on the canvas.
-   - Implement the `requestAnimationFrame` loop for the frog's jumping animation.
-   - Handle play/pause logic and speed control.
-
-## Sweep-line Voronoi [[demo](https://rybla.github.io/interpolnet-2/sweep-line-voronoi)]
-
-### Description
-This demo visualizes the generation of a Voronoi diagram using a sweep-line algorithm approach. Users can interactively place seed points on a canvas, and a moving horizontal line sweeps across the screen, calculating and rendering the corresponding Voronoi cell boundaries in real-time. This provides an intuitive and visual understanding of how spatial partitioning works.
-
-### Features
-- Interactive canvas to place, drag, or remove seed points.
-- Real-time visualization of the sweep-line moving across the canvas.
-- Dynamic rendering of Voronoi cell boundaries as the sweep-line progresses.
-- Controls to pause, play, reset, and adjust the speed of the sweep-line.
-- Responsive design adapting to different screen sizes.
-
-### Design Goals
-- **Educational:** Clearly illustrate the process of Voronoi diagram generation.
-- **Interactive:** Encourage users to experiment with different point placements.
-- **Aesthetic:** Use a clean, consistent color scheme with distinct visual cues for points, the sweep-line, and cell boundaries. Ensure smooth animations.
-
-### Implementation Plan
-- **HTML (`index.html`):** Structure with an HTML5 `<canvas>`, a control panel for buttons (Play/Pause, Reset, Clear Points), and a brief instruction section.
-- **CSS (`style.css`):** Apply a distinct color palette. Ensure the canvas scales correctly and controls are styled with clear interactive feedback (hover/active states). Ensure mobile responsiveness.
-- **JavaScript (`script.js`):** Implement the core logic. Handle mouse/touch events for adding points. Implement an animation loop (`requestAnimationFrame`) to update the sweep-line position and calculate Voronoi edges based on the current points. Handle resizing and re-rendering.
-
-## Minimax Saddle Point [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-point)]
-
-### Description
-An interactive 3D visualization of a multivariable calculus surface where a rolling ball naturally settles into the minimax saddle point due to gravity. The user can interact with the surface to drop the ball from different locations and watch its trajectory as it accelerates down the steepest slopes, demonstrating gradient descent and saddle point dynamics.
-
-### Features
-- **3D Surface**: A visually distinct 3D representation of a multivariable function containing a saddle point (e.g., $f(x,y) = x^2 - y^2$), rendered using Three.js.
-- **Physics Simulation**: A real-time physics simulation of a ball rolling on the surface, affected by gravity, surface normals (gradients), and friction/damping.
-- **Interactive Controls**: Users can drag and drop the ball anywhere on the surface to start a new trajectory. Sliders are provided to adjust physical parameters such as gravity and friction.
-- **Visual Aids**: The ball leaves a trailing path to visualize its trajectory over time, highlighting how it oscillates and settles at the minimax point.
-- **Responsive Layout**: A clean, responsive UI overlay displaying controls and the current coordinates and velocity of the ball.
-
-### Design Goals
-- **Mathematical Intuition**: Provide an intuitive, physical understanding of saddle points, gradients, and optimization in multivariable calculus.
-- **Visual Clarity**: Use a unique and consistent color scheme (e.g., a wireframe or heat-mapped surface) to make the 3D geometry easily understandable.
-- **Performance**: Ensure smooth 60fps rendering and physics calculations.
-
-### Implementation Plan
-- **HTML/CSS**: Set up a full-screen canvas container for the 3D scene and a floating, responsive UI overlay for the controls and statistics.
-- **JavaScript (Three.js & Physics)**:
-  - Initialize a Three.js scene with a camera, lights, and orbit controls for exploring the surface.
-  - Generate the surface geometry using a custom function. Use a wireframe or custom shader material to enhance depth perception.
-  - Implement a physics loop to update the ball's position:
-    - Calculate the gradient (slope) of the surface at the ball's current $(x, y)$ coordinates.
-    - Apply acceleration proportional to the gradient to simulate gravity pulling the ball downhill.
-    - Apply a damping force (friction) proportional to velocity to ensure the ball eventually comes to rest at the saddle point $(0, 0, 0)$.
-    - Update the ball's $(x, y, z)$ position, ensuring $z$ exactly matches the surface height $f(x, y)$.
-  - Implement a trailing line or points using `THREE.Line` or `THREE.Points` to visualize the trajectory.
-  - Add raycasting to allow the user to click on the surface to place the ball at a new starting location.
-
-## Fibonacci Golden Spiral [[demo](https://rybla.github.io/interpolnet-2/fibonacci-golden-spiral)]
-
-### Description
-An interactive visualization showing the Fibonacci sequence recursively dividing a golden rectangle into smaller squares that perfectly trace the path of a logarithmic spiral. The user can watch the progressive generation of the squares and the connecting spiral arcs, demonstrating the geometric relationship between the Fibonacci numbers and the golden ratio.
-
-### Features
-- **Progressive Animation**: Slowly draws the Fibonacci squares one by one, scaling the view or zooming out as larger squares are added to keep the entire structure visible.
-- **Golden Spiral**: Simultaneously draws smooth quarter-circle arcs within each square to form a continuous golden spiral.
-- **Interactive Controls**: Users can pause/play the animation, adjust the animation speed, and manually step forward or backward through the sequence.
-- **Information Display**: Displays the current Fibonacci number and the total number of squares currently drawn.
-- **Responsive Canvas**: The canvas auto-resizes to fit the screen, maintaining the correct aspect ratio for the golden rectangle.
-
-### Design Goals
-- **Mathematical Clarity**: Clearly illustrate the construction of the golden spiral using Fibonacci squares.
-- **Visual Elegance**: Use smooth animations, distinct colors for the squares' borders, and a prominent, contrasting color for the spiral path to make the mathematical structure visually appealing.
-- **Responsiveness**: Ensure the controls and canvas look good on both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML/CSS**: Set up a full-screen canvas with a floating, responsive UI overlay for controls and statistics.
-- **JavaScript Core Logic**:
-  - Maintain state for the current step in the Fibonacci sequence (e.g., $F_n = F_{n-1} + F_{n-2}$).
-  - Track the current drawing coordinate, orientation, and scale.
-  - Implement a `requestAnimationFrame` loop to handle the progressive drawing and zooming.
-- **Rendering**:
-  - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
-  - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
-  - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
-
-## Skewed Galton Board [[demo](https://rybla.github.io/interpolnet-2/skewed-galton-board)]
-
-This demo features an interactive Galton board where users can dynamically skew the probabilities of falling balls at each peg. By adjusting the probability slider, users can observe the resulting distribution of balls at the bottom shift continuously from a standard Normal distribution (when probability is 0.5) to a skewed Poisson distribution. The implementation utilizes an HTML5 Canvas for high-performance rendering of the falling physics balls and the distribution bins, coupled with smooth CSS animations for the UI controls to provide an engaging and intuitive educational experience.
-
-## Huffman Entropy Compressor [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-compressor)]
-
-This demo provides an interactive educational visualization of data compression using a Huffman coding algorithm. Users can input arbitrary text, and the application dynamically constructs and displays a Huffman tree based on the character frequencies in the text. The demo calculates and visualizes the entropy of the text and provides real-time statistics on the original size, compressed size, and compression ratio. It features an HTML5 canvas to render the branching Huffman tree and interactive tables mapping each character to its variable-length binary code, demonstrating how more frequent characters receive shorter codes.
-
-## Slope Field Ink Drops [[demo](https://rybla.github.io/interpolnet-2/slope-field-ink-drops)]
-
-The "Slope Field Ink Drops" demo provides an interactive 2D visualization on an HTML5 canvas where users explore a dynamic slope field representing a differential equation. Users can click and drag to drop virtual ink drops that flow along the slope field, continuously tracing out distinct solution curves over time.
-
-- Features a full-screen HTML5 canvas displaying a dynamic vector field.
-- Users click and drag on the canvas to place colorful ink drops.
-- Ink drops actively trace the solution curve from their initial drop point, leaving a fading trail.
-- The slope field animates slightly over time, causing the vector orientations to sway, simulating a non-autonomous differential equation or simply adding a dynamic feel to the visualization.
-- Designed with unique, consistent coloring, responsive interactions, and mobile-friendly touch/mouse event support.
-
-## Penrose Tiling Editor [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-editor)]
-
-An interactive editor for exploring and manipulating Penrose tilings. The demo allows users to dynamically deform the edges of the fundamental kite and dart tiles, with changes propagating symmetrically across the entire aperiodic pattern.
-
-### Features
-- **Aperiodic Tiling Generation**: Automatically generates a large-scale Penrose P2 (Kite and Dart) tiling.
-- **Symmetric Edge Deformation**: Users can click and drag the edges of any tile. The deformation is applied symmetrically to all corresponding edges in the tiling, ensuring the interlocking pattern remains gapless.
-- **Interactive Control Points**: Visual indicators for the manipulatable control points on the edges of the tiles.
-- **Dynamic Rendering**: The entire tiling is re-rendered in real-time as the user drags the control points.
-- **Pan and Zoom**: Users can pan across the infinite-seeming canvas and zoom in/out to explore the intricate structures of the Penrose tiling.
-
-### Design Goals
-- **Mathematical Intuition**: Provide a tangible, interactive way to understand the complex symmetry and interlocking nature of Penrose tilings.
-- **Visually Engaging**: Use a distinct, vibrant color scheme to differentiate the kites and darts, and smooth animations for interactions.
-- **Performance**: Ensure real-time rendering of the tiling even with a large number of tiles and complex deformed edges.
-- **Responsiveness**: The canvas should fill the screen and adapt to both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML**: A full-screen `<canvas>` element for rendering the tiling, and a minimal UI overlay for controls (like "Reset Pattern").
-- **CSS**: A clean, modern aesthetic with a dark background to make the vibrant colors of the tiles pop. Ensure responsive design.
-- **JavaScript (Tiling Logic)**:
-  - Implement a deflation algorithm to generate the Penrose P2 tiling (subdividing half-kites and half-darts, or "Robinson triangles").
-  - Maintain a global set of control points that define the shape of the "Long Edge" and the "Short Edge" of the tiles.
-- **JavaScript (Rendering & Interaction)**:
-  - Use the HTML5 Canvas API to render the tiles.
-  - Implement logic to draw the deformed edges using quadratic or cubic Bézier curves based on the global control points.
-  - Add event listeners for mouse/touch interactions to allow users to pan the view, zoom, and drag the control points.
-  - When a control point is dragged, update its global coordinates and trigger a re-render of the entire canvas to show the symmetric deformation.
-
-## Raytracer Pixel Step [[demo](https://rybla.github.io/interpolnet-2/raytracer-pixel-step)]
-
-### Overview
-The **Raytracer Pixel Step** demo provides an interactive educational visualization of the fundamental process inside a raytracer for calculating a single pixel's color. It breaks down the continuous rendering process into discrete, understandable steps, focusing on tracing a primary ray from a camera through a virtual screen pixel, hitting a 2D spherical object, calculating the surface normal, and casting a shadow ray to check for light occlusion by another object.
-
-### Features
-- **Step-by-Step Visualization**: A sequential control panel that allows users to click through each stage of a raycast (Camera Origin, Ray Emit, Intersection, Surface Normal Calculation, Shadow Ray Emit, Shadow Hit/Miss, Shading Calculation).
-- **Interactive 2D Scene**: A top-down 2D canvas representing the 3D raytracing logic, where users can drag the light source, target sphere, and occluder sphere around the scene to dynamically alter the resulting raycast logic.
-- **Dynamic Geometric Drawing**: Real-time rendering of mathematical components such as the camera vector, the pixel plane, intersection points, normal vectors, and shadow rays.
-- **State Machine Animation**: Passive animations that highlight active components depending on the current step in the raytracing process.
-
-### Design Goals
-- **Clarity and Simplicity**: Use a consistent and vibrant color scheme to differentiate objects (camera, target sphere, occluder sphere, light) and ray vectors.
-- **Educational Impact**: Demystify the "black box" of raytracing by visually breaking down a single ray calculation, clearly showing how lighting and shadows are computed through geometry.
-- **Responsiveness**: Ensure the scene layout and controls adapt gracefully to mobile and desktop screens.
-
-### Implementation Plan
-- **HTML**: Create a responsive layout featuring a main `<canvas>` for the 2D scene and a dedicated control panel `<div>` with a descriptive text area and a "Next Step" button.
-- **CSS**: Apply a distinct, clean styling with clear contrast. Implement flexbox for an adaptable layout and use CSS transitions for smooth interactive feedback on buttons.
-- **JavaScript (State Logic)**:
-  - Implement a state machine (enum or sequence) to manage the current step in the raytracing process.
-  - Define data structures for vectors, spheres (position, radius, color), the camera (position), and the light source.
-- **JavaScript (Math & Raytracing)**:
-  - Implement 2D vector mathematics (addition, subtraction, normalization, dot product).
-  - Implement a line-sphere intersection algorithm to mathematically detect where rays hit the 2D circles.
-- **JavaScript (Rendering & Interaction)**:
-  - Use `requestAnimationFrame` for a continuous render loop on the HTML5 Canvas.
-  - Add pointer event listeners (mousedown, mousemove, mouseup/touchstart, touchmove, touchend) to enable dragging of the scene objects.
-  - Draw the scene dynamically based on the current state, animating vectors and updating the explanation text to guide the user through the raytracing calculation.
-
-## Gray-Scott Turing Patterns [[demo](https://rybla.github.io/interpolnet-2/gray-scott-turing-patterns)]
-
-This demo provides an interactive WebGL simulation of the Gray-Scott model of reaction-diffusion, allowing users to paint "chemical food" onto a digital canvas to watch complex, organic Turing patterns emerge, grow, and split in real time.
-
-### Features
-- **Real-time WebGL Simulation:** Uses WebGL ping-pong framebuffers to simulate the Gray-Scott equations at 60 FPS across a high-resolution grid.
-- **Interactive Painting:** Users can interact with the canvas using mouse or touch to add "chemical food" (substance B) directly into the simulation, triggering new patterns to grow.
-- **Dynamic Parameter Controls:** Sliders to adjust feed rate ($f$), kill rate ($k$), diffusion rates ($D_A$ and $D_B$), and time steps per frame, allowing users to explore different parameter regimes (e.g., spots, stripes, mazes, and moving spots).
-- **Custom Color Mapping:** A shader-based color mapping system that translates the chemical concentrations into vibrant, organic colors.
-- **Responsive Layout:** A mobile-friendly design that adapts the canvas and control panel to various screen sizes.
-
-### Design Goals
-- Provide an intuitive and mesmerizing way to explore reaction-diffusion systems.
-- Ensure high performance by keeping all simulation computations and rendering on the GPU.
-- Create a distinct visual identity with a dark, scientific theme, using glowing colors for the patterns and clear, minimalist typography for the controls.
-
-### Implementation Outline
-1. **HTML/CSS Structure:** Build a full-screen or large responsive canvas with an overlaid or side-by-side control panel (using modern CSS Grid/Flexbox).
-2. **WebGL Context and Shaders:**
-   - **Simulation Shader:** A fragment shader that reads the previous state from a texture, computes the discrete Laplacian, and updates concentrations $A$ and $B$ according to the Gray-Scott equations.
-   - **Render Shader:** A fragment shader that samples the current state texture and maps the concentration of $B$ to a color gradient for display.
-3. **Ping-Pong Framebuffers:** Set up two Framebuffer Objects (FBOs) with attached textures (`gl.UNSIGNED_BYTE` format, converted to normalized float in shaders for wider compatibility, or `gl.FLOAT` if the extension is available; for safety and broad compatibility, we will use a clever mapping with 8-bit channels if needed, though most modern browsers support `OES_texture_float`. Given the memory constraints, we'll try to stick to basic data types where possible, but precision is key for Gray-Scott).
-4. **Interaction Logic:** Track pointer events to pass a uniform (mouse coordinates and click state) to the simulation shader, adding a burst of substance $B$ where the user clicks/drags.
-5. **Animation Loop:** In each frame, run the simulation shader multiple times (for numerical stability and speed), then run the render shader once to output to the canvas.
-
-## L-System Fractal Trees [[demo](https://rybla.github.io/interpolnet-2/l-system-fractal-trees)]
-
-An interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
-
-### Features
-- **Interactive Grammar Ruleset Editor**: A control panel area allowing users to define an axiom and specific grammar replacement rules.
-- **Instant Rendering**: As users edit the axiom, rules, or parameters like angle and length, the L-system is recalculated and instantly rendered on the HTML5 canvas.
-- **Axiomatic String Expansions**: Visualizes the string generated by recursively applying rules to the initial axiom.
-- **Branching L-system Fractal Trees**: Translates the expanded string into drawing commands to generate complex branching structures in real-time.
-
-### Design Goals
-- **Educational**: Visually demonstrate how simple string replacement rules can generate complex, self-similar fractal patterns.
-- **Immediate Feedback**: Ensure modifications to the ruleset are instantly reflected in the visualization to facilitate intuitive understanding and exploration.
-- **Aesthetics**: A distinct, unique, and consistent color scheme for the UI and the generated trees, with smooth, fluid rendering.
-
-### Implementation Plan
-- **HTML/CSS**: A responsive split-layout with a control panel on one side and a canvas on the other, utilizing Flexbox/Grid. Include hover, focus, and active state animations.
-- **L-System Logic**: Implement a `parseRules` function to create a key-value mapping of replacement rules and a `generateLSystem` function to recursively expand the axiom based on the rules.
-- **Canvas Drawing**: Implement a `drawTree` function that parses the expanded string into canvas drawing commands. Add `input` and `change` event listeners to instantly trigger `generateLSystem` and `drawTree` upon user edits.
-
-## Perlin Noise Visualizer [[demo](https://rybla.github.io/interpolnet-2/perlin-noise-visualizer)]
-
-### Overview
-The **Perlin Noise Visualizer** provides an interactive and educational look at how 2D Perlin noise is generated. It demonstrates the underlying gradient vectors and shows how bilinear interpolation blends these gradients to produce smooth, continuous noise maps often used in procedural generation.
-
-### Features
-- **Gradient Vector Display:** Visualizes the pseudo-random 2D gradient vectors at grid intersections.
-- **Interpolation Visualization:** Real-time demonstration of how values are smoothly interpolated between grid points.
-- **Interactive Parameters:** Controls to adjust grid resolution (frequency) and animate the noise generation process.
-- **Dynamic Feedback:** Watch the noise map update instantly as parameters are modified or the gradient vectors are randomly regenerated.
-
-### Design Goals
-- **Educational Clarity:** Break down the somewhat complex algorithm of Perlin noise into easily understandable visual components.
-- **Interactivity:** Encourage exploration by allowing users to tinker with the frequency and seed of the noise.
-- **Aesthetic Quality:** Use a clean, modern aesthetic with distinct colors for gradient vectors and the resulting noise map to clearly separate the underlying math from the final visual output.
-- **Responsiveness:** Ensure the interactive canvas and controls adapt seamlessly to various screen sizes.
-
-### Implementation Plan
-- **HTML/CSS:** Structure a responsive page with a main `<canvas>` element for the visualization and a control panel for user inputs. Style with a clear, engaging theme.
-- **JavaScript (Core Logic):**
-  - Implement a basic pseudo-random number generator for consistent gradient generation.
-  - Define a function to create a grid of 2D unit vectors.
-  - Implement the core Perlin noise algorithm: determining the cell containing a point, calculating dot products between distance vectors and gradients, and applying the smoothstep fade function for bilinear interpolation.
-- **JavaScript (Rendering):**
-  - Use the HTML5 Canvas 2D API to render the underlying grid.
-  - Draw the gradient vectors at each grid node.
-  - Render the interpolated noise map, perhaps togglable so users can see just the gradients or the final noise.
-- **JavaScript (Interaction):**
-  - Add event listeners to control inputs to regenerate gradients, change grid size, and toggle visualization layers.
-  - Implement an animation loop to potentially shift the noise map or slowly rotate the gradient vectors for dynamic demonstration.
-
-## Boids Flocking Simulation [[demo](https://rybla.github.io/interpolnet-2/boids-flocking-simulation)]
-
-The Boids Flocking Simulation demo provides an interactive 2D visualization of emergent flocking behavior. Inspired by Craig Reynolds' original algorithm, the simulation renders a collection of "boids" (bird-oid objects) on an HTML5 canvas. Users can tweak the exact weights of the three core rules—separation, alignment, and cohesion—via dynamic sliders to observe in real-time how the flocking behavior changes, such as moving from a tightly knit school to a chaotic swarm. The demo features a modern, mobile-friendly design with distinct colors to distinguish boids and UI elements, alongside passive animations to highlight interactable controls.
-
-## Barycentric Triangle Rasterizer [[demo](https://rybla.github.io/interpolnet-2/barycentric-triangle-rasterizer)]
-
-This demo provides an interactive and educational look at how computer graphics rasterize triangles by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients using barycentric coordinates.
-
-### Features
-- **Pixel-by-Pixel Rasterization:** Visually fills a massive 2D triangle step-by-step to demonstrate the rendering process.
-- **Barycentric Interpolation:** Calculates the barycentric coordinates of each pixel to interpolate colors from the three primary vertices (Red, Green, Blue).
-- **Interactive Vertices:** Users can drag the three vertices of the triangle to dynamically change its shape, size, and the resulting color gradients.
-- **Playback Controls:** Pause, play, reset, and adjust the speed of the rasterization process.
-
-### Design Goals
-- **Educational:** Break down the fundamental concept of triangle rasterization and barycentric coordinates in an intuitive and visual way.
-- **Interactive Exploration:** Let users manipulate the geometry to see real-time updates of the rasterization constraints and color interpolation.
-- **Aesthetics:** Clean, responsive design with distinctive vertex colors blending smoothly inside the triangle against a dark or clearly contrasting background.
-
-### Implementation Plan
-- **HTML/CSS:** Structure a responsive page with a main `<canvas>` for rendering and a side/bottom control panel for controls. Style with a clear, readable theme and custom range inputs.
-- **JavaScript (State):** Keep track of the three vertices (position and color), the current rasterization coordinate (x, y bounds), and animation state.
-- **JavaScript (Math):** Implement functions to calculate the bounding box of the triangle, compute barycentric coordinates (alpha, beta, gamma) for a given point, and check if a point lies within the triangle.
-- **JavaScript (Rendering):** Use `requestAnimationFrame` for a main loop that incrementally checks pixels within the bounding box. If a pixel is inside the triangle, color it using barycentric interpolation of the vertex colors.
-- **JavaScript (Interaction):** Add pointer event listeners to allow dragging of vertices (triggering a reset of the rasterization) and hook up control buttons to manage the animation loop.
   - Setup a Three.js scene, camera, renderer, and lights.
   - Create the coordinate axes and a grid helper.
   - Render vectors $u$ and $v$ as arrows (`ArrowHelper` or custom meshes).
@@ -2496,1175 +2161,195 @@ This demo provides an interactive and educational look at how computer graphics 
   - Dynamically calculate the cross product vector and update its corresponding arrow in the scene.
   - Draw the parallelogram defined by $u$ and $v$ using a custom `BufferGeometry` and update it dynamically.
 
-## Galton Board Binomial Coefficients [[demo](https://rybla.github.io/interpolnet-2/galton-board-binomial)]
+## Galton Board Visualizer [[demo](https://rybla.github.io/interpolnet-2/galton-board-visualizer)]
 
-A physics simulation of a Galton board (also known as a quincunx or bean machine), which demonstrates the Central Limit Theorem and visually calculates binomial coefficients. Users can drop balls from the top, watching them bounce randomly left or right at each peg, eventually settling into bins at the bottom to form a normal distribution.
+This demo visually calculates binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution. As a ball falls through each row of pegs, it has a 50% chance of bouncing left or right. The resulting distribution of balls in the collection bins perfectly mirrors the theoretical binomial distribution for $n$ trials (where $n$ is the number of peg rows), which in turn approximates the Gaussian normal distribution curve.
 
-### Features
-- **Interactive Physics Engine**: A custom physics simulation that handles rigid body collisions between falling balls and static pegs.
-- **Dynamic Binomial Coefficients**: As balls settle into bins, the bins visually fill up. The bins display both the expected binomial coefficient for that position and the actual count of balls.
-- **Adjustable Parameters**: Users can change the number of peg rows, the bounce properties (restitution), and the spawn rate of the balls.
-- **Visualization Modes**:
-  - **Distribution Overlay**: A theoretical normal distribution curve is overlaid on the bins, scaling dynamically as more balls are dropped.
-  - **Path Tracing**: An option to leave a faint trail behind each ball to visualize its unique path through the maze.
-- **Counters and Stats**: Real-time display of total balls dropped, current balls in motion, and the error margin between the simulated distribution and the theoretical binomial distribution.
+Features include:
+- An interactive HTML5 Canvas displaying the peg maze, falling balls, and collection bins.
+- Dynamic control over the number of peg rows (1 to 20), instantly re-configuring the board and resetting the simulation.
+- A "Simulation Speed" slider to control the rate at which balls are dropped and fall.
+- A continuous overlaid line graph representing the theoretical perfect binomial distribution, scaling as balls fill the bins.
+- A responsive layout that centers the board and scales pegs based on available screen space and row count.
+- Balls that stack realistically within their respective bins using simple rigid-body physics for visual flair.
+- An automatic flush system when a bin reaches maximum capacity to allow for continuous demonstration.
 
-### Design Goals
-- **Educational Intuition**: Make the connection between individual random events (a ball bouncing left or right) and macroscopic predictable patterns (the normal distribution) visceral and obvious.
-- **Performance**: Capable of simulating hundreds of balls simultaneously at 60fps using optimized 2D physics.
-- **Aesthetics**: A clean, perhaps slightly "wooden" or "brass" skeuomorphic design, or alternatively, a modern dark theme with bright neon balls, consistent with Interpolnet 2's unique style.
-- **Responsive Layout**: The board scales to fit both desktop and mobile screens, ensuring the physics still work correctly regardless of the canvas size.
-
-### Implementation Plan
-- **HTML Structure**: A main `<canvas>` element for the board and a control panel for parameters and statistics.
-- **CSS Styling**: Responsive flexbox layout, with distinct colors for the UI elements and the canvas border.
-- **JavaScript Core**:
-    - **Physics Engine**: Implement simple circle-circle (ball-peg) and circle-line (ball-wall/floor) collision detection and resolution.
-    - **Galton Logic**: Generate the triangular grid of pegs and the bins at the bottom based on the number of rows.
-    - **Rendering Loop**: Use `requestAnimationFrame` to update positions, resolve collisions, and draw the pegs, balls, bins, and distribution overlay.
-    - **Math Utilities**: Functions to calculate binomial coefficients ($\binom{n}{k}$) and the normal distribution curve.
 The implementation relies on an explicit physics loop in JavaScript running with `requestAnimationFrame`. Balls are tracked with position, velocity, and state (falling vs. settled). Collision detection is performed radially against the mathematically positioned peg grid. When a ball passes the final row, it determines its destination bin and transitions to a settled stack state. A secondary loop calculates the combinations for the binomial distribution curve plotted over the bins.
-## Modular Arithmetic Clock Face [[demo](https://rybla.github.io/interpolnet-2/modular-arithmetic-clock-face)]
+## Modular Arithmetic Clock [[demo](https://rybla.github.io/interpolnet-2/modular-arithmetic-clock)]
 
-The "Modular Arithmetic Clock Face" demo provides a visual and interactive exploration of modular arithmetic (specifically addition and multiplication) by mapping operations onto a physical clock face dial. This approach grounds abstract mathematical concepts like congruence and modulo operations into an intuitive, continuous circular motion model that wraps around seamlessly.
-
-The demo features a responsive, mobile-friendly interface showcasing an interactive HTML5 Canvas. A prominent, neon-styled circular clock face dominates the center of the screen, with customizable numbers equally spaced around its perimeter, representing the set of integers for a chosen modulo `n`. Users can actively adjust `n` (the modulus), the current operation (Addition or Multiplication), and an operational value (the step size or multiplicand) via an intuitive control panel floating above or beside the canvas.
-
-When an operation is triggered or continuously scrubbed via a slider, the mathematical action is animated directly on the clock face. For addition, an animated arc or arrow originates from an initial value and smoothly sweeps around the perimeter by the specified step amount, physically wrapping past zero if the value exceeds `n`. Multiplication is visualized by drawing rhythmic, continuous path traces or rapid successive addition steps that multiply the base value, forming intricate geometric star patterns and cycles when wrapping around the dial repeatedly.
-
-The color scheme employs deep space backgrounds with glowing neon cyan, magenta, and bright yellow accents to give the mathematical lines high contrast and visual flair. Continuous, passive animations (such as a slowly rotating background grid or pulsing active nodes) ensure the interface feels alive, while state transitions respond smoothly using `requestAnimationFrame` for high-performance rendering. The layout is fully responsive, vertically stacking the controls underneath the canvas on smaller screens and dynamically scaling the clock radius to maximize available screen real estate.
-## Markov Chain Frog Jump [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog-jump)]
-
-The **Markov Chain Frog Jump** demo provides an interactive visualization of a Markov chain. The state space is represented visually as a network of distinct lilypads distributed across a serene pond setting. The possible state transitions are depicted as directed arrows connecting these lilypads. The thickness or labeling of these arrows corresponds directly to the transition probabilities between states.
-
-At the center of this visualization is a virtual frog, which acts as the current state indicator. The frog jumps from its current lilypad to a new one, simulating a single step in the Markov chain process. The choice of the next lilypad is determined stochastically, weighted by the outgoing transition probabilities of the current state. This continuous jumping animation provides an intuitive and engaging way to observe the long-term behavior and state distribution of the Markov chain.
-
-**Design Goals and Features:**
-* **Visual Clarity:** Clear distinction between states (lilypads) and transitions (arrows).
-* **Intuitive Mechanics:** The frog metaphor immediately conveys the idea of moving from one discrete state to another based on probabilities.
-* **Interactive Exploration:** A control panel allows users to manipulate the simulation speed, letting them observe the system dynamically.
-* **Responsive Layout:** The canvas is designed to automatically adapt to different screen sizes, ensuring a seamless experience on both desktop and mobile devices.
-* **Consistent Aesthetics:** The color palette and typography strictly follow the project's consistent design guidelines, creating a cohesive look and feel within the Interpolnet ecosystem.
-
-## Sweep-line Voronoi [[demo](https://rybla.github.io/interpolnet-2/sweep-line-voronoi-demo)]
-
-This demo provides an interactive visualization of Fortune's sweep-line algorithm (in a discrete rendering context) for generating Voronoi diagrams.
-
-Users can interact with the main `<canvas>` element by clicking to place new "seed" points. As seeds are placed, a horizontal "sweep-line" continuously moves down the screen.
-The algorithm calculates the boundary curve formed by the intersections of distance functions extending from each active seed above the sweep-line.
-As the sweep-line moves, the breakpoints (intersections) of these curves trace out the edges of the Voronoi cells.
-
-An off-screen canvas is used to continuously accumulate and draw these traced edges. The final render loop composites the off-screen edges, the active seeds, the sweep-line itself, and the dynamic boundary curves onto the main canvas, providing a real-time, animated view of the Voronoi cell formation process.
-The demo features a consistent and modern color scheme, ensuring clear visibility of all mathematical components. The layout is fully responsive, keeping the canvas centered and appropriately scaled for mobile devices.
-
-## Minimax Saddle Settler [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-settler)]
-
-This demo features an interactive 3D visualization using Three.js where users can explore a multivariable calculus surface that has a minimax saddle point. Users can drag a ball onto the surface, and watch it naturally settle into the minimax saddle point by simulating simultaneous gradient descent (along the minimizing axis) and gradient ascent (along the maximizing axis) dynamics, rather than uniform gravity, accompanied by a dynamic trailing path.
-
-## Fibonacci Spiral Animation [[demo](https://rybla.github.io/interpolnet-2/fibonacci-spiral-animation)]
-
-### Description
-An interactive visualization showing the Fibonacci sequence recursively dividing a golden rectangle into smaller squares that perfectly trace the path of a logarithmic spiral. The user can watch the progressive generation of the squares and the connecting spiral arcs, demonstrating the geometric relationship between the Fibonacci numbers and the golden ratio.
+An interactive physical clock face visualization that represents modular arithmetic, where addition and multiplication warp around the dial continuously.
 
 ### Features
-- **Progressive Animation**: Slowly draws the Fibonacci squares one by one, scaling the view or zooming out as larger squares are added to keep the entire structure visible.
-- **Golden Spiral**: Simultaneously draws smooth quarter-circle arcs within each square to form a continuous golden spiral.
-- **Interactive Controls**: Users can pause/play the animation, adjust the animation speed, and manually step forward or backward through the sequence.
-- **Information Display**: Displays the current Fibonacci number and the total number of squares currently drawn.
-- **Responsive Canvas**: The canvas auto-resizes to fit the screen, maintaining the correct aspect ratio for the golden rectangle.
+- **Interactive Clock Face**: A circular dial displaying the numbers from 0 to N-1, where N is the modulus.
+- **Dynamic Modulus Control**: A slider allowing users to change the modulus (N) dynamically, seamlessly re-rendering the clock face.
+- **Addition & Multiplication Modes**: Users can select between addition and multiplication operations to see how they behave in modular arithmetic.
+- **Visual Operations**:
+  - For addition `(a + b) mod N`: An animated arc traces from 0 to `a`, and then from `a` to the result, wrapping around the clock face if necessary.
+  - For multiplication `(a * b) mod N`: Multiple arcs trace the repeated addition of `a`, `b` times, looping around the dial to arrive at the final modulo result.
+- **Interactive Input**: Users can select the operands `a` and `b` via input fields or sliders.
+- **Continuous Warping Animation**: Smooth, satisfying animations that emphasize the "wrap-around" nature of modular arithmetic.
 
 ### Design Goals
-- **Mathematical Clarity**: Clearly illustrate the construction of the golden spiral using Fibonacci squares.
-- **Visual Elegance**: Use smooth animations, distinct colors for the squares' borders, and a prominent, contrasting color for the spiral path to make the mathematical structure visually appealing.
-- **Responsiveness**: Ensure the controls and canvas look good on both desktop and mobile devices.
+- **Intuitive Understanding**: Demystify modular arithmetic (often called "clock math") by directly using its most common real-world analogy.
+- **Engaging Aesthetics**: A retro-futuristic, neon-infused color scheme (e.g., deep dark blue background with bright cyan, magenta, and yellow accents) to make the math visually striking.
+- **Responsiveness**: Ensure the clock and controls scale perfectly for both desktop and mobile devices.
 
 ### Implementation Plan
-- **HTML/CSS**: Set up a full-screen canvas with a floating, responsive UI overlay for controls and statistics.
-- **JavaScript Core Logic**:
-  - Maintain state for the current step in the Fibonacci sequence (e.g., $F_n = F_{n-1} + F_{n-2}$).
-  - Track the current drawing coordinate, orientation, and scale.
-  - Implement a `requestAnimationFrame` loop to handle the progressive drawing and zooming.
-- **Rendering**:
-  - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
-  - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
-  - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
-
-## Skewable Galton Board [[demo](https://rybla.github.io/interpolnet-2/skewable-galton-board)]
-
-An interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
-
-### Features
-- **Physics Simulation**: A real-time physics simulation of balls falling through a grid of pegs and accumulating in bins.
-- **Interactive Skewing**: A slider control that allows the user to dynamically adjust the probability of a ball bouncing left versus right at each peg.
-- **Dynamic Distribution Visualization**: As balls accumulate in the bins, a theoretical distribution curve (shifting from Normal to Poisson depending on the skew) is overlaid to compare with the experimental results.
-- **Continuous Flow**: Balls continuously drop from the top to show the distribution forming over time.
-
-### Design Goals
-- **Educational Intuition**: Provide a visual, interactive way to understand how the normal distribution arises from independent random events (Central Limit Theorem) and how altering the probability of those events leads to a skewed (Poisson-like) distribution.
-- **Visual Clarity**: Use distinct, contrasting colors for the balls, pegs, and the overlay curve to ensure the simulation and the resulting data are easy to distinguish.
-- **Responsive Layout**: Ensure the canvas and controls are usable on both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML/CSS**: A full-screen `<canvas>` for the simulation and a UI overlay for the probability skew slider. Style with the Interpolnet 2 dark theme.
-- **JavaScript Core Logic**:
-  - Implement a simple 2D physics engine for falling balls, handling gravity and collisions with a static triangular grid of pegs.
-  - Implement the skew logic: when a ball hits a peg, use the slider's value (0.0 to 1.0) to determine the probability of bouncing right.
-  - Manage a set of bins at the bottom to catch and stack the balls.
-- **Rendering**:
-  - Use HTML5 Canvas API (`requestAnimationFrame`) to draw the pegs, animating balls, and the accumulating stacks in the bins.
-  - Draw a dynamic theoretical curve over the bins based on the current probability parameter.
-
-## Huffman Entropy Coding Compressor [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-coding-compressor)]
-
-The Huffman Entropy Coding Compressor demo provides an interactive educational visualization of data compression. It dynamically generates a Huffman tree based on input text character frequencies, calculates Shannon entropy, and displays real-time compression statistics and variable-length binary codes.
-
-### Features
-- Real-time frequency analysis of user input text.
-- Dynamic generation and visualization of a Huffman tree on an HTML5 canvas.
-- Display of Shannon entropy, compression ratio, and space savings.
-- Output of the original text encoded using the generated variable-length binary codes.
-
-### Design Goals
-- Use a distinct, unique, and consistent color scheme (e.g., deep purples and bright accents for tree nodes).
-- Incorporate smooth passive and active animations when the input changes to demonstrate real-time updates.
-- Ensure the layout is responsive and mobile-friendly, effectively managing the input, visualization, and output areas.
-
-### Implementation Plan
-- **HTML:** Create a semantic layout with a text area for input, a canvas element for the tree visualization, and a results section for statistics and the encoded output.
-- **CSS:** Apply responsive grid or flexbox styling, define the specific color palette, and add CSS transitions for interactive elements.
-- **JavaScript:**
-  - Calculate character frequencies.
-  - Build the Huffman tree structure using a priority queue approach.
-  - Calculate Shannon entropy based on probabilities.
-  - Traverse the tree to generate the dictionary of binary codes.
-  - Render the tree on the canvas, dynamically positioning nodes and drawing connections.
-  - Set up input event listeners to recalculate and re-render on every keystroke.
-
-## Dynamic Slope Field Tracer [[demo](https://rybla.github.io/interpolnet-2/dynamic-slope-field-tracer)]
-
-This demo provides an interactive 2D visualization on an HTML5 canvas where users explore a dynamic slope field representing a differential equation. Users can interact by dropping virtual "ink drops" anywhere on the canvas, which then flow along the vector field to continuously trace distinct solution curves.
-
-Features:
-- Dynamic rendering of a slope field for a specific differential equation.
-- Interactive placement of "ink drops" via click or touch.
-- Continuous tracing of solution curves originating from the ink drops, following the vector field over time.
-- Smooth animations for the flowing ink drops.
-- Distinct color scheme for the background, vector lines, and ink trails.
-- Responsive design for varying screen sizes, ensuring the field and interaction area adjust correctly.
-
-Implementation Outline:
-- `index.html`: Contains the full-screen canvas element for the slope field and a simple overlay container for an informational title.
-- `style.css`: Defines a distinct dark/neon theme, ensuring the canvas fills the viewport and UI elements are styled responsively with subtle entrance animations.
-- `script.js`:
-    - Handles canvas resizing to match the window dimensions.
-    - Defines a differential equation function $dy/dx = f(x, y)$.
-    - Implements a rendering loop that draws the static vector field (short line segments representing the slope at grid points).
-    - Manages an array of active "ink drops", updating their positions based on the local slope (using a numerical integration step) and drawing their continuous trails.
-    - Attaches event listeners for `mousedown`/`touchstart` to spawn new ink drops at the pointer location.
-
-## Penrose Tiling Visualizer [[demo](https://rybla.github.io/interpolnet-2/penrose-tiling-visualizer)]
-
-The **Penrose Tiling Visualizer** provides an interactive visualization of a Penrose tiling on an HTML5 canvas. The demo utilizes the deflation algorithm to generate the aperiodic tiling, conceptually breaking the infinite pattern down into fundamental "Robinson triangles" (half-kites and half-darts).
-
-A core interactive feature of this demo is the ability for users to dynamically deform the straight edges of the base tiles. The straight edges are replaced with cubic Bézier curves, and the user can drag control points on a central "base" kite/dart pair. Any deformations made to these base edges are instantly and symmetrically propagated across the entire aperiodic pattern, showcasing how complex, curved, non-periodic tessellations can be constructed from simple fundamental rules.
-
-### Features
-- Generates an aperiodic Penrose tiling (P3) using the deflation algorithm on Robinson triangles.
-- Renders the tiles using cubic Bézier curves instead of straight line segments.
-- Interactive control points on a base kite and dart allow users to manipulate the shape of the edges.
-- Edge deformations correctly tessellate and propagate symmetrically across the entire infinite-like pattern in real-time.
-- Distinct and aesthetically pleasing color scheme for kites, darts, and UI controls.
-- Smooth animations for interactivity and mobile-friendly responsive canvas design.
-
-### Implementation Outline
-- `index.html`: Contains the full-screen canvas element for the visualization and an informational overlay detailing instructions for the user.
-- `style.css`: Defines the unique color scheme using CSS variables, ensures the canvas fills the viewport, and styles the overlay with subtle entrance animations.
-- `script.js`:
-    - Implements data structures representing acute (half-kite) and obtuse (half-dart) Robinson triangles.
-    - Implements the recursive deflation algorithm (`subdivide`) to generate a set of triangles covering the screen.
-    - Contains a rendering loop (`draw`) that translates the logical straight-edge triangles into curved tessellating shapes by evaluating cubic Bézier curves based on a global set of user-defined control point offsets.
-    - Attaches event listeners for `mousedown`/`touchstart`/`mousemove`/`touchmove`/`mouseup`/`touchend` to allow dragging of the base control points, triggering a re-render.
-
-## Raytracer Single Pixel Calculation [[demo](https://rybla.github.io/interpolnet-2/raytracer-single-pixel-calculation)]
-
-### [Raytracer Single Pixel Calculation](/raytracer-single-pixel-calculation/)
-
-This demo provides an interactive educational visualization of the fundamental process inside a raytracer for calculating a single pixel's color. It breaks down the continuous rendering process into discrete, step-by-step visual calculations, allowing users to physically see each stage of the algorithm as it happens.
-
-**Features:**
-- Step-by-step visualization: Traces a primary ray from the camera, calculates intersection with a 2D sphere, finds the surface normal, and casts shadow rays for light occlusion.
-- Distinct color scheme: Utilizes a unique palette with clear, vibrant colors to distinguish different elements (camera, ray, sphere, normal, light).
-- Interactive progression: Users can click to advance the animation through each logical step of the raytracing pipeline.
-- Educational annotations: Real-time text overlays explain the current mathematical operation being performed (e.g., "Calculating primary ray direction", "Checking sphere intersection", "Computing normal", "Testing shadow ray").
-
-**Design Goals:**
-- To demystify the core algorithm of raytracing by slowing it down and visualizing it in two dimensions.
-- To use clear, distinct visual cues (colors, animations, and typography) to separate the physical elements of the scene from the abstract mathematical vectors.
-- To ensure the demo is responsive and accessible on mobile devices, providing a seamless educational experience across screen sizes.
-
-**Implementation Plan:**
-- **HTML/CSS:** Set up a full-screen, responsive HTML5 canvas. Apply a custom CSS variable-based color scheme and clear typography for UI elements.
-- **JavaScript State Machine:** Implement a state machine to handle the progression of the raytracer:
-    - State 1 (Init): Show camera, image plane, sphere, and light source.
-    - State 2 (Primary Ray): Animate a ray shooting from the camera through a specific pixel on the image plane towards the scene.
-    - State 3 (Intersection): Calculate and highlight the exact intersection point on the sphere surface.
-    - State 4 (Normal Calculation): Visualize the calculation of the surface normal vector at the intersection point.
-    - State 5 (Shadow Ray): Animate a secondary ray from the intersection point towards the light source to check for occlusion.
-    - State 6 (Result): Color the pixel on the image plane based on whether the shadow ray reached the light or was blocked.
-- **Rendering Loop:** Use `requestAnimationFrame` to drive smooth interpolation for the moving rays and fading annotations, using distinct colors for primary rays, normal vectors, and shadow rays.
-
-## Turing Patterns (Gray-Scott) [[demo](https://rybla.github.io/interpolnet-2/turing-patterns-gray-scott)]
-
-This demo implements a WebGL simulation of the Gray-Scott reaction-diffusion model, allowing users to paint chemical food onto a canvas to watch organic Turing patterns grow and split.
-
-### Features
-- Real-time simulation of the Gray-Scott model using WebGL for high-performance parallel computation.
-- Users can interactively "paint" chemical food (variable `V`) by clicking or dragging on the canvas, sparking new pattern growth.
-- The rendering uses a distinct, consistent color scheme mapping the chemical concentration to vibrant, distinct hues, providing a continuous passive animation.
-- Responsive, mobile-friendly design where the canvas scales dynamically with the window size.
-
-### Implementation Details
-- The simulation requires high-precision calculations for the reaction-diffusion equations, as the frame-to-frame continuous delta updates are very small. It requests the `OES_texture_float` WebGL extension and uses `gl.FLOAT` textures, as 8-bit `gl.UNSIGNED_BYTE` textures lack the necessary precision and would truncate small continuous deltas to zero.
-- It utilizes ping-pong framebuffers: the output of one frame's computation (the updated chemical concentrations) becomes the input texture for the next frame.
-- The WebGL setup includes two main shader programs: a simulation shader that calculates the next state of the chemical concentrations using the Gray-Scott equations and a rendering shader that maps the concentrations to the visual color scheme.
-
-## L-System Fractal Trees Generator [[demo](https://rybla.github.io/interpolnet-2/l-system-fractal-trees-generator)]
-
-An interactive grammar ruleset editor where specific axiomatic string expansions instantly render as branching L-system fractal trees.
-
-### Features
-- **Interactive Grammar Ruleset Editor**: A control panel area allowing users to define an axiom and specific grammar replacement rules.
-- **Instant Rendering**: As users edit the axiom, rules, or parameters like angle and length, the L-system is recalculated and instantly rendered on the HTML5 canvas.
-- **Axiomatic String Expansions**: Visualizes the string generated by recursively applying rules to the initial axiom.
-- **Branching L-system Fractal Trees**: Translates the expanded string into drawing commands to generate complex branching structures in real-time.
-
-### Design Goals
-- **Educational**: Visually demonstrate how simple string replacement rules can generate complex, self-similar fractal patterns.
-- **Immediate Feedback**: Ensure modifications to the ruleset are instantly reflected in the visualization to facilitate intuitive understanding and exploration.
-- **Aesthetics**: A distinct, unique, and consistent color scheme for the UI and the generated trees, with smooth, fluid rendering.
-
-### Implementation Plan
-- **HTML/CSS**: A responsive split-layout with a control panel on one side and a canvas on the other, utilizing Flexbox/Grid. Include hover, focus, and active state animations.
-- **L-System Logic**: Implement a `parseRules` function to create a key-value mapping of replacement rules and a `generateLSystem` function to recursively expand the axiom based on the rules.
-- **Canvas Drawing**: Implement a `drawTree` function that parses the expanded string into canvas drawing commands. Add `input` and `change` event listeners to instantly trigger `generateLSystem` and `drawTree` upon user edits.
-
-## Perlin Noise Visualizer 2 [[demo](https://rybla.github.io/interpolnet-2/perlin-noise-visualizer-2)]
-
-An interactive, educational visualization of how 2D Perlin noise is generated, breaking down the algorithm into its core components.
-
-### Features
-- **Gradient Grid Overlay:** Displays a grid where intersections feature pseudo-random 2D gradient vectors.
-- **Interpolation Visualization:** Shows how bilinear interpolation blends the dot products of distance vectors and gradient vectors.
-- **Step-by-Step Animation:** Users can click on the canvas to step through the generation process: showing just the grid, then the gradient vectors, then the blended noise map.
-- **Dynamic Recalculation:** The noise pattern and gradients regenerate upon user request, demonstrating the pseudo-random nature of the algorithm.
-
-### Design Goals
-- **Educational Clarity:** Make the mathematical process of generating Perlin noise easy to understand visually.
-- **Clean Aesthetic:** Use distinct, high-contrast colors to separate the underlying grid/vectors from the resulting noise map.
-- **Interactivity:** Allow the user to step through the process at their own pace.
-
-### Implementation Plan
-- **HTML Structure:** A simple full-screen `<canvas>` element for rendering, with an overlay text element for instructional text.
-- **CSS Styling:** A dark theme background with vibrant colors (e.g., cyan/magenta) for the vectors, and a grayscale gradient map for the noise output. Use a responsive layout.
-- **JavaScript Logic:**
-  - Create a 2D grid of random unit vectors.
-  - Implement the core Perlin noise algorithm functions: dot product, fade function (smoothstep), and bilinear interpolation (lerp).
-  - Implement a `requestAnimationFrame` render loop that draws the grid, the vectors, and the interpolated noise pixel by pixel, based on the current animation state controlled by click events.
-
-## Boids Flocking Simulation [[demo](https://rybla.github.io/interpolnet-2/boids-flocking)]
-
-This demo provides an interactive 2D visualization of emergent flocking behavior based on Craig Reynolds' Boids algorithm. The simulation is rendered on an HTML5 canvas and allows users to explore the dynamics of separation, alignment, and cohesion. Users can dynamically adjust the weights of these three core rules via intuitive sliders, observing in real-time how the changes affect the flocking patterns of the boids. The demo features a distinctive color scheme, smooth passive animations, and a responsive, mobile-friendly design with a control panel for the sliders.
-
-## Barycentric Triangle Fill [[demo](https://rybla.github.io/interpolnet-2/barycentric-triangle-fill)]
-
-This demo provides an interactive visualization of the barycentric coordinate rasterization process by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients.
-
-### Features
-- **Pixel-by-Pixel Rasterization:** Visually fills a massive 2D triangle step-by-step to demonstrate the rendering process.
-- **Barycentric Interpolation:** Calculates the barycentric coordinates of each pixel to interpolate colors from the three primary vertices (Red, Green, Blue).
-- **Interactive Vertices:** Users can drag the three vertices of the triangle to dynamically change its shape, size, and the resulting color gradients.
-- **Step-by-Step Animation:** Users can click on the canvas to step through the rasterization process.
-
-### Design Goals
-- **Educational:** Break down the fundamental concept of triangle rasterization and barycentric coordinates in an intuitive and visual way.
-- **Interactive Exploration:** Let users manipulate the geometry to see real-time updates of the rasterization constraints and color interpolation.
-- **Aesthetics:** Clean, responsive design with distinctive vertex colors blending smoothly inside the triangle against a dark or clearly contrasting background.
-
-### Implementation Plan
-- **HTML/CSS:** Structure a responsive page with a main `<canvas>` for rendering and a text overlay for instructions. Style with a clear, readable theme and distinct colors.
-- **JavaScript (State):** Keep track of the three vertices (position and color), the current rasterization coordinate (x, y bounds), and animation state.
-- **JavaScript (Math):** Implement functions to calculate the bounding box of the triangle, compute barycentric coordinates (alpha, beta, gamma) for a given point, and check if a point lies within the triangle.
-- **JavaScript (Rendering):** Use `requestAnimationFrame` for a main loop that incrementally checks pixels within the bounding box. If a pixel is inside the triangle, color it using barycentric interpolation of the vertex colors.
-- **JavaScript (Interaction):** Add pointer event listeners to allow dragging of vertices (triggering a reset of the rasterization) and canvas clicks to advance the animation.
-
-## Marching Cubes Isosurface [[demo](https://rybla.github.io/interpolnet-2/marching-cubes)]
-
-An interactive 3D visualization that demonstrates the Marching Cubes algorithm. Users can dynamically adjust the isosurface threshold of a continuously animated 3D scalar field, watching in real-time as the algorithm generates a cohesive, fluid-like polygonal mesh that represents the boundary of the threshold.
-
-### Features
-- **Real-time 3D Rendering**: High-performance WebGL rendering of a 3D scalar field and the resulting polygonal mesh using Three.js.
-- **Dynamic Scalar Field**: The underlying scalar field is continuously animated, creating organic, blob-like structures that merge and separate over time.
-- **Interactive Threshold Slider**: Users can control the `threshold` value of the isosurface via a slider. Adjusting the slider instantly re-evaluates the marching cubes algorithm, shrinking or expanding the visible mesh.
-- **Camera Controls**: Users can drag to rotate the camera and view the evolving 3D structure from any angle.
-- **Visual Clarity**: Uses a distinct, glowing material for the mesh against a dark background, making the geometric topology easy to observe.
-
-### Design Goals
-- **Algorithm Demystification**: Provide an intuitive, visual representation of how the marching cubes algorithm extracts a 2D surface from 3D volumetric data.
-- **Mesmerizing Fluidity**: Create an engaging "lava lamp" effect through smooth animations and organic shapes.
-- **Responsive Interaction**: Ensure the mesh updates instantly as the user drags the threshold slider, emphasizing the direct connection between the mathematical parameter and the physical geometry.
-
-### Implementation Plan
-- **Tech Stack**: Three.js for 3D rendering.
-- **Scalar Field Generation**: Create a function $f(x, y, z, t)$ that evaluates the density at any point in the 3D grid. This function will combine multiple moving, overlapping density spheres whose positions update based on time ($t$).
-- **Marching Cubes Implementation**:
-  - Define a 3D grid (e.g., $40 \times 40 \times 40$).
-  - In each frame, evaluate the scalar field function at every grid point.
-  - Implement (or utilize an optimized version of) the marching cubes algorithm:
-    1. For each cube in the grid, determine an 8-bit index based on which of its 8 vertices are below the current isosurface threshold.
-    2. Use this index to look up the corresponding edge intersections from a pre-calculated edge table.
-    3. Calculate the exact intersection points on the edges using linear interpolation.
-    4. Generate triangles connecting these intersection points.
-  - Update the Three.js `BufferGeometry` with the newly generated vertices and normals.
-- **User Interface**: A simple HTML range slider overlaid on the canvas, linked to the threshold parameter.
-
-## Dithering Algorithm Comparison [[demo](https://rybla.github.io/interpolnet-2/dithering-algorithm-comparison)]
-
-Compare various error-diffusion and ordered dithering algorithms by dragging a slider across a high-resolution image to reveal its 1-bit pixelation.
-
-### Features
-- **Algorithm Selection**: A control panel to select between different dithering algorithms:
-  - Threshold
-  - Random
-  - Ordered (Bayer Matrix)
-  - Floyd-Steinberg
-  - Atkinson
-- **Interactive Split Slider**: An overlay slider on the main image. Dragging it reveals the original image on one side and the dithered version on the other side, allowing precise visual comparison of the details.
-- **Procedural Image Generation**: A visually appealing, high-resolution procedural image is generated on an off-screen canvas to serve as the subject for dithering, containing smooth gradients and shapes to test the algorithms effectively.
-- **Real-time Processing**: Dithering algorithms are processed efficiently to ensure the split view updates quickly when switching algorithms.
-
-### Design Goals
-- **Visual Comparison**: Provide a clear, intuitive way to understand the differences between various dithering techniques and their visual artifacts.
-- **Smooth Interaction**: Ensure the split slider feels fluid and responsive.
-- **Clean Aesthetic**: A distinct dark theme with neon accents, ensuring mobile-friendliness and smooth hover/active animations.
-
-### Implementation Plan
-- **HTML**: Structure the UI with a control panel containing radio buttons for the dithering algorithms and a main container with a `<canvas>` element and an `<input type="range">` overlay slider.
-- **CSS**: Create a responsive layout using flexbox/grid for the main container and control panel. Add a dark theme with neon accents. Style the slider thumb to be a vertical line spanning the height of the canvas.
+- **HTML Structure**: A two-panel responsive layout with a control panel on one side (inputs, sliders, operation toggles) and a large `<canvas>` on the other for the clock face.
+- **CSS Styling**: Apply the neon color palette, with glowing effects for active numbers and paths. Implement flexbox/grid for a responsive design.
 - **JavaScript**:
-  - Procedurally generate a high-resolution grayscale/color image on an off-screen canvas.
-  - Implement the dithering algorithms to process the generated image data.
-  - Add event listeners for the slider to dynamically draw the original image and the dithered version on the main canvas, updating the split view in real-time.
-
-## Procedural Map Generator [[demo](https://rybla.github.io/interpolnet-2/procedural-map-generator)]
-
-Build a map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.
-
-### Features
-- **Dynamic Terrain Generation**: Generates terrain in real-time using simplex noise combined with Fractional Brownian Motion (fBm) to create overlapping octaves for detailed elevation.
-- **Moisture Mapping**: Uses an independent noise map to determine moisture levels.
-- **Biome Classification**: Maps the intersection of elevation and moisture values to a variety of biomes (e.g., Desert, Grassland, Forest, Tundra, Snow).
-- **Water Features**: Distinct coloring for shallow and deep water to create coastlines, as well as distinct logic to form rivers.
-- **Interactive Regeneration**: Clicking the canvas regenerates a new map with a different random seed instantly.
-
-### Design Goals
-- **Organic Aesthetics**: The primary goal is to produce natural-looking maps with varied biomes and realistic transitions (coastlines and varying elevations).
-- **Performance**: Use an efficient, compact implementation of 2D Simplex Noise and fast rendering via `CanvasRenderingContext2D.putImageData()`.
-- **Responsive Layout**: Provide a mobile-friendly view where the map correctly scales to fit the screen without stretching, and provides smooth passive/active animations upon interaction.
-- **Distinct Colors**: Implement a specific, rich color palette to clearly differentiate biomes, using the established Interpolnet 2 typography and spacing guidelines.
-
-### Implementation Plan
-- **HTML Structure**: A clean layout containing the canvas element and an overlay or sidebar with the map legend.
-- **CSS Styling**: A dark theme UI that contrasts with the vibrant map colors, ensuring mobile responsiveness.
-- **JavaScript Engine**:
-  - `SimplexNoise`: Implement a minimal Simplex Noise generator based on standard fast implementations.
-  - `fBm`: A function that sums multiple scaled noise layers (`octaves`) by modifying `frequency` (lacunarity) and `amplitude` (persistence).
-  - `Map Generation`: Two distinct fBm passes (one for elevation, one for moisture).
-  - `Biome Mapping`: A function mapping `(elevation, moisture)` pairs to an RGBA color.
-  - `Rendering`: Calculate pixel colors for a grid and write them to an `ImageData` array for single-pass rendering to the canvas.
-
-## WebGL Vector Particle Emitter [[demo](https://rybla.github.io/interpolnet-2/webgl-vector-particle-emitter)]
-
-The WebGL Vector Particle Emitter demo provides an interactive 2D visualization using WebGL where users can visually construct and manipulate vectors representing wind, gravity, and drag applied to thousands of independent points emitted from a source.
-
-### Features
-- **Vector Control:** Users can drag the endpoints of visual vector arrows on the canvas to configure global physical forces (gravity, wind, drag) interactively.
-- **Particle System:** Thousands of independent particles are continuously emitted from a central point.
-- **WebGL Rendering:** Efficient rendering of particles using `gl.POINTS` with customized point sprites via fragment shaders.
-- **Physics Simulation:** Each particle's velocity and position are updated every frame by applying the sum of the configured vector forces (Euler integration).
-
-### Implementation
-- `Vector Data Structure`: JavaScript objects that hold `x` and `y` components for each user-configurable force, and a method to render themselves as arrows onto an overlay 2D canvas context.
-- `WebGL Buffers`: Two separate VBOs for particle data (positions and life/velocity) updated dynamically using `gl.bufferSubData()`.
-- `Shaders`:
-  - `Vertex Shader`: Calculates the screen position and point size based on particle age.
-  - `Fragment Shader`: Renders a soft, glowing point sprite.
-- `Simulation Loop`: A `requestAnimationFrame` loop that calculates the total acceleration vector from the user-configured gravity, wind, and drag vectors, updates all active particles' positions, and handles particle emission and recycling.
-- `Interaction`: Pointer event listeners on a 2D overlay canvas handle hit detection for the interactive vector arrow heads, allowing drag-and-drop modification of the underlying physical forces.
-
-## Shadow Mapping Deconstructed [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping-deconstructed)]
-
-Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
-
-### Features
-- **Split-Screen Visualization:** Two side-by-side (or vertically stacked on mobile) views rendering the exact same scene simultaneously: one from the main camera's perspective showing fully rendered shadows, and one from the light source's perspective showing the depth map.
-- **Interactive Light Positioning:** Users can click and drag on the screen to rotate the light source around the central objects, dynamically updating the shadow map in real-time.
-- **Real-time Depth Rendering:** The second view utilizes a depth material to visually demonstrate how a shadow map encodes distance from the light.
-- **Dynamic Shadows:** Moving the light immediately alters the shadows cast by various objects (like toruses and spheres) onto the floor and each other, which perfectly correlates with the depth buffer view.
-- **Responsive Layout:** Automatically adjusts from side-by-side on wide screens to a vertical stack on mobile devices.
-
-### Design Goals
-- **Educational Clarity:** Visually demystify how shadow mapping works by letting the user see exactly what the light "sees."
-- **Seamless Interactivity:** Provide a fluid experience where dragging instantly updates both rendering contexts without lag.
-- **Distinct Aesthetic:** Use the Interpolnet dark theme with a clean, high-contrast palette to make shadows and the depth map easy to distinguish.
-
-### Implementation Plan
-- **HTML/CSS Layout:** A flexible container displaying two rendering views. Each view will feature an overlay indicating its perspective (Camera View vs. Light Depth Buffer).
-- **Three.js Scene Setup:** Initialize a single 3D scene containing a floor plane and a few floating geometric shapes (e.g., torus, cube, sphere).
-- **Light & Cameras:**
-  - Create a main perspective camera.
-  - Create a directional light with shadow mapping enabled.
-  - Create a camera representing the light source's perspective.
-- **Split-Screen Rendering Loop:**
-  - Use two WebGLRenderers (or a single renderer with `setViewport` and `setScissor`).
-  - Render the scene normally for the camera view.
-  - For the light view, apply a `MeshDepthMaterial` (or a custom depth visualization shader) to all objects, overriding their standard materials temporarily, and render the scene from the light's camera perspective.
-- **Interaction:** Attach pointer event listeners to allow dragging, which calculates a new polar coordinate position for the directional light, smoothly updating its position vector in the animation loop.
-
-## Delaunay Triangulation Visualizer [[demo](https://rybla.github.io/interpolnet-2/delaunay-triangulation-visualizer)]
-
-The Delaunay Triangulation Visualizer is an interactive demo that beautifully illustrates the geometric properties of a Delaunay mesh. Users can tap or click anywhere on an HTML5 canvas to place arbitrary points, from which expanding circles begin to grow outward in real-time.
-
-### Features
-- Real-time animation of expanding circumcircles originating from user-defined points.
-- Continuous calculation and rendering of valid Delaunay triangles as expanding circles intersect and lock together according to the empty circumcircle property.
-- Smooth fading effects to highlight the newest connections while maintaining visual clarity.
-- Interactive point placement via pointer events, enabling users to actively influence the emerging mesh.
-
-### Design Goal
-To provide a satisfying and visually intuitive understanding of Delaunay triangulation, demonstrating how optimal, non-overlapping triangles naturally emerge from a set of discrete points through the continuous expansion and intersection of their circumcircles.
-
-### Implementation Plan
-- **State Management:** Maintain an array of user-placed points, active expanding circles, and established valid triangles.
-- **Rendering:** Utilize an HTML5 `<canvas>` and `requestAnimationFrame` for a continuous render loop, drawing the expanding circles, the points, and the final triangulation lines with a cohesive color palette.
-- **Logic:** Each animation frame, increment the radius of all active circles. Continuously check for intersections among triplets of circles to identify valid Delaunay triangles, ensuring no other points lie within the circumcircle of the formed triangle.
-- **Interaction:** Add pointer event listeners (click/touch) to the canvas to push new coordinate data into the state array, triggering the birth of a new expanding circle.
-
-## 3D UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/3d-uv-map-painter)]
-
-An interactive visualization demonstrating how a 2D texture wraps around a 3D object. The demo provides a split-screen view showing a 3D cube and its corresponding unrolled 2D UV map, allowing users to paint directly on the flat surface and observe the changes in real time on the 3D model.
-
-### Features
-- **Split-Screen Interface:** Side-by-side view with a 2D painting canvas and a 3D rendered cube.
-- **Real-Time Texture Mapping:** Brush strokes painted on the 2D canvas are immediately applied as a dynamic texture onto the 3D cube.
-- **UV Map Guide:** The 2D canvas displays a faint outline showing exactly how the six faces of the cube correspond to the flat 2D layout.
-- **Interactive 3D View:** The 3D cube continuously rotates to show all faces, or can be interacted with to view specific angles.
-
-### Design Goals
-- **Educational Intuition:** Help users understand the concept of UV mapping by bridging the gap between flat textures and 3D surfaces in a concrete, interactive way.
-- **Visual Feedback:** Provide immediate visual connection between drawing actions and 3D texturing.
-- **Consistent Aesthetic:** Use a distinct color scheme (e.g., deep charcoal background with bright neon brush strokes) consistent with Interpolnet 2's style.
-
-### Implementation Plan
-- **HTML/CSS:** Create a responsive flexbox/grid layout ensuring the 2D canvas and 3D view are equally sized and properly scaled on both desktop and mobile.
-- **2D Canvas Logic:**
-  - Initialize a standard HTML5 `<canvas>` for drawing.
-  - Implement a simple brush drawing logic tracking mouse/touch events.
-  - Draw a persistent underlying grid/guide representing the unrolled cube faces.
-- **3D Rendering (Three.js):**
-  - Set up a Three.js scene, camera, and basic lighting.
-  - Create a cube using standard 3D geometry.
-  - Apply the 2D canvas as a `CanvasTexture` to the cube's material.
-  - Re-map the default UV coordinates of the cube's geometry to match the unrolled cross-layout drawn on the 2D canvas.
-  - Add an animation loop to rotate the cube and flag the texture for updates (`needsUpdate = true`) whenever the user paints.
-
-## Inverse Kinematics Robotic Arm [[demo](https://rybla.github.io/interpolnet-2/inverse-kinematics-robotic-arm)]
-
-A multi-jointed robotic arm utilizing inverse kinematics where users drag the end effector and the algorithm calculates the joint angles.
-
-### Features
-- **Multi-Jointed Arm**: A visual representation of a robotic arm with multiple segments and joints connected in a chain.
-- **Inverse Kinematics**: Implements an algorithm (such as Cyclic Coordinate Descent or FABRIK) to continuously solve for the joint angles required to reach the target.
-- **Interactive Target**: Users can drag a target point (the end effector's goal) around the canvas, and the arm automatically moves to follow it.
-- **Real-Time Rendering**: The arm's position and orientation update smoothly in real time as the target is moved.
-
-### Design Goals
-- **Responsiveness**: Ensure the physics/math calculations perform efficiently to allow smooth, real-time dragging without lag.
-- **Visual Clarity**: Use distinct, consistent colors for the base, joints, segments, and target to make the structure clear.
-- **Educational Intuition**: Provide a tactile, interactive way to understand inverse kinematics, an important concept in robotics and animation.
-
-### Implementation Plan
-- **HTML**: A full-screen `<canvas>` for the rendering context.
-- **CSS**: A clean, modern aesthetic with a dark background to make the vibrant colors of the arm pop. Ensure responsive design.
-- **JavaScript (Kinematics Logic)**:
-  - Define a data structure for the arm, including an array of segment lengths and joint angles.
-  - Implement an inverse kinematics solver to iteratively adjust the joint angles to minimize the distance between the end effector and the target.
-  - Implement forward kinematics to calculate the exact `(x, y)` coordinates of each joint given the current angles.
-- **JavaScript (Rendering & Interaction)**:
-  - Use the HTML5 Canvas API to render the segments (as lines or thick paths) and joints (as circles).
-  - Add event listeners for mouse/touch interactions to update the target position and trigger the IK solver and rendering loop.
-
-## Constructive Solid Geometry Visualizer [[demo](https://rybla.github.io/interpolnet-2/csg-visualizer)]
-
-Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
-
-### Features
-- **3D Interactive Canvas**: A 3D environment rendered with Three.js showing transparent geometric primitives.
-- **CSG Operations**: Users can perform boolean operations (union, intersection, subtraction) on 3D primitives.
-- **Dynamic Manipulation**: Users can select, move, and combine shapes to create complex carved-out objects in real-time.
-- **Operation Selection**: A clean, accessible control panel allowing users to toggle which CSG operation to perform between the selected primitives.
-- **Real-Time Rendering**: The resulting complex geometry updates immediately after an operation or translation is applied.
-
-### Design Goals
-- **Educational Intuition**: Provide a direct, visual, hands-on way to understand how boolean operations can construct intricate 3D models from simple base shapes.
-- **Aesthetic Consistency**: Employ a distinct, visually pleasing dark theme with neon-accented, semi-transparent materials that let users see the internal structures of the CSG operations.
-- **Responsiveness**: Ensure the application and control panel scale smoothly and maintain usability on both mobile and desktop screens.
-- **Interactive Feedback**: Passive hover animations on the UI and clear visual distinction of the resulting carved-out mesh against the base primitives.
-
-### Implementation Plan
-- **HTML**: Include a full-screen container for the 3D canvas alongside a floating control panel for selecting the CSG operation (Union, Intersection, Subtraction). Import necessary libraries (`three`, `three-mesh-bvh`, `three-bvh-csg`) via an importmap.
-- **CSS**: Apply a cohesive dark theme, managing layout using Flexbox/Grid to keep the UI overlaid and responsive. Add CSS transitions for interactive button states.
-- **JavaScript (Three.js & CSG)**:
-  - Setup a Three.js scene, camera, lights, and WebGLRenderer.
-  - Create initial 3D primitives (e.g., BoxGeometry, SphereGeometry) and convert them into `Brush` objects utilizing `three-bvh-csg`.
-  - Implement an interaction layer mapping pointer events (via raycasting or basic drag logic) to update the position of the brushes.
-  - Instantiate an `Evaluator` and dynamically perform the selected boolean operation (`ADDITION`, `SUBTRACTION`, `DIFFERENCE`, `INTERSECTION`) whenever a brush moves or the operation setting is changed, rendering the resulting complex mesh clearly to the user.
-
-## Screen Space Ambient Occlusion [[demo](https://rybla.github.io/interpolnet-2/ssao-visualizer)]
-
-An interactive educational visualization of Screen Space Ambient Occlusion (SSAO). It demonstrates how SSAO approximates global illumination by casting hemispherical test rays from a pixel's depth buffer to determine corner shading and local occlusion.
-
-### Features
-- **3D Interactive Scene**: A simple scene composed of blocks and walls where occlusion naturally occurs (e.g. corners and crevices). The user can rotate the camera to view the scene from different angles.
-- **Hemispherical Ray Casting**: Clicking anywhere on the scene casts a batch of test rays in a hemisphere oriented along the surface normal at the clicked point.
-- **Visual Feedback**: The cast rays are drawn as physical lines. Rays that are unblocked (meaning they hit the sky/background) are colored in a bright neon color (e.g. green or cyan), while rays that are blocked by nearby geometry are colored in a contrasting color (e.g. red or orange).
-- **Real-time Evaluation**: A small text overlay displays the calculated ambient occlusion factor for the clicked point, representing the ratio of unblocked rays to total rays.
-
-### Design Goals
-- **Algorithm Demystification**: Visually break down the SSAO technique so users can understand how local geometry blocks ambient light and creates shading in crevices.
-- **Interactive Exploration**: Allow the user to actively sample different points in the scene (flat surfaces vs. tight corners) to immediately see how the occlusion factor changes based on surrounding geometry.
-- **Distinct Aesthetics**: Employ a clean, consistent color scheme with high contrast to easily differentiate blocked vs unblocked rays, avoiding standard dark-theme clichés while maintaining the Interpolnet 2 style.
-- **Mobile Friendly**: Ensure that the 3D scene and text overlay are responsive and work well on both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML/CSS**: A full-screen container for the Three.js canvas and a minimal UI overlay for displaying the occlusion result. Use CSS variables for a consistent, unique color palette.
-- **3D Scene Setup (Three.js)**: Create a basic scene with intersecting geometries (e.g. a floor plane and some scattered boxes or a room corner) to create interesting occlusion areas.
-- **Interaction Logic**: Implement a raycaster to detect clicks on the scene geometry. Upon a click, determine the intersection point and the surface normal.
-- **Raycasting Visualization**: Generate a set of random sample vectors within a hemisphere oriented along the surface normal. Use Three.js `Raycaster` for each sample vector to check for intersections with the scene geometry within a specific radius.
-- **Rendering Rays**: Draw the sample rays using `THREE.Line` or `THREE.ArrowHelper`. Color them based on whether they hit geometry (blocked) or not (unblocked).
-- **Occlusion Calculation**: Calculate the occlusion factor based on the number of blocked rays and update the UI overlay.
-
-## Morph Target Facial Expression Interpolator [[demo](https://rybla.github.io/interpolnet-2/morph-target-facial-expression-interpolator)]
-
-### Description
-This demo illustrates how 3D character facial expressions are generated by interpolating vertex positions between a neutral base mesh and a morph target mesh. In this example, an abstract stylized face transitions from a neutral expression to a smiling expression using a time-based oscillation. Users can see the continuous deformation of the geometry, demonstrating the underlying mechanics of morph targets in 3D animation.
-
-### Features
-- **3D Morph Target Animation**: Displays a programmatically generated 3D head mesh that continuously interpolates between a base state and a "smiling" morph target state.
-- **Visual Feedback**: The mesh is styled with distinct, consistent colors and uses a wireframe overlay or lighting to clearly show the vertex displacement during interpolation.
-- **Continuous Animation**: The morphing influence oscillates automatically using a time-based function, providing a passive animation that clearly demonstrates the effect without requiring manual input.
-
-### Design Goals
-- **Educational Visualization**: Clearly show how vertices are displaced from a base position to a target position to form different shapes.
-- **Consistent Aesthetics**: Employ a unique, clean color palette and clear typography that fits the Interpolnet 2 design guidelines.
-- **Mobile Friendly**: Ensure the Three.js canvas fills the screen responsively, working well across desktop and mobile devices.
-
-### Implementation Plan
-- **HTML/CSS**: Setup a full-screen Three.js container with minimal UI. Apply CSS variables for a consistent theme. Use an import map to include the Three.js library.
-- **Three.js Scene Setup**: Initialize a basic 3D scene with a camera, lights, and an animation loop. Handle window resize events for responsiveness.
-- **Geometry Generation**: Create a base mesh (e.g., using `THREE.IcosahedronGeometry` or a basic sphere) representing an abstract character head.
-- **Morph Target Implementation**: Iterate through the base geometry's position attributes to calculate a modified set of positions (e.g., pulling vertices in a specific area upwards to simulate a smile). Add this modified attribute as a morph target to the geometry.
-- **Animation Loop**: Use `Math.sin()` in the render loop to oscillate the geometry's `morphTargetInfluences[0]` value, smoothly transitioning the mesh between its neutral and smiling states.
   - **State Management**: Track the modulus `N`, operands `a` and `b`, and the selected operation.
   - **Rendering**: Use HTML5 Canvas to draw the clock face, placing numbers evenly around the circumference.
   - **Animation Logic**: Calculate the paths for addition and multiplication. Use `requestAnimationFrame` to animate drawing the arcs and paths wrapping around the circle. Use easing functions for smooth motion.
-## Markov Chain Frog Jump [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog-jump)]
+## Markov Chain Frog [[demo](https://rybla.github.io/interpolnet-2/markov-chain-frog)]
 
-A visual simulation of a Markov chain represented as a network of lilypads. A frog jumps between the lilypads according to weighted probability arrows that visually connect them.
-
-### Features
-- **Interactive State Graph**: Three distinct lilypads representing the states in the Markov chain.
-- **Dynamic Transition Probabilities**: Users can adjust the transition probabilities using sliders. The directed arrows between lilypads dynamically update their thickness to reflect these weights.
-- **Simulation Controls**: Play, Pause, and Step buttons to manually or automatically trigger the frog's jumps through the Markov chain.
-- **Frog Animation**: The frog visibly jumps from lilypad to lilypad along the transition arrows, making the state changes obvious.
-- **Path Highlighting**: The active path the frog is taking lights up to clearly indicate the selected transition based on the probabilities.
-
-### Design Goals
-- **Intuitive Understanding**: Connect the abstract mathematical concept of Markov chains and state transitions to a simple, understandable real-world analogy.
-- **Engaging Aesthetics**: Use a nature-inspired color palette with deep water blues, vibrant lilypad greens, and clear contrasting colors for the transition arrows to create a relaxing pond vibe.
-- **Responsiveness**: Ensure the graph and controls scale appropriately and remain usable on both mobile and desktop devices.
-
-### Implementation Plan
-- **HTML Structure**: A full-screen `<canvas>` for the simulation, overlaid with a floating UI control panel containing probability sliders and simulation buttons.
-- **CSS Styling**: A pond-themed background with semi-transparent, frosted-glass UI panels and custom-styled range sliders.
-- **JavaScript**:
-  - **State Management**: Track the transition matrix, the frog's current state, and the simulation status (playing, paused, jumping).
-  - **Rendering**: HTML5 Canvas to draw lilypads, curved transition arrows (using quadratic curves to handle bi-directional edges without overlapping), and the frog.
-  - **Animation Logic**: `requestAnimationFrame` loop to animate the frog's parabolic jump along the selected arrow, along with passive bobbing of the lilypads.
-  - **Interactive Logic**: Update the transition probabilities via sliders, normalizing outgoing probabilities so they always sum to 1.0 per state.
-## Voronoi Sweep-Line Visualizer [[demo](https://rybla.github.io/interpolnet-2/voronoi-sweep-line)]
-
-An interactive visualization of Fortune's sweep-line algorithm for generating Voronoi diagrams. Users can place random seed points on a canvas while a horizontal sweep-line moves across, calculating and rendering the beach line and the intersecting Voronoi cell boundaries in real-time.
+A web-based interactive visualization of a Markov Chain, conceptualized as a network of Lilypads. A frog jumps between these Lilypads, and the jumps are determined by weighted probability arrows connecting them.
 
 ### Features
-- **Interactive Seed Placement**: Users can click on the canvas to add new seed points dynamically.
-- **Real-Time Sweep-Line**: A horizontal sweep-line moves down the screen, simulating the progression of Fortune's algorithm.
-- **Dynamic Beach Line**: The "beach line" (a sequence of parabolic arcs) is rendered in real-time, showing the set of points equidistant from the sweep-line and the nearest seed point above it.
-- **Voronoi Edge Tracing**: As the breakpoints between parabolic arcs move, they trace out the edges of the Voronoi cells, which are permanently drawn onto the canvas.
-- **Playback Controls**: Users can pause, resume, and adjust the speed of the sweep-line, or clear the canvas to start over.
+- **Interactive Lilypads (States)**: Users can click on the canvas to add new Lilypads to the pond, representing the states in the Markov chain.
+- **Weighted Probability Arrows (Transitions)**: Users can drag from one Lilypad to another to create directed arrows representing transition probabilities.
+- **Weight Adjustment**: A floating UI panel allows users to select an arrow and adjust its transition weight. The weights outgoing from each Lilypad are automatically normalized to sum to 1 (or 100%).
+- **Animated Frog (The Process)**: A frog character sits on one Lilypad. A "Step" button makes the frog jump to the next Lilypad based on the defined probabilities. An "Auto-Jump" toggle lets the frog jump continuously at a set interval.
+- **Path Highlighting**: When the frog jumps, the specific arrow it traveled across lights up briefly.
+- **State Distribution Chart**: A side panel displays a bar chart showing the frequency of visits to each Lilypad, visually demonstrating the stationary distribution (if it exists) as the frog makes many jumps.
 
 ### Design Goals
-- **Educational Visualization**: Make the abstract mathematical process of Fortune's algorithm concrete and visually understandable.
-- **Aesthetic Quality**: Use a distinct, consistent color scheme with glowing neon accents (e.g., bright cyan for the sweep-line, magenta for the beach line, and yellow for the Voronoi edges) against a dark background.
-- **Responsiveness**: Ensure the canvas and UI controls adapt seamlessly to different screen sizes, working perfectly on both mobile and desktop devices.
+- **Intuitive Metaphor**: Use the playful, concrete metaphor of a frog and lilypads to explain the abstract mathematical concept of state transitions and probabilities in a Markov chain.
+- **Engaging Aesthetics**: A vibrant, nature-inspired "pond" theme. Deep blues/greens for the water, bright green for the Lilypads, and a distinct, cute frog character.
+- **Direct Manipulation**: Building the Markov chain should feel like drawing a graph or a mind map, with immediate visual feedback when weights are changed.
+- **Clear Feedback**: The normalization of probabilities should be visually apparent (e.g., arrow thickness changes based on relative weight).
 
 ### Implementation Plan
-- **HTML/CSS**: A full-screen `<canvas>` for the visualization and a floating UI control panel for the interactive buttons and sliders.
-- **JavaScript Engine**:
-  - Maintain an array of seed points.
-  - Implement a pixel-based approximation of the beach line: for each x-coordinate, calculate the maximum y-value among all parabolas defined by the seed points and the current sweep-line.
-  - Detect breakpoints (intersections of parabolas) along the beach line.
-  - Use an offscreen canvas to permanently trace the paths of these breakpoints over time, forming the Voronoi edges.
-  - Animate the sweep-line using `requestAnimationFrame`, updating the beach line and edge traces every frame.
+- **HTML Structure**: A full-screen container holding an HTML5 `<canvas>` for the pond, an overlay `<div>` for the control panel (adding states, adjusting weights, play/pause), and a sidebar `<div>` for the state distribution chart.
+- **CSS Styling**: A cohesive "pond" color palette. The UI panels should have a translucent, frosted glass effect so the pond is still visible underneath.
+- **JavaScript Core**:
+    - **State Management**: A graph data structure where nodes are Lilypads (with `x`, `y` coordinates and a `visitCount`) and edges are transitions (with `source`, `target`, and `weight`).
+    - **Canvas Rendering**: Use `requestAnimationFrame` to draw the pond background, Lilypads, arrows (using Bezier curves for aesthetics and to handle bidirectional links), and the frog.
+    - **Interaction Handling**: Pointer events to handle creating Lilypads (clicking empty space), creating arrows (dragging between Lilypads), and selecting arrows to adjust weights.
+    - **Markov Logic**: A function that takes the frog's current Lilypad, looks at the outgoing normalized probabilities, generates a random number between 0 and 1, and selects the next Lilypad accordingly.
+    - **Animation**: Smoothly animate the frog's jump along the Bezier curve of the chosen arrow.
+    - **Chart Update**: Update the DOM-based bar chart whenever the frog lands on a Lilypad.
 
-## Minimax Saddle Settler 3D [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-settler-3d)]
+## Voronoi Diagram Sweep-Line [[demo](https://rybla.github.io/interpolnet-2/voronoi-sweep-line)]
 
-### Description
-This demo renders an interactive 3D multivariable calculus surface where a rolling ball naturally settles into the minimax saddle point using simultaneous gradient descent and ascent dynamics, leaving a dynamic trailing path. It visually illustrates the unique properties of saddle points, where the gradient goes to zero but the point is neither a local maximum nor a local minimum. By dragging and dropping the ball onto different parts of the surface, users can explore how the opposing forces guide the ball to the center.
+An interactive HTML5 Canvas demo visualizing Fortune's algorithm, a sweep-line algorithm for generating Voronoi diagrams. Users can place random seed points on the canvas, triggering a horizontal sweep line that dynamically constructs the intersecting parabolic beach lines and traces the boundaries of the resulting Voronoi cells.
 
 ### Features
-- **3D Interactive Surface**: Displays a mathematical saddle surface using Three.js, with distinct colors to highlight curvature.
-- **Dynamic Physics Simulation**: Simulates a ball rolling on the surface. Instead of true gravity, it employs a custom force model where the ball descends along one primary axis and ascends along the orthogonal axis.
-- **Trailing Path Visualization**: The ball leaves a visible, fading trail as it moves, making its trajectory and the gradient dynamics clearly visible over time.
-- **Drag and Drop Interaction**: Users can grab the ball using pointer events and drag it to any valid point on the surface to observe new trajectories.
+- **Interactive Point Placement**: Clicking anywhere on the canvas dynamically adds a new seed point.
+- **Continuous Sweep-Line Animation**: A horizontal sweep line moves continuously downwards. When a new point is added, its effect on the sweep line and beach line is calculated in real time.
+- **Dynamic Beach Line Rendering**: Above the sweep line, the complex intersection of parabolas (the "beach line") is calculated and drawn continuously, showing how each seed's sphere of influence grows.
+- **Voronoi Cell Filling**: As the sweep line moves, the regions defined by the beach line are filled with distinct colors corresponding to their seed points, persistently drawing the final Voronoi diagram on a background canvas.
+- **Dual Canvas System**: Utilizes a back canvas for persistent painting of the cell colors and boundaries, and a front transparent canvas for rendering the dynamic sweep line, beach line, and seed points smoothly.
 
 ### Design Goals
-- **Educational Value**: Visually clarify how gradient descent/ascent operates on surfaces with varying curvature, especially saddle points.
-- **Engaging Aesthetics**: Employ a vibrant, consistent color palette that avoids generic dark themes, following the Interpolnet 2 guidelines.
-- **Responsiveness**: Ensure the 3D scene scales appropriately and interactions feel natural on both desktop and mobile devices.
+- **Algorithm Visualization**: Make the complex mechanics of Fortune's algorithm (sweep lines and parabolic beach lines) visually intuitive and understandable.
+- **Striking Aesthetics**: Employ a dark theme with vibrant, randomly generated neon colors for the Voronoi cells and a bright, contrasting color for the sweep line and beach line to make the math look striking.
+- **Performance**: Maintain a smooth 60fps animation even as the number of points and the complexity of the beach line increase, leveraging a dual-canvas optimization.
+- **Responsive**: Ensure the visualization works seamlessly across desktop and mobile sizes, recalculating properly if the window is resized.
 
 ### Implementation Plan
-- **HTML/CSS**: Set up a full-screen container for the Three.js canvas. Apply a CSS variable-based color scheme. Ensure the canvas expands to fill the container without layout collapse.
-- **Three.js Scene Setup**: Initialize a basic 3D scene with an orthogonal or perspective camera, lights, and an animation loop. Handle window resize events.
-- **Geometry Generation**: Create a custom buffer geometry to represent the multivariable saddle function mathematically. Apply a visually distinct material.
-- **Interaction Logic**: Implement a raycaster to detect pointer events. Map screen coordinates to the surface geometry to allow the user to drag the ball.
-- **Physics and Path Logic**: In the `requestAnimationFrame` loop, calculate the gradient of the surface at the ball's current coordinates. Apply simultaneous descent/ascent logic, update the ball's position, and constraint it to the surface geometry. Update the trailing path using an instanced mesh or line segments.
+- **HTML Structure**: A full-screen container with two overlapping `<canvas>` elements (`background-canvas` and `foreground-canvas`).
+- **CSS Styling**: A dark theme, utilizing absolute positioning to perfectly overlap the canvases.
+- **JavaScript Core**:
+    - **State Management**: Track an array of `seeds` (x, y, color) and the current `sweepY` position.
+    - **Mathematics**: Implement functions to calculate a parabola given a focus (seed) and directrix (sweep line). Implement a function to find the intersections of these parabolas to determine the valid segments forming the beach line.
+    - **Rendering Loop**: Use `requestAnimationFrame`.
+        - Increment `sweepY`.
+        - For every pixel across the width (or a sampled resolution for performance), calculate the highest parabola `y` value to determine the beach line.
+        - **Background Canvas**: Draw the vertical distance between the previous frame's beach line and the current frame's beach line, coloring it according to which seed "owns" that section of the beach line.
+        - **Foreground Canvas**: Clear the canvas. Draw the seed points, the straight horizontal sweep line, and the complex beach line curve.
+    - **Interaction**: Handle pointer events to add new points, generating a random bright color for each.
 
-## Fibonacci Golden Spiral Visualizer [[demo](https://rybla.github.io/interpolnet-2/fibonacci-golden-spiral-visualizer)]
+## Minimax Saddle Point Surface [[demo](https://rybla.github.io/interpolnet-2/minimax-saddle-point-surface)]
 
-An interactive visualization showing the Fibonacci sequence recursively dividing a golden rectangle into smaller squares that perfectly trace the path of a logarithmic spiral. The user can watch the progressive generation of the squares and the connecting spiral arcs, demonstrating the geometric relationship between the Fibonacci numbers and the golden ratio.
+An interactive 3D multivariable calculus visualization where a rolling ball naturally settles into the minimax saddle point.
 
 ### Features
-- **Progressive Animation**: Slowly draws the Fibonacci squares one by one, scaling the view or zooming out as larger squares are added to keep the entire structure visible.
-- **Golden Spiral**: Simultaneously draws smooth quarter-circle arcs within each square to form a continuous golden spiral.
-- **Interactive Controls**: Users can click the canvas to advance the sequence, manually stepping forward through the sequence.
-- **Responsive Canvas**: The canvas auto-resizes to fit the screen, maintaining the correct aspect ratio for the golden rectangle.
+- **3D Saddle Surface**: A parametric surface representing a hyperbolic paraboloid (e.g., $f(x, z) = x^2 - z^2$).
+- **Minimax Dynamics**: A rolling ball is simulated using a custom physics loop based on gradient descent along the $x$-axis and gradient ascent along the $z$-axis, naturally finding the saddle point.
+- **Interactive Dragging**: Users can drag the ball to different starting positions using a Raycaster, observing how it always returns to the saddle point.
+- **Visual Feedback**: The surface is rendered with a wireframe or grid texture to clearly show the curvature, while the ball is distinctly colored.
 
 ### Design Goals
-- **Mathematical Clarity**: Clearly illustrate the construction of the golden spiral using Fibonacci squares.
-- **Visual Elegance**: Use smooth animations, distinct colors for the squares' borders, and a prominent, contrasting color for the spiral path to make the mathematical structure visually appealing.
-- **Responsiveness**: Ensure the canvas looks good on both desktop and mobile devices.
+- **Educational Intuition**: Provide a visceral, geometric understanding of what a saddle point is in multivariable calculus.
+- **Engaging Aesthetics**: Use a clean, scientific aesthetic (dark background with glowing neon grid lines).
+- **Responsiveness**: Ensure the 3D canvas scales to fit any screen size and supports touch interactions for dragging the ball.
 
 ### Implementation Plan
-- **HTML/CSS**: Set up a full-screen canvas with a distinct, unique, and consistent color scheme.
-- **JavaScript Core Logic**:
-  - Maintain state for the current step in the Fibonacci sequence.
-  - Track the current drawing coordinate, orientation, and scale.
-  - Implement a `requestAnimationFrame` loop to handle the progressive drawing and zooming.
-- **Rendering**:
-  - Use `ctx.strokeRect` or `ctx.fillRect` with varying colors to draw each new Fibonacci square.
-  - Use `ctx.arc` to draw the quarter-circle path connecting the opposite corners of the square.
-  - Apply `ctx.translate` and `ctx.scale` to keep the growing structure centered and visible within the canvas viewport as it exponentially expands.
+- **Tech Stack**: Three.js for 3D rendering.
+- **Scene Setup**:
+    - A parametric geometry to draw the saddle surface.
+    - A sphere mesh representing the ball.
+    - Orbit controls for camera manipulation.
+- **Physics Simulation**:
+    - Update the ball's $(x, z)$ coordinates each frame based on the gradient of the surface function $f(x, z)$.
+    - The new $y$ coordinate is computed as $f(x, z)$.
+- **Interaction Logic**:
+    - Implement a raycaster to allow the user to grab and drag the ball across the surface.
+    - Disable physics updates while the ball is being dragged, resuming once released.
+## Golden Spiral [[demo](https://rybla.github.io/interpolnet-2/golden-spiral)]
 
-## Interactive Galton Board [[demo](https://rybla.github.io/interpolnet-2/interactive-galton-board)]
+An interactive visualization demonstrating how the Fibonacci sequence recursively divides a golden rectangle into smaller squares, perfectly tracing the path of a logarithmic spiral.
+
+### Features
+- **Golden Rectangle Recursion**: Visualizes a large starting golden rectangle that is iteratively divided into a square and a smaller golden rectangle.
+- **Logarithmic Spiral**: An animated spiral perfectly traces through the opposite corners of the drawn squares, illustrating the golden spiral.
+- **Continuous Drawing Animation**: The division of squares and the drawing of the spiral arcs are animated to visually demonstrate the construction process.
+
+### Design Goals
+- **Mathematical Clarity**: Clearly show the geometric connection between the Fibonacci sequence (squares) and the golden spiral.
+- **Aesthetic**: Use a beautiful, cohesive color scheme (e.g., a dark background with golden/yellow strokes for the spiral and squares).
+- **Responsive**: Ensure the canvas scales perfectly across different device sizes, centering the spiral within the view.
+
+### Implementation Plan
+- **HTML**: Include a single, full-screen `<canvas>` element.
+- **CSS**: Apply a dark background to the page, reset margins, and configure the canvas to fill the entire viewport.
+- **JavaScript (Canvas API)**:
+    - Compute the optimal starting dimensions of the golden rectangle based on the screen size.
+    - Implement a `requestAnimationFrame` loop to animate the drawing process.
+    - Recursively draw scaled-down squares and quarter-circle arcs, applying the necessary rotation and translation to correctly position them according to the Fibonacci spiral geometry.
+## Galton Board Skew [[demo](https://rybla.github.io/interpolnet-2/galton-board-skew)]
 
 An interactive Galton board where users can skew the peg probabilities to watch the resulting distribution shift from normal to Poisson.
 
 ### Features
-- **Dynamic Physics Simulation**: Continuously drops physical balls that bounce and collide off a triangular grid of static pegs, eventually gathering into bins at the bottom.
-- **Interactive Skewing**: Users can interact with the canvas to dynamically skew the probability of balls falling to the left or right at each peg.
-- **Real-Time Distribution Visualization**: As the balls accumulate in the bins, they form a distribution that visually shifts from a normal bell curve to a skewed Poisson-like distribution depending on the user's interaction.
-- **Continuous Flow**: Balls continuously drop from the top, providing a mesmerizing and ongoing visualization of the statistical process.
+- **Adjustable Skew Probability**: A dynamic slider allows users to change the probability $p$ that a ball bounces right at each peg. By default $p = 0.5$ yielding a normal distribution, but skewing it demonstrates the Poisson approximation of the binomial distribution.
+- **Continuous Simulation Loop**: Balls continuously drop from the top, bouncing against a grid of pegs, building a live histogram in the bins below.
+- **Live Updates**: Changing the probability dynamically updates the trajectory of falling balls immediately without stopping the simulation.
+- **Dynamic Bins**: Bins automatically expand and highlight when balls enter, and visually decay to clearly show the distribution accumulating over time.
 
 ### Design Goals
-- **Statistical Intuition**: Demonstrate the Central Limit Theorem and visually show how altering the probability of independent random events leads to a skewed distribution.
-- **Visceral Feedback**: Provide an engaging and satisfying animation of balls cascading through the maze, reacting dynamically to the user's probability skewing.
-- **Aesthetic Consistency**: Use a dark, vibrant theme with distinct colors for pegs, balls, and bins, ensuring fluid physics animations that fit the Interpolnet 2 design guidelines.
-- **Responsive Layout**: Ensure the canvas and simulation scale effectively on both desktop and mobile devices.
+- **Educational Intuition**: Provide a visceral, real-time visualization of statistical concepts (Binomial, Normal, and Poisson distributions) using an engaging physical analogy.
+- **Aesthetics**: Employ a clean, dark "neon" color scheme with bright, glowing balls and pegs for a modern look.
+- **Responsive & Mobile Friendly**: Ensure the visualization canvas automatically resizes and positions correctly across any screen.
 
 ### Implementation Plan
-- **HTML/CSS**: A full-screen `<canvas>` container. Styling with a dark theme and consistent typography, focusing on responsiveness and smooth animations.
-- **Physics System (JavaScript)**: Implement a custom, performant 2D physics loop managing ball positions, velocities, and gravity, along with circle-circle collisions against the peg grid.
-- **Galton Board Generator**: Dynamically generate a triangular grid array of peg positions and vertical bin dividers at the bottom.
-- **Probability Logic**: Implement logic where a user interaction modifies the probability of a ball bouncing right vs. left, applying this probability when resolving collisions with pegs.
-- **Rendering**: Use the Canvas API (`ctx.arc`, `ctx.fillRect`) to efficiently draw the elements in the `requestAnimationFrame` render loop.
-
-## Huffman Tree Visualizer [[demo](https://rybla.github.io/interpolnet-2/huffman-tree-visualizer)]
+- **HTML Structure**: A full-screen container with a single `<canvas>` element for the simulation, and an overlaid translucent `<div>` control panel for the skew slider.
+- **CSS Styling**: A dark theme, absolute positioning for the overlay, customized slider styles with hover states.
+- **JavaScript Core**:
+    - **State Management**: Track falling `balls` array, a static grid of `pegs`, and `bins` counting the landed balls.
+    - **Mathematics**: Calculate the physical position of pegs in an equilateral triangle grid. Update ball velocities and positions with gravity.
+    - **Collision Logic**: When a ball intersects a peg radius, resolve the collision and impart a horizontal bounce dictated by the skewed probability $p$.
+    - **Rendering Loop**: Use `requestAnimationFrame` to draw the dark background, pegs, balls, and the resulting histogram bars at the bottom.
+    - **Interaction**: Pointer events to capture slider changes and update the $p$ value in the simulation state in real time.
+## Huffman Entropy Calculator [[demo](https://rybla.github.io/interpolnet-2/huffman-entropy-calculator)]
 
 An entropy calculator that visually compresses a string of text using a dynamically generated Huffman coding tree based on character frequency.
 
 ### Features
-- **Dynamic Input**: Users can enter text into a text area, and the Huffman tree, frequency table, and compression statistics are updated in real-time.
-- **Huffman Tree Visualization**: Renders the generated Huffman tree on an HTML5 canvas, clearly showing the branching paths (0 and 1) and the leaf nodes containing the characters and their frequencies.
-- **Entropy Calculation**: Calculates and displays the Shannon entropy of the input text, comparing it to the average bits per character achieved by the Huffman coding.
-- **Compression Statistics**: Displays real-time metrics such as the original size (in bits, assuming 8-bit ASCII), compressed size (in bits), and the compression ratio.
-- **Variable-Length Binary Codes**: Shows a table mapping each character in the input to its corresponding variable-length binary code generated by the Huffman tree.
+- **Real-Time Analysis**: As the user types into a text input field, the application instantly calculates character frequencies, probabilities, and the Shannon entropy of the text.
+- **Dynamic Huffman Tree**: A visual representation of the Huffman coding tree is generated and updated in real-time.
+- **Compression Metrics**: Displays the original size (in bits, assuming 8 bits/char), the compressed size (in bits, using the generated Huffman codes), and the resulting compression ratio.
+- **Animated Tree Construction**: Smooth transitions when nodes are added, merged, or repositioned within the tree to help visualize the algorithm's bottom-up building process.
+- **Interactive Code Table**: A dynamic table showing each character, its frequency, and its assigned variable-length binary Huffman code.
+- **Node Highlighting**: Hovering over a character in the table or text input highlights the corresponding path from the root to the leaf node in the visual tree.
 
 ### Design Goals
-- **Educational Clarity**: Make the abstract concept of Huffman coding and entropy visually concrete, demonstrating how more frequent characters are assigned shorter codes.
-- **Real-Time Feedback**: Ensure that all visualizations and statistics update immediately as the user types, providing an interactive learning experience.
-- **Aesthetic Consistency**: Use a distinct, unique, and consistent color scheme with clear typography, following the project's design guidelines.
-- **Responsiveness**: The layout should adapt to different screen sizes, ensuring the text input, statistics, and canvas are usable on both desktop and mobile devices.
+- **Educational Value**: Demystify the concept of data compression and entropy by providing a tangible, interactive visualization of one of the most fundamental algorithms.
+- **Clarity and Aesthetics**: Use a clean, modern interface with a distinct color palette (e.g., deep background with bright accent colors for nodes and edges) to make the tree structure easily readable.
+- **Responsiveness**: Ensure the tree layout algorithm can handle varying text lengths and adapt to different screen sizes, gracefully scaling or allowing panning/zooming if the tree becomes too large.
 
 ### Implementation Plan
-- **HTML**: Structure the page with an input section (textarea), a statistics section (entropy, sizes, compression ratio), a code table section, and a canvas for drawing the tree. Use CSS Grid/Flexbox for layout.
-- **CSS**: Apply a consistent color palette and typography. Style the inputs, tables, and statistics for clarity and visual appeal. Implement responsive media queries.
-- **JavaScript (Huffman Algorithm)**:
-  - Calculate character frequencies from the input text.
-  - Build the Huffman tree using a priority queue (or sorting an array of nodes).
-  - Traverse the tree to generate the binary codes for each character.
-  - Calculate Shannon entropy and compression statistics.
-- **JavaScript (Rendering)**:
-  - Implement a recursive function to draw the Huffman tree on the canvas. Calculate node positions to avoid overlap, drawing lines for edges and circles for nodes. Include text labels for characters, frequencies, and edge values (0/1).
-  - Dynamically generate the HTML for the code table based on the generated dictionary.
-
-## Slope Field Tracer [[demo](https://rybla.github.io/interpolnet-2/slope-field-tracer)]
-
-This demo visualizes a dynamic slope field and allows users to explore the solutions of a differential equation. By clicking or tapping on the canvas, users drop virtual "ink drops" which flow along the slope field, tracing out the distinct solution curves to the differential equation.
-
-**Features:**
-- A background grid of small line segments visualizing the slope field for a specific differential equation.
-- Interactive canvas where user clicks generate new ink drops.
-- Ink drops that continuously animate, extending their path by calculating the next position based on the slope at their current location using numerical integration.
-- The path gradually fades or leaves a smooth curve on the canvas, demonstrating the solution trajectory.
-
-**Design Goals:**
-- Keep the design clean with a math-inspired aesthetic (e.g., subtle grid lines, crisp curves).
-- Use distinct colors: one for the background slope field (e.g., a muted color), and vibrant colors for the ink drop paths to make them pop.
-- Provide smooth and continuous animations for the paths being traced out.
-- Ensure responsiveness across screen sizes, keeping the field centered and scaled properly.
-
-**Implementation Plan:**
-- **HTML/CSS:** Set up a full-width/height `<canvas>` element for rendering, with CSS variables for the color scheme.
-- **JavaScript Setup:** Initialize the canvas context, handle window resizing, and set up a basic animation loop with `requestAnimationFrame`.
-- **Slope Field Rendering:** Define a differential equation (e.g., $dy/dx = \sin(x) \cdot \cos(y)$). Draw small line segments across a grid, calculating their angle using the differential equation.
-- **Interaction:** Add `pointerdown` event listeners to add a new "drop" object to an array of active drops at the specified coordinate.
-- **Animation Logic:** In the animation loop, iterate through active drops. For each drop, calculate the slope at its current position, update its position by a small step (`dx`, `dy`), and draw a line segment connecting its previous position to its new position. Use a method like Euler's method or RK4 for the numerical integration.
-
-## Interlocking Penrose Tiling Editor [[demo](https://rybla.github.io/interpolnet-2/interlocking-penrose-tiling-editor)]
-
-An interactive editor for exploring and manipulating Penrose tilings. The demo allows users to dynamically deform the edges of the fundamental kite and dart tiles, with changes propagating symmetrically across the entire aperiodic pattern.
-
-### Features
-- **Aperiodic Tiling Generation**: Automatically generates a large-scale Penrose P2 (Kite and Dart) tiling.
-- **Symmetric Edge Deformation**: Users can interact with the fundamental tile shapes to deform their straight edges into curves. The deformation is applied symmetrically to all corresponding edges in the tiling, ensuring the interlocking pattern remains gapless.
-- **Dynamic Rendering**: The entire tiling is re-rendered in real-time as the user deforms the control points.
-- **Pan and Zoom**: Users can pan across the infinite-seeming canvas and zoom in/out to explore the intricate structures of the Penrose tiling.
-
-### Design Goals
-- **Mathematical Intuition**: Provide a tangible, interactive way to understand the complex symmetry and interlocking nature of Penrose tilings.
-- **Visually Engaging**: Use a distinct, unique, and consistent color scheme to differentiate the kites and darts, and smooth animations for interactions.
-- **Performance**: Ensure real-time rendering of the tiling even with a large number of tiles and complex deformed edges.
-- **Responsiveness**: The canvas should fill the screen and adapt to both desktop and mobile devices.
-
-### Implementation Plan
-- **HTML**: A full-screen `<canvas>` element for rendering the tiling.
-- **CSS**: A clean, modern aesthetic to make the vibrant colors of the tiles pop. Ensure responsive design.
-- **JavaScript (Tiling Logic)**:
-  - Implement a deflation algorithm to generate the Penrose P2 tiling (subdividing half-kites and half-darts, or "Robinson triangles").
-  - Maintain a global set of control points that define the shape of the "Long Edge" and the "Short Edge" of the tiles.
-- **JavaScript (Rendering & Interaction)**:
-  - Use the HTML5 Canvas API to render the tiles.
-  - Implement logic to draw the deformed edges using quadratic or cubic Bézier curves based on the global control points.
-  - Add event listeners for mouse/touch interactions to allow users to pan the view, zoom, and deform the edges.
-  - When a control point is moved, update its global coordinates and trigger a re-render of the entire canvas to show the symmetric deformation.
-
-## Single Pixel Raytracer [[demo](https://rybla.github.io/interpolnet-2/single-pixel-raytracer)]
-
-Step through a single pixel's ray calculation showing the physical line bouncing off a sphere and checking light source occlusion.
-
-### Features
-- **Step-by-Step Visualization**: A sequential control panel that allows users to click through each stage of a raycast (Camera Origin, Ray Emit, Intersection, Surface Normal Calculation, Shadow Ray Emit, Shadow Hit/Miss, Shading Calculation).
-- **Interactive 2D Scene**: A top-down 2D canvas representing the 3D raytracing logic, where users can drag the light source, target sphere, and occluder sphere around the scene to dynamically alter the resulting raycast logic.
-- **Dynamic Geometric Drawing**: Real-time rendering of mathematical components such as the camera vector, the pixel plane, intersection points, normal vectors, and shadow rays.
-- **State Machine Animation**: Passive animations that highlight active components depending on the current step in the raytracing process.
-
-### Design Goals
-- **Clarity and Simplicity**: Use a consistent and vibrant color scheme to differentiate objects (camera, target sphere, occluder sphere, light) and ray vectors.
-- **Educational Impact**: Demystify the "black box" of raytracing by visually breaking down a single ray calculation, clearly showing how lighting and shadows are computed through geometry.
-- **Responsiveness**: Ensure the scene layout and controls adapt gracefully to mobile and desktop screens.
-
-### Implementation Plan
-- **HTML**: Create a responsive layout featuring a main `<canvas>` for the 2D scene and a dedicated control panel `<div>` with a descriptive text area.
-- **CSS**: Apply a distinct, clean styling with clear contrast. Implement flexbox for an adaptable layout and use CSS transitions for smooth interactive feedback on buttons.
-- **JavaScript (State Logic)**:
-  - Implement a state machine (enum or sequence) to manage the current step in the raytracing process.
-  - Define data structures for vectors, spheres (position, radius, color), the camera (position), and the light source.
-- **JavaScript (Math & Raytracing)**:
-  - Implement 2D vector mathematics (addition, subtraction, normalization, dot product).
-  - Implement a line-sphere intersection algorithm to mathematically detect where rays hit the 2D circles.
-- **JavaScript (Rendering & Interaction)**:
-  - Use `requestAnimationFrame` for a continuous render loop on the HTML5 Canvas.
-  - Add pointer event listeners (mousedown, mousemove, mouseup/touchstart, touchmove, touchend) to enable dragging of the scene objects.
-  - Draw the scene dynamically based on the current state, animating vectors and updating the explanation text to guide the user through the raytracing calculation. Advances are triggered by clicks.
-
-## WebGL Gray-Scott Model [[demo](https://rybla.github.io/interpolnet-2/webgl-gray-scott)]
-
-An interactive WebGL simulation of the Gray-Scott model of reaction-diffusion. Users can paint chemical food onto a canvas to watch complex, organic Turing patterns emerge, grow, and split in real time.
-
-### Features
-- **Real-time WebGL Simulation:** Uses WebGL framebuffers to simulate the Gray-Scott equations efficiently at 60 FPS across the canvas.
-- **Interactive Painting:** Users can interact with the canvas using mouse or touch to add "chemical food" (substance B) directly into the simulation, triggering new patterns to grow.
-- **Organic Color Mapping:** A shader-based color mapping system that translates the chemical concentrations into a distinct, unique, and consistent color scheme.
-- **Responsive Layout:** A mobile-friendly design that adapts the full-screen canvas to various screen sizes.
-
-### Design Goals
-- **Mesmerizing Visualization:** Provide an intuitive and engaging way to explore reaction-diffusion systems and Turing patterns.
-- **High Performance:** Keep simulation computations and rendering on the GPU to ensure fluid animations.
-- **Consistent Aesthetics:** Utilize a specific, coherent color palette aligned with the Interpolnet 2 design language, utilizing glowing colors for the patterns and clear typography.
-
-### Implementation Plan
-- **HTML/CSS Structure:** Build a responsive full-screen `<canvas>` for WebGL rendering. Style the canvas and any necessary containers to be mobile-friendly and fill the screen. Apply the distinct typography and color scheme.
-- **WebGL Context and Initialization:** Set up the WebGL context, required buffers, and textures to handle the simulation grid and rendering operations.
-- **Shaders:**
-   - **Simulation Shader:** A fragment shader that reads the previous state, computes the discrete Laplacian, and updates concentrations according to the Gray-Scott equations.
-   - **Render Shader:** A fragment shader that samples the current state texture and maps the concentration to the designated color scheme.
-- **Interaction Logic:** Track pointer events (mouse/touch) to pass coordinates as uniforms to the simulation shader, allowing the user to add chemical bursts.
-- **Animation Loop:** Implement a `requestAnimationFrame` loop that steps the simulation multiple times per frame for stability and speed before rendering the final output to the canvas.
-
-## L-System Fractal Trees Editor [[demo](https://rybla.github.io/interpolnet-2/l-system-fractal-trees-editor)]
-
-An interactive grammar ruleset editor where axiomatic string expansions are instantly rendered as branching L-system fractal trees on an HTML5 canvas. It implements a recursive ruleset parser and a two-pass turtle-graphics algorithm to calculate bounding boxes, ensuring the fractal is perfectly scaled and centered while drawing commands (F, G, +, -, [, ]) and ignoring non-drawing variables (X, Y).
-
-### Features
-- **Interactive Grammar Ruleset Editor**: A control panel area allowing users to define an axiom and specific grammar replacement rules.
-- **Instant Rendering**: As users edit the axiom, rules, or parameters like angle and length, the L-system is recalculated and instantly rendered on the HTML5 canvas.
-- **Axiomatic String Expansions**: Visualizes the string generated by recursively applying rules to the initial axiom.
-- **Branching L-system Fractal Trees**: Translates the expanded string into drawing commands to generate complex branching structures in real-time.
-- **Auto-Scaling and Centering**: Utilizes a two-pass algorithm to calculate the bounding box and scale the fractal tree to fit perfectly within the canvas viewport.
-
-### Design Goals
-- **Educational**: Visually demonstrate how simple string replacement rules can generate complex, self-similar fractal patterns.
-- **Immediate Feedback**: Ensure modifications to the ruleset are instantly reflected in the visualization to facilitate intuitive understanding and exploration.
-- **Aesthetics**: A distinct, unique, and consistent color scheme for the UI and the generated trees, with smooth, fluid rendering.
-
-### Implementation Plan
-- **HTML/CSS**: A responsive split-layout with a control panel on one side and a canvas on the other, utilizing Flexbox/Grid. Include hover, focus, and active state animations.
-- **L-System Logic**: Implement a `parseRules` function to create a key-value mapping of replacement rules and a `generateLSystem` function to recursively expand the axiom based on the rules.
-- **Canvas Drawing**: Implement a `drawTree` function that parses the expanded string into canvas drawing commands. It uses a two-pass turtle-graphics algorithm to calculate the bounding box, then draws the fractal correctly scaled and centered, ignoring non-drawing variables (X, Y) and processing drawing variables (F, G, +, -, [, ]). Add `input` and `change` event listeners to instantly trigger `generateLSystem` and `drawTree` upon user edits.
-
-## 2D Perlin Noise Generation Visualizer [[demo](https://rybla.github.io/interpolnet-2/2d-perlin-noise-generation-visualizer)]
-
-This demo visualizes the generation of 2D Perlin noise by showing the underlying gradient vectors and how bilinear interpolation smooths the resulting map. It displays a grid where each node has a random 2D gradient vector. The space between the grid nodes is filled with a grayscale visualization of the noise values, calculated using the dot products of distance vectors and the grid's gradient vectors, smoothed by bilinear interpolation.
-
-**Features:**
-- Real-time generation and visualization of 2D Perlin noise on an HTML5 canvas.
-- Visualization of the random underlying gradient vectors at each grid node as animated arrows.
-- Dynamic rendering of the interpolated noise values as pixel intensities.
-- A smooth animation loop that continuously shifts the vectors or positions to show the fluid nature of the noise over time.
-
-**Design Goals:**
-- To clearly illustrate the underlying mechanics of Perlin noise generation.
-- To use a unique, distinct, and consistent color scheme (e.g., using a distinct hue for the gradient vectors to contrast with the grayscale noise) and typography.
-- To ensure responsive design and mobile-friendliness, scaling the canvas appropriately based on window size.
-
-**Implementation Plan:**
-- Use a single `<canvas>` element for rendering.
-- Implement the core logic for Perlin noise in pure JavaScript without external libraries.
-- Compute the grid of gradient vectors and animate them slightly to create an evolving noise pattern.
-- Render the interpolated noise values per-pixel (using `ImageData` for performance) and overlay the gradient vectors on top using canvas drawing commands.
-- Apply a responsive CSS layout using flexbox/grid and consistent typography.
-
-## Boids Flocking Simulator [[demo](https://rybla.github.io/interpolnet-2/boids-flocking-simulator)]
-
-An interactive 2D simulation of emergent flocking behavior based on Craig Reynolds' Boids algorithm. The simulation renders a collection of "boids" (bird-oid objects) on an HTML5 canvas. Users can tweak the exact weights of the three core rules—separation, alignment, and cohesion—via dynamic sliders to observe in real-time how the flocking behavior changes, such as moving from a tightly knit school to a chaotic swarm.
-
-### Features
-- **Flocking Physics**: Real-time simulation of boids with tunable parameters for separation, alignment, cohesion, and speed.
-- **Interactive Controls**: A control panel with sliders allowing users to dynamically adjust the weights of the flocking rules.
-- **Visual Clarity**: Boids are rendered as distinct shapes (e.g., triangles) indicating their direction of movement.
-- **Responsive Canvas**: A full-screen or responsive `<canvas>` element that automatically resizes to fit the viewport, ensuring mobile-friendliness.
-
-### Design Goals
-- **Educational Intuition**: Provide a hands-on way to understand how complex, emergent group behaviors arise from simple, localized rules.
-- **Visually Engaging**: Use a distinct, unique, and consistent color scheme for the boids and the background, making the simulation pleasant to watch.
-- **Responsive Layout**: The controls and simulation should adapt seamlessly to different screen sizes, providing a great experience on mobile and desktop.
-- **Fluid Animation**: Ensure the simulation runs at a smooth 60 FPS using `requestAnimationFrame`.
-
-### Implementation Plan
-- **HTML**: Create a semantic layout with a `<canvas>` element for the simulation and a control panel for the sliders.
-- **CSS**: Apply a dark, modern theme with distinct accent colors for the UI elements, ensuring clear typography and responsive design using Flexbox.
-- **JavaScript (Boids Logic)**:
-  - Implement a `Boid` class managing position, velocity, and acceleration.
-  - Implement the three core rules: Separation (avoiding crowding), Alignment (steering towards average heading of neighbors), and Cohesion (steering towards average position of neighbors).
-- **JavaScript (Rendering & Interaction)**:
-  - Use the HTML5 Canvas API to draw the boids as oriented triangles.
-  - Implement a `requestAnimationFrame` loop to continuously update and render the boids.
-  - Add event listeners to the sliders to dynamically update the weights used in the boid logic.
-
-## Barycentric Coordinate Rasterization [[demo](https://rybla.github.io/interpolnet-2/barycentric-rasterization)]
-
-An interactive visualization showing the barycentric coordinate rasterization process. It demonstrates how a massive 2D triangle is filled pixel-by-pixel, calculating color gradients by interpolating vertex colors based on barycentric coordinates.
-
-### Features
-- **Pixel-by-Pixel Rasterization**: Animates the process of iterating over the bounding box of a triangle and checking if each pixel lies within it.
-- **Barycentric Color Interpolation**: Colors each pixel dynamically by calculating its barycentric coordinates and interpolating between the primary colors of the three vertices.
-- **Interactive Vertices**: Users can drag the three vertices of the triangle to change its shape, instantly restarting the rasterization process.
-- **Responsive Canvas**: The visualization scales appropriately across different screen sizes and devices.
-
-### Design Goals
-- **Educational Visualization**: Provide a clear, step-by-step visual intuition for how 3D graphics are rasterized onto 2D screens.
-- **Consistent Aesthetics**: Utilize a distinct, unique, and consistent color scheme for the UI and the triangle vertices (e.g., vibrant red, green, and blue for the corners).
-- **Responsive Layout**: Ensure the controls and rendering adapt seamlessly to both mobile and desktop screens.
-
-### Implementation Plan
-- **HTML**: Create a container for the `<canvas>` element and an overlaid instruction text.
-- **CSS**: Apply a distinct color scheme and typography, using Flexbox to structure the layout responsively.
-- **JavaScript (Core Logic)**:
-  - Implement a `Triangle` class or data structure with three draggable vertices.
-  - Compute the bounding box of the triangle to limit the rasterization area.
-  - Implement a function to compute barycentric coordinates for any given pixel `(x, y)`.
-- **JavaScript (Rendering & Interaction)**:
-  - Use `requestAnimationFrame` to animate the rasterization process pixel-by-pixel or block-by-block, drawing to an `ImageData` buffer for performance to avoid garbage collection pressure.
-  - Add pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to allow users to drag the triangle vertices.
-
-## Marching Cubes Isosurface Visualizer [[demo](https://rybla.github.io/interpolnet-2/marching-cubes-isosurface)]
-
-An interactive 3D visualization demonstrating the Marching Cubes algorithm. Users can dynamically adjust the isosurface threshold of a continuously animated 3D scalar field, watching in real-time as the algorithm generates a cohesive, fluid-like polygonal mesh that represents the boundary of the threshold.
-
-### Features
-- **Real-time 3D Rendering**: High-performance WebGL rendering of a 3D scalar field and the resulting polygonal mesh using Three.js.
-- **Dynamic Scalar Field**: The underlying scalar field is continuously animated, creating organic, blob-like structures that merge and separate over time.
-- **Interactive Threshold Slider**: Users can control the \`threshold\` value of the isosurface via a slider. Adjusting the slider instantly re-evaluates the marching cubes algorithm, shrinking or expanding the visible mesh.
-- **Visual Clarity**: Uses a distinct, glowing material for the mesh against a dark background, making the geometric topology easy to observe.
-
-### Design Goals
-- **Algorithm Demystification**: Provide an intuitive, visual representation of how the marching cubes algorithm extracts a 2D surface from 3D volumetric data.
-- **Mesmerizing Fluidity**: Create an engaging "lava lamp" effect through smooth animations and organic shapes.
-- **Responsive Interaction**: Ensure the mesh updates instantly as the user drags the threshold slider, emphasizing the direct connection between the mathematical parameter and the physical geometry.
-
-### Implementation Plan
-- **Tech Stack**: Three.js for 3D rendering.
-- **Scalar Field Generation**: Create a function that evaluates the density at any point in the 3D grid. This function will combine multiple moving, overlapping density spheres whose positions update based on time ($t$).
-- **Marching Cubes Implementation**:
-  - Define a 3D grid and use the marching cubes algorithm to evaluate it.
-  - Update the Three.js mesh with the newly generated vertices and normals.
-- **User Interface**: A simple HTML range slider overlaid on the canvas, linked to the threshold parameter.
-
-## Error Diffusion Dithering Comparison [[demo](https://rybla.github.io/interpolnet-2/error-diffusion-dithering)]
-
-An interactive visualization comparing various error-diffusion dithering algorithms applied to a high-resolution image. Users can drag a vertical slider across the image to reveal a 1-bit pixelation effect on one side, while keeping the original high-resolution image on the other. A control panel allows users to select which error-diffusion algorithm (e.g., Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke) is applied to the dithered portion.
-
-### Features
-- **Interactive Split-Screen**: A draggable vertical divider allowing users to smoothly pan across the image, comparing the original high-resolution version with the 1-bit dithered version.
-- **Algorithm Selection**: A control panel to select between different error-diffusion dithering algorithms, dynamically updating the dithered output in real-time.
-- **High-Resolution Processing**: The dithering algorithms process a high-resolution image using canvas pixel manipulation, correctly handling pixel data and error propagation.
-- **Responsive Layout**: The canvas and controls adjust seamlessly to different screen sizes and orientations.
-
-### Design Goals
-- **Algorithm Comparison**: Provide a clear, visual way to understand and compare the subtle differences and visual artifacts of various dithering algorithms.
-- **Engaging Interaction**: Make the comparison intuitive through a draggable split-screen reveal effect.
-- **Consistent Aesthetics**: Utilize a distinct, unique, and consistent color scheme for the UI controls and typography, ensuring they stand out against the image while remaining unobtrusive.
-- **Mobile Friendliness**: Ensure touch events work smoothly for the draggable divider and algorithm selection on mobile devices.
-
-### Implementation Plan
-- **HTML**: Structure the page with a main container holding the canvas and an overlaid control panel for algorithm selection.
-- **CSS**: Apply a distinct color scheme and typography to the UI. Use absolute positioning for the draggable divider and control panel over the canvas. Ensure responsive layout using Flexbox/Grid for the controls.
-- **JavaScript (Core Logic)**:
-  - Load a high-resolution image onto a hidden off-screen canvas to extract pixel data.
-  - Implement functions for different dithering algorithms (Floyd-Steinberg, Atkinson, etc.) that process the image data and propagate quantization errors to neighboring pixels.
-- **JavaScript (Rendering & Interaction)**:
-  - Use the main `<canvas>` to draw the original image and then overlay the dithered version using `drawImage` with a clipping region based on the slider position.
-  - Add `pointerdown`, `pointermove`, and `pointerup` event listeners to the canvas/divider to update the clipping region dynamically.
-  - Update the dithered image data whenever a new algorithm is selected from the control panel.
-
-## Procedural Biome Map Generator [[demo](https://rybla.github.io/interpolnet-2/procedural-biome-map-generator)]
-
-This demo is a map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.
-
-It features a full-screen canvas that renders the map pixel-by-pixel based on the noise map calculations. It uses two separate multi-octave noise layers—one for elevation, and one for moisture—combining them to figure out what type of biome should be present at each pixel.
-
-- Elevation layer determines Ocean, Beach, Coastlines, Mountains, etc.
-- Moisture layer further differentiates land into Deserts, Forests, Jungles, Snow, etc.
-- Local minima calculation based on elevation is used to dynamically generate a series of simple rivers that flow into the ocean.
-- The map is re-generated periodically or interactively to animate it dynamically, or using CSS animations on the canvas to simulate interactive elements.
-- The implementation strictly uses a mobile-friendly responsive layout and a distinct consistent color palette that echoes vintage topographical maps and satellite data.
-
-## WebGL Particle Physics Emitter [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-physics-emitter)]
-
-An interactive 2D particle emitter powered by WebGL where users can visually construct and tweak the math for wind, gravity, and drag vectors applied to independent points. Thousands of particles are simulated and rendered in real-time, allowing users to intuitively understand how different physical forces interact to influence particle trajectories.
-
-### Features
-- **Real-time Particle Simulation**: High-performance rendering of tens of thousands of particles using WebGL, ensuring smooth 60 FPS animation.
-- **Interactive Force Vectors**: Visual controls to manipulate wind (horizontal/vertical force), gravity (downward/upward force), and drag (velocity dampening) vectors.
-- **Continuous Emission**: A steady stream of particles is emitted from a central point, with a defined lifespan and randomized initial velocities.
-- **Dynamic Visuals**: Particles change color or opacity based on their speed and lifespan, creating a mesmerizing and readable flow of movement.
-
-### Design Goals
-- **Educational Physics Math**: Provide a direct, visual correlation between mathematical vectors (gravity, wind, drag) and the physical behavior of simulated particles.
-- **Distinct Aesthetics**: Use a dark, vibrant, and consistent color scheme (e.g., neon blues and pinks against a deep charcoal background) to make the particles pop.
-- **Responsive Layout**: Ensure the canvas and vector control panel adapt seamlessly to desktop and mobile layouts, stacking vertically on smaller screens.
-- **Intuitive UI Feedback**: Employ active and passive animations on the control sliders to indicate interaction and real-time state changes.
-
-### Implementation Plan
-- **HTML**: Structure the page with a main `<canvas>` for WebGL rendering and a sidebar/overlay control panel containing range sliders for the physics parameters.
-- **CSS**: Apply a cohesive dark theme, using Flexbox/Grid for a responsive layout. Style the sliders and typography to match the project's unique design guidelines.
-- **JavaScript (WebGL & Shaders)**:
-  - Initialize a WebGL context and compile vertex and fragment shaders.
-  - Render particles using `gl.POINTS`. The vertex shader will handle scaling and positioning, while the fragment shader handles coloring and shape (e.g., making them circular).
-- **JavaScript (Physics Simulation)**:
-  - Maintain a buffer of particle data (position, velocity, age, lifespan).
-  - Implement a `requestAnimationFrame` loop that calculates position updates based on the current wind, gravity, and drag values.
-  - Upload the updated particle positions to the GPU via WebGL buffers every frame.
-- **JavaScript (Interaction)**:
-  - Add event listeners to the UI sliders to update global variables for wind (x, y), gravity (y), and drag coefficient.
-  - Update the displayed numerical values of the vectors dynamically as the user interacts with the controls.
-
-## Shadow Mapping Deconstructed [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping)]
-
-Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
-
-### Features
-- **Split-Screen Visualization:** Two side-by-side (or vertically stacked on mobile) views rendering the exact same scene simultaneously: one from the main camera's perspective showing fully rendered shadows, and one from the light source's perspective showing the depth map.
-- **Interactive Light Positioning:** Users can click and drag on the screen to rotate the light source around the central objects, dynamically updating the shadow map in real-time.
-- **Real-time Depth Rendering:** The second view utilizes a depth material to visually demonstrate how a shadow map encodes distance from the light.
-- **Dynamic Shadows:** Moving the light immediately alters the shadows cast by various objects (like toruses and spheres) onto the floor and each other, which perfectly correlates with the depth buffer view.
-- **Responsive Layout:** Automatically adjusts from side-by-side on wide screens to a vertical stack on mobile devices.
-
-### Design Goals
-- **Educational Clarity:** Visually demystify how shadow mapping works by letting the user see exactly what the light "sees."
-- **Seamless Interactivity:** Provide a fluid experience where dragging instantly updates both rendering contexts without lag.
-- **Distinct Aesthetic:** Use the Interpolnet dark theme with a clean, high-contrast palette to make shadows and the depth map easy to distinguish.
-
-### Implementation Plan
-- **HTML/CSS Layout:** A flexible container displaying two rendering views. Each view will feature an overlay indicating its perspective (Camera View vs. Light Depth Buffer).
-- **Three.js Scene Setup:** Initialize a single 3D scene containing a floor plane and a few floating geometric shapes (e.g., torus, cube, sphere).
-- **Light & Cameras:**
-  - Create a main perspective camera.
-  - Create a directional light with shadow mapping enabled.
-  - Create a camera representing the light source's perspective.
-- **Split-Screen Rendering Loop:**
-  - Use two WebGLRenderers (or a single renderer with `setViewport` and `setScissor`).
-  - Render the scene normally for the camera view.
-  - For the light view, apply a `MeshDepthMaterial` (or a custom depth visualization shader) to all objects, overriding their standard materials temporarily, and render the scene from the light's camera perspective.
-- **Interaction:** Attach pointer event listeners to allow dragging, which calculates a new polar coordinate position for the directional light, smoothly updating its position vector in the animation loop.
-
-## Delaunay Circle Mesh Expansion [[demo](https://rybla.github.io/interpolnet-2/delaunay-circle-mesh-expansion)]
-
-The Delaunay Circle Mesh Expansion demo provides an interactive visualization of how a Delaunay triangulation can emerge dynamically from expanding circles. Users place points randomly on the canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
-
-### Features
-- **Interactive Point Placement:** Users can click or tap anywhere on the HTML5 canvas to place new seed points.
-- **Dynamic Circle Expansion:** Once placed, each seed point emits a circle that steadily expands in radius over time.
-- **Delaunay Triangulation Locking:** As the expanding circles intersect with one another, the algorithm dynamically checks for circumcircle properties. When the optimal geometric conditions are met for any three points, a triangle is "locked" in place, forming the Delaunay mesh incrementally.
-- **Visual Feedback:** Expanding circles are rendered with soft, translucent colors, while the locked triangulation edges are drawn with distinct, high-contrast lines.
-
-### Design Goals
-- **Educational Intuition:** Break down the abstract concept of Delaunay triangulation (specifically the empty circumcircle property) into a physical, continuous animation of expanding waves.
-- **Mesmerizing Aesthetics:** Utilize a dark, modern theme with glowing neon colors for the circles and mesh edges to create a relaxing, visually appealing experience.
-- **Responsive Layout:** Ensure the canvas scales perfectly on both mobile and desktop screens, providing a seamless interactive area.
-
-### Implementation Plan
-- **HTML/CSS:** Implement a full-screen responsive `<canvas>` with an overlaid control or instruction panel. Apply the Interpolnet dark theme with distinct typography.
-- **JavaScript Core Logic:**
-  - Maintain a state array of active points and their corresponding expanding circle radii.
-  - On each frame, iterate through all possible triplets of points. Calculate their circumcenter and circumradius.
-  - If the global expanding radius reaches a triplet's circumradius, and no other point lies inside this circumcircle (the Delaunay condition), "lock" the triangle and draw its edges.
-- **JavaScript Rendering:**
-  - Use `requestAnimationFrame` for a smooth continuous loop.
-  - Draw the expanding circles using `ctx.arc`.
-  - Draw the locked triangle edges using `ctx.beginPath` and `ctx.lineTo`.
-- **Interactivity:** Add `pointerdown` event listeners to the canvas to easily push new points into the state array and reset or trigger their expansion phase.
-
-## UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/uv-map-painter)]
-
-This demo is an interactive tool allowing users to paint on a 2D canvas representing the unrolled UV map of a 3D cube, and see their brush strokes wrap around the 3D object in real-time.
-
-### Features
-- **Split-Screen Interface:** A side-by-side (or top-and-bottom on mobile) layout with a 2D painting canvas on one side and a 3D rendering of a cube on the other side.
-- **UV Map Layout:** The 2D canvas is divided into 6 square regions arranged in a standard cross or T-shape pattern, representing the unrolled faces of the 3D cube.
-- **Real-time 3D Texture Mapping:** As the user paints on the 2D canvas, the 3D cube's texture updates dynamically and immediately.
-- **Interactive 3D Viewing:** The 3D view allows the user to rotate the cube using mouse or touch interactions to see all sides.
-- **Color Selection:** Users can choose from a palette of vibrant colors or select custom colors to paint with.
-
-### Design Goals
-- **Educational Visualization:** Provide a hands-on, intuitive way for users to understand how 2D textures are mapped onto 3D geometry using UV coordinates.
-- **Seamless Interactivity:** The update from 2D strokes to 3D texture must be fluid and instant, creating a satisfying painting experience.
-- **Mobile Friendly:** The layout should adapt elegantly to portrait screens by stacking the 2D canvas and 3D view, ensuring usability on phones and tablets.
-- **Distinct Aesthetic:** Follow the Interpolnet 2 color scheme and typography guidelines.
-
-### Implementation Plan
-- **HTML:** Create a flexbox/grid layout container holding a `<canvas>` element for 2D painting and a `<div>` container for the Three.js 3D rendering context. Include a color picker interface.
-- **CSS:** Use the Interpolnet typography (e.g., from `public/index.css`) and responsive layout styles to stack the views on smaller screens.
-- **JavaScript (2D Canvas):**
-  - Draw the UV grid layout, highlighting the bounds of each face.
-  - Implement basic pointer/touch event handlers for drawing lines/strokes on the canvas.
-- **JavaScript (Three.js):**
-  - Set up a scene with a camera, lights, and a `BoxGeometry`.
-  - Create a 3D texture object using the 2D `<canvas>` element as its source.
-  - In the animation loop, or upon every stroke event, flag the texture to update so the GPU fetches the latest canvas data.
-  - Use `OrbitControls` (or custom interaction logic) to handle rotating the 3D cube.
-
-## Inverse Kinematics Robotic Arm [[demo](https://rybla.github.io/interpolnet-2/inverse-kinematics-arm)]
-
-This demo provides an interactive 2D visualization of a multi-jointed robotic arm. Users can drag a target point (the end effector) around the canvas, and the underlying inverse kinematics algorithm calculates the necessary joint angles for the arm to reach that point.
-
-### Features
-- **Multi-Jointed Robotic Arm:** A continuous chain of articulated segments originating from a fixed base point.
-- **Inverse Kinematics Algorithm:** Implements a real-time iterative algorithm (like FABRIK - Forward And Backward Reaching Inverse Kinematics) to compute the required joint angles to position the end of the arm at the user's cursor.
-- **Interactive End Effector:** Users can click and drag the target point anywhere on the screen. The arm will stretch or fold dynamically to reach it.
-- **Visual Feedback:** Shows the target point clearly and provides visual cues if the target is out of the arm's total reachable bounds.
-- **Responsive Layout:** The canvas adapts to different screen sizes, making it usable on both desktop and mobile devices.
-
-### Design Goals
-- **Educational Intuition:** Break down the complex concept of inverse kinematics into a simple, tangible interactive experience.
-- **Fluid Animation:** Ensure the algorithm is performant enough to run at 60 FPS, providing smooth and satisfying motion as the arm tracks the target.
-- **Consistent Aesthetics:** Use a modern dark theme with bright, neon accents (e.g., cyan for the arm, magenta for the target) to align with Interpolnet 2's design language, ensuring high contrast and clear visibility of the mathematical components.
-
-### Implementation Plan
-- **HTML/CSS:** Set up a full-screen `<canvas>` element for rendering, overlaid with a simple text instructions panel. Use CSS variables for a consistent color scheme.
-- **JavaScript Core Logic:**
-  - Define an array of segments (each with length and angle properties).
-  - Implement a forward kinematics function to compute global `(x, y)` joint positions from angles.
-  - Implement an inverse kinematics solver. For FABRIK:
-    1. Reaching Forward: Set the end effector to the target position, then move each subsequent joint backwards towards the base, constrained by segment lengths.
-    2. Reaching Backward: Set the base joint back to its fixed origin, then move each subsequent joint forwards, again constrained by lengths.
-    3. Iterate this process until the end effector is sufficiently close to the target or max iterations are reached.
-- **JavaScript Rendering & Interaction:**
-  - Use `requestAnimationFrame` for a smooth continuous render loop.
-  - Draw the segments as thick lines (`ctx.lineWidth`, `ctx.lineCap = 'round'`) and the joints as circles (`ctx.arc`).
-  - Add pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to the canvas to handle dragging the target point.
-- **HTML Structure**: A main container holding the canvas for the image and the interactive slider element. A control panel for selecting the dithering algorithm.
-- **CSS Styling**: A simple, dark theme. CSS absolute positioning will be used to overlay the slider onto the canvas. The canvas rendering will handle the split view.
-- **JavaScript Engine**:
-  - Load the base high-resolution image and extract its pixel data via a canvas `ImageData` object.
-  - Implement a general error-diffusion function that accepts different weight matrices (kernels).
-  - Add specific matrices for Floyd-Steinberg, Atkinson, Jarvis-Judice-Ninke, and Stucki.
-  - Apply the selected dithering algorithm to the image data.
-  - Handle the slider's `input` event to dynamically composite the original image and the dithered image based on the slider's position, drawing the combined result to the visible canvas.
-## Biome Map Generator [[demo](https://rybla.github.io/interpolnet-2/biome-map-generator)]
-
-A procedural map generator that dynamically combines overlapping octaves of simplex noise with a moisture map to generate diverse biomes, coastlines, and river systems.
-
-### Features
-- **Dynamic Terrain Generation**: Uses layered simplex noise to create a highly detailed and organic elevation map.
-- **Moisture Simulation**: Computes a separate moisture map, also using noise, which interacts with the elevation data.
-- **Biome Classification**: Assigns specific biomes (e.g., Desert, Grassland, Forest, Tundra, Snow) based on the intersection of elevation and moisture levels.
-- **Coastline Delineation**: Distinct rendering of coastlines where landmasses meet the ocean (sea level threshold).
-- **River Systems**: A procedural algorithm that spawns rivers at higher elevations and traces their steepest descent down to the sea level.
-
-### Design Goals
-- **Visual Clarity**: Present a distinct and easily recognizable map with clear color-coded biomes.
-- **Real-time Feedback**: The map is generated seamlessly and rendered instantly onto the canvas.
-- **Organic Feel**: The use of multiple octaves of noise ensures that the terrain looks natural, avoiding harsh, pixelated edges.
-
-### Implementation Plan
-- **HTML/CSS**: A clean, responsive container holding a full-screen or large `<canvas>` element for rendering the map, styled with a distinct, unique, and consistent color scheme.
-- **JavaScript Core**:
-    - **Simplex Noise Engine**: Implement a robust 2D Simplex noise function to serve as the foundation for the terrain.
-    - **Map Data Structures**: Create 2D arrays to hold elevation and moisture data for each pixel or cell.
-    - **Biome Mapping**: A function that takes `(elevation, moisture)` as input and returns a specific biome color.
-    - **River Generation**: An algorithm that randomly drops "springs" on land and follows the gradient downwards, marking cells as rivers until they hit the ocean or get stuck.
-    - **Canvas Rendering**: Use `ImageData` to efficiently draw the generated pixels to the canvas.
 - **HTML Structure**: A layout featuring a text input area, a statistics/metrics panel, a character code table, and a large central canvas or SVG area for the tree visualization.
 - **Data Structures (JavaScript)**:
     - Implement a `MinHeap` or priority queue to efficiently build the Huffman tree.
@@ -3678,29 +2363,23 @@ A procedural map generator that dynamically combines overlapping octaves of simp
     - Use HTML5 Canvas or SVG (SVG might be easier for handling interactions and CSS transitions on nodes).
     - Implement a tree layout algorithm (like Reingold-Tilford) to calculate the $(x, y)$ coordinates for each node to ensure a clean, non-overlapping display.
     - Animate node movements using CSS transitions or a `requestAnimationFrame` loop.
-## Slope Field Ink Trace [[demo](https://rybla.github.io/interpolnet-2/slope-field-ink-trace)]
+## Dynamic Slope Field [[demo](https://rybla.github.io/interpolnet-2/dynamic-slope-field)]
 
-An interactive educational tool that visualizes a dynamic slope field (direction field) for a given differential equation. Users can interact with the field by "dropping" virtual ink on the canvas, which then flows along the field lines, tracing out the distinct solution curves (integral curves) corresponding to their chosen initial conditions.
+An interactive mathematical visualization tool where users can explore differential equations by interacting with a real-time, dynamic slope field.
 
 ### Features
-- **Dynamic Slope Field:** The canvas renders a grid of short line segments representing the slope $dy/dx$ of a differential equation (e.g., $dy/dx = \sin(x) + \cos(y)$) at various points $(x, y)$. The field is responsive to panning and zooming.
-- **Interactive Ink Drops:** Users click or touch anywhere on the canvas to place a "drop of ink".
-- **Solution Curve Tracing:** Once dropped, the ink particle is integrated in both forward and backward "time" along the slope field using a numerical method (like Runge-Kutta 4th order or Euler's method), leaving a permanent, smooth trail that visualizes the specific solution curve through that initial value.
-- **Multiple Drops:** Users can place multiple drops to see how different initial conditions lead to different solution curves, revealing the overall family of solutions and behavior of the differential equation (e.g., asymptotes, attractors, repellors).
+- **Dynamic Slope Field Grid**: Displays a background grid of slope lines, calculated in real-time based on a user-provided differential equation ($dy/dx = f(x, y)$). The field uses color mapping to indicate the magnitude (steepness) of the slope at each point.
+- **Interactive "Ink" Dropping**: Users can click or tap anywhere on the canvas to drop virtual "ink" particles. These particles are then animated over time, tracing the specific solution curves (integral curves) through the slope field originating from those initial coordinate drops.
+- **Real-Time Equation Parsing**: A floating control panel provides a text input for the user to type in their own equations (e.g., `Math.sin(x) * y`, `-x/y`, `x - y`). As the user types, the background slope field instantly re-renders to reflect the new differential equation.
+- **Continuous Simulation Loop**: The ink drops leave a persistent or slowly fading trail as they are pushed across the canvas by the calculated slopes using a numerical method solver (like Euler's or Runge-Kutta).
+- **Responsive Canvas**: The slope field and particle coordinate system automatically adjust to window resizing, ensuring a consistent visual experience on both mobile and desktop screens.
 
 ### Design Goals
-- **Educational Intuition:** Make the abstract concept of differential equations and initial value problems concrete and highly interactive. Provide a visceral sense of "flow" along the vector field.
-- **Engaging Aesthetics:** Employ a dark, "blueprint" or "fluid dynamics" aesthetic. The slope field segments are subtle (e.g., dim cyan or grid-like), while the ink traces are bright, glowing, and high-contrast (e.g., neon magenta, yellow, green) to stand out clearly.
-- **Fluid Performance:** Use HTML5 Canvas to ensure smooth rendering of the field and the integration of multiple ink traces simultaneously at 60fps.
+- **Educational Sandbox**: Provide a highly intuitive, tactile way for students and enthusiasts to understand the relationship between a differential equation, its slope field, and the family of specific solution curves. By physically "dropping" points, the abstract concept of initial value problems becomes concrete.
+- **Striking Visuals**: Utilize a dark, scientific theme with glowing, neon accents. The background field should be subtle but clear, while the active ink trails should be bright and distinct (e.g., cyan, magenta, and bright yellow), creating a beautiful flow-art effect over time.
+- **Fluid Performance**: Leverage `requestAnimationFrame` and optimized canvas rendering to ensure that evaluating the equation at hundreds of grid points and animating dozens of particles simultaneously runs at a smooth 60 frames per second.
 
 ### Implementation Plan
-- **HTML Structure:** A full-screen container with a single `<canvas>` element for the rendering. A minimalistic UI overlay might display the current differential equation (though a hardcoded interesting equation is sufficient for the core demo).
-- **CSS Styling:** A dark theme background, resetting margins, and absolute positioning for the canvas to fill the viewport.
-- **JavaScript Core:**
-    - **Mathematics:** Define a function `f(x, y)` representing the differential equation $dy/dx$.
-    - **Rendering Loop:** Use `requestAnimationFrame` to draw the slope field grid (calculating the angle at each grid point and drawing a short line segment) and update the positions of any active "ink drops".
-    - **Integration:** For each active ink drop, use a numerical integration step (e.g., RK4) to calculate its next position based on the slope at its current position. Draw a line segment from the old position to the new position.
-    - **Interaction:** Add pointer event listeners (`pointerdown`, `pointermove` for dragging) to capture user input and spawn new ink drop objects at the cursor's $(x, y)$ coordinates, mapped from screen space to the mathematical coordinate system.
 - **HTML/CSS Structure**: A full-screen `<canvas>` element for the rendering and an absolutely positioned, translucent floating control panel containing the equation input text field.
 - **Math Evaluation Engine**: A custom or restricted evaluation function that safely parses the user's string input into a callable JavaScript function `f(x, y)`, making `Math` object methods available (like `sin`, `cos`, `exp`).
 - **Rendering Loop (Canvas API)**:
@@ -3988,35 +2667,26 @@ An interactive map generator that combines overlapping octaves of simplex noise 
   - Create a lookup table or function to determine the biome color based on elevation and moisture thresholds.
 - **River Simulation**: Algorithm to pick random inland points, calculate the steepest downhill gradient, and trace a path until it reaches sea level, marking those pixels as rivers.
 - **Rendering Loop**: Use `ImageData` to manipulate pixels efficiently and draw the final biome colors and rivers onto the canvas context.
-## WebGL Particle Vector Physics [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-vector-physics)]
+## WebGL Particle Emitter [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-emitter)]
 
-WebGL Particle Vector Physics [[demo](https://rybla.github.io/interpolnet-2/webgl-particle-vector-physics)]
-
-An interactive WebGL-based physics sandbox where users construct the mathematics of motion by tweaking vector components in real time. It simulates thousands of independent particles acting under the influence of global forces.
+An interactive WebGL-based particle system that visually demonstrates the effects of vector mathematics and simple physics. Users can construct math vectors for wind, gravity, and drag, which are independently applied to a massive amount of particles rendered in real-time.
 
 ### Features
-- **GPU-Accelerated Rendering**: Thousands of particles are rendered simultaneously via WebGL to ensure fluid performance.
-- **Visual Vector Controls**: A comprehensive UI overlaid on the canvas allows users to independently adjust the X and Y components of Gravity and Wind, as well as the magnitude of Drag.
-- **Real-Time Physics Simulation**: Every particle updates its velocity and position every frame according to the classic kinematic equations, visually reflecting the current vector math.
-- **Dynamic Particle Lifecycle**: Particles spawn continuously, fly through the vector field, and reset when they drift out of bounds or lose all energy, maintaining a continuous flow.
-- **Distinct Neon Aesthetic**: Particles are rendered as bright neon points against a stark dark background, creating an engaging, energetic visual experience.
+- **GPU-Accelerated Particles**: Thousands of individual particles are updated and rendered directly via WebGL, allowing for a smooth 60fps experience even with high particle counts.
+- **Interactive Physics Vectors**:
+    - **Gravity Vector**: Users can adjust a 2D vector controlling the constant pull on all particles.
+    - **Wind Vector**: A directional force that pushes particles across the canvas.
+    - **Drag Coefficient**: A slider to increase or decrease the simulated air resistance, causing particles to slow down over time relative to their velocity.
+- **Visual Controls**: Interactive UI elements that allow dragging to set vector magnitude and direction.
+- **Real-Time Simulation**: Changes to gravity, wind, and drag immediately affect the simulation without restarting.
+- **Emission Dynamics**: A steady stream of particles is emitted from a central point, fading out as they age.
 
 ### Design Goals
-- **Educational Mathematics**: Make the abstract concepts of vector addition and kinematics (velocity, acceleration, drag) intuitive by letting the user tweak the variables and immediately observe the results.
-- **High Performance**: Utilize WebGL to ensure the simulation handles massive particle counts smoothly across devices.
-- **Intuitive UI**: Provide clear, accessible sliders that map directly to the underlying physical forces.
+- **Educational and Fun**: Demystify simple physics simulation (Euler integration) by providing an engaging visual sandbox.
+- **Performance**: Use WebGL to push the limits of particle counts in the browser, showing the power of typed arrays and shaders.
+- **Aesthetic Excellence**: Adopt a "neon synthwave" visual style—dark background with bright, glowing cyan, magenta, and yellow particles.
 
 ### Implementation Plan
-- **HTML/CSS Structure**: A full-screen `<canvas>` dedicated to WebGL rendering, paired with a semi-transparent, floating HTML control panel for the vector sliders. The CSS uses a dark theme with neon-colored UI accents.
-- **WebGL Context & Shaders**:
-  - Implement a vertex shader that accepts particle positions and maps them to normalized device coordinates.
-  - Implement a simple fragment shader that outputs a solid neon color for each particle.
-- **Physics Engine (JavaScript)**:
-  - Maintain typed arrays (e.g., `Float32Array`) for particle positions and velocities.
-  - Establish a `requestAnimationFrame` loop that updates every particle. The core physics update per particle is: `velocity = (velocity + gravity + wind) * (1 - drag); position += velocity;`.
-  - Handle boundary conditions by respawning particles that exit the canvas area.
-  - Update the WebGL position buffer with the newly computed positions and issue a draw call.
-- **UI Interactivity**: Attach event listeners to the range inputs to update the global `gravity`, `wind`, and `drag` variables used in the physics engine instantly.
 - **HTML Structure**: A full-screen `<canvas>` element for the WebGL rendering. A floating, semi-transparent UI control panel overlay containing the sliders and vector controls.
 - **CSS Styling**: A cohesive dark theme, using responsive flexbox for the controls so they look good on desktop and mobile.
 - **JavaScript Core**:
@@ -4025,33 +2695,26 @@ An interactive WebGL-based physics sandbox where users construct the mathematics
     - **Physics Engine**: In the `requestAnimationFrame` loop, update particle positions based on $v_{new} = v_{old} + (gravity + wind - drag \times v_{old}) \times dt$ and $p_{new} = p_{old} + v_{new} \times dt$.
     - **Rendering**: Upload the updated buffer data to the GPU and draw as `GL_POINTS`.
     - **Interaction**: Handle pointer events on custom UI elements to update the physics variables dynamically.
-## 3D Shadow Mapping Split-Screen View [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping-split-screen)]
+## Shadow Mapping Deconstruction [[demo](https://rybla.github.io/interpolnet-2/shadow-mapping-deconstruction)]
 
-An interactive 3D visualization that deconstructs the mechanics of shadow mapping by providing a side-by-side split-screen view. One side shows the final rendered scene from the main camera's perspective, while the other side visualizes the depth buffer as seen from the light source's perspective.
+Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene from the camera's perspective next to the light source's depth buffer.
 
 ### Features
-- **Split-Screen Viewport**: The browser window is divided into two distinct views:
-    - **Main Camera View**: Displays the scene with full lighting, materials, and cast shadows.
-    - **Light Camera (Depth) View**: Displays the scene precisely from the perspective of the directional light source. Instead of normal colors, objects are rendered using a depth material (grayscale) representing the shadow map.
-- **Interactive Scene Manipulation**: Users can use orbit controls to rotate and zoom the main camera, and separate controls (or UI sliders) to move the position of the light source.
-- **Real-Time Shadow Updates**: As the light source is moved, the depth map on the right side updates instantly, and the resulting shadows cast in the main view recalculate in real time.
-- **Dynamic Objects**: The scene includes a variety of 3D objects (e.g., a rotating cube, a floating torus, a central sphere) resting on a large flat plane to clearly demonstrate shadow casting and receiving.
+- **Split-Screen Visualization**: A side-by-side (or top-and-bottom on mobile) layout presenting two distinct views of the same 3D scene.
+- **Camera Perspective**: The primary view shows the scene as seen by the main camera, featuring objects casting and receiving shadows.
+- **Light Source Perspective**: The secondary view shows the scene exactly as seen from the perspective of the shadow-casting light source.
+- **Depth Map Rendering**: The secondary view renders the scene using a depth material, visually representing the shadow map (closer objects are darker/lighter, further objects fade). This reveals how the light "sees" depth.
+- **Dynamic Objects**: A scene consisting of several simple geometric objects (like a rotating torus, a sphere, and a ground plane) to clearly demonstrate shadow casting and receiving.
 
 ### Design Goals
-- **Educational Clarity**: Demystify the "black box" of 3D shadow mapping by explicitly showing the intermediate step (the depth texture) that makes it possible.
-- **Visual Causality**: Make it immediately obvious that the dark spots (shadows) in the main view correspond exactly to the areas hidden from the light's depth buffer.
-- **Aesthetic Quality**: Employ a clean, modern aesthetic. The depth view should use a striking grayscale mapping where closer objects are brighter, contrasting with a vibrant color palette in the main scene.
+- **Educational Demystification**: Provide a clear, intuitive visual explanation of how shadow mapping algorithms work in 3D graphics by exposing the hidden "light camera".
+- **Visual Correlation**: The split-screen design allows users to instantly connect the shadows seen in the main camera view with the depth information generated in the light's view.
+- **Clean Aesthetic**: Use a minimalist, high-contrast visual style to ensure the geometry and shadows are the clear focus.
 
 ### Implementation Plan
-- **HTML Structure**: A full-screen container holding a single `<canvas>` element for the WebGL rendering, overlaid with a minimal UI panel for instructions or light controls.
-- **Styling (CSS)**: A dark theme for the UI. The split screen will be handled by Three.js rendering logic rather than HTML layout.
+- **HTML Structure**: Set up a responsive flexbox container holding two distinct `div` elements, one for each view.
+- **CSS Styling**: Apply the Interpolnet 2 color scheme. Ensure the two views stack vertically on small screens and sit side-by-side on larger screens.
 - **JavaScript (Three.js)**:
-    - Set up a single Three.js scene containing the objects, a plane, a main perspective camera, and a directional light with a shadow camera.
-    - Enable shadow maps in the renderer (`renderer.shadowMap.enabled = true`).
-    - **Dual Viewports**: Use `renderer.setViewport` and `renderer.setScissor` to divide the canvas horizontally.
-    - **First Render Pass (Main View)**: Render the scene using the main camera.
-    - **Second Render Pass (Depth View)**: Render the scene again using the light's shadow camera. To visualize the depth map, temporarily swap the materials of all objects to a `MeshDepthMaterial` during this pass.
-    - Implement `OrbitControls` attached to the main camera, and perhaps a subtle automated animation for the objects to make the shadows dynamic.
   - Initialize a single Three.js scene containing the objects (torus, sphere, plane).
   - Create a `DirectionalLight` or `SpotLight` configured to cast shadows.
   - Set up two cameras: the main `PerspectiveCamera` and a camera corresponding to the light source's position and orientation (often an `OrthographicCamera` for directional lights).
@@ -4181,56 +2844,39 @@ An interactive 3D visualization using THREE that demystifies how Screen Space Am
   - Cast a Three.js Raycaster along each of these vectors for a short distance (the SSAO radius).
   - Draw lines (using `THREE.Line` or `THREE.ArrowHelper`) to represent these rays, colored based on whether the raycaster detects a hit within the radius.
 
-## 3D Facial Expression Morphing [[demo](https://rybla.github.io/interpolnet-2/3d-facial-expression-morphing)]
+## 3D Character Facial Expression Interpolation [[demo](https://rybla.github.io/interpolnet-2/3d-character-facial-expression-interpolation)]
 
-An interactive 3D visualization demonstrating how character facial expressions are generated by interpolating vertex positions between a neutral base mesh and a smiling target mesh.
+A visualization that demonstrates how a 3D character's facial expression changes by interpolating vertex positions between a neutral base mesh and a smiling target mesh.
 
 ### Features
-- **3D Interactive Scene**: A stylized facial mesh rendered in a 3D environment that can be rotated and zoomed.
-- **Real-time Morphing**: An interactive slider allowing users to interpolate the facial expression seamlessly between a neutral state and a full smile.
-- **Vertex Interpolation**: As the slider moves, the underlying vertices of the mesh smoothly transition between the base and target positions, demonstrating the core mechanic of 3D facial animation.
-- **Wireframe Overlay**: The mesh is rendered with a wireframe overlay so users can clearly see the topology and how individual vertices move during the morph.
-- **Responsive Interface**: A mobile-friendly control panel overlaid on the 3D canvas for adjusting the morph weight.
+- **Interactive 3D View**: A 3D view of a character's face.
+- **Interpolation Slider**: A slider control that dynamically adjusts the interpolation factor between 0.0 (neutral) and 1.0 (smiling), instantly reflecting changes on the 3D model.
 
 ### Design Goals
-- **Educational Demystification**: Provide a clear, visual intuition for how 3D facial animation and blend shapes work by exposing the underlying vertex interpolation.
-- **Visual Clarity**: Use a clean, tech-inspired aesthetic with high contrast (e.g., dark background with bright, neon accents) to make the mesh and its deformation clear.
-- **Fluid Interactivity**: Ensure the morphing updates instantly as the slider is adjusted, maintaining a smooth 60fps experience.
+- **Educational**: Help users understand how basic facial animation works by interpolating between predefined target shapes (blend shapes/morph targets).
+- **Visual Clarity**: Display the mesh clearly to emphasize the movement of individual vertices as the expression changes.
 
 ### Implementation Plan
-- **Tech Stack**: HTML5 Canvas and Three.js for the 3D environment.
-- **Geometry Generation**: Use `THREE.BufferGeometry` to dynamically create a simple, stylized face base mesh.
-- **Morph Targets**: Create a morph target representing a "smile" by modifying the mouth vertices of the base geometry and assigning it to `geometry.morphAttributes.position`.
-- **Lighting & Materials**: Set up ambient and directional lighting. Use a material with `wireframe: true` or a combination of solid and wireframe materials to highlight the topology.
-- **Interaction (JavaScript)**: Link an HTML range slider to the mesh's `morphTargetInfluences[0]` property to allow users to interactively control the interpolation weight. Use `OrbitControls` for camera manipulation.
 - **Renderer**: Implement custom 3D projection rendering to an HTML5 canvas element, without external 3D libraries.
 - **Mesh Data**: Hard-code the vertices and faces for a simple low-polygon base face mesh, and a target smile mesh which contains identically structured topology but with adjusted vertex positions (e.g., mouth corners raised and cheeks shifted).
 - **Logic**: A render loop reading the slider value (t). The final position of each vertex is calculated as: `(1 - t) * baseVertex + t * smileVertex`. The canvas is cleared and the interpolated mesh is projected and drawn every frame.
 
-## Toon Shading Deconstruction [[demo](https://rybla.github.io/interpolnet-2/toon-shading-deconstruction)]
+## Cel Shading Visualizer [[demo](https://rybla.github.io/interpolnet-2/cel-shading-visualizer)]
 
-Toon Shading Deconstruction provides an interactive 3D visualization to deconstruct non-photorealistic rendering.
-It shows how smooth lighting gradients are snapped into sharp color bands using a 1D step texture.
+An interactive 3D visualization that demonstrates how cel shading (toon shading) works by mapping smooth lighting gradients to sharp color bands using an adjustable 1D step texture.
 
 ### Features
-- A 3D model (e.g., a torus knot or sphere) rendered with a custom toon shader.
-- An interactive 1D step texture (ramp texture) that users can edit in real-time.
-- Visualizing how lighting (dot product of normal and light direction) maps to the 1D texture.
-- Sliders for controlling light position, color, and object rotation.
+- **3D Model Viewer**: A central 3D model (e.g., a torus knot) that displays the lighting.
+- **Interactive 1D Gradient Map**: A visual representation of a 1D texture that users can adjust to change the number of color bands (steps).
+- **Real-Time Shading Updates**: The 3D model instantly reflects the changes made to the 1D gradient map, snapping smooth lighting into discrete tones.
+- **Lighting Controls**: Interactive controls to adjust the light's direction to observe how the cel-shaded bands react.
 
 ### Design Goals
-- Clean and modern UI with responsive design.
-- Interactive and intuitive controls.
-- Consistent typography and distinct color scheme.
+- **Educational Value**: Clearly illustrate the mapping process from continuous diffuse lighting values (N dot L) to discrete color bands.
+- **Visual Feedback**: Make the connection between the 1D texture configuration and the resulting non-photorealistic rendering immediate and intuitive.
+- **Aesthetic**: A stylish, clean aesthetic that highlights the cartoonish nature of cel shading against a dark, contrasting background.
 
 ### Implementation Plan
-1. Setup a Three.js scene with a 3D object and a directional light.
-2. Create a custom ShaderMaterial implementing toon shading logic:
-   - Calculate diffuse lighting: `max(dot(normal, lightDir), 0.0)`.
-   - Use the diffuse lighting value as the U coordinate to sample a 1D texture.
-3. Build a UI to edit the 1D texture (gradient ramp) by specifying color stops or thresholds.
-4. Dynamically generate the 1D texture using a Canvas element and pass it to the shader.
-5. Add controls for light and object properties.
 - **HTML/CSS**: A flex container with a main 3D canvas and a panel for UI controls.
 - **3D Rendering**: Use Three.js to render the scene. Apply `MeshToonMaterial` which supports a gradient map. Use a `DataTexture` to dynamically generate the 1D step texture based on user input.
 - **Interaction**: UI sliders to let users define the number of steps and light position, dynamically rebuilding the `DataTexture` when settings change.
@@ -4338,60 +2984,40 @@ An interactive 3D visualization that demonstrates subsurface scattering by shini
 
 ## 2D Metaballs Liquid Simulator [[demo](https://rybla.github.io/interpolnet-2/2d-metaballs-liquid-simulator)]
 
-An interactive WebGL visualization on an HTML5 canvas that simulates liquid drops by dynamically rendering 2D metaballs. The metaballs smoothly merge into one another using overlapping thresholds calculated from their inverse-square distance functions.
+Render 2D metaballs that smoothly merge into one another like liquid drops by calculating the overlapping thresholds of their inverse-square distance functions.
 
 ### Features
-- **Liquid Simulation**: Multiple 2D metaballs move organically around the screen, bouncing off edges and each other, simulating liquid drops.
-- **Smooth Merging**: As metaballs get close to each other, their fields overlap, and they seamlessly merge together, creating a convincing liquid-like effect.
-- **Interactive Controls**: Users can adjust the base threshold, the number of metaballs, and their speed in real-time to see how the simulation responds.
-- **Responsive Canvas**: The visualization scales cleanly to any screen size, maintaining performance and visual fidelity on both desktop and mobile devices.
+- **Metaballs**: 2D metaballs that smoothly merge into one another.
+- **Overlapping Thresholds**: Calculate the overlapping thresholds of their inverse-square distance functions.
+- **Liquid Simulator**: Simulate liquid drops that merge into one another.
 
 ### Design Goals
-- **Organic Movement**: Ensure the metaballs move and merge in a satisfying, physically plausible manner to accurately mimic liquid behavior.
-- **High Performance**: Utilize WebGL to handle the per-pixel calculations required for evaluating the inverse-square distance fields, allowing for a large number of metaballs to run smoothly at 60fps.
-- **Clear Interaction**: Provide immediate visual feedback when users tweak the simulation parameters, demonstrating the underlying math in a tangible way.
+- **Smooth Merging**: Provide a visually appealing and smooth merging of liquid drops.
+- **Performance**: Ensure the simulation is performant and responsive.
+- **Aesthetic**: A visually pleasing and modern interface with a consistent color scheme.
 
 ### Implementation Plan
-- **HTML/CSS**: A full-screen or prominent `<canvas>` element for the WebGL rendering, alongside a distinct, unique, and cleanly styled control panel for user inputs.
-- **WebGL Setup (JavaScript)**:
-    - Initialize a WebGL context and set up a full-screen quad to act as the drawing surface.
-    - Compile custom vertex and fragment shaders.
-- **Metaball Physics**:
-    - Manage an array of metaball objects in JavaScript, each with a position, velocity, and radius.
-    - Update their positions every frame based on their velocity, handling simple boundary collisions to keep them on-screen.
-- **Shader Logic (GLSL)**:
-    - The fragment shader receives the positions and radii of all active metaballs as uniforms.
-    - For each pixel, it calculates the sum of the inverse-square distances from the pixel to the center of each metaball.
-    - If this sum exceeds a predefined threshold (passed as a uniform from the UI), the pixel is colored as "liquid" (e.g., a solid color or a gradient); otherwise, it is treated as background.
 - **HTML**: Set up a canvas for rendering.
 - **CSS**: Apply styling.
 - **JavaScript**: Implement the metaballs logic and rendering loop.
 
 ## Path Tracing vs Ray Tracing [[demo](https://rybla.github.io/interpolnet-2/path-tracing-vs-ray-tracing)]
 
-An interactive 2D visualization that contrasts standard deterministic ray tracing with stochastic path tracing by showing how firing hundreds of randomized rays per pixel accurately resolves global illumination and soft shadows.
+An interactive 2D visualization that contrasts standard ray tracing with path tracing by showing how firing hundreds of randomized stochastic rays per pixel accurately resolves global illumination and soft shadows.
 
 ### Features
-- **Split-Screen or Toggle View**: Compare traditional Ray Tracing (hard shadows, deterministic rays) side-by-side or interchangeably with Path Tracing (soft shadows, global illumination).
-- **Progressive Accumulation**: Watch in real-time as the path tracing algorithm accumulates random samples to reduce noise and converge on a smoothly lit scene.
-- **Adjustable Parameters**: Interactively change the number of rays per pixel, bounce limits, light source size, and scene geometry.
-- **Visualizing Rays**: Optionally view individual ray bounces in a simplified 2D map to understand how path tracing scatters light.
+- **Split-Screen or Togglable View**: A canvas displaying a simple 2D scene (camera, light source, obstacles). Users can switch between "Ray Tracing" mode and "Path Tracing" mode.
+- **Ray Tracing Mode**: Visualizes the standard deterministic approach: a single primary ray is cast per pixel, and a single shadow ray is cast to the light. Produces hard shadows and no indirect lighting.
+- **Path Tracing Mode**: Visualizes the stochastic approach: hundreds of primary rays are cast, bouncing randomly off surfaces based on material properties (diffuse, specular) and accumulating color over time to produce soft shadows, color bleeding, and global illumination.
+- **Interactive Scene Elements**: Users can drag the light source or obstacles around the scene to see how the lighting dynamically updates in real-time.
+- **Interactive Pixel Selection**: Users can click on any pixel in the scene to visualize the specific rays being cast for that pixel, demystifying the rendering process.
 
 ### Design Goals
-- **Educational Value**: Clearly demystify the difference between Ray Tracing and Path Tracing through interactive visual feedback.
-- **Intuitive Controls**: Simple sliders and toggles allow users to experiment with core rendering concepts like soft shadows and light bounces.
-- **Aesthetic**: A visually engaging setup with a sleek, consistent dark theme that makes light accumulation pop out vibrantly.
+- **Educational Clarity**: Visually demonstrate the core difference between deterministic ray tracing and stochastic path tracing. Show why path tracing requires many samples but yields more realistic lighting.
+- **Visual Causality**: Directly link the random paths of bouncing rays to the accumulation of indirect light and soft shadows in the final image.
+- **Aesthetic**: A clean, modern "blueprint" or "tactical screen" visual style, using distinct neon colors against a dark background for the rays and obstacles, maintaining the Interpolnet 2 design system.
 
 ### Implementation Plan
-- **HTML/CSS Structure**: A responsive layout with a main `canvas` element and a floating control panel for adjusting rendering parameters.
-- **Rendering Logic (JavaScript)**:
-    - Define a simple 2D scene with light sources, occluders, and reflective/diffuse boundaries.
-    - Implement a deterministic ray tracing function: cast one ray from the eye to the surface, and one shadow ray to the light source.
-    - Implement a stochastic path tracing function: cast random rays that scatter off surfaces, accumulating light with each bounce.
-- **Progressive Rendering Loop**:
-    - Use `requestAnimationFrame` to continuously render new samples for path tracing over time.
-    - Accumulate the results in an off-screen buffer or blend them over previous frames to resolve noise.
-- **Interactivity**: Use HTML controls (sliders, toggles) to update rendering settings and trigger a scene reset to start accumulating a new image.
 - **HTML Structure**: A layout featuring the main 2D `<canvas>` element for the visualization and a control panel for switching modes and interacting with the scene.
 - **Styling (CSS)**: Apply the dark, high-contrast Interpolnet 2 theme, ensuring responsive design and clear, distinct buttons.
 - **Rendering Engine (JavaScript)**:
@@ -4482,26 +3108,20 @@ An interactive 2D visualization that allows users to move control points on a gr
 
 ## 3D Color Gamut Visualizer [[demo](https://rybla.github.io/interpolnet-2/3d-color-gamut-visualizer)]
 
-An interactive 3D visualization that shows the exact boundaries and geometric differences between RGB, HSV, and CIELAB color models.
+An interactive 3D color gamut visualization that shows the exact boundaries and geometric differences between the RGB, HSV, and CIELAB color models.
 
 ### Features
-- **3D Interactive Model**: A central 3D scene containing thousands of points, each representing a distinct color.
-- **Color Model Switching**: Users can toggle the visualization to interpret the colors in RGB space (forming a cube), HSV space (forming a cylinder or double cone), or CIELAB space (forming an irregular curved volume).
-- **Smooth Transitions**: The points smoothly animate from their position in one color space to their position in another, making the mathematical relationship between the spaces visually apparent.
-- **Information Panel**: Shows the current color space and brief mathematical descriptions of its coordinate system.
+- **Interactive 3D View**: A 3D environment where users can rotate, pan, and zoom to explore the color spaces from any angle.
+- **Multiple Color Models**: Toggles to switch between the RGB (cube), HSV (cylinder/cone), and CIELAB (irregular 3D shape) color gamut boundaries.
+- **Geometric Transitions**: Smooth, animated transitions when switching between different color models, morphing the point cloud or mesh to illustrate how the color spaces map to one another.
+- **Color Point Cloud**: The volume of the gamuts is represented by a dense point cloud, where each point is colored exactly matching its coordinate in the color space.
 
 ### Design Goals
-- **Educational Clarity**: Help users intuitively understand how different color models parameterize the same visible colors differently.
-- **Visual Delight**: Utilize thousands of colorful points moving in 3D space to create a visually engaging and beautiful experience.
-- **Performance**: Use efficient rendering techniques (like `THREE.Points` with custom buffer attributes) to ensure smooth animations even with high point counts.
+- **Educational Geometry**: Demystify the abstract shapes of different color spaces by allowing users to physically manipulate and compare their 3D boundaries.
+- **Visual Brilliance**: Utilize the actual colors represented by the coordinates to create a stunning, vibrant, and perfectly accurate color visualization.
+- **Fluid Interactivity**: Ensure smooth 60fps animations during model morphing, making the exploration feel continuous and tangible.
 
 ### Implementation Plan
-- **HTML/CSS**: A full-screen container for the Three.js canvas, with a responsive UI overlay for the controls to select the active color space.
-- **Three.js Logic**:
-  - Sample the RGB space evenly to create a base set of colors.
-  - Compute the 3D coordinates for each color in RGB, HSV, and CIELAB spaces.
-  - Store these coordinates in a `THREE.BufferGeometry`.
-  - Use `requestAnimationFrame` to interpolate the vertex positions between the current color space layout and the target color space layout when a user switches modes.
 - **Tech Stack**: HTML5 Canvas and Three.js for 3D rendering.
 - **Geometry Generation**:
   - Distribute thousands of points uniformly in the RGB space (0-1 for R, G, B).
@@ -4570,29 +3190,27 @@ An interactive physics simulation that visually proves a counter-intuitive princ
     - "Reset" button returns balls to their starting positions.
     - Sliders dynamically update the simulation parameters (even mid-flight, though resetting first is usually clearer).
 
-## Spring Energy Oscillator [[demo](https://rybla.github.io/interpolnet-2/spring-energy-oscillator)]
+## Harmonic Oscillator Energy [[demo](https://rybla.github.io/interpolnet-2/harmonic-oscillator-energy)]
 
-An interactive physics simulation that allows users to hook a virtual mass to a spring and graph its kinetic and potential energy exchange in real-time as it oscillates. Users can dynamically adjust the mass, spring constant, and damping friction to see how these properties affect the system's behavior and energy conservation.
+An interactive physics simulation that visualizes the energy exchange within a simple harmonic oscillator. Users can hook a virtual mass to a spring and watch as kinetic and potential energy transfer back and forth in real-time.
 
 ### Features
-- **Interactive Physics Sandbox**: A main canvas where users can visually see a spring attached to a mass. Users can click and drag the mass to stretch or compress the spring, adding potential energy to the system.
-- **Real-Time Energy Graph**: An adjacent scrolling canvas that plots the system's kinetic energy, potential energy, and total energy over time, providing a clear visual representation of energy exchange and conservation.
-- **Dynamic Controls**: Sliders allow users to adjust the mass of the object, the stiffness of the spring (spring constant), and the amount of friction (damping) in the environment in real-time.
-- **Responsive Layout**: The simulation and graph adapt to different screen sizes, ensuring usability on both desktop and mobile devices.
+- **Interactive Physics Sandbox**: A central canvas displaying a spring attached to a mass block. Users can click and drag the mass vertically to set its initial displacement and release it to start the oscillation.
+- **Adjustable Parameters**: A control panel with real-time sliders to tweak the physical properties of the system:
+    - **Mass ($m$)**: Adjust the weight of the block, changing its inertia.
+    - **Spring Constant ($k$)**: Adjust the stiffness of the spring, changing the restoring force.
+    - **Damping Friction ($c$)**: Adjust the air resistance or internal friction, causing the oscillation to gradually lose energy and settle.
+- **Real-Time Energy Graph**: A secondary canvas positioned alongside the simulation that plots the continuous energy curves of the system over time. It visually tracks:
+    - **Kinetic Energy (KE)**: $KE = \frac{1}{2}mv^2$ (peaks when the mass passes through the equilibrium point).
+    - **Potential Energy (PE)**: $PE = \frac{1}{2}kx^2$ (peaks when the mass is at its maximum displacement).
+    - **Total Energy (TE)**: $TE = KE + PE$ (remains constant in an undamped system, but slowly decays in a damped system).
 
 ### Design Goals
-- **Educational Value**: Provide a clear, intuitive way for students and enthusiasts to understand harmonic motion, Hooke's Law, and the conservation of energy.
-- **Visual Clarity**: Distinguish kinetic, potential, and total energy curves on the graph using a consistent and vibrant color scheme that makes the relationship between them obvious.
-- **Engaging Interaction**: Make the act of dragging the mass and watching the resulting oscillation and energy transfer feel satisfying and responsive.
+- **Educational Intuition**: The primary goal is to make the abstract concepts of kinetic and potential energy tangible. By linking a physical simulation directly to a real-time graph, users can visually comprehend how energy is conserved and transferred.
+- **Immediate Feedback**: Changes to the sliders immediately affect both the physical movement of the mass and the shape of the energy graph.
+- **Aesthetic**: Use a clean, scientific "blueprint" aesthetic consistent with the Interpolnet 2 project. Dark background with distinct, high-contrast neon colors (e.g., cyan for Kinetic Energy, magenta for Potential Energy, yellow for Total Energy) to clearly differentiate the data streams.
 
 ### Implementation Plan
-- **HTML Structure**: Create a main container with a split view: one section for the physics simulation canvas, one for the scrolling energy graph canvas, and a control panel for the sliders.
-- **CSS Styling**: Apply a modern, clean design with a distinct color palette (e.g., deep background, bright colors for the spring and energy lines). Use Flexbox/Grid for a responsive layout.
-- **JavaScript Core**:
-    - **Physics Engine**: Implement a numerical integration loop (e.g., Euler or Verlet integration) using `requestAnimationFrame`. Apply Hooke's Law ($F = -kx$) and a damping force ($F_d = -cv$) to update the mass's acceleration, velocity, and position.
-    - **Simulation Rendering**: Draw the spring (as a zig-zag line that expands/contracts based on position) and the mass on the first canvas.
-    - **Graph Rendering**: Calculate kinetic energy ($K = \frac{1}{2}mv^2$) and potential energy ($U = \frac{1}{2}kx^2$). Plot these values along with the total energy ($E = K + U$) on the second canvas, creating a scrolling effect by shifting historical data points.
-    - **Interaction Handling**: Listen to pointer events to allow manual displacement of the mass, and input events to update the physical constants from the sliders.
 - **HTML/CSS Structure**: A responsive layout featuring three main sections: the simulation canvas, the energy graph canvas, and the control panel. Flexbox will be used to ensure it stacks neatly on mobile devices.
 - **Physics Engine (JavaScript)**:
     - Implement a simple Euler integration or Verlet integration loop within `requestAnimationFrame`.
@@ -4629,28 +3247,27 @@ A web-based interactive simulation of a 2D Lennard-Jones gas. Users can control 
 - **Interaction Logic**: Handle the volume slider `input` event to adjust the container's width, and handle the reset button to re-initialize particle positions with random velocities.
 - **CSS Styling**: Apply the Interpolnet 2 color scheme, ensuring the UI controls have active/hover states and the layout is responsive via flexbox.
 
-## Water Ripple Interference Simulator [[demo](https://rybla.github.io/interpolnet-2/water-ripple-interference)]
+## 2D Water Ripple Interference [[demo](https://rybla.github.io/interpolnet-2/water-ripple-interference)]
 
-A 2D water ripple simulation where users can place two oscillating point sources to generate distinct constructive and destructive interference patterns.
+An interactive 2D wave simulation that visualizes the principles of wave interference. Users can place and manipulate two oscillating point sources on a water-like surface to observe how their ripples create distinct constructive and destructive interference patterns.
 
 ### Features
-- **Dual Oscillators**: Two interactive point sources that continuously emit circular waves.
-- **Interference Visualization**: A dynamically rendered 2D fluid surface that correctly calculates the addition and cancellation of waves (constructive and destructive interference).
-- **Interactive Dragging**: Users can drag the wave sources around the screen to explore how their positions affect the interference patterns.
-- **Real-Time Rendering**: The simulation calculates wave heights at every pixel to create a realistic, continuous ripple effect.
+- **Real-Time 2D Wave Simulation**: A high-performance simulation of the 2D wave equation on an HTML5 canvas, calculating and rendering the propagation of ripples across a grid.
+- **Dual Point Sources**: Two independent, continuous wave sources (oscillators) generate circular ripples.
+- **Interactive Source Placement**: Users can click and drag the point sources around the canvas to dynamically alter the interference pattern.
+- **Adjustable Parameters**: A control panel allows users to tweak the properties of the wave sources:
+    - **Frequency**: Controls how fast the sources oscillate (wavelength).
+    - **Amplitude**: Controls the height of the generated waves.
+    - **Separation**: A slider to symmetrically adjust the distance between the two sources relative to the center.
+- **Visual Interference Patterns**: The rendering clearly highlights areas of constructive interference (where waves reinforce, creating higher peaks and deeper troughs) and destructive interference (where waves cancel out, creating calm areas known as nodal lines).
 
 ### Design Goals
-- **Educational Demystification**: Make the abstract physics concept of wave interference tangible and visually clear.
-- **Aesthetic Excellence**: Use a deep, dark oceanic color palette with bright, glowing cyan highlights for the wave crests, matching the overall Interpolnet 2 style.
-- **Smooth Interaction**: Ensure the dragging feels responsive and the ripples update smoothly at 60 FPS.
+- **Educational Intuition**: Provide a clear, visual, and interactive demonstration of wave interference, a fundamental concept in physics, acoustics, and optics (e.g., Young's double-slit experiment).
+- **Aesthetics**: Create a beautiful, mesmerizing visualization. Use a color palette that evokes water or energy (e.g., deep blues/cyan for the background, bright white/cyan for wave peaks, and dark navy for troughs).
+- **Performance**: Ensure smooth 60fps rendering of the simulation, utilizing efficient array operations and `ImageData` for fast canvas drawing.
+- **Responsive Layout**: The simulation canvas should adapt to different screen sizes, with a floating or sidebar control panel.
 
 ### Implementation Plan
-- **HTML/CSS**: A full-screen `<canvas>` element for the simulation, overlayed with a minimal, dark-themed UI to show the source indicators.
-- **JavaScript Core**:
-    - **Simulation Loop**: Use `requestAnimationFrame` to drive the time component of the wave equations.
-    - **Wave Math**: Calculate the total displacement at any given pixel using a sum of sine waves: $h(x, y) = \sum A \sin(k \cdot d_i - \omega \cdot t)$, where $d_i$ is the distance to source $i$.
-    - **Rendering**: Due to the need to evaluate math per-pixel, directly manipulate an `ImageData` array in a tight loop and `putImageData` back to the canvas context, mapping the resulting height to an RGBA color value.
-    - **Interaction**: Attach pointer events to the canvas to allow moving the sources, checking distance to see which source is grabbed.
 - **HTML Structure**: A full-screen `<canvas>` element for the simulation and a UI control panel overlay (`div`) containing range inputs for parameters.
 - **Styling (CSS)**: A dark theme to make the wave patterns pop. The UI should have a frosted glass effect or a clean, modern look consistent with the Interpolnet 2 project.
 - **Simulation Engine (JavaScript)**:

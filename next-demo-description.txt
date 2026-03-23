@@ -1,3 +1,0 @@
-Your demo description is the following:
-
-Show the barycentric coordinate rasterization process by filling in a massive 2D triangle pixel-by-pixel to calculate color gradients.
