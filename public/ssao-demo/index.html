@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Screen Space Ambient Occlusion</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <div class="panel">
+        <h1>Screen Space Ambient Occlusion</h1>
+        <p>
+          Click anywhere on the geometry to designate a target pixel and see how SSAO casts hemispherical test rays to calculate ambient occlusion.
+        </p>
+        <div class="controls">
+          <div class="stat-row">
+            <span>Rays Cast:</span>
+            <span id="stat-total">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Rays Occluded:</span>
+            <span id="stat-occluded">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Ambient Occlusion:</span>
+            <span id="stat-ao">0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  </body>
+</html>

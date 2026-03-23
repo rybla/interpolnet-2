@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | 3D Character Facial Expression Interpolation</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="demo-container">
+      <canvas id="render-canvas"></canvas>
+      <div id="control-panel">
+        <h1 class="title">Expression Interpolation</h1>
+        <p class="description">Slide to interpolate between a neutral base mesh and a smiling target mesh.</p>
+        <div class="slider-group">
+          <label for="interpolation-slider">Smile Intensity: <span id="intensity-value">0</span>%</label>
+          <input type="range" id="interpolation-slider" min="0" max="100" value="0" />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

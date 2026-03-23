@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barycentric Coordinate Rasterization</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="canvas-container">
+            <canvas id="rasterCanvas"></canvas>
+        </div>
+        <div id="ui-panel">
+            <h1>Barycentric Rasterization</h1>
+            <p>Filling a triangle pixel-by-pixel using barycentric coordinates to calculate color gradients.</p>
+
+            <div class="readout-group">
+                <h3>Current Pixel</h3>
+                <div class="readout-row">
+                    <span class="label">X:</span> <span id="val-x">0</span>
+                </div>
+                <div class="readout-row">
+                    <span class="label">Y:</span> <span id="val-y">0</span>
+                </div>
+            </div>
+
+            <div class="readout-group">
+                <h3>Barycentric Weights</h3>
+                <div class="readout-row">
+                    <span class="label weight-alpha">&alpha; (Red):</span> <span id="val-alpha">0.000</span>
+                </div>
+                <div class="readout-row">
+                    <span class="label weight-beta">&beta; (Green):</span> <span id="val-beta">0.000</span>
+                </div>
+                <div class="readout-row">
+                    <span class="label weight-gamma">&gamma; (Blue):</span> <span id="val-gamma">0.000</span>
+                </div>
+            </div>
+
+            <div class="readout-group">
+                <h3>Interpolated Color</h3>
+                <div class="color-display-row">
+                    <div id="color-swatch"></div>
+                    <span id="val-color">rgb(0, 0, 0)</span>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                 <button id="btn-reset">Reset</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

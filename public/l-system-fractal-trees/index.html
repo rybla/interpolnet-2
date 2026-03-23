@@ -8,59 +8,59 @@
     <script src="./script.js" defer></script>
   </head>
   <body>
-    <div class="container">
-      <div class="control-panel">
-        <h1>L-System Fractal Trees</h1>
-        <p>Edit the grammar ruleset to instantly render axiomatic string expansions as branching fractal trees.</p>
+    <div class="app-container">
+      <aside class="control-panel">
+        <header>
+          <h1>L-System Explorer</h1>
+          <p>Interactive Grammar Editor</p>
+        </header>
 
-        <div class="input-group">
-          <label for="axiom">Axiom</label>
-          <input type="text" id="axiom" value="X" />
-        </div>
+        <section class="controls">
+          <div class="input-group">
+            <label for="axiom">Axiom</label>
+            <input type="text" id="axiom" value="F" spellcheck="false" autocomplete="off" />
+          </div>
 
-        <div class="input-group">
-          <label for="rules">Rules (Format: A->B, one per line)</label>
-          <textarea id="rules" rows="4">X->F+[[X]-X]-F[-FX]+X
-F->FF</textarea>
-        </div>
+          <div class="rules-container">
+            <div class="rules-header">
+              <label>Rules</label>
+              <button id="add-rule-btn" class="icon-btn" title="Add Rule" aria-label="Add Rule">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              </button>
+            </div>
+            <div id="rules-list" class="rules-list">
+              <!-- Rules will be dynamically inserted here -->
+            </div>
+          </div>
+        </section>
 
-        <div class="input-group">
-          <label for="iterations">Iterations: <span id="iterations-val">5</span></label>
-          <input type="range" id="iterations" min="1" max="7" value="5" />
-        </div>
+        <section class="instructions">
+          <p>Grammar characters:</p>
+          <ul>
+            <li><code>F</code> or <code>A</code>, <code>B</code>: Draw forward</li>
+            <li><code>f</code>: Move forward without drawing</li>
+            <li><code>+</code>: Turn right</li>
+            <li><code>-</code>: Turn left</li>
+            <li><code>[</code>: Save current state</li>
+            <li><code>]</code>: Restore saved state</li>
+          </ul>
+        </section>
+      </aside>
 
-        <div class="input-group">
-          <label for="angle">Angle (degrees): <span id="angle-val">25</span></label>
-          <input type="range" id="angle" min="1" max="180" value="25" />
-        </div>
-
-        <div class="input-group">
-          <label for="length">Segment Length: <span id="length-val">5</span></label>
-          <input type="range" id="length" min="1" max="50" value="5" />
-        </div>
-
-        <div class="input-group">
-          <label for="start-x">Start X (%): <span id="start-x-val">50</span></label>
-          <input type="range" id="start-x" min="0" max="100" value="50" />
-        </div>
-
-        <div class="input-group">
-          <label for="start-y">Start Y (%): <span id="start-y-val">100</span></label>
-          <input type="range" id="start-y" min="0" max="100" value="100" />
-        </div>
-
-        <div class="presets">
-          <label>Presets:</label>
-          <button id="preset-tree1">Tree 1</button>
-          <button id="preset-tree2">Tree 2</button>
-          <button id="preset-koch">Koch Curve</button>
-          <button id="preset-sierpinski">Sierpinski</button>
-        </div>
-      </div>
-
-      <div class="canvas-container">
-        <canvas id="fractal-canvas"></canvas>
-      </div>
+      <main class="canvas-container">
+        <canvas id="lsystem-canvas"></canvas>
+      </main>
     </div>
+
+    <template id="rule-template">
+      <div class="rule-row">
+        <input type="text" class="rule-key" placeholder="A" maxlength="1" spellcheck="false" autocomplete="off" />
+        <span class="rule-arrow">→</span>
+        <input type="text" class="rule-value" placeholder="Replacement" spellcheck="false" autocomplete="off" />
+        <button class="remove-rule-btn icon-btn" title="Remove Rule" aria-label="Remove Rule">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </template>
   </body>
 </html>

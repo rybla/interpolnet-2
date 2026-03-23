@@ -1,202 +1,228 @@
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+// FABRIK (Forward And Backward Reaching Inverse Kinematics) algorithm implementation
+// for a 2D multi-jointed robotic arm on an HTML5 canvas.
+
+const canvas = document.getElementById('arm-canvas');
+const ctx = canvas.getContext('2d');
 
 let width, height;
-
-function resize() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-}
-
-window.addEventListener("resize", resize);
-resize();
-
-class Segment {
-  constructor(length, angle) {
-    this.length = length;
-    this.angle = angle;
-    this.x = 0;
-    this.y = 0;
-  }
-}
-
-const numSegments = 5;
-const segmentLength = 60;
-const segments = [];
-
-for (let i = 0; i < numSegments; i++) {
-  segments.push(new Segment(segmentLength, 0));
-}
-
-let target = { x: width / 2 + numSegments * segmentLength, y: height / 2 };
+let origin = { x: 0, y: 0 };
+let target = { x: 0, y: 0 };
+let joints = [];
+let segmentLengths = [];
 let isDragging = false;
 
-function drawSegment(segment, index) {
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(segment.length, 0);
-  ctx.strokeStyle = "#38bdf8"; // Light blue
-  ctx.lineWidth = 15 - index * 2;
-  ctx.lineCap = "round";
-  ctx.stroke();
+// Config
+const NUM_SEGMENTS = 5;
+const SEGMENT_LENGTH = 80;
+const TOTAL_LENGTH = NUM_SEGMENTS * SEGMENT_LENGTH;
+const TOLERANCE = 0.01;
+const MAX_ITERATIONS = 10;
 
-  // Joint
-  ctx.beginPath();
-  ctx.arc(0, 0, 8 - index, 0, Math.PI * 2);
-  ctx.fillStyle = "#e2e8f0"; // Slate 200
-  ctx.fill();
+function resize() {
+  width = canvas.clientWidth;
+  height = canvas.clientHeight;
+  canvas.width = width;
+  canvas.height = height;
 
-  if (index === numSegments - 1) {
-    // End effector
-    ctx.beginPath();
-    ctx.arc(segment.length, 0, 6, 0, Math.PI * 2);
-    ctx.fillStyle = "#f472b6"; // Pink 400
-    ctx.fill();
+  origin = { x: width / 2, y: height };
+
+  // Set target somewhere visible initially
+  if (target.x === 0 && target.y === 0) {
+    target = { x: width / 2 + 150, y: height - 200 };
   }
 }
 
-function updateForwardKinematics() {
-  let x = width / 2;
-  let y = height / 2;
-  let currentAngle = 0;
+function initArm() {
+  joints = [];
+  segmentLengths = [];
 
-  for (let i = 0; i < segments.length; i++) {
-    const segment = segments[i];
-    segment.x = x;
-    segment.y = y;
-    currentAngle += segment.angle;
-    x += Math.cos(currentAngle) * segment.length;
-    y += Math.sin(currentAngle) * segment.length;
-  }
-}
-
-function inverseKinematics(targetX, targetY) {
-  const iterations = 10;
-
-  for (let iter = 0; iter < iterations; iter++) {
-    updateForwardKinematics();
-
-    let currentAngle = 0;
-    for (let i = 0; i < segments.length; i++) {
-      currentAngle += segments[i].angle;
-    }
-
-    // CCD Algorithm
-    for (let i = segments.length - 1; i >= 0; i--) {
-
-        let endEffectorX = segments[0].x;
-        let endEffectorY = segments[0].y;
-        let tempAngle = 0;
-
-        for (let j=0; j < segments.length; j++) {
-            tempAngle += segments[j].angle;
-            endEffectorX += Math.cos(tempAngle) * segments[j].length;
-            endEffectorY += Math.sin(tempAngle) * segments[j].length;
-        }
-
-        const segment = segments[i];
-
-        const dxEnd = endEffectorX - segment.x;
-        const dyEnd = endEffectorY - segment.y;
-
-        const dxTarget = targetX - segment.x;
-        const dyTarget = targetY - segment.y;
-
-        let angleEnd = Math.atan2(dyEnd, dxEnd);
-        let angleTarget = Math.atan2(dyTarget, dxTarget);
-
-        let angleDiff = angleTarget - angleEnd;
-
-        // Normalize angle
-        while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-        while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-
-        segment.angle += angleDiff;
-
-        // Update kinematics after each segment change for next iteration in CCD
-        updateForwardKinematics();
+  for (let i = 0; i <= NUM_SEGMENTS; i++) {
+    joints.push({
+      x: origin.x,
+      y: origin.y - i * SEGMENT_LENGTH,
+    });
+    if (i < NUM_SEGMENTS) {
+      segmentLengths.push(SEGMENT_LENGTH);
     }
   }
 }
 
+function distance(p1, p2) {
+  const dx = p1.x - p2.x;
+  const dy = p1.y - p2.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function solveFABRIK() {
+  let distToTarget = distance(joints[0], target);
+
+  // 1. Unreachable case
+  if (distToTarget > TOTAL_LENGTH) {
+    for (let i = 0; i < NUM_SEGMENTS; i++) {
+      let r = distance(target, joints[i]);
+      let lambda = segmentLengths[i] / r;
+
+      joints[i + 1].x = (1 - lambda) * joints[i].x + lambda * target.x;
+      joints[i + 1].y = (1 - lambda) * joints[i].y + lambda * target.y;
+    }
+  } else {
+    // 2. Reachable case
+    let b = { x: joints[0].x, y: joints[0].y };
+    let dif = distance(joints[joints.length - 1], target);
+    let iterations = 0;
+
+    while (dif > TOLERANCE && iterations < MAX_ITERATIONS) {
+      // Forward Reaching
+      joints[joints.length - 1].x = target.x;
+      joints[joints.length - 1].y = target.y;
+
+      for (let i = joints.length - 2; i >= 0; i--) {
+        let r = distance(joints[i + 1], joints[i]);
+        let lambda = segmentLengths[i] / r;
+
+        joints[i].x = (1 - lambda) * joints[i + 1].x + lambda * joints[i].x;
+        joints[i].y = (1 - lambda) * joints[i + 1].y + lambda * joints[i].y;
+      }
+
+      // Backward Reaching
+      joints[0].x = b.x;
+      joints[0].y = b.y;
+
+      for (let i = 0; i < joints.length - 1; i++) {
+        let r = distance(joints[i + 1], joints[i]);
+        let lambda = segmentLengths[i] / r;
+
+        joints[i + 1].x = (1 - lambda) * joints[i].x + lambda * joints[i + 1].x;
+        joints[i + 1].y = (1 - lambda) * joints[i].y + lambda * joints[i + 1].y;
+      }
+
+      dif = distance(joints[joints.length - 1], target);
+      iterations++;
+    }
+  }
+}
+
+function update() {
+  // Update origin just in case canvas was resized
+  origin.x = width / 2;
+  origin.y = height;
+  joints[0].x = origin.x;
+  joints[0].y = origin.y;
+
+  solveFABRIK();
+}
 
 function draw() {
   ctx.clearRect(0, 0, width, height);
 
-  inverseKinematics(target.x, target.y);
-  updateForwardKinematics();
-
-  // Draw target
-  ctx.beginPath();
-  ctx.arc(target.x, target.y, 12, 0, Math.PI * 2);
-  ctx.fillStyle = "#facc15"; // Yellow 400
-  ctx.fill();
-
-  // Pulse animation for target
-  ctx.beginPath();
-  ctx.arc(target.x, target.y, 20 + Math.sin(Date.now() * 0.005) * 5, 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(250, 204, 21, 0.5)"; // Yellow 400 with opacity
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  // Draw floor
+  ctx.fillStyle = '#333';
+  ctx.fillRect(0, height - 10, width, 10);
 
   // Draw base
   ctx.beginPath();
-  ctx.arc(width / 2, height / 2, 20, 0, Math.PI * 2);
-  ctx.fillStyle = "#475569"; // Slate 600
+  ctx.arc(origin.x, origin.y, 25, Math.PI, 0);
+  ctx.fillStyle = '#444';
   ctx.fill();
 
-  ctx.save();
-  ctx.translate(width / 2, height / 2);
+  // Draw segments
+  ctx.lineWidth = 14;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#00d2d3'; // Cyan for segments
 
-  for (let i = 0; i < segments.length; i++) {
-    const segment = segments[i];
-    ctx.rotate(segment.angle);
-    drawSegment(segment, i);
-    ctx.translate(segment.length, 0);
+  ctx.beginPath();
+  ctx.moveTo(joints[0].x, joints[0].y);
+  for (let i = 1; i < joints.length; i++) {
+    ctx.lineTo(joints[i].x, joints[i].y);
+  }
+  ctx.stroke();
+
+  // Draw joints
+  for (let i = 0; i < joints.length; i++) {
+    ctx.beginPath();
+    ctx.arc(joints[i].x, joints[i].y, 10, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff00ff'; // Magenta for joints
+    ctx.fill();
+
+    // Draw joint highlights
+    ctx.beginPath();
+    ctx.arc(joints[i].x, joints[i].y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
   }
 
-  ctx.restore();
+  // Draw target
+  ctx.beginPath();
+  ctx.arc(target.x, target.y, isDragging ? 20 : 15, 0, Math.PI * 2);
+  ctx.fillStyle = isDragging ? '#ffcc00' : '#ffaa00';
+  ctx.fill();
 
-  requestAnimationFrame(draw);
+  // Target ring
+  ctx.beginPath();
+  ctx.arc(target.x, target.y, 25, 0, Math.PI * 2);
+  ctx.strokeStyle = isDragging ? '#ffcc00' : '#ffaa00';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // End effector connection
+  let lastJoint = joints[joints.length - 1];
+  ctx.beginPath();
+  ctx.moveTo(lastJoint.x, lastJoint.y);
+  ctx.lineTo(target.x, target.y);
+  ctx.strokeStyle = 'rgba(255, 170, 0, 0.5)';
+  ctx.setLineDash([5, 5]);
+  ctx.stroke();
+  ctx.setLineDash([]);
 }
 
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// Event Listeners
 function handlePointerDown(e) {
-  isDragging = true;
-  updateTarget(e);
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  // Check if click is near target
+  if (distance({x, y}, target) < 40) {
+    isDragging = true;
+    target.x = x;
+    target.y = y;
+    canvas.style.cursor = 'grabbing';
+  } else {
+    // Or just move target there immediately
+    target.x = x;
+    target.y = y;
+    isDragging = true;
+    canvas.style.cursor = 'grabbing';
+  }
 }
 
 function handlePointerMove(e) {
-  if (isDragging) {
-    updateTarget(e);
-  }
+  if (!isDragging) return;
+
+  const rect = canvas.getBoundingClientRect();
+  target.x = e.clientX - rect.left;
+  target.y = e.clientY - rect.top;
 }
 
 function handlePointerUp() {
   isDragging = false;
+  canvas.style.cursor = 'grab';
 }
 
-function updateTarget(e) {
-  const rect = canvas.getBoundingClientRect();
-  let clientX = e.clientX;
-  let clientY = e.clientY;
+canvas.addEventListener('pointerdown', handlePointerDown);
+window.addEventListener('pointermove', handlePointerMove);
+window.addEventListener('pointerup', handlePointerUp);
+window.addEventListener('resize', resize);
 
-  if (e.touches && e.touches.length > 0) {
-    clientX = e.touches[0].clientX;
-    clientY = e.touches[0].clientY;
-  }
-
-  target.x = clientX - rect.left;
-  target.y = clientY - rect.top;
-}
-
-canvas.addEventListener("mousedown", handlePointerDown);
-canvas.addEventListener("mousemove", handlePointerMove);
-window.addEventListener("mouseup", handlePointerUp);
-
-canvas.addEventListener("touchstart", handlePointerDown, { passive: false });
-canvas.addEventListener("touchmove", handlePointerMove, { passive: false });
-window.addEventListener("touchend", handlePointerUp);
-
-requestAnimationFrame(draw);
+// Initialization
+canvas.style.cursor = 'grab';
+resize();
+initArm();
+loop();

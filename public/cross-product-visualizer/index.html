@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross Product Visualizer</title>
+    <link rel="stylesheet" href="../index.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="ui-panel">
+        <h1>Cross Product</h1>
+        <div class="vector-readout u-vector">
+            <span class="label">u:</span>
+            <span class="value" id="val-u"></span>
+        </div>
+        <div class="vector-readout v-vector">
+            <span class="label">v:</span>
+            <span class="value" id="val-v"></span>
+        </div>
+        <div class="vector-readout cross-vector">
+            <span class="label">u &times; v:</span>
+            <span class="value" id="val-cross"></span>
+        </div>
+        <div class="vector-readout area-readout">
+            <span class="label">Area ||u &times; v||:</span>
+            <span class="value" id="val-area"></span>
+        </div>
+        <div class="instructions">
+            Drag the spheres to adjust the vectors <strong>u</strong> and <strong>v</strong>.<br>
+            Scroll to zoom. Drag background to rotate.
+        </div>
+    </div>
+    <div id="canvas-container"></div>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
