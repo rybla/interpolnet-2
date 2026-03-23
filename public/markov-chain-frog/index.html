@@ -8,17 +8,12 @@
     <script src="./script.js" defer></script>
   </head>
   <body>
-        <div class="app-container">
-      <canvas id="pondCanvas"></canvas>
-      <div class="ui-panel">
-        <h1 class="demo-title">Markov Chain Frog</h1>
-        <div class="controls">
-          <button id="playPauseBtn" class="control-btn">Play</button>
-          <div class="speed-control">
-            <label for="speedSlider">Speed:</label>
-            <input type="range" id="speedSlider" min="0.5" max="3" step="0.1" value="1">
-          </div>
-        </div>
+    <div class="container">
+      <canvas id="pond-canvas"></canvas>
+      <div id="instructions">
+        <h1>Markov Chain Frog</h1>
+        <p><strong>Click empty space:</strong> Add a lilypad (state)</p>
+        <p><strong>Drag between lilypads:</strong> Add/strengthen a transition arrow</p>
       </div>
     </div>
   </body>

@@ -3,21 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interpolnet 2 | Voronoi Sweep-Line Visualizer</title>
+    <title>Interpolnet 2 | Voronoi Diagram Sweep-Line</title>
     <link rel="stylesheet" href="./style.css" />
     <script src="./script.js" defer></script>
   </head>
   <body>
-    <div id="container">
-      <div id="header">
-        <h1>Voronoi Sweep-Line Visualizer</h1>
-        <p>Click anywhere to place a seed point. The sweep-line moving down will compute the Voronoi cells.</p>
-        <div id="controls">
-           <button id="clearBtn">Clear</button>
-           <button id="resetLineBtn">Restart Sweep</button>
-        </div>
+    <div id="app">
+      <canvas id="background-canvas"></canvas>
+      <canvas id="foreground-canvas"></canvas>
+      <div id="instructions">
+        <h1>Voronoi Diagram Sweep-Line</h1>
+        <p>Click anywhere on the canvas to add a new random seed point.</p>
+        <p>Watch Fortune's algorithm generate the Voronoi cells using a sweep line.</p>
       </div>
-      <canvas id="canvas"></canvas>
     </div>
   </body>
 </html>
