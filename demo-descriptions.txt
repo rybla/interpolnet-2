@@ -1,4 +1,3 @@
-Let users place points randomly on a canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
 Show a 3D cube unrolled into a flat UV map layout allowing users to paint on the 2D surface and see the brush strokes wrap around the 3D object.
 Construct a multi-jointed robotic arm utilizing inverse kinematics where users drag the end effector and the algorithm calculates the joint angles.
 Visualize Constructive Solid Geometry by letting users intersect, union, and subtract transparent 3D primitives to carve out complex objects.
