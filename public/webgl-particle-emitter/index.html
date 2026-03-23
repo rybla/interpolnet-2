@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | WebGL Particle Emitter</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <canvas id="glcanvas"></canvas>
+
+    <div id="ui-panel">
+      <h2>Particle Physics</h2>
+
+      <div class="control-group">
+        <label>Gravity</label>
+        <div class="vector-control" id="gravity-control">
+          <div class="vector-head" id="gravity-head"></div>
+          <div class="vector-line" id="gravity-line"></div>
+          <div class="vector-origin"></div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Wind</label>
+        <div class="vector-control" id="wind-control">
+          <div class="vector-head" id="wind-head"></div>
+          <div class="vector-line" id="wind-line"></div>
+          <div class="vector-origin"></div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="drag-slider">Drag: <span id="drag-value">0.05</span></label>
+        <input type="range" id="drag-slider" min="0" max="0.5" step="0.01" value="0.05">
+      </div>
+
+      <div class="control-group">
+        <label for="emission-slider">Emission Rate: <span id="emission-value">1000</span></label>
+        <input type="range" id="emission-slider" min="100" max="5000" step="100" value="1000">
+      </div>
+
+      <div class="control-group">
+        <button id="reset-btn">Reset Vectors</button>
+      </div>
+    </div>
+  </body>
+</html>
