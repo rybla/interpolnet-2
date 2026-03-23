@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | WebGL Game of Life</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="ui">
+      <h1>WebGL Game of Life</h1>
+      <p>Stamp patterns onto the grid.</p>
+
+      <div class="controls">
+        <label>
+          <input type="radio" name="stamp" value="glider" checked />
+          Glider
+        </label>
+        <label>
+          <input type="radio" name="stamp" value="gosper" />
+          Gosper Glider Gun
+        </label>
+      </div>
+    </div>
+    <canvas id="canvas"></canvas>
+  </body>
+</html>
