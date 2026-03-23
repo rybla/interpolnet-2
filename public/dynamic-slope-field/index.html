@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Dynamic Slope Field</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas"></canvas>
+      <div id="controls">
+        <h1>Dynamic Slope Field</h1>
+        <p class="description">Click or tap to drop virtual ink and trace solution curves.</p>
+        <div class="input-group">
+          <label for="equation-input">dy/dx = f(x, y) =</label>
+          <input type="text" id="equation-input" value="Math.sin(x) * y" spellcheck="false" autocomplete="off" />
+        </div>
+        <div class="error-message" id="error-message"></div>
+      </div>
+    </div>
+  </body>
+</html>

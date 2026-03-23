@@ -1,0 +1,84 @@
+:root {
+  --primary-color: #00ffcc; /* Neon cyan */
+  --bg-color: #0b0f19; /* Deep violet/black */
+  --text-color: #ffffff;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  font-family: 'Courier New', Courier, monospace; /* Consistent with other demos */
+  color: var(--text-color);
+  touch-action: none; /* Prevent scrolling on mobile when painting */
+}
+
+#glcanvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#instructions {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(11, 15, 25, 0.8);
+  padding: 15px 25px;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none; /* Let clicks pass through to canvas */
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+  animation: pulse 3s infinite alternate;
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+
+#instructions h1 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#instructions p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+@keyframes pulse {
+  from {
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+    border-color: rgba(0, 255, 204, 0.5);
+  }
+  to {
+    box-shadow: 0 0 25px rgba(0, 255, 204, 0.6);
+    border-color: var(--primary-color);
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 600px) {
+  #instructions {
+    bottom: 10px;
+    padding: 10px 15px;
+  }
+  #instructions h1 {
+    font-size: 1rem;
+  }
+  #instructions p {
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Riemann Zeta 3D Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Include Three.js and OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Include MathJax for rendering math equations -->
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <div id="header">
+        <h1>Riemann Zeta 3D Visualizer</h1>
+        <p>Explore the topography of the critical line $\sigma = \frac{1}{2}$ where non-trivial zeros reside.</p>
+      </div>
+      <div id="info-panel">
+        <p><strong>Hover Information:</strong></p>
+        <p>Coordinate $s = \sigma + it$</p>
+        <p id="coord-s">s = ?</p>
+        <p>Magnitude $|\zeta(s)|$</p>
+        <p id="val-zeta">|\zeta(s)| = ?</p>
+      </div>
+      <div id="controls-panel">
+         <label for="resolution-slider">Resolution:</label>
+         <input type="range" id="resolution-slider" min="50" max="300" value="150" />
+         <span id="res-val">150</span>
+      </div>
+    </div>
+  </body>
+</html>
