@@ -9,47 +9,55 @@
   </head>
   <body>
     <div id="app">
-      <div id="controls">
+      <header>
         <h1>Path Tracing vs Ray Tracing</h1>
-        <p>Compare deterministic hard shadows with stochastic soft shadows.</p>
+        <p>Click on any pixel to visualize the rendering calculation for that point.</p>
+      </header>
 
-        <div class="control-group">
-          <label>Mode:</label>
-          <div class="radio-group">
-            <label>
-              <input type="radio" name="mode" value="ray" checked> Ray Tracing
-            </label>
-            <label>
-              <input type="radio" name="mode" value="path"> Path Tracing
-            </label>
+      <main>
+        <div id="canvas-container">
+          <canvas id="render-canvas"></canvas>
+          <canvas id="overlay-canvas"></canvas>
+        </div>
+
+        <aside id="control-panel">
+          <div class="control-group">
+            <h2>Rendering Mode</h2>
+            <div class="radio-group">
+              <input type="radio" id="mode-ray-tracing" name="render-mode" value="ray" checked>
+              <label for="mode-ray-tracing">Standard Ray Tracing</label>
+
+              <input type="radio" id="mode-path-tracing" name="render-mode" value="path">
+              <label for="mode-path-tracing">Stochastic Path Tracing</label>
+            </div>
+            <p id="mode-description" class="description-text">Standard deterministic ray tracing: one primary ray, one shadow ray to the light. Produces hard shadows and no global illumination.</p>
           </div>
-        </div>
 
-        <div class="control-group">
-          <label for="light-size">Light Size: <span id="light-size-val">20</span></label>
-          <input type="range" id="light-size" min="1" max="100" value="20" />
-        </div>
+          <div class="control-group" id="path-tracing-controls" style="display: none;">
+            <h2>Path Tracing Settings</h2>
+            <div class="slider-container">
+              <label for="rays-per-pixel">Rays per pixel: <span id="rpp-value">1</span></label>
+              <input type="range" id="rays-per-pixel" min="1" max="500" value="1">
+            </div>
+            <div class="slider-container">
+              <label for="max-bounces">Max Bounces: <span id="bounces-value">3</span></label>
+              <input type="range" id="max-bounces" min="1" max="10" value="3">
+            </div>
+          </div>
 
-        <div class="control-group">
-          <label for="bounces">Max Bounces: <span id="bounces-val">3</span></label>
-          <input type="range" id="bounces" min="1" max="10" value="3" />
-        </div>
+          <div class="control-group">
+            <h2>Simulation Controls</h2>
+            <button id="btn-fire-rays">Fire Rays at Center</button>
+            <button id="btn-clear">Clear Visualization</button>
+          </div>
 
-        <div class="control-group">
-          <label for="samples-per-frame">Samples per Frame: <span id="samples-per-frame-val">10</span></label>
-          <input type="range" id="samples-per-frame" min="1" max="50" value="10" />
-        </div>
-
-        <div class="stats">
-          <p>Total Samples: <span id="total-samples">0</span></p>
-        </div>
-
-        <button id="reset-btn">Reset Render</button>
-      </div>
-
-      <div id="canvas-container">
-        <canvas id="render-canvas"></canvas>
-      </div>
+          <div class="stats-panel">
+            <h3>Statistics</h3>
+            <p>Rays Cast: <span id="stat-rays-cast">0</span></p>
+            <p>Intersections: <span id="stat-intersections">0</span></p>
+          </div>
+        </aside>
+      </main>
     </div>
   </body>
 </html>

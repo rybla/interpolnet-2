@@ -1,306 +1,406 @@
-const canvas = document.getElementById('pondCanvas');
-const ctx = canvas.getContext('2d');
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("pond-canvas");
+  const ctx = canvas.getContext("2d");
 
-let width, height;
+  let width, height;
 
-// State Machine Definition
-const states = [
-  { id: 0, label: 'A', x: 0.3, y: 0.3, color: '#34d399', radius: 60 },
-  { id: 1, label: 'B', x: 0.7, y: 0.3, color: '#6ee7b7', radius: 60 },
-  { id: 2, label: 'C', x: 0.5, y: 0.7, color: '#10b981', radius: 60 }
-];
-
-const transitions = [
-  { from: 0, to: 1, prob: 0.6 },
-  { from: 0, to: 2, prob: 0.4 },
-  { from: 1, to: 0, prob: 0.3 },
-  { from: 1, to: 2, prob: 0.5 },
-  { from: 1, to: 1, prob: 0.2 },
-  { from: 2, to: 0, prob: 0.8 },
-  { from: 2, to: 2, prob: 0.2 }
-];
-
-function resize() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-}
-
-window.addEventListener('resize', resize);
-resize();
-
-function drawArrow(fromX, fromY, toX, toY, prob, isActive, isSelfLoop) {
-  const dx = toX - fromX;
-  const dy = toY - fromY;
-  const angle = Math.atan2(dy, dx);
-  const len = Math.sqrt(dx * dx + dy * dy);
-
-  ctx.save();
-  ctx.strokeStyle = isActive ? '#fbbf24' : 'rgba(255, 255, 255, 0.3)';
-  ctx.fillStyle = isActive ? '#fbbf24' : 'rgba(255, 255, 255, 0.7)';
-  ctx.lineWidth = isActive ? 4 : 2;
-
-  if (isSelfLoop) {
-    const loopRadius = 40;
-    const loopCenterX = fromX + 40;
-    const loopCenterY = fromY - 60;
-
-    ctx.beginPath();
-    ctx.arc(loopCenterX, loopCenterY, loopRadius, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Draw arrowhead for self loop
-    ctx.beginPath();
-    ctx.moveTo(fromX + 40, fromY - 20);
-    ctx.lineTo(fromX + 30, fromY - 30);
-    ctx.lineTo(fromX + 50, fromY - 30);
-    ctx.fill();
-
-    // Draw probability text
-    ctx.font = '16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(prob.toFixed(1), loopCenterX, loopCenterY - loopRadius - 10);
-  } else {
-    // Offset start and end points by state radius so arrows don't go to center
-    const radius = states[0].radius + 10;
-    const startX = fromX + Math.cos(angle) * radius;
-    const startY = fromY + Math.sin(angle) * radius;
-    const endX = toX - Math.cos(angle) * radius;
-    const endY = toY - Math.sin(angle) * radius;
-
-    // Calculate control point for curved line to separate bidirectional arrows
-    const midX = (startX + endX) / 2;
-    const midY = (startY + endY) / 2;
-    const offset = 40;
-    const cpX = midX - Math.sin(angle) * offset;
-    const cpY = midY + Math.cos(angle) * offset;
-
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.quadraticCurveTo(cpX, cpY, endX, endY);
-    ctx.stroke();
-
-    // Calculate angle at the end point for arrowhead
-    const endAngle = Math.atan2(endY - cpY, endX - cpX);
-
-    // Draw arrowhead
-    ctx.beginPath();
-    ctx.moveTo(endX, endY);
-    ctx.lineTo(endX - 15 * Math.cos(endAngle - Math.PI / 6), endY - 15 * Math.sin(endAngle - Math.PI / 6));
-    ctx.lineTo(endX - 15 * Math.cos(endAngle + Math.PI / 6), endY - 15 * Math.sin(endAngle + Math.PI / 6));
-    ctx.fill();
-
-    // Draw probability text
-    const textX = cpX - Math.sin(angle) * 15;
-    const textY = cpY + Math.cos(angle) * 15;
-    ctx.font = '16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(prob.toFixed(1), textX, textY);
+  function resizeCanvas() {
+    width = canvas.clientWidth;
+    height = canvas.clientHeight;
+    canvas.width = width * window.devicePixelRatio;
+    canvas.height = height * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
   }
-  ctx.restore();
-}
 
-function drawLilypads() {
-  states.forEach(state => {
-    const sx = state.x * width;
-    const sy = state.y * height;
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
 
-    // Draw shadow
-    ctx.save();
-    ctx.translate(sx, sy);
-    ctx.beginPath();
-    ctx.ellipse(0, 10, state.radius, state.radius * 0.8, 0, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-    ctx.fill();
+  // State
+  const lilypads = [];
+  const arrows = []; // { id, sourceId, targetId, weight }
+  let nextId = 1;
 
-    // Draw lilypad
-    ctx.beginPath();
-    // A slightly notched circle for a lilypad look
-    ctx.arc(0, 0, state.radius, 0.1, Math.PI * 2 - 0.1);
-    ctx.lineTo(0, 0);
-    ctx.closePath();
-    ctx.fillStyle = state.color;
-    ctx.fill();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#064e3b';
-    ctx.stroke();
+  const LILYPAD_RADIUS = 30;
+  const FROG_RADIUS = 15;
 
-    // Draw label
-    ctx.fillStyle = '#064e3b';
-    ctx.font = 'bold 24px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(state.label, 0, 0);
-    ctx.restore();
-  });
-}
+  let dragState = {
+    isDragging: false,
+    startLilypad: null,
+    currentX: 0,
+    currentY: 0,
+  };
 
+  const frog = {
+    currentLilypadId: null,
+    isJumping: false,
+    jumpProgress: 0, // 0 to 1
+    jumpPath: null, // the arrow being traversed
+    jumpDuration: 800, // ms
+    jumpStartTime: 0,
+    restingTime: 0,
+    restDuration: 500, // delay before next jump
+  };
 
-// Animation State
-let isPlaying = false;
-let animationSpeed = 1;
-let frogState = 0; // Current state ID
-let targetState = null;
-let transitionProgress = 0; // 0 to 1
-let activeTransition = null;
+  // Utilities
+  function getLilypadAt(x, y) {
+    return lilypads.find((pad) => {
+      const dx = pad.x - x;
+      const dy = pad.y - y;
+      return dx * dx + dy * dy <= LILYPAD_RADIUS * LILYPAD_RADIUS;
+    });
+  }
 
-const playPauseBtn = document.getElementById('playPauseBtn');
-const speedSlider = document.getElementById('speedSlider');
-
-playPauseBtn.addEventListener('click', () => {
-  isPlaying = !isPlaying;
-  playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
-  playPauseBtn.style.backgroundColor = isPlaying ? '#fbbf24' : '#22c55e';
-});
-
-speedSlider.addEventListener('input', (e) => {
-  animationSpeed = parseFloat(e.target.value);
-});
-
-function getNextState(currentState) {
-  const possibleTransitions = transitions.filter(t => t.from === currentState);
-  const rand = Math.random();
-  let cumulativeProb = 0;
-
-  for (let t of possibleTransitions) {
-    cumulativeProb += t.prob;
-    if (rand <= cumulativeProb) {
-      return t;
+  function addLilypad(x, y) {
+    const newPad = { id: nextId++, x, y };
+    lilypads.push(newPad);
+    if (frog.currentLilypadId === null) {
+      frog.currentLilypadId = newPad.id;
+      frog.restingTime = performance.now();
     }
+    return newPad;
   }
-  // Fallback
-  return possibleTransitions[0];
-}
 
-function drawFrog(x, y, scale = 1, opacity = 1) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.scale(scale, scale);
-  ctx.globalAlpha = opacity;
+  function addArrow(sourceId, targetId) {
+    if (sourceId === targetId) return; // self loops allowed but visual is hard, ignoring for now or just handling simply
 
-  // Frog Body
-  ctx.fillStyle = '#059669';
-  ctx.beginPath();
-  ctx.ellipse(0, 0, 20, 15, 0, 0, Math.PI * 2);
-  ctx.fill();
+    // Check if arrow already exists
+    const existing = arrows.find(
+      (a) => a.sourceId === sourceId && a.targetId === targetId
+    );
+    if (existing) {
+      existing.weight += 1; // Increase probability if drawn again
+      return existing;
+    }
 
-  // Eyes
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
-  ctx.arc(-10, -10, 6, 0, Math.PI * 2);
-  ctx.arc(10, -10, 6, 0, Math.PI * 2);
-  ctx.fill();
+    const newArrow = {
+      id: nextId++,
+      sourceId,
+      targetId,
+      weight: 1,
+    };
+    arrows.push(newArrow);
+    return newArrow;
+  }
 
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(-10, -10, 2, 0, Math.PI * 2);
-  ctx.arc(10, -10, 2, 0, Math.PI * 2);
-  ctx.fill();
+  function getNormalizedProbabilities(sourceId) {
+    const outgoing = arrows.filter((a) => a.sourceId === sourceId);
+    const totalWeight = outgoing.reduce((sum, a) => sum + a.weight, 0);
+    return outgoing.map((a) => ({
+      ...a,
+      probability: totalWeight > 0 ? a.weight / totalWeight : 0,
+    }));
+  }
 
-  // Legs
-  ctx.strokeStyle = '#059669';
-  ctx.lineWidth = 4;
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(-15, 5);
-  ctx.lineTo(-25, 15);
-  ctx.lineTo(-30, 25);
-  ctx.moveTo(15, 5);
-  ctx.lineTo(25, 15);
-  ctx.lineTo(30, 25);
-  ctx.stroke();
+  // Interaction
+  function getPointerPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches && e.touches.length > 0) {
+      return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top,
+      };
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+      return {
+        x: e.changedTouches[0].clientX - rect.left,
+        y: e.changedTouches[0].clientY - rect.top,
+      };
+    }
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    };
+  }
 
-  ctx.restore();
-}
+  function handlePointerDown(e) {
+    e.preventDefault();
+    const { x, y } = getPointerPos(e);
+    const clickedPad = getLilypadAt(x, y);
 
-let lastTime = performance.now();
-
-function render(timestamp) {
-  const dt = timestamp - lastTime;
-  lastTime = timestamp;
-
-  ctx.clearRect(0, 0, width, height);
-
-  drawLilypads();
-
-  // Draw Transitions
-  transitions.forEach(t => {
-    const s1 = states.find(s => s.id === t.from);
-    const s2 = states.find(s => s.id === t.to);
-    const isActive = activeTransition && t.from === activeTransition.from && t.to === activeTransition.to;
-    drawArrow(s1.x * width, s1.y * height, s2.x * width, s2.y * height, t.prob, isActive, t.from === t.to);
-  });
-
-  // Calculate Frog Position
-  const sFrom = states.find(s => s.id === frogState);
-  let frogX = sFrom.x * width;
-  let frogY = sFrom.y * height;
-  let frogScale = 1;
-
-  if (isPlaying) {
-    if (activeTransition === null) {
-      // Start a jump
-      activeTransition = getNextState(frogState);
-      targetState = activeTransition.to;
-      transitionProgress = 0;
+    if (clickedPad) {
+      dragState.isDragging = true;
+      dragState.startLilypad = clickedPad;
+      dragState.currentX = x;
+      dragState.currentY = y;
     } else {
-      // Animate jump
-      transitionProgress += (dt / 1000) * animationSpeed;
-
-      if (transitionProgress >= 1) {
-        // Jump complete
-        frogState = targetState;
-        activeTransition = null;
-        targetState = null;
-        transitionProgress = 0;
+      // Don't add if clicking close to another
+      if (!lilypads.some((pad) => Math.hypot(pad.x - x, pad.y - y) < LILYPAD_RADIUS * 2.5)) {
+        addLilypad(x, y);
       }
     }
   }
 
-  if (activeTransition !== null) {
-    const sTo = states.find(s => s.id === activeTransition.to);
-    const toX = sTo.x * width;
-    const toY = sTo.y * height;
-
-    // Smooth interpolation (ease in-out)
-    const t = Math.min(1, transitionProgress);
-    const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
-    if (activeTransition.from === activeTransition.to) {
-      // Self loop animation (jump up and down)
-      frogY -= Math.sin(t * Math.PI) * 100;
-    } else {
-      // Jump between pads
-      // Calculate quadratic bezier along the curved path
-      const midX = (sFrom.x * width + toX) / 2;
-      const midY = (sFrom.y * height + toY) / 2;
-      const dx = toX - sFrom.x * width;
-      const dy = toY - sFrom.y * height;
-      const angle = Math.atan2(dy, dx);
-      const offset = 40;
-      const cpX = midX - Math.sin(angle) * offset;
-      const cpY = midY + Math.cos(angle) * offset;
-
-      const startX = sFrom.x * width;
-      const startY = sFrom.y * height;
-
-      frogX = (1 - easedT) * (1 - easedT) * startX + 2 * (1 - easedT) * easedT * cpX + easedT * easedT * toX;
-      frogY = (1 - easedT) * (1 - easedT) * startY + 2 * (1 - easedT) * easedT * cpY + easedT * easedT * toY;
-
-      // Arc the jump upwards as well
-      frogY -= Math.sin(t * Math.PI) * 60;
-    }
-
-    // Scale up during jump
-    frogScale = 1 + Math.sin(t * Math.PI) * 0.5;
+  function handlePointerMove(e) {
+    e.preventDefault();
+    if (!dragState.isDragging) return;
+    const { x, y } = getPointerPos(e);
+    dragState.currentX = x;
+    dragState.currentY = y;
   }
 
-  drawFrog(frogX, frogY, frogScale);
+  function handlePointerUp(e) {
+    e.preventDefault();
+    if (!dragState.isDragging) return;
 
-  requestAnimationFrame(render);
-}
+    const { x, y } = getPointerPos(e);
+    const targetPad = getLilypadAt(x, y);
 
-requestAnimationFrame(render);
+    if (targetPad && targetPad.id !== dragState.startLilypad.id) {
+      addArrow(dragState.startLilypad.id, targetPad.id);
+    }
+
+    dragState.isDragging = false;
+    dragState.startLilypad = null;
+  }
+
+  canvas.addEventListener("mousedown", handlePointerDown);
+  canvas.addEventListener("mousemove", handlePointerMove);
+  window.addEventListener("mouseup", handlePointerUp);
+
+  canvas.addEventListener("touchstart", handlePointerDown, { passive: false });
+  canvas.addEventListener("touchmove", handlePointerMove, { passive: false });
+  window.addEventListener("touchend", handlePointerUp, { passive: false });
+
+  // Math/Geometry for drawing arrows
+  function drawArrow(ctx, sourceX, sourceY, targetX, targetY, probability, isBidirectional) {
+    const dx = targetX - sourceX;
+    const dy = targetY - sourceY;
+    const angle = Math.atan2(dy, dx);
+    const dist = Math.hypot(dx, dy);
+
+    // If bidirectional, curve it
+    let controlX = (sourceX + targetX) / 2;
+    let controlY = (sourceY + targetY) / 2;
+
+    if (isBidirectional) {
+       const curveOffset = 40;
+       controlX -= Math.sin(angle) * curveOffset;
+       controlY += Math.cos(angle) * curveOffset;
+    }
+
+    // Shorten line so it doesn't go inside lilypad
+    const startX = sourceX + Math.cos(angle) * LILYPAD_RADIUS;
+    const startY = sourceY + Math.sin(angle) * LILYPAD_RADIUS;
+    const endX = targetX - Math.cos(angle) * LILYPAD_RADIUS;
+    const endY = targetY - Math.sin(angle) * LILYPAD_RADIUS;
+
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+
+    // Thickness based on probability
+    ctx.lineWidth = 1 + probability * 8;
+    ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 + probability * 0.5})`;
+    ctx.stroke();
+
+    // Arrow head
+    const headlen = 10 + probability * 10;
+    // Need tangent angle at end of bezier
+    const t = 1; // end
+    const tx = 2 * (1 - t) * (controlX - startX) + 2 * t * (endX - controlX);
+    const ty = 2 * (1 - t) * (controlY - startY) + 2 * t * (endY - controlY);
+    const tangentAngle = Math.atan2(ty, tx);
+
+    ctx.beginPath();
+    ctx.moveTo(endX, endY);
+    ctx.lineTo(endX - headlen * Math.cos(tangentAngle - Math.PI / 6), endY - headlen * Math.sin(tangentAngle - Math.PI / 6));
+    ctx.lineTo(endX - headlen * Math.cos(tangentAngle + Math.PI / 6), endY - headlen * Math.sin(tangentAngle + Math.PI / 6));
+    ctx.lineTo(endX, endY);
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.fill();
+
+    // Draw probability text
+    const textX = 0.5 * 0.5 * startX + 2 * 0.5 * 0.5 * controlX + 0.5 * 0.5 * endX;
+    const textY = 0.5 * 0.5 * startY + 2 * 0.5 * 0.5 * controlY + 0.5 * 0.5 * endY;
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "12px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    // Background for text
+    const text = `${(probability * 100).toFixed(0)}%`;
+    const metrics = ctx.measureText(text);
+    ctx.fillStyle = "rgba(10, 31, 51, 0.8)"; // pond bg
+    ctx.fillRect(textX - metrics.width/2 - 4, textY - 8, metrics.width + 8, 16);
+
+    ctx.fillStyle = "#fff";
+    ctx.fillText(text, textX, textY);
+  }
+
+  // Get point along bezier
+  function getBezierPoint(t, p0x, p0y, p1x, p1y, p2x, p2y) {
+    const x = Math.pow(1-t, 2) * p0x + 2 * (1-t) * t * p1x + Math.pow(t, 2) * p2x;
+    const y = Math.pow(1-t, 2) * p0y + 2 * (1-t) * t * p1y + Math.pow(t, 2) * p2y;
+    return {x, y};
+  }
+
+  function triggerFrogJump() {
+    if (frog.isJumping || frog.currentLilypadId === null) return;
+
+    const probs = getNormalizedProbabilities(frog.currentLilypadId);
+    if (probs.length === 0) return; // nowhere to jump
+
+    const r = Math.random();
+    let accumulated = 0;
+    let selectedArrow = null;
+
+    for (const arrow of probs) {
+      accumulated += arrow.probability;
+      if (r <= accumulated) {
+        selectedArrow = arrow;
+        break;
+      }
+    }
+
+    if (selectedArrow) {
+      frog.isJumping = true;
+      frog.jumpPath = selectedArrow;
+      frog.jumpStartTime = performance.now();
+      frog.jumpProgress = 0;
+    }
+  }
+
+  function updateFrog(time) {
+    if (frog.isJumping) {
+      const elapsed = time - frog.jumpStartTime;
+      frog.jumpProgress = Math.min(1, elapsed / frog.jumpDuration);
+
+      if (frog.jumpProgress >= 1) {
+        // landed
+        frog.isJumping = false;
+        frog.currentLilypadId = frog.jumpPath.targetId;
+        frog.jumpPath = null;
+        frog.restingTime = time;
+      }
+    } else if (frog.currentLilypadId !== null) {
+      // see if we should jump again
+      if (time - frog.restingTime > frog.restDuration) {
+         triggerFrogJump();
+      }
+    }
+  }
+
+  function draw(time) {
+    updateFrog(time);
+
+    ctx.clearRect(0, 0, width, height);
+
+    // Draw active drag arrow
+    if (dragState.isDragging && dragState.startLilypad) {
+      ctx.beginPath();
+      ctx.moveTo(dragState.startLilypad.x, dragState.startLilypad.y);
+      ctx.lineTo(dragState.currentX, dragState.currentY);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Draw all arrows
+    const renderedArrows = new Set();
+    arrows.forEach(arrow => {
+        const source = lilypads.find(p => p.id === arrow.sourceId);
+        const target = lilypads.find(p => p.id === arrow.targetId);
+        if (!source || !target) return;
+
+        const probs = getNormalizedProbabilities(source.id);
+        const normArrow = probs.find(a => a.id === arrow.id);
+        const probability = normArrow ? normArrow.probability : 0;
+
+        const reverseExists = arrows.some(a => a.sourceId === target.id && a.targetId === source.id);
+
+        drawArrow(ctx, source.x, source.y, target.x, target.y, probability, reverseExists);
+    });
+
+    // Draw lilypads
+    lilypads.forEach(pad => {
+      ctx.beginPath();
+      ctx.arc(pad.x, pad.y, LILYPAD_RADIUS, 0, Math.PI * 2);
+      ctx.fillStyle = "#2ecc71"; // lilypad color
+
+      // Cutout to make it look like a lilypad
+      ctx.lineTo(pad.x, pad.y);
+      ctx.fill();
+
+      // Slightly darker border
+      ctx.strokeStyle = "#27ae60";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(pad.x, pad.y, LILYPAD_RADIUS - 2, Math.PI/6, 11*Math.PI/6);
+      ctx.stroke();
+    });
+
+    // Draw frog
+    if (frog.currentLilypadId !== null || frog.isJumping) {
+      let fx, fy;
+      let scale = 1;
+
+      if (frog.isJumping && frog.jumpPath) {
+        const source = lilypads.find(p => p.id === frog.jumpPath.sourceId);
+        const target = lilypads.find(p => p.id === frog.jumpPath.targetId);
+
+        if (source && target) {
+          const dx = target.x - source.x;
+          const dy = target.y - source.y;
+          const angle = Math.atan2(dy, dx);
+          const reverseExists = arrows.some(a => a.sourceId === target.id && a.targetId === source.id);
+
+          let controlX = (source.x + target.x) / 2;
+          let controlY = (source.y + target.y) / 2;
+
+          if (reverseExists) {
+             const curveOffset = 40;
+             controlX -= Math.sin(angle) * curveOffset;
+             controlY += Math.cos(angle) * curveOffset;
+          }
+
+          // Ease out
+          const t = 1 - Math.pow(1 - frog.jumpProgress, 3);
+          const pt = getBezierPoint(t, source.x, source.y, controlX, controlY, target.x, target.y);
+          fx = pt.x;
+          fy = pt.y;
+
+          // Parabolic arc scale for "jump" effect
+          scale = 1 + Math.sin(frog.jumpProgress * Math.PI) * 0.5;
+        }
+      } else {
+        const currentPad = lilypads.find(p => p.id === frog.currentLilypadId);
+        if (currentPad) {
+          fx = currentPad.x;
+          fy = currentPad.y;
+        }
+      }
+
+      if (fx !== undefined && fy !== undefined) {
+        ctx.save();
+        ctx.translate(fx, fy);
+        ctx.scale(scale, scale);
+
+        // Simple frog
+        ctx.beginPath();
+        ctx.arc(0, 0, FROG_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = "#f1c40f"; // yellowish frog
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#d4ac0d";
+        ctx.stroke();
+
+        // Eyes
+        ctx.fillStyle = "#fff";
+        ctx.beginPath(); ctx.arc(-6, -8, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(6, -8, 4, 0, Math.PI * 2); ctx.fill();
+
+        ctx.fillStyle = "#000";
+        ctx.beginPath(); ctx.arc(-6, -8, 2, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(6, -8, 2, 0, Math.PI * 2); ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+});

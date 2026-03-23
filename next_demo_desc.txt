@@ -1,3 +1,0 @@
-Your demo description is the following:
-
-Simulate a Boids algorithm where users can tweak the exact weights of separation, alignment, and cohesion to see how bird flocking changes.

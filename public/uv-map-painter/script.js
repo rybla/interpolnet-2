@@ -1,257 +1,281 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("paintCanvas");
+  const ctx = canvas.getContext("2d");
+  const viewPanel = document.getElementById("viewPanel");
 
-// --- 2D Canvas Painting Logic ---
-const canvas = document.getElementById('uv-canvas');
-const ctx = canvas.getContext('2d');
-const colorPicker = document.getElementById('color-picker');
-const brushSize = document.getElementById('brush-size');
-const clearBtn = document.getElementById('clear-btn');
+  // Canvas size and drawing settings
+  const SIZE = 512;
+  const CELL = SIZE / 4; // 4x3 grid for unfolded cube
+  const paintColor = "#00ffcc"; // Neon cyan
+  const brushSize = 10;
+  let isPainting = false;
+  let lastPos = null;
 
-let isDrawing = false;
-let lastX = 0;
-let lastY = 0;
-let textureNeedsUpdate = false;
+  // Initialize canvas background and UV layout guide
+  function initCanvas() {
+    ctx.fillStyle = "#2c3e50"; // Dark blue-gray background
+    ctx.fillRect(0, 0, SIZE, SIZE);
 
-// Initial setup: draw the UV grid layout
-function drawUVLayout() {
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Draw grid lines to indicate the unfolded cube (cross pattern)
+    // Layout:
+    //      [Top]
+    // [Left][Front][Right][Back]
+    //      [Bottom]
+    // The dimensions of the cross fit in a 4x3 grid.
 
-  const cellSize = canvas.width / 4; // 4 columns
-  // Grid pattern for a standard unrolled cube (cross shape)
-  // [ ][T][ ][ ]
-  // [L][F][R][B]
-  // [ ][Bo][ ][ ]
-  // T=Top, L=Left, F=Front, R=Right, B=Back, Bo=Bottom
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
 
-  ctx.strokeStyle = '#cccccc';
-  ctx.lineWidth = 2;
+    // Top face
+    ctx.rect(CELL, 0, CELL, CELL);
+    // Left face
+    ctx.rect(0, CELL, CELL, CELL);
+    // Front face
+    ctx.rect(CELL, CELL, CELL, CELL);
+    // Right face
+    ctx.rect(CELL * 2, CELL, CELL, CELL);
+    // Back face
+    ctx.rect(CELL * 3, CELL, CELL, CELL);
+    // Bottom face
+    ctx.rect(CELL, CELL * 2, CELL, CELL);
 
-  // Draw outlines for the 6 faces
-  const faces = [
-    { x: 1, y: 0, label: 'Top' },
-    { x: 0, y: 1, label: 'Left' },
-    { x: 1, y: 1, label: 'Front' },
-    { x: 2, y: 1, label: 'Right' },
-    { x: 3, y: 1, label: 'Back' },
-    { x: 1, y: 2, label: 'Bottom' }
-  ];
+    ctx.stroke();
 
-  faces.forEach(face => {
-    ctx.strokeRect(face.x * cellSize, face.y * cellSize, cellSize, cellSize);
+    // Fill unused areas with darker color to indicate non-paintable regions (purely visual)
+    ctx.fillStyle = "#1a252f";
+    ctx.fillRect(0, 0, CELL, CELL);
+    ctx.fillRect(CELL * 2, 0, CELL * 2, CELL);
+    ctx.fillRect(0, CELL * 2, CELL, CELL);
+    ctx.fillRect(CELL * 2, CELL * 2, CELL * 2, CELL);
+    ctx.fillRect(0, CELL * 3, SIZE, CELL); // Empty bottom row
+  }
 
-    // Add light label
-    ctx.fillStyle = '#eeeeee';
-    ctx.font = '24px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(face.label, face.x * cellSize + cellSize / 2, face.y * cellSize + cellSize / 2);
+  initCanvas();
+
+  // Pointer interaction
+  function getMousePos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  function startPosition(e) {
+    isPainting = true;
+    lastPos = getMousePos(e);
+    draw(e);
+  }
+
+  function endPosition() {
+    isPainting = false;
+    lastPos = null;
+    ctx.beginPath();
+  }
+
+  function draw(e) {
+    if (!isPainting) return;
+
+    e.preventDefault();
+
+    const currentPos = getMousePos(e);
+
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = paintColor;
+
+    ctx.beginPath();
+    if (lastPos) {
+      ctx.moveTo(lastPos.x, lastPos.y);
+    } else {
+      ctx.moveTo(currentPos.x, currentPos.y);
+    }
+    ctx.lineTo(currentPos.x, currentPos.y);
+    ctx.stroke();
+
+    lastPos = currentPos;
+
+    // Signal Three.js that texture has updated
+    if (texture) {
+      texture.needsUpdate = true;
+    }
+  }
+
+  canvas.addEventListener("pointerdown", startPosition);
+  canvas.addEventListener("pointermove", draw);
+  canvas.addEventListener("pointerup", endPosition);
+  canvas.addEventListener("pointerout", endPosition);
+  canvas.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+
+  // -------------------------
+  // Three.js 3D Setup
+  // -------------------------
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color("#121212");
+
+  const camera = new THREE.PerspectiveCamera(45, viewPanel.clientWidth / viewPanel.clientHeight, 0.1, 100);
+  camera.position.z = 4;
+  camera.position.y = 1;
+  camera.position.x = 2;
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(viewPanel.clientWidth, viewPanel.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  viewPanel.appendChild(renderer.domElement);
+
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambientLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(5, 5, 5);
+  scene.add(dirLight);
+
+  // Box Geometry and UV Mapping
+  const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+
+  // The UV mapping strategy for BoxGeometry needs to match our 4x3 cross
+  // UV coordinates go from 0 to 1.
+  // We have 4 columns and 4 rows (since our canvas is square but our cross fits in 4x3, the bottom row is unused).
+  // Actually, SIZE=512, CELL=128.
+  // 4 columns = 1.0 / 4 = 0.25 each.
+  // 4 rows = 1.0 / 4 = 0.25 each. (y is bottom-up in WebGL)
+
+  // Map individual faces to specific rectangles in the UV space
+  // Face order in BoxGeometry: Right, Left, Top, Bottom, Front, Back
+
+  const col = 0.25;
+  const row = 0.25;
+
+  // Helper to generate UVs for a face given its grid position (x, y) where (0,0) is top-left in 2D canvas
+  // Keep in mind WebGL UV 'y' is 0 at the bottom, 1 at the top.
+  function setFaceUVs(faceIndex, gridX, gridY) {
+    const uvs = geometry.attributes.uv;
+
+    // Convert gridY (0 is top row) to uvY (0 is bottom).
+    // Our canvas is 4x4 cells (bottom row unused).
+    // Row 0 is y in [0.75, 1.0]
+    // Row 1 is y in [0.5, 0.75]
+    // Row 2 is y in [0.25, 0.5]
+    // Row 3 is y in [0.0, 0.25]
+    const u0 = gridX * col;
+    const u1 = (gridX + 1) * col;
+    const v1 = 1.0 - (gridY * row);
+    const v0 = 1.0 - ((gridY + 1) * row);
+
+    // Each face has 2 triangles = 6 vertices = 6 UV pairs.
+    // In BoxGeometry, faces are 4 vertices indexed into triangles. Wait, in BufferGeometry each face is 6 vertices if not indexed.
+    // Let's check if it's indexed.
+
+    // For BoxGeometry in r128, it IS indexed. But we can modify the UV array directly since vertices might be shared?
+    // Actually, BoxGeometry vertices are duplicated per face to allow distinct normals/UVs.
+    // So there are 24 vertices.
+
+    const vertexIndexOffset = faceIndex * 4;
+
+    // BoxGeometry vertex order per face:
+    // 0: top right
+    // 1: top left
+    // 2: bottom right
+    // 3: bottom left
+
+    uvs.setXY(vertexIndexOffset + 0, u1, v1);
+    uvs.setXY(vertexIndexOffset + 1, u0, v1);
+    uvs.setXY(vertexIndexOffset + 2, u1, v0);
+    uvs.setXY(vertexIndexOffset + 3, u0, v0);
+  }
+
+  // Right face (x = 1, y = 1) in our cross
+  // Wait, let's map: Right face is right of front -> grid(2,1)
+  setFaceUVs(0, 2, 1);
+  // Left face is left of front -> grid(0,1)
+  setFaceUVs(1, 0, 1);
+  // Top face is above front -> grid(1,0)
+  setFaceUVs(2, 1, 0);
+  // Bottom face is below front -> grid(1,2)
+  setFaceUVs(3, 1, 2);
+  // Front face -> grid(1,1)
+  setFaceUVs(4, 1, 1);
+  // Back face is right of Right face -> grid(3,1)
+  setFaceUVs(5, 3, 1);
+
+  geometry.attributes.uv.needsUpdate = true;
+
+  // Texture and Material
+  let texture = new THREE.CanvasTexture(canvas);
+  // Disable filtering to make the grid and strokes look sharp (optional)
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+
+  const material = new THREE.MeshStandardMaterial({
+    map: texture,
+    roughness: 0.7,
+    metalness: 0.1
   });
 
-  // Grey out unused areas to make it clear where to paint
-  ctx.fillStyle = 'rgba(200, 200, 200, 0.5)';
-  const unused = [
-    { x: 0, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 },
-    { x: 0, y: 2 }, { x: 2, y: 2 }, { x: 3, y: 2 },
-    { x: 0, y: 3 }, { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }
-  ];
-  unused.forEach(cell => {
-    ctx.fillRect(cell.x * cellSize, cell.y * cellSize, cellSize, cellSize);
+  const cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  // Rotation controls
+  let isDragging = false;
+  let previousMousePosition = { x: 0, y: 0 };
+  let targetRotation = { x: 0, y: 0 };
+  let currentRotation = { x: 0, y: 0 };
+
+  viewPanel.addEventListener("pointerdown", e => {
+    isDragging = true;
+    previousMousePosition = { x: e.offsetX, y: e.offsetY };
   });
 
-  textureNeedsUpdate = true;
-}
+  viewPanel.addEventListener("pointermove", e => {
+    if (isDragging) {
+      const deltaMove = {
+        x: e.offsetX - previousMousePosition.x,
+        y: e.offsetY - previousMousePosition.y
+      };
 
-drawUVLayout();
+      targetRotation.y += deltaMove.x * 0.01;
+      targetRotation.x += deltaMove.y * 0.01;
 
-// Painting functionality
-function getCoordinates(e) {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
+      previousMousePosition = { x: e.offsetX, y: e.offsetY };
+    }
+  });
 
-  let clientX, clientY;
-  if (e.touches && e.touches.length > 0) {
-    clientX = e.touches[0].clientX;
-    clientY = e.touches[0].clientY;
-  } else {
-    clientX = e.clientX;
-    clientY = e.clientY;
+  window.addEventListener("pointerup", () => {
+    isDragging = false;
+  });
+
+  // Handle Resize
+  window.addEventListener("resize", () => {
+    camera.aspect = viewPanel.clientWidth / viewPanel.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(viewPanel.clientWidth, viewPanel.clientHeight);
+  });
+
+  // Animation Loop
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Gently auto-rotate if not dragging
+    if (!isDragging) {
+      targetRotation.y -= 0.005;
+      targetRotation.x -= 0.002;
+    }
+
+    // Smoothly interpolate rotation
+    currentRotation.x += (targetRotation.x - currentRotation.x) * 0.1;
+    currentRotation.y += (targetRotation.y - currentRotation.y) * 0.1;
+
+    cube.rotation.x = currentRotation.x;
+    cube.rotation.y = currentRotation.y;
+
+    renderer.render(scene, camera);
   }
 
-  return {
-    x: (clientX - rect.left) * scaleX,
-    y: (clientY - rect.top) * scaleY
-  };
-}
-
-function startDrawing(e) {
-  isDrawing = true;
-  const coords = getCoordinates(e);
-  lastX = coords.x;
-  lastY = coords.y;
-}
-
-function draw(e) {
-  if (!isDrawing) return;
-  e.preventDefault(); // Prevent scrolling on touch
-
-  const coords = getCoordinates(e);
-
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(coords.x, coords.y);
-  ctx.strokeStyle = colorPicker.value;
-  ctx.lineWidth = brushSize.value;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.stroke();
-
-  lastX = coords.x;
-  lastY = coords.y;
-
-  textureNeedsUpdate = true;
-}
-
-function stopDrawing() {
-  isDrawing = false;
-}
-
-// Event listeners for painting
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
-
-canvas.addEventListener('touchstart', startDrawing, { passive: false });
-canvas.addEventListener('touchmove', draw, { passive: false });
-canvas.addEventListener('touchend', stopDrawing);
-
-clearBtn.addEventListener('click', () => {
-  drawUVLayout();
-});
-
-// --- Three.js 3D Logic ---
-const container = document.getElementById('three-container');
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x2a2a35); // Match panel background
-
-const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-camera.position.set(2, 2, 3);
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-container.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.autoRotate = true;
-controls.autoRotateSpeed = 2.0;
-
-// Create texture from the 2D canvas
-const texture = new THREE.CanvasTexture(canvas);
-// Ensure crisp pixel rendering if desired, or smooth. Using smooth for painting.
-texture.colorSpace = THREE.SRGBColorSpace;
-// Adjust texture mapping to match our UV layout
-// We need to remap UVs of a BoxGeometry to match our layout
-// However, the simplest way is to create a custom geometry or manually edit BoxGeometry UVs.
-// Since BoxGeometry default UVs map the whole texture to each face, we need to customize it.
-
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const uvAttribute = geometry.attributes.uv;
-
-// Standard layout mapping:
-// We defined 4 columns, 4 rows (1024x1024 total, each face 256x256).
-// Row 0 (top): empty, Top, empty, empty
-// Row 1: Left, Front, Right, Back
-// Row 2: empty, Bottom, empty, empty
-// Note: WebGL UVs (0,0) is bottom-left, (1,1) is top-right.
-// Our canvas layout (0,0) is top-left.
-// So we need to invert Y coordinates.
-
-const cSize = 0.25; // cell size in UV space
-const uvs = new Float32Array(geometry.attributes.uv.array.length);
-
-// Face order in BoxGeometry: Right(0), Left(1), Top(2), Bottom(3), Front(4), Back(5)
-// Let's define the cells (x, y from bottom-left)
-// Top: x=1, y=3
-// Bottom: x=1, y=1
-// Left: x=0, y=2
-// Front: x=1, y=2
-// Right: x=2, y=2
-// Back: x=3, y=2
-const faceCoords = [
-  { x: 2, y: 2 }, // Right
-  { x: 0, y: 2 }, // Left
-  { x: 1, y: 3 }, // Top
-  { x: 1, y: 1 }, // Bottom
-  { x: 1, y: 2 }, // Front
-  { x: 3, y: 2 }  // Back
-];
-
-for (let i = 0; i < 6; i++) {
-  const offset = i * 8;
-  const fc = faceCoords[i];
-  // 4 vertices per face. Standard UVs are: (0,1), (1,1), (0,0), (1,0)
-  // Let's map them to our grid
-
-  // Vertex 0: bottom-left (wait, threejs BoxGeometry order is usually different)
-  // Let's rely on modifying the existing 0-1 range to the specific cell
-  for (let j = 0; j < 4; j++) {
-    const origU = uvAttribute.array[offset + j * 2];
-    const origV = uvAttribute.array[offset + j * 2 + 1];
-
-    uvs[offset + j * 2] = fc.x * cSize + origU * cSize;
-    uvs[offset + j * 2 + 1] = fc.y * cSize + origV * cSize;
-  }
-}
-
-geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-
-const material = new THREE.MeshStandardMaterial({
-  map: texture,
-  roughness: 0.5,
-  metalness: 0.1
-});
-
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-scene.add(ambientLight);
-
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-dirLight.position.set(5, 5, 5);
-scene.add(dirLight);
-
-// Animation Loop
-function animate() {
-  requestAnimationFrame(animate);
-
-  // If the user painted on the canvas, update the texture
-  if (textureNeedsUpdate) {
-    texture.needsUpdate = true;
-    textureNeedsUpdate = false;
-  }
-
-  controls.update(); // Required for damping and autoRotate
-
-  renderer.render(scene, camera);
-}
-
-animate();
-
-// Handle window resize
-window.addEventListener('resize', () => {
-  camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth, container.clientHeight);
-});
-
-// Stop auto-rotation when user interacts with the 3D view
-controls.addEventListener('start', () => {
-  controls.autoRotate = false;
+  animate();
 });

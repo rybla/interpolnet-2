@@ -1,195 +1,408 @@
-const canvas = document.getElementById('noise-canvas');
-const ctx = canvas.getContext('2d');
+// State variables
+const state = {
+  gridSize: 100,
+  interpolation: 'smoothstep', // 'linear', 'smoothstep', 'smootherstep'
+  showGrid: true,
+  animateZ: true,
+  zOffset: 0,
+  zSpeed: 0.005,
+  hoverX: -1,
+  hoverY: -1,
+  width: 0,
+  height: 0,
+  permutation: [],
+  gradients: []
+};
 
-let gridSize = 6;
-let gradients = [];
+// Canvas context references
+let noiseCtx, overlayCtx;
+let noiseCanvas, overlayCanvas;
 
-// Get controls
-const gridSizeInput = document.getElementById('grid-size');
-const gridSizeVal = document.getElementById('grid-size-val');
-const regenerateBtn = document.getElementById('regenerate-btn');
-const showNoiseToggle = document.getElementById('show-noise');
-const showGradientsToggle = document.getElementById('show-gradients');
-const showGridToggle = document.getElementById('show-grid');
+// DOM Elements
+const els = {
+  resSlider: document.getElementById('resolution-slider'),
+  resVal: document.getElementById('resolution-value'),
+  interpRadios: document.getElementsByName('interpolation'),
+  showGridCheckbox: document.getElementById('show-grid'),
+  animateZCheckbox: document.getElementById('animate-z'),
+  probePanel: document.getElementById('probe-panel'),
+  pPos: document.getElementById('probe-pos'),
+  pLocal: document.getElementById('probe-local'),
+  pWeight: document.getElementById('probe-weight'),
+  pFinal: document.getElementById('probe-final'),
+  vTL: { grad: document.getElementById('grad-tl'), dist: document.getElementById('dist-tl'), dot: document.getElementById('dot-tl') },
+  vTR: { grad: document.getElementById('grad-tr'), dist: document.getElementById('dist-tr'), dot: document.getElementById('dot-tr') },
+  vBL: { grad: document.getElementById('grad-bl'), dist: document.getElementById('dist-bl'), dot: document.getElementById('dot-bl') },
+  vBR: { grad: document.getElementById('grad-br'), dist: document.getElementById('dist-br'), dot: document.getElementById('dot-br') },
+};
 
-// Math utils for Perlin noise
-function smoothstep(t) {
-  return t * t * t * (t * (t * 6 - 15) + 10);
+// Initialize Perlin Noise tables
+function initPerlin() {
+  state.permutation = new Array(256);
+  for (let i = 0; i < 256; i++) {
+    state.permutation[i] = i;
+  }
+
+  // Shuffle permutation table
+  for (let i = 255; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [state.permutation[i], state.permutation[j]] = [state.permutation[j], state.permutation[i]];
+  }
+
+  // Duplicate the table to avoid index wrapping calculations
+  state.permutation = state.permutation.concat(state.permutation);
+
+  // Pre-calculate random normalized gradients for 3D
+  state.gradients = new Array(512);
+  for (let i = 0; i < 512; i++) {
+    let theta = Math.random() * 2 * Math.PI;
+    let phi = Math.acos(2 * Math.random() - 1);
+    state.gradients[i] = {
+      x: Math.sin(phi) * Math.cos(theta),
+      y: Math.sin(phi) * Math.sin(theta),
+      z: Math.cos(phi)
+    };
+  }
+}
+
+function getGradient(xi, yi, zi) {
+  let hash = state.permutation[(state.permutation[(state.permutation[xi & 255] + yi) & 255] + zi) & 255];
+  return state.gradients[hash];
+}
+
+function fade(t, method) {
+  switch (method) {
+    case 'linear': return t;
+    case 'smoothstep': return t * t * (3 - 2 * t);
+    case 'smootherstep': return t * t * t * (t * (t * 6 - 15) + 10);
+    default: return t;
+  }
 }
 
 function lerp(a, b, t) {
   return a + t * (b - a);
 }
 
-function dotProductGrid(x, y, vx, vy) {
-  const dx = x - vx;
-  const dy = y - vy;
-
-  const g = gradients[vy][vx];
-  return dx * g.x + dy * g.y;
+// Calculate dot product of distance and gradient vectors
+function gradDot(xi, yi, zi, x, y, z) {
+  let g = getGradient(xi, yi, zi);
+  return (x * g.x) + (y * g.y) + (z * g.z);
 }
 
-// Generate random unit vector
-function randomGradient() {
-  const theta = Math.random() * 2 * Math.PI;
-  return {
-    x: Math.cos(theta),
-    y: Math.sin(theta)
-  };
+// Main Perlin Noise function
+function perlin(x, y, z) {
+  let xi = Math.floor(x) & 255;
+  let yi = Math.floor(y) & 255;
+  let zi = Math.floor(z) & 255;
+
+  let xf = x - Math.floor(x);
+  let yf = y - Math.floor(y);
+  let zf = z - Math.floor(z);
+
+  let u = fade(xf, state.interpolation);
+  let v = fade(yf, state.interpolation);
+  let w = fade(zf, state.interpolation);
+
+  // Calculate dot products at 8 corners of the cube
+  let p000 = gradDot(xi, yi, zi, xf, yf, zf);
+  let p100 = gradDot(xi + 1, yi, zi, xf - 1, yf, zf);
+  let p010 = gradDot(xi, yi + 1, zi, xf, yf - 1, zf);
+  let p110 = gradDot(xi + 1, yi + 1, zi, xf - 1, yf - 1, zf);
+  let p001 = gradDot(xi, yi, zi + 1, xf, yf, zf - 1);
+  let p101 = gradDot(xi + 1, yi, zi + 1, xf - 1, yf, zf - 1);
+  let p011 = gradDot(xi, yi + 1, zi + 1, xf, yf - 1, zf - 1);
+  let p111 = gradDot(xi + 1, yi + 1, zi + 1, xf - 1, yf - 1, zf - 1);
+
+  // Interpolate along x
+  let x00 = lerp(p000, p100, u);
+  let x10 = lerp(p010, p110, u);
+  let x01 = lerp(p001, p101, u);
+  let x11 = lerp(p011, p111, u);
+
+  // Interpolate along y
+  let y0 = lerp(x00, x10, v);
+  let y1 = lerp(x01, x11, v);
+
+  // Interpolate along z
+  let res = lerp(y0, y1, w);
+
+  // Scale output from [-1, 1] to [0, 1] approximately
+  return (res + 1) / 2;
 }
 
-// Generate the grid of random gradients
-function generateGradients() {
-  gradients = [];
-  for (let y = 0; y <= gridSize; y++) {
-    const row = [];
-    for (let x = 0; x <= gridSize; x++) {
-      row.push(randomGradient());
-    }
-    gradients.push(row);
-  }
-}
-
-// Calculate perlin noise value at given coordinate
-function perlin(x, y) {
-  const x0 = Math.floor(x);
-  const x1 = x0 + 1;
-  const y0 = Math.floor(y);
-  const y1 = y0 + 1;
-
-  const sx = smoothstep(x - x0);
-  const sy = smoothstep(y - y0);
-
-  let n0, n1, ix0, ix1, value;
-
-  n0 = dotProductGrid(x, y, x0, y0);
-  n1 = dotProductGrid(x, y, x1, y0);
-  ix0 = lerp(n0, n1, sx);
-
-  n0 = dotProductGrid(x, y, x0, y1);
-  n1 = dotProductGrid(x, y, x1, y1);
-  ix1 = lerp(n0, n1, sx);
-
-  value = lerp(ix0, ix1, sy);
-
-  // Return mapped from [-1, 1] to [0, 1] for easy coloring
-  return (value + 1) / 2;
-}
-
-generateGradients();
-
-// Render Functions
-function drawGrid(cellWidth, cellHeight) {
-  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--grid-color');
-  ctx.lineWidth = 1;
-
-  for (let i = 0; i <= gridSize; i++) {
-    const x = i * cellWidth;
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
-
-    const y = i * cellHeight;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
-    ctx.stroke();
-  }
-}
-
-function drawGradients(cellWidth, cellHeight) {
-  const vectorColor = getComputedStyle(document.body).getPropertyValue('--vector-color');
-  ctx.strokeStyle = vectorColor;
-  ctx.lineWidth = 2;
-  const arrowLen = Math.min(cellWidth, cellHeight) * 0.4;
-
-  for (let y = 0; y <= gridSize; y++) {
-    for (let x = 0; x <= gridSize; x++) {
-      const px = x * cellWidth;
-      const py = y * cellHeight;
-      const vx = gradients[y][x].x * arrowLen;
-      const vy = gradients[y][x].y * arrowLen;
-
-      // Draw Vector Line
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      ctx.lineTo(px + vx, py + vy);
-      ctx.stroke();
-
-      // Draw Vector Head (simple circle for origin)
-      ctx.beginPath();
-      ctx.arc(px, py, 3, 0, Math.PI * 2);
-      ctx.fillStyle = vectorColor;
-      ctx.fill();
-    }
-  }
-}
-
-function drawNoise(cellWidth, cellHeight) {
-  const pixelSize = 4; // optimization to not draw every single pixel
-
-  for (let y = 0; y < canvas.height; y += pixelSize) {
-    for (let x = 0; x < canvas.width; x += pixelSize) {
-      const nx = x / cellWidth;
-      const ny = y / cellHeight;
-      const value = perlin(nx, ny);
-
-      // Map to a gradient (e.g. pink to dark)
-      const colorVal = Math.floor(value * 255);
-
-      // Use an alpha value based on the noise over the dark bg
-      // value ranges from 0 to 1
-      ctx.fillStyle = `rgba(255, 71, 126, ${value})`;
-      ctx.fillRect(x, y, pixelSize, pixelSize);
-    }
-  }
-}
-
+// Resize canvases to match window
 function resize() {
-  const container = canvas.parentElement;
-  canvas.width = container.clientWidth;
-  canvas.height = container.clientHeight;
-  render();
+  state.width = window.innerWidth;
+  state.height = window.innerHeight;
+
+  noiseCanvas.width = state.width;
+  noiseCanvas.height = state.height;
+  overlayCanvas.width = state.width;
+  overlayCanvas.height = state.height;
+
+  drawNoise();
 }
 
-window.addEventListener('resize', resize);
+// Draw the underlying noise field (heatmap)
+function drawNoise() {
+  if (!noiseCtx) return;
+  const imgData = noiseCtx.createImageData(state.width, state.height);
+  const data = imgData.data;
 
-// Event Listeners for UI
-gridSizeInput.addEventListener('input', (e) => {
-  gridSize = parseInt(e.target.value, 10);
-  gridSizeVal.textContent = gridSize;
-  generateGradients();
-  render();
-});
+  // Render noise for every pixel
+  for (let y = 0; y < state.height; y++) {
+    for (let x = 0; x < state.width; x++) {
+      let px = x / state.gridSize;
+      let py = y / state.gridSize;
 
-regenerateBtn.addEventListener('click', () => {
-  generateGradients();
-  render();
-});
+      // Get noise value [0, 1]
+      let n = perlin(px, py, state.zOffset);
 
-showNoiseToggle.addEventListener('change', render);
-showGradientsToggle.addEventListener('change', render);
-showGridToggle.addEventListener('change', render);
+      // Map to a color (dark blue to bright cyan/white)
+      let r = Math.floor(n * n * 200);
+      let g = Math.floor(n * 255);
+      let b = Math.floor(n * 255 + (1-n) * 100);
 
-// Initial call
-resize();
+      let index = (y * state.width + x) * 4;
+      data[index] = r;
+      data[index + 1] = g;
+      data[index + 2] = b;
+      data[index + 3] = 255;
+    }
+  }
+  noiseCtx.putImageData(imgData, 0, 0);
+}
 
-function render() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function formatVec(x, y) {
+  return `[${x.toFixed(2)}, ${y.toFixed(2)}]`;
+}
 
-  const cellWidth = canvas.width / gridSize;
-  const cellHeight = canvas.height / gridSize;
+// Draw the grid, vectors, and hover overlays
+function drawOverlay() {
+  if (!overlayCtx) return;
 
-  if (showNoiseToggle.checked) {
-    drawNoise(cellWidth, cellHeight);
+  overlayCtx.clearRect(0, 0, state.width, state.height);
+
+  if (state.showGrid) {
+    overlayCtx.lineWidth = 1;
+    overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+
+    // Draw grid lines
+    overlayCtx.beginPath();
+    for (let x = 0; x <= state.width; x += state.gridSize) {
+      overlayCtx.moveTo(x, 0);
+      overlayCtx.lineTo(x, state.height);
+    }
+    for (let y = 0; y <= state.height; y += state.gridSize) {
+      overlayCtx.moveTo(0, y);
+      overlayCtx.lineTo(state.width, y);
+    }
+    overlayCtx.stroke();
+
+    // Draw gradient vectors at grid intersections
+    overlayCtx.lineWidth = 2;
+    overlayCtx.strokeStyle = 'rgba(0, 255, 204, 0.6)'; // Accent Cyan
+    const arrowLen = state.gridSize * 0.4;
+
+    for (let y = 0; y <= state.height; y += state.gridSize) {
+      for (let x = 0; x <= state.width; x += state.gridSize) {
+        let gridX = Math.floor(x / state.gridSize);
+        let gridY = Math.floor(y / state.gridSize);
+        let gridZ = Math.floor(state.zOffset);
+
+        let g = getGradient(gridX, gridY, gridZ);
+        // Project 3D gradient vector onto 2D plane for visualization
+        let mag = Math.sqrt(g.x * g.x + g.y * g.y);
+        if (mag > 0.001) {
+          let nx = g.x / mag;
+          let ny = g.y / mag;
+
+          overlayCtx.beginPath();
+          overlayCtx.moveTo(x, y);
+          overlayCtx.lineTo(x + nx * arrowLen, y + ny * arrowLen);
+          overlayCtx.stroke();
+
+          // Draw dot
+          overlayCtx.beginPath();
+          overlayCtx.arc(x, y, 3, 0, Math.PI * 2);
+          overlayCtx.fillStyle = 'rgba(0, 255, 204, 0.8)';
+          overlayCtx.fill();
+        }
+      }
+    }
   }
 
-  if (showGridToggle.checked) {
-    drawGrid(cellWidth, cellHeight);
+  // Draw hover probe
+  if (state.hoverX >= 0 && state.hoverY >= 0) {
+    let px = state.hoverX / state.gridSize;
+    let py = state.hoverY / state.gridSize;
+    let pz = state.zOffset;
+
+    let xi = Math.floor(px);
+    let yi = Math.floor(py);
+    let zi = Math.floor(pz);
+
+    let xf = px - xi;
+    let yf = py - yi;
+    let zf = pz - zi;
+
+    // Draw highlighted grid cell box
+    let cellX = xi * state.gridSize;
+    let cellY = yi * state.gridSize;
+
+    overlayCtx.strokeStyle = 'rgba(255, 0, 255, 0.8)'; // Magenta
+    overlayCtx.lineWidth = 2;
+    overlayCtx.strokeRect(cellX, cellY, state.gridSize, state.gridSize);
+
+    // Draw cursor point
+    overlayCtx.beginPath();
+    overlayCtx.arc(state.hoverX, state.hoverY, 5, 0, Math.PI * 2);
+    overlayCtx.fillStyle = 'rgba(255, 0, 255, 1)';
+    overlayCtx.fill();
+
+    // Draw distance vectors from corners to point
+    overlayCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+    overlayCtx.setLineDash([4, 4]);
+    overlayCtx.beginPath();
+    overlayCtx.moveTo(cellX, cellY); overlayCtx.lineTo(state.hoverX, state.hoverY); // TL
+    overlayCtx.moveTo(cellX + state.gridSize, cellY); overlayCtx.lineTo(state.hoverX, state.hoverY); // TR
+    overlayCtx.moveTo(cellX, cellY + state.gridSize); overlayCtx.lineTo(state.hoverX, state.hoverY); // BL
+    overlayCtx.moveTo(cellX + state.gridSize, cellY + state.gridSize); overlayCtx.lineTo(state.hoverX, state.hoverY); // BR
+    overlayCtx.stroke();
+    overlayCtx.setLineDash([]);
+
+    // Update Panel Data
+    els.probePanel.classList.remove('hidden');
+
+    let u = fade(xf, state.interpolation);
+    let v = fade(yf, state.interpolation);
+
+    els.pPos.innerText = `[${xi}, ${yi}]`;
+    els.pLocal.innerText = `[${xf.toFixed(2)}, ${yf.toFixed(2)}]`;
+    els.pWeight.innerText = `[${u.toFixed(2)}, ${v.toFixed(2)}]`;
+
+    // TL
+    let gTL = getGradient(xi, yi, zi);
+    let dotTL = gradDot(xi, yi, zi, xf, yf, zf);
+    els.vTL.grad.innerText = formatVec(gTL.x, gTL.y);
+    els.vTL.dist.innerText = formatVec(xf, yf);
+    els.vTL.dot.innerText = dotTL.toFixed(3);
+
+    // TR
+    let gTR = getGradient(xi + 1, yi, zi);
+    let dotTR = gradDot(xi + 1, yi, zi, xf - 1, yf, zf);
+    els.vTR.grad.innerText = formatVec(gTR.x, gTR.y);
+    els.vTR.dist.innerText = formatVec(xf - 1, yf);
+    els.vTR.dot.innerText = dotTR.toFixed(3);
+
+    // BL
+    let gBL = getGradient(xi, yi + 1, zi);
+    let dotBL = gradDot(xi, yi + 1, zi, xf, yf - 1, zf);
+    els.vBL.grad.innerText = formatVec(gBL.x, gBL.y);
+    els.vBL.dist.innerText = formatVec(xf, yf - 1);
+    els.vBL.dot.innerText = dotBL.toFixed(3);
+
+    // BR
+    let gBR = getGradient(xi + 1, yi + 1, zi);
+    let dotBR = gradDot(xi + 1, yi + 1, zi, xf - 1, yf - 1, zf);
+    els.vBR.grad.innerText = formatVec(gBR.x, gBR.y);
+    els.vBR.dist.innerText = formatVec(xf - 1, yf - 1);
+    els.vBR.dot.innerText = dotBR.toFixed(3);
+
+    // Final
+    let finalVal = perlin(px, py, pz);
+    els.pFinal.innerText = finalVal.toFixed(4);
+  } else {
+    els.probePanel.classList.add('hidden');
+  }
+}
+
+let lastTime = 0;
+
+// Animation loop
+function animate(time) {
+  let dt = time - lastTime;
+  lastTime = time;
+
+  if (state.animateZ) {
+    state.zOffset += state.zSpeed * (dt / 16);
+    drawNoise(); // Only redraw heavy background noise if Z changes
   }
 
-  if (showGradientsToggle.checked) {
-    drawGradients(cellWidth, cellHeight);
-  }
+  drawOverlay(); // Always draw overlay (for hover updates)
+  requestAnimationFrame(animate);
+}
+
+// Setup Event Listeners
+function setupEvents() {
+  window.addEventListener('resize', resize);
+
+  overlayCanvas.addEventListener('mousemove', (e) => {
+    let rect = overlayCanvas.getBoundingClientRect();
+    state.hoverX = e.clientX - rect.left;
+    state.hoverY = e.clientY - rect.top;
+
+    // Update immediately if paused
+    if (!state.animateZ) {
+      drawOverlay();
+    }
+  });
+
+  overlayCanvas.addEventListener('mouseleave', () => {
+    state.hoverX = -1;
+    state.hoverY = -1;
+    if (!state.animateZ) {
+      drawOverlay();
+    }
+  });
+
+  els.resSlider.addEventListener('input', (e) => {
+    state.gridSize = parseInt(e.target.value);
+    els.resVal.innerText = state.gridSize;
+    drawNoise();
+    if (!state.animateZ) drawOverlay();
+  });
+
+  els.interpRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      state.interpolation = e.target.value;
+      drawNoise();
+      if (!state.animateZ) drawOverlay();
+    });
+  });
+
+  els.showGridCheckbox.addEventListener('change', (e) => {
+    state.showGrid = e.target.checked;
+    if (!state.animateZ) drawOverlay();
+  });
+
+  els.animateZCheckbox.addEventListener('change', (e) => {
+    state.animateZ = e.target.checked;
+    if (!state.animateZ) {
+      // Force a redraw just in case
+      drawNoise();
+      drawOverlay();
+    }
+  });
+}
+
+// Initialization
+function init() {
+  noiseCanvas = document.getElementById('noise-canvas');
+  overlayCanvas = document.getElementById('overlay-canvas');
+  noiseCtx = noiseCanvas.getContext('2d', { alpha: false });
+  overlayCtx = overlayCanvas.getContext('2d');
+
+  initPerlin();
+  setupEvents();
+  resize();
+
+  requestAnimationFrame(animate);
+}
+
+// Run when DOM is loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
 }
