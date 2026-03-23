@@ -1,3 +1,0 @@
-Your demo description is the following:
-
-Build a map generator that combines overlapping octaves of simplex noise with a moisture map to generate biomes, coastlines, and rivers dynamically.

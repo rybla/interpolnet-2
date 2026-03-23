@@ -1,202 +1,72 @@
-/**
- * 3D Color Gamut Visualizer
- */
+// 3D Color Gamut Visualizer
 
 let scene, camera, renderer, controls;
-let pointCloud, geometry;
+let pointCloud;
+
+// Settings
+const numPoints = 64000;
+const pointSize = 0.02;
+
 let currentMode = 'rgb';
-let targetPositions = [];
-let currentPositions = [];
-let rgbPositions = [];
-let hsvPositions = [];
-let labPositions = [];
-let transitionProgress = 1;
+const targetPositions = new Float32Array(numPoints * 3);
 
-const numPointsPerAxis = 16;
-const totalPoints = numPointsPerAxis * numPointsPerAxis * numPointsPerAxis;
+// Data arrays for different modes
+const pointsRGB = new Float32Array(numPoints * 3);
+const pointsHSV = new Float32Array(numPoints * 3);
+const pointsLAB = new Float32Array(numPoints * 3);
 
-// Layout modes mapping
-const MODES = ['rgb', 'hsv', 'cielab'];
+// Initialize color spaces data
+generateColorData();
 
-// ----- Color Space Conversion Functions -----
-
-// Convert RGB [0,1] to HSV [0,1]
-function rgbToHsv(r, g, b) {
-  let max = Math.max(r, g, b);
-  let min = Math.min(r, g, b);
-  let d = max - min;
-  let h, s, v = max;
-
-  s = max === 0 ? 0 : d / max;
-
-  if (max === min) {
-    h = 0; // achromatic
-  } else {
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-  return { h, s, v };
-}
-
-// Convert RGB [0,1] to CIELAB
-function rgbToXyz(r, g, b) {
-  let [rL, gL, bL] = [r, g, b].map(v => {
-    return v > 0.04045 ? Math.pow((v + 0.055) / 1.055, 2.4) : v / 12.92;
-  });
-
-  rL *= 100;
-  gL *= 100;
-  bL *= 100;
-
-  let x = rL * 0.4124 + gL * 0.3576 + bL * 0.1805;
-  let y = rL * 0.2126 + gL * 0.7152 + bL * 0.0722;
-  let z = rL * 0.0193 + gL * 0.1192 + bL * 0.9505;
-
-  return { x, y, z };
-}
-
-function xyzToLab(x, y, z) {
-  // D65 standard referent
-  const refX = 95.047;
-  const refY = 100.000;
-  const refZ = 108.883;
-
-  let [xL, yL, zL] = [x / refX, y / refY, z / refZ].map(v => {
-    return v > 0.008856 ? Math.pow(v, 1/3) : (7.787 * v) + (16 / 116);
-  });
-
-  let l = (116 * yL) - 16;
-  let a = 500 * (xL - yL);
-  let b = 200 * (yL - zL);
-
-  return { l, a, b };
-}
-
-function rgbToLab(r, g, b) {
-  let xyz = rgbToXyz(r, g, b);
-  return xyzToLab(xyz.x, xyz.y, xyz.z);
-}
+init();
+animate();
 
 function init() {
   const container = document.getElementById('canvas-container');
 
+  // Scene setup
   scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0b0f19);
 
+  // Camera setup
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(2, 2, 4);
+  camera.position.set(2, 2, 3);
 
+  // Renderer setup
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   container.appendChild(renderer.domElement);
 
+  // Orbit controls
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   controls.autoRotate = true;
   controls.autoRotateSpeed = 1.0;
 
-  // Create coordinate axes
+  // Create axes helper for context
   const axesHelper = new THREE.AxesHelper(1.5);
+  // Red = X, Green = Y, Blue = Z
   scene.add(axesHelper);
 
-  createPointCloud();
+  const geometry = new THREE.BufferGeometry();
 
-  setupUI();
+  const initialPositions = new Float32Array(numPoints * 3);
+  initialPositions.set(pointsRGB);
 
-  window.addEventListener('resize', onWindowResize);
+  // Target position buffer is used for animating
+  targetPositions.set(pointsRGB);
 
-  animate();
-}
+  // We use the RGB point positions as colors (since R,G,B are 0-1)
+  const colors = new Float32Array(numPoints * 3);
+  colors.set(pointsRGB);
 
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function setupUI() {
-  const buttons = document.querySelectorAll('.mode-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      // Remove active from all
-      buttons.forEach(b => b.classList.remove('active'));
-      // Add active to clicked
-      e.target.classList.add('active');
-
-      const newMode = e.target.getAttribute('data-mode');
-      if (newMode !== currentMode) {
-        setTargetMode(newMode);
-      }
-    });
-  });
-}
-
-function createPointCloud() {
-  geometry = new THREE.BufferGeometry();
-
-  const positions = new Float32Array(totalPoints * 3);
-  const colors = new Float32Array(totalPoints * 3);
-
-  let i = 0;
-  for (let r = 0; r < numPointsPerAxis; r++) {
-    for (let g = 0; g < numPointsPerAxis; g++) {
-      for (let b = 0; b < numPointsPerAxis; b++) {
-        // Normalize to [0, 1]
-        const nR = r / (numPointsPerAxis - 1);
-        const nG = g / (numPointsPerAxis - 1);
-        const nB = b / (numPointsPerAxis - 1);
-
-        // Colors
-        colors[i * 3] = nR;
-        colors[i * 3 + 1] = nG;
-        colors[i * 3 + 2] = nB;
-
-        // --- RGB Positions (Cube centered at origin) ---
-        rgbPositions.push(nR - 0.5, nG - 0.5, nB - 0.5);
-
-        // --- HSV Positions (Cylinder/Cone) ---
-        const hsv = rgbToHsv(nR, nG, nB);
-        // radius = saturation, height = value, angle = hue
-        const radius = hsv.s;
-        const angle = hsv.h * Math.PI * 2;
-        const hsvX = radius * Math.cos(angle);
-        const hsvZ = radius * Math.sin(angle);
-        const hsvY = hsv.v - 0.5;
-        hsvPositions.push(hsvX, hsvY, hsvZ);
-
-        // --- CIELAB Positions ---
-        const lab = rgbToLab(nR, nG, nB);
-        // Normalize roughly to [-1, 1] for visual consistency
-        // L: [0, 100], a: [-128, 127], b: [-128, 127]
-        const labY = (lab.l / 100) - 0.5;
-        const labX = lab.a / 128;
-        const labZ = lab.b / 128;
-        labPositions.push(labX, labY, labZ);
-
-        i++;
-      }
-    }
-  }
-
-  // Initialize with RGB positions
-  currentPositions = [...rgbPositions];
-  targetPositions = [...rgbPositions];
-
-  for (let j = 0; j < totalPoints * 3; j++) {
-    positions[j] = currentPositions[j];
-  }
-
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('position', new THREE.BufferAttribute(initialPositions, 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 0.05,
+    size: pointSize,
     vertexColors: true,
     transparent: true,
     opacity: 0.8,
@@ -205,38 +75,157 @@ function createPointCloud() {
 
   pointCloud = new THREE.Points(geometry, material);
   scene.add(pointCloud);
+
+  // Window resize handler
+  window.addEventListener('resize', onWindowResize);
+
+  setupUI();
 }
 
-function setTargetMode(mode) {
-  currentMode = mode;
-  transitionProgress = 0;
+function setupUI() {
+  const btnRgb = document.getElementById('btn-rgb');
+  const btnHsv = document.getElementById('btn-hsv');
+  const btnLab = document.getElementById('btn-cielab');
 
-  switch(mode) {
-    case 'rgb': targetPositions = [...rgbPositions]; break;
-    case 'hsv': targetPositions = [...hsvPositions]; break;
-    case 'cielab': targetPositions = [...labPositions]; break;
+  btnRgb.addEventListener('click', () => {
+    setActiveButton(btnRgb);
+    transitionTo(pointsRGB);
+    currentMode = 'rgb';
+  });
+
+  btnHsv.addEventListener('click', () => {
+    setActiveButton(btnHsv);
+    transitionTo(pointsHSV);
+    currentMode = 'hsv';
+  });
+
+  btnLab.addEventListener('click', () => {
+    setActiveButton(btnLab);
+    transitionTo(pointsLAB);
+    currentMode = 'cielab';
+  });
+}
+
+function setActiveButton(activeBtn) {
+  document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+  activeBtn.classList.add('active');
+}
+
+function transitionTo(newTargetArray) {
+  targetPositions.set(newTargetArray);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function generateColorData() {
+  const steps = Math.cbrt(numPoints);
+  const stepSize = 1.0 / (steps - 1);
+
+  let i = 0;
+  for (let r = 0; r < steps; r++) {
+    for (let g = 0; g < steps; g++) {
+      for (let b = 0; b < steps; b++) {
+        // RGB is 0 to 1
+        const rv = r * stepSize;
+        const gv = g * stepSize;
+        const bv = b * stepSize;
+
+        // RGB positions
+        pointsRGB[i * 3] = rv;
+        pointsRGB[i * 3 + 1] = gv;
+        pointsRGB[i * 3 + 2] = bv;
+
+        // HSV conversions
+        const max = Math.max(rv, gv, bv);
+        const min = Math.min(rv, gv, bv);
+        const d = max - min;
+
+        let h = 0;
+        if (d !== 0) {
+          if (max === rv) h = ((gv - bv) / d) % 6;
+          else if (max === gv) h = (bv - rv) / d + 2;
+          else h = (rv - gv) / d + 4;
+        }
+        h = h / 6; // normalize 0-1
+        if (h < 0) h += 1;
+
+        let s = max === 0 ? 0 : d / max;
+        let v = max;
+
+        // Map HSV to cylinder
+        // H -> angle, S -> radius, V -> height (Y axis)
+        const angle = h * Math.PI * 2;
+        const radius = s * 0.8; // scaled to fit nicely
+
+        pointsHSV[i * 3] = Math.cos(angle) * radius;
+        pointsHSV[i * 3 + 1] = v; // Y is V
+        pointsHSV[i * 3 + 2] = Math.sin(angle) * radius;
+
+        // LAB conversions
+        // First RGB to XYZ
+        let _r = rv > 0.04045 ? Math.pow((rv + 0.055) / 1.055, 2.4) : rv / 12.92;
+        let _g = gv > 0.04045 ? Math.pow((gv + 0.055) / 1.055, 2.4) : gv / 12.92;
+        let _b = bv > 0.04045 ? Math.pow((bv + 0.055) / 1.055, 2.4) : bv / 12.92;
+
+        let x = (_r * 0.4124 + _g * 0.3576 + _b * 0.1805) * 100;
+        let y = (_r * 0.2126 + _g * 0.7152 + _b * 0.0722) * 100;
+        let z = (_r * 0.0193 + _g * 0.1192 + _b * 0.9505) * 100;
+
+        // XYZ to LAB
+        // using standard D65 illuminant
+        x /= 95.047;
+        y /= 100.000;
+        z /= 108.883;
+
+        x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
+        y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
+        z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
+
+        const L = (116 * y) - 16;
+        const A = 500 * (x - y);
+        const B = 200 * (y - z);
+
+        // Map LAB to 3D space
+        // Normalize L to 0-1, A and B are ~ -128 to 127, scale them down
+        pointsLAB[i * 3] = A / 128.0;
+        pointsLAB[i * 3 + 1] = L / 100.0;
+        pointsLAB[i * 3 + 2] = B / 128.0;
+
+        i++;
+      }
+    }
   }
 }
 
 function animate() {
   requestAnimationFrame(animate);
 
-  // Interpolate positions
-  if (transitionProgress < 1 && geometry) {
-    transitionProgress += 0.02; // Speed of transition
-    if (transitionProgress > 1) transitionProgress = 1;
+  // Morph animation
+  if (pointCloud) {
+    const positions = pointCloud.geometry.attributes.position.array;
+    let needsUpdate = false;
 
-    const positions = geometry.attributes.position.array;
-    for (let i = 0; i < totalPoints * 3; i++) {
-      // Lerp
-      currentPositions[i] += (targetPositions[i] - currentPositions[i]) * 0.1;
-      positions[i] = currentPositions[i];
+    // Simple linear interpolation
+    for (let i = 0; i < positions.length; i++) {
+      const target = targetPositions[i];
+      const current = positions[i];
+      const diff = target - current;
+
+      if (Math.abs(diff) > 0.001) {
+        positions[i] += diff * 0.05; // ease factor
+        needsUpdate = true;
+      }
     }
-    geometry.attributes.position.needsUpdate = true;
+
+    if (needsUpdate) {
+      pointCloud.geometry.attributes.position.needsUpdate = true;
+    }
   }
 
   controls.update();
   renderer.render(scene, camera);
 }
-
-window.onload = init;

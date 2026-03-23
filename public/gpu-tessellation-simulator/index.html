@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | GPU Tessellation Simulator</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./script.js"></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <h1>GPU Tessellation Simulator</h1>
+      <p>Demonstrate GPU tessellation by moving the camera closer to the object to dynamically subdivide geometry.</p>
+
+      <div class="control-group">
+        <label for="auto-tessellation">
+          <input type="checkbox" id="auto-tessellation" checked />
+          Auto Tessellation (Distance-based)
+        </label>
+      </div>
+
+      <div class="control-group">
+        <label for="tessellation-slider">Manual Tessellation Level: <span id="tessellation-value">2</span></label>
+        <input type="range" id="tessellation-slider" min="0" max="6" value="2" disabled />
+      </div>
+
+      <div class="control-group">
+        <label for="wireframe-toggle">
+          <input type="checkbox" id="wireframe-toggle" checked />
+          Show Wireframe
+        </label>
+      </div>
+
+      <div class="stats">
+        <p>Polygons: <span id="polygon-count">0</span></p>
+        <p>Distance: <span id="camera-distance">0.00</span></p>
+      </div>
+    </div>
+  </body>
+</html>
