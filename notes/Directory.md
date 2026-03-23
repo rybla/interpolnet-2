@@ -3547,3 +3547,30 @@ Deconstruct 3D shadow mapping by rendering a split-screen view showing the scene
   - Render the scene normally for the camera view.
   - For the light view, apply a `MeshDepthMaterial` (or a custom depth visualization shader) to all objects, overriding their standard materials temporarily, and render the scene from the light's camera perspective.
 - **Interaction:** Attach pointer event listeners to allow dragging, which calculates a new polar coordinate position for the directional light, smoothly updating its position vector in the animation loop.
+
+## Delaunay Circle Mesh Expansion [[demo](https://rybla.github.io/interpolnet-2/delaunay-circle-mesh-expansion)]
+
+The Delaunay Circle Mesh Expansion demo provides an interactive visualization of how a Delaunay triangulation can emerge dynamically from expanding circles. Users place points randomly on the canvas to watch circles expand and lock together to form the mathematically optimal Delaunay triangle mesh.
+
+### Features
+- **Interactive Point Placement:** Users can click or tap anywhere on the HTML5 canvas to place new seed points.
+- **Dynamic Circle Expansion:** Once placed, each seed point emits a circle that steadily expands in radius over time.
+- **Delaunay Triangulation Locking:** As the expanding circles intersect with one another, the algorithm dynamically checks for circumcircle properties. When the optimal geometric conditions are met for any three points, a triangle is "locked" in place, forming the Delaunay mesh incrementally.
+- **Visual Feedback:** Expanding circles are rendered with soft, translucent colors, while the locked triangulation edges are drawn with distinct, high-contrast lines.
+
+### Design Goals
+- **Educational Intuition:** Break down the abstract concept of Delaunay triangulation (specifically the empty circumcircle property) into a physical, continuous animation of expanding waves.
+- **Mesmerizing Aesthetics:** Utilize a dark, modern theme with glowing neon colors for the circles and mesh edges to create a relaxing, visually appealing experience.
+- **Responsive Layout:** Ensure the canvas scales perfectly on both mobile and desktop screens, providing a seamless interactive area.
+
+### Implementation Plan
+- **HTML/CSS:** Implement a full-screen responsive `<canvas>` with an overlaid control or instruction panel. Apply the Interpolnet dark theme with distinct typography.
+- **JavaScript Core Logic:**
+  - Maintain a state array of active points and their corresponding expanding circle radii.
+  - On each frame, iterate through all possible triplets of points. Calculate their circumcenter and circumradius.
+  - If the global expanding radius reaches a triplet's circumradius, and no other point lies inside this circumcircle (the Delaunay condition), "lock" the triangle and draw its edges.
+- **JavaScript Rendering:**
+  - Use `requestAnimationFrame` for a smooth continuous loop.
+  - Draw the expanding circles using `ctx.arc`.
+  - Draw the locked triangle edges using `ctx.beginPath` and `ctx.lineTo`.
+- **Interactivity:** Add `pointerdown` event listeners to the canvas to easily push new points into the state array and reset or trigger their expansion phase.

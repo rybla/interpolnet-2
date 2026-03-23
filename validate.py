@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import threading
 import time
+import os
 from playwright.sync_api import sync_playwright
 
 PORT = 8000
@@ -11,15 +12,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
-def run_server():
+def start_server():
     socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print(f"Serving at port {PORT}")
-        httpd.serve_forever()
+    httpd = socketserver.TCPServer(("", PORT), Handler)
+    httpd.serve_forever()
 
 def run_validation():
-    # Start the server in a daemon thread
-    server_thread = threading.Thread(target=run_server, daemon=True)
+    # Start the server in a background thread
+    server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
     # Wait a moment for the server to start
@@ -30,26 +30,26 @@ def run_validation():
         page = browser.new_page()
 
         # Navigate to the demo
-        page.goto(f"http://localhost:{PORT}/webgl-particle-physics-emitter/")
+        page.goto(f"http://localhost:{PORT}/delaunay-circle-mesh-expansion/")
 
-        # Wait for demo to load
-        page.wait_for_selector("canvas#webgl-canvas")
-        time.sleep(1) # wait for some particles to spawn
+        # Wait for the canvas to load
+        page.wait_for_selector("canvas#mesh-canvas")
 
-        # Interact with the control panel
-        # Change Wind X
-        page.fill("input#wind-x", "20")
-        page.dispatch_event("input#wind-x", "input")
+        # Place several points to form a triangulation
+        page.mouse.click(200, 200)
+        page.mouse.click(400, 200)
+        page.mouse.click(300, 400)
+        page.mouse.click(100, 300)
+        page.mouse.click(500, 300)
 
-        # Change Gravity
-        page.fill("input#gravity", "10")
-        page.dispatch_event("input#gravity", "input")
-
-        # Let the physics update for a moment
-        time.sleep(2)
+        # Wait for circles to expand and triangles to form
+        time.sleep(5)
 
         # Take a screenshot
-        page.screenshot(path="/app/screenshots/webgl-particle-physics-emitter.png")
+        os.makedirs("/app/screenshots", exist_ok=True)
+        screenshot_path = "/app/screenshots/delaunay-circle-mesh-expansion.png"
+        page.screenshot(path=screenshot_path)
+        print(f"Screenshot saved to {screenshot_path}")
 
         browser.close()
 
