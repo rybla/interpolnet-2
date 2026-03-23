@@ -18,11 +18,10 @@ def start_server():
     httpd.serve_forever()
 
 def run_validation():
-    # Start the server in a background thread
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
 
-    # Wait a moment for the server to start
+    # Give the server a moment to start
     time.sleep(1)
 
     with sync_playwright() as p:
@@ -30,26 +29,44 @@ def run_validation():
         page = browser.new_page()
 
         # Navigate to the demo
-        page.goto(f"http://localhost:{PORT}/delaunay-circle-mesh-expansion/")
+        page.goto(f"http://localhost:{PORT}/inverse-kinematics-arm/")
 
-        # Wait for the canvas to load
-        page.wait_for_selector("canvas#mesh-canvas")
+        # Wait for the canvas to load and be visible
+        page.wait_for_selector("canvas")
+        time.sleep(1) # Let initial rendering settle
 
-        # Place several points to form a triangulation
-        page.mouse.click(200, 200)
-        page.mouse.click(400, 200)
-        page.mouse.click(300, 400)
-        page.mouse.click(100, 300)
-        page.mouse.click(500, 300)
-
-        # Wait for circles to expand and triangles to form
-        time.sleep(5)
-
-        # Take a screenshot
+        # Ensure screenshot directory exists
         os.makedirs("/app/screenshots", exist_ok=True)
-        screenshot_path = "/app/screenshots/delaunay-circle-mesh-expansion.png"
-        page.screenshot(path=screenshot_path)
-        print(f"Screenshot saved to {screenshot_path}")
+
+        # Take an initial screenshot
+        # page.screenshot(path="/app/screenshots/inverse-kinematics-arm-initial.png")
+
+        # Interact with the canvas (drag the target point)
+        # We can simulate dragging by dispatching pointer events
+        canvas = page.locator("canvas")
+        box = canvas.bounding_box()
+
+        if box:
+            # Move target to top right
+            x_start = box["width"] / 2
+            y_start = box["height"] / 2
+
+            x_end = box["width"] * 0.8
+            y_end = box["height"] * 0.2
+
+            page.mouse.move(x_start, y_start)
+            page.mouse.down()
+            page.mouse.move(x_end, y_end, steps=10)
+            page.mouse.up()
+
+            # Let the arm settle and animation play out
+            time.sleep(0.5)
+
+            # Take a final screenshot
+            page.screenshot(path="/app/screenshots/inverse-kinematics-arm.png")
+            print("Validation complete. Screenshot saved.")
+        else:
+            print("Failed to find canvas bounding box.")
 
         browser.close()
 
