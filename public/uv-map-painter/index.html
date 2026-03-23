@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | UV Map Painter</title>
+    <link rel="stylesheet" href="../index.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1 class="title">UV Map Painter</h1>
+      <p>Paint on the 2D UV map on the left and see it wrap onto the 3D cube on the right.</p>
+    </div>
+
+    <div class="split-container">
+      <div class="panel canvas-panel">
+        <div class="controls">
+          <label for="color-picker">Brush Color:</label>
+          <input type="color" id="color-picker" value="#ff0055" />
+
+          <label for="brush-size">Brush Size:</label>
+          <input type="range" id="brush-size" min="1" max="50" value="10" />
+
+          <button id="clear-btn">Clear Map</button>
+        </div>
+        <div class="canvas-container">
+          <canvas id="uv-canvas" width="1024" height="1024"></canvas>
+        </div>
+      </div>
+
+      <div class="panel threejs-panel">
+        <div id="three-container"></div>
+      </div>
+    </div>
+  </body>
+</html>
