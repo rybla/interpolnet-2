@@ -1,0 +1,53 @@
+:root {
+  --bg-color: #121212;
+  --text-color: #f0f0f0;
+  --arm-color: #ff3366;
+  --joint-color: #00e5ff;
+  --target-color: #00ff66;
+  --base-color: #888888;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#demo-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+#ui-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  pointer-events: none;
+}
+
+h1.title {
+  margin: 0;
+  padding: 0;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+p {
+  margin-top: 5px;
+  font-size: 1rem;
+  opacity: 0.8;
+}

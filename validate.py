@@ -1,54 +1,59 @@
+import os
+import threading
 import http.server
 import socketserver
-import threading
-import time
-import os
 from playwright.sync_api import sync_playwright
 
-PORT = 8000
-DIRECTORY = "/app/public"
+def run_validation():
+    # Setup HTTP server pointing to /app/public
+    PORT = 8000
+    PUBLIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
 
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=PUBLIC_DIR, **kwargs)
 
-def start_server():
     socketserver.TCPServer.allow_reuse_address = True
     httpd = socketserver.TCPServer(("", PORT), Handler)
-    httpd.serve_forever()
 
-def run_validation():
-    # Start the server in a background thread
-    server_thread = threading.Thread(target=start_server, daemon=True)
+    # Start server in daemon thread
+    server_thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     server_thread.start()
 
-    # Wait a moment for the server to start
-    time.sleep(1)
+    print(f"Serving at port {PORT}")
 
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
 
-        # Navigate to the demo
-        page.goto(f"http://localhost:{PORT}/delaunay-circle-mesh-expansion/")
+        # Open demo page
+        page.goto(f"http://localhost:{PORT}/ik-robotic-arm/")
 
-        # Wait for the canvas to load
-        page.wait_for_selector("canvas#mesh-canvas")
+        # Wait for canvas
+        page.wait_for_selector('canvas')
+        page.wait_for_timeout(1000) # Give it a second to draw
 
-        # Place several points to form a triangulation
-        page.mouse.click(200, 200)
-        page.mouse.click(400, 200)
-        page.mouse.click(300, 400)
-        page.mouse.click(100, 300)
-        page.mouse.click(500, 300)
+        # Interact: drag the target
+        # Mouse down at initial target pos (center + 150)
+        box = page.locator('canvas').bounding_box()
+        x = box['x'] + box['width'] / 2 + 150
+        y = box['y'] + box['height'] / 2
 
-        # Wait for circles to expand and triangles to form
-        time.sleep(5)
+        page.mouse.move(x, y)
+        page.mouse.down()
 
-        # Take a screenshot
-        os.makedirs("/app/screenshots", exist_ok=True)
-        screenshot_path = "/app/screenshots/delaunay-circle-mesh-expansion.png"
+        # Drag to new position
+        page.mouse.move(box['x'] + 100, box['y'] + 100, steps=10)
+        page.mouse.up()
+
+        # Wait a bit to ensure rendering
+        page.wait_for_timeout(500)
+
+        # Take screenshot
+        os.makedirs("screenshots", exist_ok=True)
+        screenshot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "screenshots", "ik-robotic-arm.png")
         page.screenshot(path=screenshot_path)
+
         print(f"Screenshot saved to {screenshot_path}")
 
         browser.close()

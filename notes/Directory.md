@@ -3603,3 +3603,29 @@ This demo is an interactive tool allowing users to paint on a 2D canvas represen
   - Create a 3D texture object using the 2D `<canvas>` element as its source.
   - In the animation loop, or upon every stroke event, flag the texture to update so the GPU fetches the latest canvas data.
   - Use `OrbitControls` (or custom interaction logic) to handle rotating the 3D cube.
+
+## Inverse Kinematics Robotic Arm [[demo](https://rybla.github.io/interpolnet-2/ik-robotic-arm)]
+
+A multi-jointed robotic arm utilizing inverse kinematics where users drag the end effector and the algorithm calculates the joint angles.
+
+### Features
+- **Multi-Jointed Arm**: A visual representation of a robotic arm with multiple segments and joints connected in a chain.
+- **Inverse Kinematics**: Implements an algorithm to continuously solve for the joint angles required to reach the target.
+- **Interactive Target**: Users can drag a target point (the end effector's goal) around the canvas, and the arm automatically moves to follow it.
+- **Real-Time Rendering**: The arm's position and orientation update smoothly in real time as the target is moved.
+
+### Design Goals
+- **Responsiveness**: Ensure the physics/math calculations perform efficiently to allow smooth, real-time dragging without lag.
+- **Visual Clarity**: Use distinct, consistent colors for the base, joints, segments, and target to make the structure clear.
+- **Educational Intuition**: Provide a tactile, interactive way to understand inverse kinematics, an important concept in robotics and animation.
+
+### Implementation Plan
+- **HTML**: A full-screen `<canvas>` for the rendering context.
+- **CSS**: A clean, modern aesthetic with a dark background to make the vibrant colors of the arm pop. Ensure responsive design.
+- **JavaScript (Kinematics Logic)**:
+  - Define a data structure for the arm, including an array of segment lengths and joint angles.
+  - Implement an inverse kinematics solver to iteratively adjust the joint angles to minimize the distance between the end effector and the target.
+  - Implement forward kinematics to calculate the exact `(x, y)` coordinates of each joint given the current angles.
+- **JavaScript (Rendering & Interaction)**:
+  - Use the HTML5 Canvas API to render the segments (as lines or thick paths) and joints (as circles).
+  - Add event listeners for mouse/touch interactions to update the target position and trigger the IK solver and rendering loop.
