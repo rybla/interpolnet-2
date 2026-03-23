@@ -3603,3 +3603,33 @@ This demo is an interactive tool allowing users to paint on a 2D canvas represen
   - Create a 3D texture object using the 2D `<canvas>` element as its source.
   - In the animation loop, or upon every stroke event, flag the texture to update so the GPU fetches the latest canvas data.
   - Use `OrbitControls` (or custom interaction logic) to handle rotating the 3D cube.
+
+## Inverse Kinematics Robotic Arm [[demo](https://rybla.github.io/interpolnet-2/inverse-kinematics-arm)]
+
+This demo provides an interactive 2D visualization of a multi-jointed robotic arm. Users can drag a target point (the end effector) around the canvas, and the underlying inverse kinematics algorithm calculates the necessary joint angles for the arm to reach that point.
+
+### Features
+- **Multi-Jointed Robotic Arm:** A continuous chain of articulated segments originating from a fixed base point.
+- **Inverse Kinematics Algorithm:** Implements a real-time iterative algorithm (like FABRIK - Forward And Backward Reaching Inverse Kinematics) to compute the required joint angles to position the end of the arm at the user's cursor.
+- **Interactive End Effector:** Users can click and drag the target point anywhere on the screen. The arm will stretch or fold dynamically to reach it.
+- **Visual Feedback:** Shows the target point clearly and provides visual cues if the target is out of the arm's total reachable bounds.
+- **Responsive Layout:** The canvas adapts to different screen sizes, making it usable on both desktop and mobile devices.
+
+### Design Goals
+- **Educational Intuition:** Break down the complex concept of inverse kinematics into a simple, tangible interactive experience.
+- **Fluid Animation:** Ensure the algorithm is performant enough to run at 60 FPS, providing smooth and satisfying motion as the arm tracks the target.
+- **Consistent Aesthetics:** Use a modern dark theme with bright, neon accents (e.g., cyan for the arm, magenta for the target) to align with Interpolnet 2's design language, ensuring high contrast and clear visibility of the mathematical components.
+
+### Implementation Plan
+- **HTML/CSS:** Set up a full-screen `<canvas>` element for rendering, overlaid with a simple text instructions panel. Use CSS variables for a consistent color scheme.
+- **JavaScript Core Logic:**
+  - Define an array of segments (each with length and angle properties).
+  - Implement a forward kinematics function to compute global `(x, y)` joint positions from angles.
+  - Implement an inverse kinematics solver. For FABRIK:
+    1. Reaching Forward: Set the end effector to the target position, then move each subsequent joint backwards towards the base, constrained by segment lengths.
+    2. Reaching Backward: Set the base joint back to its fixed origin, then move each subsequent joint forwards, again constrained by lengths.
+    3. Iterate this process until the end effector is sufficiently close to the target or max iterations are reached.
+- **JavaScript Rendering & Interaction:**
+  - Use `requestAnimationFrame` for a smooth continuous render loop.
+  - Draw the segments as thick lines (`ctx.lineWidth`, `ctx.lineCap = 'round'`) and the joints as circles (`ctx.arc`).
+  - Add pointer event listeners (`pointerdown`, `pointermove`, `pointerup`) to the canvas to handle dragging the target point.
