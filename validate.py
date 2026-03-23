@@ -5,70 +5,58 @@ import time
 import os
 from playwright.sync_api import sync_playwright
 
-PORT = 8000
-DIRECTORY = "/app/public"
+def run_server():
+    # Serve from the public directory so that the import maps and assets resolve properly.
+    Handler = http.server.SimpleHTTPRequestHandler
+    class MyTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
 
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
-
-def start_server():
-    socketserver.TCPServer.allow_reuse_address = True
-    httpd = socketserver.TCPServer(("", PORT), Handler)
-    httpd.serve_forever()
+    with MyTCPServer(("", 8000), Handler) as httpd:
+        httpd.serve_forever()
 
 def run_validation():
-    server_thread = threading.Thread(target=start_server, daemon=True)
+    print("Starting server...")
+    server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
 
     # Give the server a moment to start
-    time.sleep(1)
+    time.sleep(2)
 
+    print("Starting Playwright...")
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
 
         # Navigate to the demo
-        page.goto(f"http://localhost:{PORT}/inverse-kinematics-arm/")
+        page.goto('http://localhost:8000/csg-visualizer/index.html')
 
-        # Wait for the canvas to load and be visible
-        page.wait_for_selector("canvas")
-        time.sleep(1) # Let initial rendering settle
+        # Wait for the scene to load and render
+        time.sleep(3)
 
-        # Ensure screenshot directory exists
-        os.makedirs("/app/screenshots", exist_ok=True)
+        # Perform some interaction (drag to move the brush)
+        print("Interacting with the demo...")
+        container = page.locator('#canvas-container')
 
-        # Take an initial screenshot
-        # page.screenshot(path="/app/screenshots/inverse-kinematics-arm-initial.png")
+        # Select intersection operation
+        page.locator('input[value="INTERSECTION"]').check()
 
-        # Interact with the canvas (drag the target point)
-        # We can simulate dragging by dispatching pointer events
-        canvas = page.locator("canvas")
-        box = canvas.bounding_box()
+        # Simulate dragging the object
+        container.hover()
+        page.mouse.down()
+        page.mouse.move(200, 200, steps=10)
+        page.mouse.move(400, 300, steps=10)
+        page.mouse.up()
 
-        if box:
-            # Move target to top right
-            x_start = box["width"] / 2
-            y_start = box["height"] / 2
+        # Wait a moment to capture the new shapes
+        time.sleep(2)
 
-            x_end = box["width"] * 0.8
-            y_end = box["height"] * 0.2
+        print("Taking screenshot...")
+        os.makedirs('../screenshots', exist_ok=True)
+        page.screenshot(path='../screenshots/csg-visualizer.png')
 
-            page.mouse.move(x_start, y_start)
-            page.mouse.down()
-            page.mouse.move(x_end, y_end, steps=10)
-            page.mouse.up()
-
-            # Let the arm settle and animation play out
-            time.sleep(0.5)
-
-            # Take a final screenshot
-            page.screenshot(path="/app/screenshots/inverse-kinematics-arm.png")
-            print("Validation complete. Screenshot saved.")
-        else:
-            print("Failed to find canvas bounding box.")
-
+        print("Validation complete.")
         browser.close()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public'))
     run_validation()

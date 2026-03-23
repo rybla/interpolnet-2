@@ -100,6 +100,7 @@ function initCSG() {
   // Setup Evaluator and Result Mesh
   evaluator = new Evaluator();
   evaluator.attributes = ['position', 'normal'];
+  evaluator.useGroups = false;
 
   resultMesh = new THREE.Mesh(new THREE.BufferGeometry(), materialResult);
   resultMesh.castShadow = true;
