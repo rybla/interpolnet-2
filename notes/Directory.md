@@ -3574,3 +3574,32 @@ The Delaunay Circle Mesh Expansion demo provides an interactive visualization of
   - Draw the expanding circles using `ctx.arc`.
   - Draw the locked triangle edges using `ctx.beginPath` and `ctx.lineTo`.
 - **Interactivity:** Add `pointerdown` event listeners to the canvas to easily push new points into the state array and reset or trigger their expansion phase.
+
+## UV Map Painter [[demo](https://rybla.github.io/interpolnet-2/uv-map-painter)]
+
+This demo is an interactive tool allowing users to paint on a 2D canvas representing the unrolled UV map of a 3D cube, and see their brush strokes wrap around the 3D object in real-time.
+
+### Features
+- **Split-Screen Interface:** A side-by-side (or top-and-bottom on mobile) layout with a 2D painting canvas on one side and a 3D rendering of a cube on the other side.
+- **UV Map Layout:** The 2D canvas is divided into 6 square regions arranged in a standard cross or T-shape pattern, representing the unrolled faces of the 3D cube.
+- **Real-time 3D Texture Mapping:** As the user paints on the 2D canvas, the 3D cube's texture updates dynamically and immediately.
+- **Interactive 3D Viewing:** The 3D view allows the user to rotate the cube using mouse or touch interactions to see all sides.
+- **Color Selection:** Users can choose from a palette of vibrant colors or select custom colors to paint with.
+
+### Design Goals
+- **Educational Visualization:** Provide a hands-on, intuitive way for users to understand how 2D textures are mapped onto 3D geometry using UV coordinates.
+- **Seamless Interactivity:** The update from 2D strokes to 3D texture must be fluid and instant, creating a satisfying painting experience.
+- **Mobile Friendly:** The layout should adapt elegantly to portrait screens by stacking the 2D canvas and 3D view, ensuring usability on phones and tablets.
+- **Distinct Aesthetic:** Follow the Interpolnet 2 color scheme and typography guidelines.
+
+### Implementation Plan
+- **HTML:** Create a flexbox/grid layout container holding a `<canvas>` element for 2D painting and a `<div>` container for the Three.js 3D rendering context. Include a color picker interface.
+- **CSS:** Use the Interpolnet typography (e.g., from `public/index.css`) and responsive layout styles to stack the views on smaller screens.
+- **JavaScript (2D Canvas):**
+  - Draw the UV grid layout, highlighting the bounds of each face.
+  - Implement basic pointer/touch event handlers for drawing lines/strokes on the canvas.
+- **JavaScript (Three.js):**
+  - Set up a scene with a camera, lights, and a `BoxGeometry`.
+  - Create a 3D texture object using the 2D `<canvas>` element as its source.
+  - In the animation loop, or upon every stroke event, flag the texture to update so the GPU fetches the latest canvas data.
+  - Use `OrbitControls` (or custom interaction logic) to handle rotating the 3D cube.

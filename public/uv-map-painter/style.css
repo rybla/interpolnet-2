@@ -1,0 +1,132 @@
+:root {
+  --bg-color: #1a1a24;
+  --panel-bg: #2a2a35;
+  --text-color: #f0f0f5;
+  --accent-color: #ff0055;
+  --border-color: #3f3f5a;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+
+.split-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: 1rem;
+  min-height: 0; /* Important for flex children to scroll/shrink properly */
+}
+
+.panel {
+  flex: 1;
+  background-color: var(--panel-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.controls {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+}
+
+.controls label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.controls input[type="color"] {
+  border: none;
+  background: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.controls input[type="range"] {
+  flex: 1;
+  max-width: 150px;
+  cursor: pointer;
+  accent-color: var(--accent-color);
+}
+
+.controls button {
+  background-color: var(--border-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.controls button:hover {
+  background-color: var(--accent-color);
+}
+
+.canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  overflow: auto;
+}
+
+#uv-canvas {
+  background-color: #ffffff; /* Use white background for the canvas itself */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: crosshair;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border-radius: 4px;
+}
+
+.threejs-panel {
+  position: relative;
+}
+
+#three-container {
+  width: 100%;
+  height: 100%;
+  min-height: 300px; /* fallback for mobile */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+  }
+
+  .panel {
+    min-height: 400px;
+  }
+}
