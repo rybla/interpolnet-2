@@ -4866,3 +4866,30 @@ An interactive visualization that reveals the recursive linear interpolations us
   - Listen to `pointerdown`, `pointermove`, and `pointerup` events on the canvas.
   - When the pointer goes down near a control point, mark it as "grabbed".
   - Update the coordinates of the grabbed point during `pointermove`.
+
+## WebGL Game of Life [[demo](https://rybla.github.io/interpolnet-2/webgl-game-of-life)]
+
+An interactive, massively parallel implementation of Conway's Game of Life running entirely on the GPU via WebGL. Users can explore the evolving cellular automaton on a sprawling canvas and actively interfere by stamping complex patterns like Gliders and Gosper Glider Guns directly into the simulation.
+
+### Features
+- **GPU-Accelerated Simulation**: Utilizes WebGL fragment shaders and ping-pong framebuffers to calculate the Game of Life rules across millions of cells simultaneously at a smooth 60 FPS.
+- **Interactive Stamping**: Users can select from predefined patterns (Glider, Gosper Gun) and click anywhere on the canvas to instantly spawn them into the active simulation grid.
+- **Massive Canvas**: The simulation grid is large enough to allow complex, emergent behaviors and long-lasting patterns to unfold without immediately hitting boundaries.
+- **Visual Feedback**: The cells are rendered with high contrast against a dark background, making the chaotic and ordered structures easily visible.
+- **Responsive Controls**: A clean UI overlay allows users to select their active stamp tool.
+
+### Design Goals
+- **High Performance**: Demonstrate the power of GPGPU (General-Purpose computing on Graphics Processing Units) by running a classic algorithm orders of magnitude faster than a CPU implementation.
+- **Tactile Interaction**: Give users the satisfying ability to inject complex, moving "lifeforms" into an existing ecosystem and watch the chaotic ripple effects.
+- **Aesthetics**: Maintain the Interpolnet 2 dark theme with bright, glowing cells (e.g., neon green or cyan) to give it a futuristic, computational feel.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen `<canvas>` element for the WebGL context, with a floating UI control panel overlay for selecting the stamp pattern.
+- **WebGL Architecture (JavaScript)**:
+    - **Ping-Pong Framebuffers**: Create two WebGL textures attached to framebuffers. One holds the current state, the other will be drawn to for the next state, swapping roles each frame.
+    - **Simulation Shader**: A fragment shader that reads the current state texture, samples the 8 neighboring cells, and applies Conway's rules (survival, death, reproduction) to determine the new state.
+    - **Render Shader**: A simple shader to draw the current state texture to the screen with appropriate coloring.
+- **Interaction Logic**:
+    - Listen for `pointerdown` events on the canvas.
+    - Map screen coordinates to texture coordinates.
+    - When a stamp occurs, use `gl.texSubImage2D` to upload the specific pattern's pixel data (Glider or Gosper Gun) directly into the active state texture at the clicked location.
