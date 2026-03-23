@@ -4802,3 +4802,30 @@ Let users place points randomly on a canvas to watch circles expand and lock tog
   - `Algorithm`: Implement an incremental algorithm (like Bowyer-Watson) to update the triangulation when a point is added.
   - `Animation Loop`: Animate the radius of expanding circles. When a point is added, new triangles are formed, and their corresponding circumcircles start expanding from radius 0 up to their target radius.
   - `Interaction`: Click/touch listeners on the canvas to add points.
+
+## Simple Harmonic Motion [[demo](https://rybla.github.io/interpolnet-2/simple-harmonic-motion)]
+
+An interactive 2D visualization that links the uniform circular motion of a point on a wheel directly to the generation of a simple harmonic sine wave on an adjacent scrolling graph.
+
+### Features
+- **Uniform Circular Motion**: A rotating wheel (circle) with a distinct point moving at a constant angular velocity along its circumference.
+- **Sine Wave Generation**: As the point moves, its vertical (y-axis) position is continuously traced and plotted onto an adjacent, horizontally scrolling graph, forming a perfect sine wave.
+- **Visual Linkage**: A direct visual connecting line (e.g., a dashed tracking line) links the point on the wheel to the drawing head of the sine wave, explicitly demonstrating the mathematical relationship between circular and harmonic motion.
+- **Interactive Controls**: Users can adjust the amplitude (radius of the wheel) and the frequency (angular velocity) of the motion in real-time.
+
+### Design Goals
+- **Educational Intuition**: Provide a clear, visual proof that simple harmonic motion is a 1D projection of uniform circular motion.
+- **Aesthetic Excellence**: Utilize a sleek, dark theme with vibrant, high-contrast neon colors (e.g., cyan for the wheel, magenta for the wave) to differentiate the components and make the tracing obvious.
+- **Smooth Animation**: Employ `requestAnimationFrame` to ensure fluid, continuous drawing and scrolling without jitter.
+- **Responsive Layout**: Ensure the canvas and UI controls adapt gracefully to different screen sizes.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A full-screen `<canvas>` element for the simulation, overlaid with a clean, dark-themed control panel containing range inputs for amplitude and frequency.
+- **JavaScript Core Logic**:
+  - Implement an animation loop that updates an angle variable `theta` based on the current frequency and time delta.
+  - Calculate the wheel point's position: `y = amplitude * sin(theta)`, `x = centerX + amplitude * cos(theta)`.
+  - Maintain an array of recent `y` values to render the scrolling sine wave trace.
+- **Canvas Rendering**:
+  - Draw the wheel, its center, and the moving point.
+  - Draw the sine wave by iterating over the historical `y` values, mapping them to linearly decreasing `x` coordinates to create the scrolling effect.
+  - Draw the horizontal connecting line from the wheel's point to the leading edge of the sine wave.
