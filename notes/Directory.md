@@ -4829,3 +4829,40 @@ An interactive 2D visualization that links the uniform circular motion of a poin
   - Draw the wheel, its center, and the moving point.
   - Draw the sine wave by iterating over the historical `y` values, mapping them to linearly decreasing `x` coordinates to create the scrolling effect.
   - Draw the horizontal connecting line from the wheel's point to the leading edge of the sine wave.
+
+## Bezier Curve Construction [[demo](https://rybla.github.io/interpolnet-2/bezier-curve-construction)]
+
+An interactive visualization that reveals the recursive linear interpolations used to construct a cubic Bézier curve, showing the moving scaffolding lines dynamically as a parameter *t* progresses.
+
+### Features
+- **Interactive Control Points**: Users can click and drag the four control points defining the cubic Bézier curve.
+- **Dynamic Scaffolding Visualization**:
+  - Visualizes the first level of interpolation: 3 moving points connecting the 4 control points.
+  - Visualizes the second level of interpolation: 2 moving points connecting the 3 points from the first level.
+  - Visualizes the final interpolation: 1 moving point that traces the actual Bézier curve.
+- **Real-Time Rendering**: The curve, scaffolding lines, and points update smoothly as the user drags the control points or as time progresses.
+- **Continuous Animation**: The parameter *t* (from 0 to 1) animates continuously to show how the point travels along the curve.
+- **Responsive Canvas**: The visualization scales to fit both desktop and mobile screens perfectly.
+
+### Design Goals
+- **Educational Clarity**: Break down the seemingly complex mathematics of a cubic Bézier curve into an intuitive geometric construction of simple linear interpolations.
+- **Visual Separation**: Use distinct colors for each level of interpolation (e.g., initial lines, first-level interpolation lines, second-level interpolation lines, and the final traced curve) to make the recursive structure obvious.
+- **Fluid Interaction**: Ensure dragging control points provides immediate, satisfying feedback with the entire scaffolding updating in real-time.
+
+### Implementation Plan
+- **HTML/CSS**: A full-screen `<canvas>` element for the visualization. Apply a dark theme with vibrant, contrasting colors for the scaffolding lines and the curve.
+- **Mathematics (JavaScript)**:
+  - Implement a `lerp(p0, p1, t)` function to linearly interpolate between two 2D points.
+  - Compute the recursive interpolations:
+    - Level 1: `A = lerp(P0, P1, t)`, `B = lerp(P1, P2, t)`, `C = lerp(P2, P3, t)`
+    - Level 2: `D = lerp(A, B, t)`, `E = lerp(B, C, t)`
+    - Final Point: `F = lerp(D, E, t)`
+  - Use the standard cubic Bézier formula to draw the full static curve path in the background: `P(t) = (1-t)^3 P0 + 3(1-t)^2 t P1 + 3(1-t) t^2 P2 + t^3 P3`.
+- **Rendering Loop**:
+  - Use `requestAnimationFrame` to animate a global `t` parameter from 0 to 1 and back (or looping).
+  - Clear the canvas each frame.
+  - Draw the full curve path, the control points, the scaffolding lines, the intermediate points, and the final moving point.
+- **Interaction Logic**:
+  - Listen to `pointerdown`, `pointermove`, and `pointerup` events on the canvas.
+  - When the pointer goes down near a control point, mark it as "grabbed".
+  - Update the coordinates of the grabbed point during `pointermove`.
