@@ -5,41 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interpolnet 2 | Constructive Solid Geometry Visualizer</title>
     <link rel="stylesheet" href="./style.css" />
-
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-          "three-mesh-bvh": "https://unpkg.com/three-mesh-bvh@0.7.3/build/index.module.js",
-          "three-bvh-csg": "https://unpkg.com/three-bvh-csg@0.0.16/build/index.module.js"
-        }
-      }
-    </script>
-    <script type="module" src="./script.js" defer></script>
+    <script src="./script.js" defer></script>
   </head>
   <body>
-    <div id="ui-panel">
-      <h1>CSG Visualizer</h1>
-      <p>Drag the shapes and see boolean operations in real-time.</p>
-
-      <div class="control-group">
-        <label>Operation:</label>
-        <div class="radio-group">
-          <label><input type="radio" name="operation" value="SUBTRACTION" checked> Subtraction</label>
-          <label><input type="radio" name="operation" value="INTERSECTION"> Intersection</label>
-          <label><input type="radio" name="operation" value="ADDITION"> Union</label>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label>Display:</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" id="show-wireframe"> Show Wireframe</label>
-          <label><input type="checkbox" id="show-base-shapes" checked> Show Base Shapes</label>
+    <div id="canvas-container"></div>
+    <div id="ui-overlay">
+      <div class="panel">
+        <h1>Constructive Solid Geometry</h1>
+        <p>Drag the shapes to intersect them. Select an operation below:</p>
+        <div class="controls">
+          <button id="btn-union" class="btn active">Union</button>
+          <button id="btn-subtract" class="btn">Subtract</button>
+          <button id="btn-intersect" class="btn">Intersect</button>
+          <button id="btn-reset" class="btn">Reset</button>
         </div>
       </div>
     </div>
-
-    <div id="canvas-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   </body>
 </html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Cubic Bezier Curve Interpolation Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="container">
+      <canvas id="canvas"></canvas>
+      <div id="ui-panel">
+        <div class="control-group">
+          <button id="play-pause-btn">Pause</button>
+        </div>
+        <div class="control-group">
+          <label for="t-slider">t = <span id="t-value">0.00</span></label>
+          <input type="range" id="t-slider" min="0" max="1" step="0.001" value="0">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
