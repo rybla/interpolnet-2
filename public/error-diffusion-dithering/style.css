@@ -1,11 +1,11 @@
 :root {
-  --color-bg: #1a1a1a;
-  --color-text: #f0f0f0;
-  --color-primary: #ff0055;
-  --color-primary-hover: #ff3377;
-  --color-surface: #2a2a2a;
-  --color-border: #444;
-  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --bg-color: #121212;
+  --surface-color: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --accent-color: #00bcd4;
+  --border-radius: 8px;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -16,128 +16,148 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  overflow: hidden; /* Prevent body scrolling during drag */
+  margin: 0;
+  padding: 20px;
 }
 
 .app-container {
+  max-width: 1000px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  gap: 20px;
 }
 
-.control-panel {
-  background-color: var(--color-surface);
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--color-border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  z-index: 10;
-}
-
-.control-panel h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-primary);
+header {
   text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--surface-color);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .controls label {
-  font-size: 1rem;
-  font-weight: 500;
+  font-weight: bold;
+  color: var(--text-secondary);
 }
 
-.controls select {
-  font-family: var(--font-family);
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
+select {
+  padding: 8px 12px;
+  background-color: #2c2c2c;
+  color: var(--text-primary);
+  border: 1px solid #3c3c3c;
   border-radius: 4px;
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  font-size: 1rem;
   cursor: pointer;
   outline: none;
   transition: border-color 0.2s;
 }
 
-.controls select:focus {
-  border-color: var(--color-primary);
+select:focus {
+  border-color: var(--accent-color);
 }
 
-.description {
+.loading-indicator {
+  display: none;
+  color: var(--accent-color);
+  font-style: italic;
   font-size: 0.9rem;
-  color: #aaa;
-  text-align: center;
-  max-width: 600px;
 }
 
-.main-view {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  position: relative;
-  overflow: hidden; /* Important to keep canvases contained */
+.loading-indicator.active {
+  display: inline-block;
+  animation: pulse 1.5s infinite ease-in-out;
 }
 
-.canvas-wrapper {
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.visualizer-container {
   position: relative;
   width: 100%;
-  height: 100%;
-  max-width: 1200px; /* Optional max width */
-  max-height: 800px;
+  border-radius: 4px;
+  overflow: hidden;
+  /* Will set a specific aspect ratio or fixed height in JS if needed, but let's allow it to naturally size for now based on canvas */
+  background-color: #000;
   display: flex;
   justify-content: center;
   align-items: center;
-  user-select: none;
-  touch-action: none; /* Crucial for custom drag on mobile */
 }
 
-canvas {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain; /* Though object-fit is for img/video, we'll manually size canvas in JS, but this helps logic conceptually if we use CSS sizing */
-  /* We will set width/height in JS based on aspect ratio */
+#dither-canvas {
   display: block;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  max-width: 100%;
+  height: auto;
+  /* Let it determine its own natural size based on rendering */
 }
 
-#canvas-original {
-  z-index: 1;
-}
-
-#canvas-dithered {
-  z-index: 2;
-  /* Will be clipped in JS via clip-path */
-}
-
-.slider {
+.slider-wrapper {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 100%; /* Will be updated via JS to match canvas height */
-  width: 4px;
-  background-color: var(--color-primary);
-  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let events pass to the input range */
+}
+
+.comparison-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 10;
   cursor: ew-resize;
-  left: 50%; /* Default middle */
+  pointer-events: auto; /* Make slider interactable */
+  margin: 0;
+}
+
+.slider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: white;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+  z-index: 2;
 }
 
 .slider-handle {
@@ -147,53 +167,68 @@ canvas {
   transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
-  background-color: var(--color-primary);
-  border: 3px solid #fff;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.1s, background-color 0.2s;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 3;
 }
 
-.slider-handle::before,
-.slider-handle::after {
+.slider-arrows {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 10px 6px 0;
+  border-color: transparent #333 transparent transparent;
+  position: relative;
+  left: -2px;
+}
+
+.slider-arrows::after {
   content: '';
   position: absolute;
   width: 0;
   height: 0;
   border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent #333;
+  top: -6px;
+  left: 4px;
 }
 
-.slider-handle::before {
-  border-width: 6px 8px 6px 0;
-  border-color: transparent #fff transparent transparent;
-  left: 6px;
+.labels {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+  pointer-events: none;
 }
 
-.slider-handle::after {
-  border-width: 6px 0 6px 8px;
-  border-color: transparent transparent transparent #fff;
-  right: 6px;
+.label {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.slider:hover .slider-handle,
-.slider:active .slider-handle {
-  transform: translate(-50%, -50%) scale(1.1);
-  background-color: var(--color-primary-hover);
-}
-
-@media (min-width: 768px) {
-  .control-panel {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
   }
-  .control-panel h1 {
-    text-align: left;
-  }
-  .description {
-    text-align: right;
+
+  header h1 {
+    font-size: 1.5rem;
   }
 }

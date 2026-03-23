@@ -1,0 +1,234 @@
+:root {
+  --bg-color: #0b0f19;
+  --panel-bg: rgba(20, 30, 48, 0.8);
+  --text-main: #e0e6ed;
+  --text-muted: #8a9bb2;
+  --accent-cyan: #00ffcc;
+  --accent-magenta: #ff00ff;
+  --accent-yellow: #ffff00;
+  --border-color: #1a2a40;
+  --btn-bg: #101c2b;
+  --btn-hover: #1e334d;
+  --btn-active: #0c1522;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-link {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--accent-magenta);
+}
+
+h1, h2 {
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+h1 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 1rem;
+  color: var(--accent-magenta);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.demo-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .demo-container {
+    flex-direction: row;
+  }
+}
+
+.canvas-container {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+  background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+canvas {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.1);
+  max-width: 100%;
+  max-height: 100%;
+  cursor: grab;
+}
+
+canvas:active {
+  cursor: grabbing;
+}
+
+.control-panel {
+  flex: 1;
+  background-color: var(--panel-bg);
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 2rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 767px) {
+  .control-panel {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+  }
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.instruction {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+button {
+  background-color: var(--btn-bg);
+  color: var(--accent-cyan);
+  border: 1px solid var(--accent-cyan);
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+button:hover {
+  background-color: var(--btn-hover);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+
+button:active {
+  background-color: var(--btn-active);
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+}
+
+.readout-log {
+  background: #000;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  height: 200px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 4px;
+}
+
+.log-entry {
+  line-height: 1.4;
+  opacity: 0.9;
+  animation: fadeIn 0.3s ease;
+}
+
+.log-entry.system { color: var(--text-muted); }
+.log-entry.primary { color: var(--accent-cyan); }
+.log-entry.intersect { color: #fff; }
+.log-entry.normal { color: var(--accent-magenta); }
+.log-entry.shadow { color: var(--accent-yellow); }
+.log-entry.shade { color: #00ff00; }
+.log-entry.miss { color: #ff3333; }
+
+.pixel-result-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #000;
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+}
+
+.final-pixel {
+  width: 64px;
+  height: 64px;
+  background-color: #000;
+  border: 2px solid var(--border-color);
+  transition: background-color 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 0.9; transform: translateY(0); }
+}
+
+/* Custom Scrollbar for log */
+.readout-log::-webkit-scrollbar {
+  width: 6px;
+}
+.readout-log::-webkit-scrollbar-track {
+  background: transparent;
+}
+.readout-log::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 3px;
+}

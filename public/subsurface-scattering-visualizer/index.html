@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Subsurface Scattering Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./three.min.js"></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div id="canvas-container"></div>
+    <div id="ui-panel">
+      <h1>Subsurface Scattering</h1>
+      <p>
+        Shine a virtual light behind a translucent 3D marble hand to visualize how light rays penetrate, scatter, and exit the surface to create a fleshy glow.
+      </p>
+
+      <div class="control-group">
+        <label>Light Position (Orbit)</label>
+        <div class="slider-container">
+          <span>Angle</span>
+          <input type="range" id="light-angle" min="0" max="6.28" step="0.01" value="3.14" />
+        </div>
+        <div class="slider-container">
+          <span>Height</span>
+          <input type="range" id="light-height" min="-5" max="5" step="0.1" value="0" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Material Properties</label>
+        <div class="slider-container">
+          <span>Transmission</span>
+          <input type="range" id="mat-transmission" min="0" max="1" step="0.01" value="0.9" />
+        </div>
+        <div class="slider-container">
+          <span>Thickness</span>
+          <input type="range" id="mat-thickness" min="0" max="10" step="0.1" value="2" />
+        </div>
+        <div class="slider-container">
+          <span>Roughness</span>
+          <input type="range" id="mat-roughness" min="0" max="1" step="0.01" value="0.2" />
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
