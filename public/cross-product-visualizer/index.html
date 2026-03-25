@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interpolnet 2 | Cross Product Visualizer</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="./script.js"></script>
+  </head>
+  <body>
+    <div id="three-container"></div>
+    <div id="ui-panel">
+      <h2>Cross Product Visualizer</h2>
+      <div class="vector-info vector-a">
+        <strong>Vector A:</strong> <span id="val-a"></span>
+      </div>
+      <div class="vector-info vector-b">
+        <strong>Vector B:</strong> <span id="val-b"></span>
+      </div>
+      <div class="vector-info vector-c">
+        <strong>A × B (Cross Product):</strong> <span id="val-c"></span>
+      </div>
+      <div class="vector-info vector-area">
+        <strong>Area (|A × B|):</strong> <span id="val-area"></span>
+      </div>
+      <p class="instructions">Drag the tips of vectors A and B to see how their cross product changes.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+@import url('../index.css');
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: var(--color-bg, #0b0f19);
+  color: var(--color-text, #e2e8f0);
+  font-family: var(--font-family, system-ui, sans-serif);
+}
+
+#three-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#ui-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  background-color: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+#ui-panel h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.vector-info {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  font-family: monospace;
+}
+
+.vector-info span {
+  float: right;
+  font-weight: bold;
+}
+
+.vector-a { color: #ff3366; }
+.vector-b { color: #33ccff; }
+.vector-c { color: #cc33ff; }
+.vector-area { color: #ffff66; margin-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px;}
+
+.instructions {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  #ui-panel {
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+  }
+}

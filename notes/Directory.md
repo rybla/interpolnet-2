@@ -4893,3 +4893,29 @@ An interactive, massively parallel implementation of Conway's Game of Life runni
     - Listen for `pointerdown` events on the canvas.
     - Map screen coordinates to texture coordinates.
     - When a stamp occurs, use `gl.texSubImage2D` to upload the specific pattern's pixel data (Glider or Gosper Gun) directly into the active state texture at the clicked location.
+
+## Cross Product Visualizer [[demo](https://rybla.github.io/interpolnet-2/cross-product-visualizer)]
+
+An interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
+
+### Features
+- **Interactive Vectors**: Two 3D vectors (A and B) that users can drag and rotate in space.
+- **Cross Product Visualization**: A third vector (A × B) is dynamically computed and displayed, showing its orthogonal relationship to A and B.
+- **Parallelogram Area**: A shaded parallelogram formed by A and B is rendered to represent the geometric magnitude of the cross product.
+- **Real-time Readout**: A UI panel showing the exact numerical components of vectors A, B, their cross product, and the calculated area.
+- **3D Navigation**: Users can orbit, pan, and zoom around the 3D space to view the vectors from any angle.
+
+### Design Goals
+- **Educational Intuition**: Provide a direct, tactile way to understand the right-hand rule and the geometric properties of the cross product.
+- **Visual Clarity**: Use distinct, consistent colors for the three vectors and the parallelogram to differentiate them clearly.
+- **Fluid Interactivity**: Ensure smooth updating of the cross product vector and area as the input vectors are manipulated.
+
+### Implementation Plan
+- **HTML/CSS Structure**: A split-screen or overlay layout with a main \`<canvas>\` for the 3D scene and a control panel for the numerical readouts.
+- **3D Environment (Three.js)**:
+  - Initialize a scene with axes helpers and a grid for spatial reference.
+  - Represent vectors using arrows or cylinders/cones.
+  - Create a custom polygon geometry for the parallelogram that updates its vertices based on vectors A and B.
+- **Interaction Logic**:
+  - Implement drag controls to allow users to move the tips of vectors A and B.
+  - Calculate the cross product `A.clone().cross(B)` and update the visual representation of the third vector and the parallelogram area.

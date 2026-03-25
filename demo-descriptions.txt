@@ -1,4 +1,3 @@
-Use an interactive 3D coordinate system to show how adjusting two vectors dynamically alters the area and orthogonal direction of their cross product.
 Visually calculate binomial coefficients by routing falling physical balls through a Galton board peg maze to form a normal distribution.
 Represent modular arithmetic as a physical clock face where addition and multiplication warp around the dial continuously.
 Visualize a Markov chain as a network of Lilypads where a frog jumps between them based on weighted probability arrows.
